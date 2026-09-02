@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "apps": [
+    {
+      "id": "mil-onboarding",
+      "title": "MIL 온보딩 노트",
+      "titleEn": "MIL Onboarding Notes",
+      "icon": "🧭",
+      "path": "apps/mil-onboarding/",
+      "desc": "서병석 랩 합류 전 학습 — 개념 12강 + 논문 노트 22편 + 진행중 연구 7건",
+      "pipeline": "논문기반",
+      "items": 41,
+      "added": "2026-09-02"
+    },
+    {
+      "id": "optimal-design",
+      "title": "최적설계 기법 총정리",
+      "titleEn": "Design Optimization Compendium",
+      "icon": "📐",
+      "path": "apps/optimal-design/",
+      "desc": "최적설계 이론·기법 단일 완결본 + HyperStudy 실습 맥락",
+      "pipeline": "개념기반",
+      "items": 15,
+      "added": "2026-09-02"
+    }
+  ]
+}

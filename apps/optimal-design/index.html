@@ -1,0 +1,2296 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>17. 최적설계 기법 총정리 (단일 완결본)</title>
+<style>
+:root{
+  --bg:#f6f7f7;
+  --surface:#ffffff;
+  --sidebar:#eef0f1;
+  --ink:#20242a;
+  --ink-soft:#565f68;
+  --ink-faint:#8993a0;
+  --line:#e1e4e7;
+  --line-strong:#c9ced3;
+  --accent:#546978;
+  --accent-strong:#3d4f5c;
+  --accent-soft:#eaeef0;
+  --accent-soft-strong:#dee5e8;
+  --code-bg:#f1f3f4;
+  --shadow:0 1px 2px rgba(20,24,30,.04), 0 8px 24px -12px rgba(20,24,30,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14171a;
+    --surface:#1a1e22;
+    --sidebar:#101316;
+    --ink:#e4e7ea;
+    --ink-soft:#a2acb5;
+    --ink-faint:#6c7680;
+    --line:#282e34;
+    --line-strong:#343b42;
+    --accent:#93a7b5;
+    --accent-strong:#b7c6d1;
+    --accent-soft:rgba(147,167,181,.09);
+    --accent-soft-strong:rgba(147,167,181,.16);
+    --code-bg:#20252a;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14171a; --surface:#1a1e22; --sidebar:#101316; --ink:#e4e7ea;
+  --ink-soft:#a2acb5; --ink-faint:#6c7680; --line:#282e34; --line-strong:#343b42;
+  --accent:#93a7b5; --accent-strong:#b7c6d1; --accent-soft:rgba(147,167,181,.09);
+  --accent-soft-strong:rgba(147,167,181,.16); --code-bg:#20252a;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+}
+:root[data-theme="light"]{
+  --bg:#f6f7f7; --surface:#ffffff; --sidebar:#eef0f1; --ink:#20242a;
+  --ink-soft:#565f68; --ink-faint:#8993a0; --line:#e1e4e7; --line-strong:#c9ced3;
+  --accent:#546978; --accent-strong:#3d4f5c; --accent-soft:#eaeef0;
+  --accent-soft-strong:#dee5e8; --code-bg:#f1f3f4;
+  --shadow:0 1px 2px rgba(20,24,30,.04), 0 8px 24px -12px rgba(20,24,30,.10);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{animation-duration:.001ms !important; transition-duration:.001ms !important} }
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-size:16px;
+  line-height:1.72;
+  -webkit-font-smoothing:antialiased;
+;
+  word-break:keep-all; overflow-wrap:break-word}
+
+.serif{ font-family:'Noto Serif KR','Nanum Myeongjo','Iowan Old Style','Source Serif Pro',Georgia,serif; }
+
+/* ---------- layout shell ---------- */
+.layout{
+  display:grid;
+  grid-template-columns: 272px minmax(0,1fr);
+  max-width:1180px;
+  margin:0 auto;
+  align-items:start;
+}
+.sidebar{
+  position:sticky;
+  top:0;
+  align-self:start;
+  height:100vh;
+  overflow-y:auto;
+  padding:28px 18px 28px 28px;
+  border-right:1px solid var(--line);
+  scrollbar-width:thin;
+}
+.sidebar-inner{ display:flex; flex-direction:column; gap:2px; }
+.sidebar-eyebrow{
+  font-size:.72rem; letter-spacing:.09em; color:var(--ink-faint);
+  text-transform:uppercase; margin:0 0 14px 10px; font-weight:600;
+}
+.toc-link{
+  display:block; padding:8px 10px; border-radius:8px;
+  font-size:.905rem; color:var(--ink-soft); text-decoration:none;
+  line-height:1.4; border-left:2px solid transparent;
+  transition:background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+.toc-link:hover{ background:var(--accent-soft); color:var(--ink); }
+.toc-link.active{
+  background:var(--accent-soft-strong); color:var(--accent-strong);
+  border-left-color:var(--accent); font-weight:600;
+}
+.sidebar-foot{
+  margin-top:18px; padding-top:14px; border-top:1px solid var(--line);
+  display:flex; flex-direction:column; gap:6px;
+}
+.sidebar-foot a{
+  font-size:.82rem; color:var(--ink-faint); text-decoration:none; padding:4px 10px;
+}
+.sidebar-foot a:hover{ color:var(--accent-strong); }
+
+.content-col{ min-width:0; padding:0 40px 120px; }
+
+/* ---------- hero ---------- */
+.hero{
+  padding:56px 0 34px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:8px;
+}
+.hero-eyebrow{
+  font-size:.78rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--accent); font-weight:700; margin:0 0 14px;
+}
+.hero h1{
+  font-size:2.15rem; line-height:1.28; margin:0 0 20px; font-weight:600;
+  color:var(--ink); text-wrap:balance;
+}
+.meta-card{
+  background:var(--surface); border:1px solid var(--line); border-radius:12px;
+  padding:20px 24px; box-shadow:var(--shadow); font-size:.95rem; color:var(--ink-soft);
+}
+.meta-card p{ margin:0 0 10px; }
+.meta-card p:last-child{ margin-bottom:0; }
+.meta-card strong{ color:var(--ink); font-weight:650; }
+
+/* ---------- sections & headings ---------- */
+.doc-section{ padding-top:52px; margin-top:4px; }
+.doc-section:first-of-type{ padding-top:40px; }
+.doc-section + .doc-section{ border-top:1px solid var(--line); }
+
+.doc-section h1{
+  font-family:'Noto Serif KR','Nanum Myeongjo','Iowan Old Style',Georgia,serif;
+  font-size:1.62rem; font-weight:600; color:var(--ink);
+  margin:0 0 22px; padding-bottom:14px; border-bottom:1px solid var(--line-strong);
+  text-wrap:balance; letter-spacing:-.01em;
+}
+.doc-section h2{
+  font-size:1.12rem; font-weight:700; color:var(--accent-strong);
+  margin:38px 0 12px; letter-spacing:-.005em;
+}
+.doc-section h3{
+  font-size:.98rem; font-weight:700; color:var(--ink);
+  margin:26px 0 10px; padding-left:11px; border-left:3px solid var(--accent);
+}
+.doc-section > h2:first-of-type,
+.doc-section > h3:first-of-type{ margin-top:22px; }
+
+p{ margin:0 0 15px; color:var(--ink); }
+.doc-section p{ max-width:74ch; }
+ul,ol{ margin:0 0 16px; padding-left:1.3em; max-width:74ch; }
+li{ margin:0 0 7px; color:var(--ink); }
+li::marker{ color:var(--ink-faint); }
+strong{ font-weight:700; color:var(--ink); }
+em{ color:var(--ink-soft); }
+hr{ border:none; border-top:1px solid var(--line); margin:0; display:none; } /* 섹션 구분은 border로 대체 */
+
+/* ---------- inline code & code blocks ---------- */
+code{
+  font-family:'Cascadia Code','D2Coding',Consolas,'SFMono-Regular','Courier New',monospace;
+  font-size:.86em; background:var(--code-bg); color:var(--ink);
+  padding:.12em .38em; border-radius:5px; white-space:pre-wrap;
+}
+pre.diagram{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:18px 20px; margin:0 0 20px; overflow-x:auto; box-shadow:var(--shadow);
+}
+pre.diagram code{
+  background:none; padding:0; border-radius:0; white-space:pre;
+  font-size:.845rem; line-height:1.62; color:var(--ink-soft); display:block;
+}
+
+/* ---------- tables ---------- */
+.table-scroll{ overflow-x:auto; margin:0 0 22px; border:1px solid var(--line); border-radius:10px; box-shadow:var(--shadow); }
+table{
+  border-collapse:collapse; width:100%; min-width:520px; background:var(--surface);
+  font-variant-numeric:tabular-nums;
+}
+thead th{
+  text-align:left; font-size:.76rem; letter-spacing:.05em; text-transform:uppercase;
+  color:var(--ink-faint); font-weight:700; background:var(--sidebar);
+  padding:10px 16px; border-bottom:1px solid var(--line-strong); white-space:nowrap;
+}
+tbody td{
+  padding:9px 16px; font-size:.895rem; color:var(--ink-soft);
+  border-bottom:1px solid var(--line); vertical-align:top;
+}
+tbody tr:last-child td{ border-bottom:none; }
+tbody td strong{ color:var(--ink); }
+tbody tr:hover td{ background:var(--accent-soft); }
+
+/* ---------- callouts (blockquote) ---------- */
+blockquote.callout{
+  margin:0 0 20px; padding:14px 18px; background:var(--accent-soft);
+  border-left:3px solid var(--line-strong); border-radius:0 8px 8px 0;
+  color:var(--ink-soft); font-size:.925rem;
+}
+blockquote.callout p{ margin:0 0 8px; max-width:none; }
+blockquote.callout p:last-child{ margin-bottom:0; }
+blockquote.callout-important{
+  background:var(--accent-soft-strong); border-left:3px solid var(--accent);
+}
+blockquote.callout-important strong{ color:var(--accent-strong); }
+
+/* ---------- links ---------- */
+a{ color:var(--accent-strong); }
+.doc-section a{ text-decoration-color:var(--line-strong); text-underline-offset:2px; }
+.doc-section a:hover{ text-decoration-color:var(--accent); }
+
+/* ---------- footer / back to top ---------- */
+.doc-footer{
+  margin-top:60px; padding-top:24px; border-top:1px solid var(--line);
+  font-size:.85rem; color:var(--ink-faint);
+}
+.back-to-top{
+  position:fixed; right:28px; bottom:28px; width:42px; height:42px;
+  border-radius:50%; background:var(--surface); border:1px solid var(--line);
+  box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center;
+  color:var(--ink-soft); text-decoration:none; font-size:1.1rem;
+  opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease;
+}
+.back-to-top.show{ opacity:1; pointer-events:auto; }
+.back-to-top:hover{ color:var(--accent-strong); transform:translateY(-2px); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 960px){
+  .layout{ grid-template-columns:1fr; }
+  .sidebar{
+    position:sticky; top:0; height:auto; width:100%;
+    border-right:none; border-bottom:1px solid var(--line);
+    padding:14px 16px; background:var(--bg); z-index:20;
+  }
+  .sidebar-inner{ flex-direction:row; overflow-x:auto; gap:4px; padding-bottom:2px; }
+  .sidebar-eyebrow{ display:none; }
+  .toc-link{ white-space:nowrap; border-left:none; border-bottom:2px solid transparent; border-radius:6px; }
+  .toc-link.active{ border-left-color:transparent; border-bottom-color:var(--accent); }
+  .sidebar-foot{ display:none; }
+  .content-col{ padding:0 20px 100px; }
+  .hero{ padding:36px 0 26px; }
+  .hero h1{ font-size:1.6rem; }
+}
+:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+</style>
+</head>
+<body>
+
+<div class="layout" id="top">
+  <nav class="sidebar" aria-label="목차">
+    <div class="sidebar-inner">
+      <p class="sidebar-eyebrow">학습자료 17 · 목차</p>
+      <a class="toc-link" href="#sec-0" data-target="sec-0">0. 용어와 기본 개념</a>
+<a class="toc-link" href="#sec-1" data-target="sec-1">1. 최적화 문제의 수학적 정의</a>
+<a class="toc-link" href="#sec-2" data-target="sec-2">2. "확률론적"의 두 가지 뜻 ★</a>
+<a class="toc-link" href="#sec-3" data-target="sec-3">3. 전체 워크플로 지도</a>
+<a class="toc-link" href="#sec-4-doe" data-target="sec-4-doe">4. DOE — 실험계획법</a>
+<a class="toc-link" href="#sec-5" data-target="sec-5">5. 근사모델 (대리모델)</a>
+<a class="toc-link" href="#sec-6" data-target="sec-6">6. 민감도 분석</a>
+<a class="toc-link" href="#sec-7" data-target="sec-7">7. 최적화 알고리즘</a>
+<a class="toc-link" href="#sec-8" data-target="sec-8">8. 다목적 최적화</a>
+<a class="toc-link" href="#sec-9-rbdo" data-target="sec-9-rbdo">9. 신뢰성 · 강건설계 (RBDO)</a>
+<a class="toc-link" href="#sec-10" data-target="sec-10">10. 최적해 검증</a>
+<a class="toc-link" href="#sec-11-arm-16" data-target="sec-11-arm-16">11. 실측 데이터 — Arm 모델 16종 전수 실행</a>
+<a class="toc-link" href="#sec-12" data-target="sec-12">12. 한 장 요약 — 언제 뭘 쓰나</a>
+<a class="toc-link" href="#sec-13" data-target="sec-13">13. 자주 하는 실수와 올바른 표현</a>
+<a class="toc-link" href="#sec-14" data-target="sec-14">14. 용어집</a>
+      <div class="sidebar-foot">
+        <span class="sv-progress" id="sv-progress"></span>
+        <a href="#top">↑ 맨 위로</a>
+        <a href="../../">← Study Vault 허브</a>
+      </div>
+    </div>
+  </nav>
+  <div class="content-col">
+    <header class="hero">
+      <p class="hero-eyebrow">업무내용 · 학습자료 · 단일 완결본</p>
+      <h1 class="serif">17. 최적설계 기법 총정리 (단일 완결본)</h1>
+      <p>작성일: 2026-08-05
+<strong>이 파일 하나로 최적설계 기법 전반을 공부할 수 있도록</strong> 기초 이론부터 수식,
+HyperStudy 실제 기능, 직접 측정한 실험값까지 전부 담았습니다.
+다른 파일을 안 봐도 되게 썼으므로 02·03·04·05번과 내용이 일부 겹칩니다.</p>
+<p>관점 축: <strong>"이 기법은 결정론적인가 확률론적인가"</strong></p>
+    </header>
+    <main>
+      
+<section class="doc-section" id="sec-0"><h1 id="0">0. 용어와 기본 개념</h1>
+<h2 id="0-1">0-1. 최적설계란</h2>
+<p><strong>"주어진 제약을 지키면서 목적을 가장 좋게 만드는 설계값을 찾는 것."</strong></p>
+<p>자동차 부품을 예로 들면 — <em>변형량이 1.5mm를 넘지 않으면서 부피(=무게, =원가)를
+가장 작게</em> 만드는 형상 치수를 찾는 일입니다.</p>
+<h2 id="0-2-4">0-2. 4대 구성요소</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>용어</th>
+<th>영문</th>
+<th>뜻</th>
+<th>Arm 모델 예시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>설계변수</strong></td>
+<td>Design Variable (DV)</td>
+<td>내가 바꿀 수 있는 값</td>
+<td>length_1~5, radius_1~3, height (9개)</td>
+</tr>
+<tr>
+<td><strong>목적함수</strong></td>
+<td>Objective Function</td>
+<td>최소/최대로 만들고 싶은 것</td>
+<td>Volume 최소화</td>
+</tr>
+<tr>
+<td><strong>제약조건</strong></td>
+<td>Constraint</td>
+<td>반드시 지켜야 하는 조건</td>
+<td>Max_Disp ≤ 1.5 mm</td>
+</tr>
+<tr>
+<td><strong>응답</strong></td>
+<td>Response</td>
+<td>해석으로 얻는 출력값</td>
+<td>Volume, Max_Disp, Max_Stress</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="callout">
+<p><strong>응답 ≠ 목적함수</strong>입니다. 응답은 해석 결과 전부이고, 그중 일부를 목적함수로,
+일부를 제약으로 "지정"하는 것입니다. Max_Stress처럼 <strong>모니터링만 하고
+목적·제약 어디에도 안 쓰는 응답</strong>도 있습니다 (HS-4000이 그렇게 합니다).</p>
+</blockquote>
+<h2 id="0-3">0-3. 설계공간과 실행가능영역</h2>
+<pre class="diagram"><code>        x₂ ↑
+     상한 ├──────────────────────┐
+          │▓▓▓▓▓▓▓░░░░░░░░░░░░░░│   ▓ = 실행가능영역 (Feasible Region)
+          │▓▓▓▓▓▓░░░░░░░░░░░░░░░│       제약을 모두 만족하는 곳
+          │▓▓▓▓▓░░░░░░░░░░░░░░░░│
+          │▓▓▓▓●←최적해 ░░░░░░░░│   ░ = 실행불가능 (Infeasible)
+          │▓▓▓▓▓░░░░░░░░░░░░░░░░│
+     하한 └──────────────────────┘→ x₁
+          하한                  상한
+              전체 사각형 = 설계공간 (Design Space)
+</code></pre>
+<ul>
+<li><strong>설계공간</strong>: 설계변수의 상·하한이 만드는 전체 영역</li>
+<li><strong>실행가능영역</strong>: 그중 제약을 모두 만족하는 부분</li>
+<li><strong>최적해는 거의 항상 실행가능영역의 "경계"에 놓입니다.</strong> ← 매우 중요.
+  제약을 빡빡하게 쓸수록 목적함수가 좋아지기 때문입니다.
+  이게 나중에 §9, §10에서 문제가 됩니다 (여유가 0이라 산포·오차에 취약).</li>
+</ul>
+<h2 id="0-4-vs">0-4. 국소 최적해 vs 전역 최적해</h2>
+<pre class="diagram"><code> f(x)
+  │    ╭╮
+  │   ╱  ╲      ╭─╮
+  │  ╱    ╲    ╱   ╲
+  │ ╱      ╲__╱     ╲
+  │╱        ●        ╲___●
+  │      국소최적       전역최적
+  └────────────────────────────→ x
+</code></pre>
+<ul>
+<li><strong>국소 최적해 (Local Optimum)</strong>: 주변보다는 좋지만 더 좋은 데가 딴 데 있음</li>
+<li><strong>전역 최적해 (Global Optimum)</strong>: 진짜 제일 좋은 곳</li>
+<li><strong>볼록(Convex) 문제</strong>면 국소 = 전역이 보장됩니다. 하지만 <strong>실제 구조해석 문제는
+  거의 다 비볼록</strong>이라 시작점에 따라 다른 답이 나옵니다.</li>
+</ul>
+<blockquote class="callout">
+<p>경사 기반 알고리즘(SQP, MFD)이 "시작점에 민감하다"는 말이 이 뜻입니다.
+언덕을 내려가다 보면 가장 가까운 골짜기에 갇힙니다.</p>
+</blockquote>
+<hr />
+</section><section class="doc-section" id="sec-1"><h1 id="1">1. 최적화 문제의 수학적 정의</h1>
+<h2 id="1-1">1-1. 표준형</h2>
+<pre class="diagram"><code>    minimize    f(x)                    ← 목적함수
+    subject to  gⱼ(x) ≤ 0    j = 1..m   ← 부등식 제약
+                hₖ(x) = 0    k = 1..p   ← 등식 제약
+                xᴸ ≤ x ≤ xᵁ             ← 변수 상하한 (side constraint)
+</code></pre>
+<ul>
+<li>최대화는 <code>max f(x) = min −f(x)</code> 로 바꿔서 같은 틀로 풉니다.</li>
+<li>제약은 <code>≤ 0</code> 형태로 정규화합니다.
+  예: <code>Max_Disp ≤ 1.5</code> → <code>g(x) = Max_Disp(x) − 1.5 ≤ 0</code></li>
+</ul>
+<p><strong>Arm 모델 문제를 표준형으로 쓰면:</strong></p>
+<pre class="diagram"><code>    minimize    Volume(x)
+    subject to  Max_Disp(x) − 1.5 ≤ 0
+                x = [length_1..5, radius_1..3, height]
+                각 변수의 상하한 지정
+</code></pre>
+<h2 id="1-2-kkt">1-2. KKT 조건 (최적해의 필요조건)</h2>
+<p>제약이 있는 문제에서 점 x*가 최적해이려면 다음을 만족해야 합니다
+(Karush-Kuhn-Tucker 조건):</p>
+<pre class="diagram"><code>① 정상성    ∇f(x*) + Σ λⱼ ∇gⱼ(x*) + Σ μₖ ∇hₖ(x*) = 0
+② 실행가능성  gⱼ(x*) ≤ 0 ,  hₖ(x*) = 0
+③ 쌍대 실행가능성  λⱼ ≥ 0
+④ 상보 여유조건   λⱼ · gⱼ(x*) = 0
+</code></pre>
+<p><strong>④가 실무적으로 중요합니다.</strong> <code>λⱼ · gⱼ = 0</code> 이라는 건:
+- 제약이 <strong>활성(active)</strong> 이면 (<code>gⱼ = 0</code>, 경계에 붙음) → λⱼ &gt; 0 가능
+- 제약이 <strong>비활성</strong>이면 (<code>gⱼ &lt; 0</code>, 여유 있음) → λⱼ = 0</p>
+<p>즉 <strong>최적해에서는 제약이 경계에 딱 붙거나(active), 아예 무관하거나</strong> 둘 중 하나입니다.
+Arm 모델에서 최적해의 Max_Disp가 전부 1.500~1.507로 나오는 이유가 이것입니다.
+제약이 active하게 걸린 것이죠.</p>
+<blockquote class="callout">
+<p><strong>λ (라그랑주 승수)의 물리적 의미</strong>: 제약을 1단위 완화했을 때 목적함수가
+얼마나 개선되는지를 나타냅니다. "그림자 가격(shadow price)"이라고도 합니다.
+Max_Disp 제약을 1.5→1.6으로 늘리면 Volume이 얼마나 더 줄어드는가, 같은 이야기.</p>
+</blockquote>
+<h2 id="1-3">1-3. 왜 그냥 다 계산해보면 안 되나</h2>
+<p>설계변수 9개를 각 10단계씩만 훑어도 10⁹ = <strong>10억 번</strong> 해석입니다.
+1회 4초면 127년. 그래서 <strong>똑똑하게 적은 횟수로 찾는 알고리즘</strong>이 필요합니다.</p>
+<p>이게 최적설계 전체 워크플로가 존재하는 이유입니다:</p>
+<pre class="diagram"><code>DOE로 적게 뽑아보고 → 중요 변수만 남기고 → 대리모델로 싸게 근사하고
+→ 알고리즘으로 효율적으로 탐색 → 마지막에 진짜 해석으로 검증
+</code></pre>
+<hr />
+</section><section class="doc-section" id="sec-2"><h1 id="2">2. "확률론적"의 두 가지 뜻 ★</h1>
+<p>이 단어가 헷갈리는 가장 큰 이유는 <strong>완전히 다른 두 개념에 같은 말을 쓰기 때문</strong>입니다.
+보고서에서 이 둘을 섞으면 바로 틀린 문장이 됩니다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>축</th>
+<th>질문</th>
+<th>용어</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>축 A — 알고리즘의 재현성</strong></td>
+<td>같은 입력으로 두 번 돌리면 같은 답이 나오는가?</td>
+<td>결정론적 알고리즘 ↔ <strong>확률적</strong>(stochastic) 알고리즘</td>
+<td>ARSM은 매번 같음 / GA는 매번 다름</td>
+</tr>
+<tr>
+<td><strong>축 B — 문제의 형식</strong></td>
+<td>설계변수·물성에 <strong>산포(불확실성)</strong> 를 넣는가?</td>
+<td><strong>결정론적 설계(DDO)</strong> ↔ <strong>확률론적 설계(RBDO)</strong></td>
+<td>"치수 = 10mm" / "치수 ~ N(10, 0.1²)"</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>두 축은 독립입니다.</strong></p>
+<pre class="diagram"><code>                        축 B: 문제 형식
+                  DDO(결정론)         RBDO(확률론)
+   축   결정론적    ARSM, SQP, MFD     SORA, SORA_ARSM
+   A    알고리즘    (재현 100%)        (내부에 FORM/MPP)
+   :  ────────────────────────────────────────────────
+   알   확률적      GRSM, GA, MOGA     GA + Monte Carlo
+   고   알고리즘    (매번 다름)         기반 RBDO
+   리
+   즘
+</code></pre>
+<h3 id="a">축 A: 알고리즘이 확률적이라는 뜻</h3>
+<p>내부에 <strong>난수(random number)</strong> 를 쓴다는 뜻입니다.
+- GA는 초기 개체군을 무작위로 만들고, 교차·변이 지점도 무작위로 고릅니다
+- GRSM은 전역 탐색 단계에서 무작위 샘플링을 합니다
+- → 시드가 고정되지 않으면 실행할 때마다 다른 답이 나옵니다</p>
+<p><strong>이것은 결함이 아니라 정상 동작입니다.</strong> 전역탐색을 하려면 무작위성이 필요합니다.
+대신 보고할 때 "N회 반복해서 평균 ± 표준편차" 형태로 써야 합니다.</p>
+<h3 id="b">축 B: 문제가 확률론적이라는 뜻</h3>
+<p>설계변수나 물성이 <strong>확정값이 아니라 분포</strong>라는 뜻입니다.
+- 도면에 10mm라고 써도 실제 생산품은 9.95~10.05mm로 흩어집니다
+- 강판 항복강도도 로트마다 다릅니다
+- → 이 산포를 확률분포로 모델링하고, 제약을 <strong>확률</strong>로 표현합니다</p>
+<pre class="diagram"><code>DDO:   Max_Disp ≤ 1.5              (확정)
+RBDO:  P(Max_Disp ≤ 1.5) ≥ 0.95    (95% 확률로 만족)
+</code></pre>
+<blockquote class="callout">
+<p><strong>면접·보고 팁</strong>: "GA는 확률론적 최적화입니다"는 애매한 표현입니다.
+"GA는 <strong>확률적 알고리즘</strong>입니다(축A). 확률론적 <strong>설계</strong>인 RBDO와는 다른 개념입니다"
+라고 하면 정확합니다.</p>
+</blockquote>
+<hr />
+</section><section class="doc-section" id="sec-3"><h1 id="3">3. 전체 워크플로 지도</h1>
+<pre class="diagram"><code> ┌─────────────────────────────────────────────────────────────┐
+ │ ① 문제 정의                                                  │
+ │    설계변수 · 목적함수 · 제약 · 상하한 결정                    │
+ └──────────────────────────┬──────────────────────────────────┘
+                            ↓
+ ┌─────────────────────────────────────────────────────────────┐
+ │ ② DOE (실험계획법)                    → §4                   │
+ │    설계공간을 효율적으로 샘플링해서 해석 실행                  │
+ └──────────────────────────┬──────────────────────────────────┘
+                            ↓
+       ┌────────────────────┴────────────────────┐
+       ↓                                         ↓
+ ┌───────────────────────────┐   ┌───────────────────────────────┐
+ │ ③ 민감도 분석 · 스크리닝   │   │ ④ 근사모델(대리모델) 구축      │
+ │    중요 변수만 선별  → §6  │   │    솔버 대신 쓸 함수    → §5   │
+ └───────────┬───────────────┘   └───────────────┬───────────────┘
+             └────────────────┬──────────────────┘
+                              ↓
+ ┌─────────────────────────────────────────────────────────────┐
+ │ ⑤ 최적화                                                     │
+ │    (a) 실솔버 직접 사용   — 정확, 비쌈          → §7          │
+ │    (b) 대리모델 위에서   — 빠름, 근사오차 있음                 │
+ │    (c) 다목적 → 파레토                          → §8          │
+ │    (d) 산포 고려 → RBDO                         → §9          │
+ └──────────────────────────┬──────────────────────────────────┘
+                            ↓
+ ┌─────────────────────────────────────────────────────────────┐
+ │ ⑥ 최적해 검증  ★ 생략 금지                      → §10        │
+ │    최적 설계점을 실제 솔버로 재해석해 예측값과 비교            │
+ └─────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+</section><section class="doc-section" id="sec-4-doe"><h1 id="4-doe">4. DOE — 실험계획법</h1>
+<h2 id="4-1">4-1. 왜 필요한가</h2>
+<p>해석 1회가 비싸므로 <strong>최소 횟수로 최대 정보</strong>를 얻어야 합니다.
+DOE는 "어떤 설계점들을 골라 해석할 것인가"를 통계적으로 설계하는 기법입니다.</p>
+<p>목적은 크게 둘입니다:
+1. <strong>스크리닝</strong> — 어느 변수가 중요한지 골라내기 (§6)
+2. <strong>대리모델 학습 데이터 생성</strong> — 응답면을 만들 재료 (§5)</p>
+<p>이 둘은 요구하는 DOE가 다릅니다. 스크리닝은 <strong>격자형(요인배치)</strong>,
+대리모델은 <strong>공간충전형</strong>이 유리합니다.</p>
+<h2 id="4-2-coding">4-2. 코딩 (Coding)</h2>
+<p>변수마다 단위와 범위가 다르므로 <code>[-1, +1]</code>로 정규화해서 다룹니다.</p>
+<pre class="diagram"><code>x_coded = 2·(x − x_min)/(x_max − x_min) − 1
+</code></pre>
+<p><code>length_1</code>이 [-0.5, 2.0] 범위면 -0.5 → -1, 2.0 → +1 로 매핑됩니다.
+이렇게 해야 서로 다른 변수의 효과 크기를 공정하게 비교할 수 있습니다.</p>
+<h2 id="4-3">4-3. 주효과와 교호작용</h2>
+<p><strong>주효과 (Main Effect)</strong> — 변수 하나를 낮은 수준에서 높은 수준으로 바꿨을 때
+응답의 평균 변화량:</p>
+<pre class="diagram"><code>E_j = ȳ(x_j = +1) − ȳ(x_j = −1)
+</code></pre>
+<p><strong>교호작용 (Interaction)</strong> — 두 변수가 함께 작용할 때 생기는 추가 효과.
+"A의 효과가 B의 수준에 따라 달라진다"는 뜻입니다.</p>
+<pre class="diagram"><code>E_jk = ½ [ ȳ(x_j·x_k = +1) − ȳ(x_j·x_k = −1) ]
+</code></pre>
+<blockquote class="callout">
+<p><strong>예시</strong>: 리브 두께를 늘리면 강성이 오르는데, 그 효과가 리브 높이에 따라
+달라진다면 두께×높이 교호작용이 있는 것입니다.</p>
+</blockquote>
+<p><strong>직교 설계(orthogonal design)</strong> 에서는 주효과와 교호작용이 <strong>서로 완전히 분리</strong>됩니다.
+Full Factorial이 그렇습니다. 이게 Full Factorial의 가장 큰 장점입니다.</p>
+<h2 id="4-4-aliasing-resolution">4-4. Aliasing과 Resolution</h2>
+<p>Fractional Factorial은 조합의 일부만 돌리므로, <strong>어떤 효과들이 서로 구분 불가하게
+섞입니다.</strong> 이걸 aliasing(별칭)이라고 합니다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Resolution</th>
+<th>섞이는 정도</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>III</strong></td>
+<td>주효과 ↔ 2차 교호작용</td>
+<td>가장 경제적. 주효과가 교호작용과 섞여 있어 위험</td>
+</tr>
+<tr>
+<td><strong>IV</strong></td>
+<td>2차 교호작용끼리</td>
+<td>주효과는 깨끗함. 교호작용끼리는 구분 불가</td>
+</tr>
+<tr>
+<td><strong>V</strong></td>
+<td>2차 ↔ 3차 교호작용</td>
+<td>주효과·2차 교호작용 모두 깨끗함</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="callout">
+<p>실무 기준: <strong>스크리닝만이면 III로 충분</strong>, 교호작용까지 봐야 하면 IV 이상.</p>
+</blockquote>
+<h2 id="4-5-hyperstudy-doe">4-5. HyperStudy 제공 DOE 전체 목록</h2>
+<p>API 열거형 <code>DoeDesignTypes</code> 기준 (2026.1 실측):</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>분류</th>
+<th>기법</th>
+<th>9변수 기준 런 수</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>격자형(요인배치)</strong></td>
+<td><strong>Full Factorial</strong></td>
+<td>2수준 <strong>512</strong> / 3수준 19,683</td>
+<td>모든 조합. 교호작용 완전 분리. 변수 수에 <strong>2ⁿ 지수 폭증</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Fractional Factorial III</td>
+<td>12</td>
+<td>최소 비용 스크리닝</td>
+</tr>
+<tr>
+<td></td>
+<td>Fractional Factorial IV</td>
+<td>24</td>
+<td>주효과 깨끗</td>
+</tr>
+<tr>
+<td></td>
+<td>Fractional Factorial V</td>
+<td>128</td>
+<td>2차 교호작용까지 깨끗</td>
+</tr>
+<tr>
+<td></td>
+<td>Plackett-Burman</td>
+<td>~12</td>
+<td>주효과 전용, 변수 20개+ 에서 유용</td>
+</tr>
+<tr>
+<td></td>
+<td>Taguchi</td>
+<td>직교배열 크기</td>
+<td>품질공학 전통, 강건설계와 함께</td>
+</tr>
+<tr>
+<td><strong>반응면용</strong></td>
+<td>Central Composite (CCD)</td>
+<td>요인점+축점+중심점</td>
+<td>2차 다항식 적합에 최적 배치</td>
+</tr>
+<tr>
+<td></td>
+<td>Box-Behnken</td>
+<td>CCD보다 적음</td>
+<td><strong>극단 코너점을 피함</strong> (물리적으로 불가능한 조합 회피)</td>
+</tr>
+<tr>
+<td><strong>공간충전형</strong></td>
+<td><strong>MELS</strong></td>
+<td>자유 지정</td>
+<td>HyperStudy 기본 추천. 균등 분포 + <strong>런 추가 가능(extensible)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>Latin Hypercube</td>
+<td>자유 지정</td>
+<td>각 변수 구간을 정확히 한 번씩</td>
+</tr>
+<tr>
+<td></td>
+<td>Hammersley</td>
+<td>자유 지정</td>
+<td>준난수 수열</td>
+</tr>
+<tr>
+<td></td>
+<td>Sobol</td>
+<td>자유 지정</td>
+<td>준난수, 고차원에서 균등성 우수</td>
+</tr>
+<tr>
+<td><strong>기타</strong></td>
+<td>Run Matrix / User</td>
+<td>사용자 지정</td>
+<td>외부 파일로 설계점 직접 입력</td>
+</tr>
+<tr>
+<td></td>
+<td>Fill Random</td>
+<td>자유 지정</td>
+<td>순수 무작위</td>
+</tr>
+<tr>
+<td></td>
+<td>Fill Statistics</td>
+<td>자유 지정</td>
+<td>분포 기반 채움</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="4-6">4-6. 결정론/확률론 관점</h2>
+<ul>
+<li><strong>[축A]</strong> 격자형(Full/Fractional Factorial, PB, Taguchi, CCD, Box-Behnken)은
+  <strong>완전 결정론적</strong> — 설계점이 수식으로 정해져 매번 동일</li>
+<li><strong>[축A]</strong> MELS·Sobol·Hammersley·LHS는 <strong>준난수(quasi-random)</strong> —
+  시드/오프셋이 같으면 재현됨. Fill Random만 진짜 무작위</li>
+<li><strong>[축B]</strong> DOE 자체는 산포 개념이 없음. 다만 HyperStudy는
+  <strong>Uncontrolled(노이즈) 변수</strong>를 별도 축으로 둘 수 있어 확률론적 DOE로 확장 가능</li>
+</ul>
+<h2 id="4-7">4-7. 장단점 정리</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>장점</th>
+<th>단점</th>
+<th>언제</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Full Factorial</td>
+<td>교호작용 완전 분리, 해석 명확, 근거로 쓰기 좋음</td>
+<td>변수 늘면 폭발</td>
+<td>변수 ≤ 6~8, 스크리닝 근거를 확실히 남길 때</td>
+</tr>
+<tr>
+<td>Fractional Factorial</td>
+<td>경제적, 주효과 분리</td>
+<td>Aliasing</td>
+<td>변수 많고 주효과만 필요</td>
+</tr>
+<tr>
+<td>Plackett-Burman</td>
+<td>최소 비용</td>
+<td>교호작용 전혀 못 봄</td>
+<td>변수 20개+ 1차 선별</td>
+</tr>
+<tr>
+<td>CCD / Box-Behnken</td>
+<td>2차 반응면에 최적</td>
+<td>변수 많으면 비쌈</td>
+<td>RSM 만들 때</td>
+</tr>
+<tr>
+<td>MELS / LHS / Sobol</td>
+<td>런 수 자유, 비선형 대응, 고차원 OK</td>
+<td>효과 "분리"는 안 됨(회귀 추정)</td>
+<td><strong>대리모델 학습 데이터</strong></td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="callout">
+<p><strong>실측</strong>: Arm 모델 Full Factorial 2수준 512런 = 약 35분 (1런 ≈ 4초).
+반면 MELS 31런으로 학습한 RBF가 최적화에 충분히 쓸 만했음
+→ <strong>비용 대비 MELS가 압도적</strong>. Full Factorial은 스크리닝 근거용으로만.</p>
+</blockquote>
+<hr />
+</section><section class="doc-section" id="sec-5"><h1 id="5">5. 근사모델 (대리모델)</h1>
+<h2 id="5-1">5-1. 개념</h2>
+<p>DOE로 얻은 소수의 (설계점, 응답) 쌍으로 <strong>응답면 함수 ŷ(x)</strong> 를 만들어,
+이후 최적화에서 솔버 대신 사용합니다.</p>
+<pre class="diagram"><code>실제:   x → [FEA 솔버, 4초] → y
+대리:   x → [ŷ(x), 0.0001초] → ŷ ≈ y
+</code></pre>
+<p>GA처럼 수천 번 평가가 필요한 알고리즘은 대리모델 없이는 불가능합니다.</p>
+<h2 id="5-2">5-2. 기법별 원리와 수식</h2>
+<h3 id="1-lsr-least-squares-regression">① LSR (Least Squares Regression) — 다항식 회귀</h3>
+<pre class="diagram"><code>ŷ(x) = β₀ + Σ βᵢxᵢ + Σ βᵢᵢxᵢ² + Σ βᵢⱼxᵢxⱼ
+</code></pre>
+<p>계수 β는 잔차제곱합을 최소화해 구합니다: <code>β = (XᵀX)⁻¹Xᵀy</code></p>
+<ul>
+<li><strong>[축A]</strong> 결정론적</li>
+<li><strong>장점</strong>: 가장 단순, <strong>계수가 곧 변수 중요도</strong>(해석 가능), 외삽이 안정적, 매우 빠름</li>
+<li><strong>단점</strong>: 다봉·강한 비선형 표현 불가. 차수를 올리면 진동(Runge 현상)</li>
+</ul>
+<h3 id="2-mlsm-moving-least-squares">② MLSM (Moving Least Squares) — 국소 가중 회귀</h3>
+<p>예측점 x 근처의 데이터에 더 큰 가중치를 줘서 국소적으로 회귀합니다.</p>
+<pre class="diagram"><code>min Σ w(‖x − xᵢ‖) · [ŷ(xᵢ) − yᵢ]²
+</code></pre>
+<p>가중함수 w는 거리가 멀수록 0으로 감소 (가우시안 등).</p>
+<ul>
+<li><strong>[축A]</strong> 결정론적</li>
+<li><strong>장점</strong>: LSR보다 비선형 대응력↑, <strong>노이즈에 강함</strong>(스무딩 효과)</li>
+<li><strong>단점</strong>: 계수 해석 불가, 데이터 범위 밖에서 불안정</li>
+</ul>
+<h3 id="3-hk-hyperkriging">③ HK (HyperKriging) — 가우시안 확률과정</h3>
+<pre class="diagram"><code>ŷ(x) = f(x)ᵀβ + Z(x)
+        └회귀항┘  └확률과정항┘
+
+Z(x): 평균 0, 공분산 Cov[Z(xᵢ), Z(xⱼ)] = σ² R(xᵢ, xⱼ) 인 가우시안 과정
+R: 상관함수 (예: 가우시안  R = exp(−Σθₖ|xᵢₖ − xⱼₖ|²) )
+</code></pre>
+<ul>
+<li><strong>[축A]</strong> 학습은 결정론적(재현됨) / <strong>[축B]</strong> 모델 자체가 확률적 해석을 가짐</li>
+<li><strong>★ 핵심 특징</strong>: 예측값과 <strong>함께 예측 분산(불확실성)</strong> 을 내놓습니다.
+  "이 지점은 데이터가 적어서 예측이 불확실하다"를 정량화할 수 있습니다.</li>
+<li><strong>장점</strong>: 신뢰구간 제공 → <strong>적응 샘플링(EGO, Efficient Global Optimization)</strong> 가능,
+  비선형 매우 강함, 학습점을 정확히 통과</li>
+<li><strong>단점</strong>: 학습 비용 큼(상관행렬 역행렬), 데이터 많으면 느려짐, θ 최적화가 까다로움</li>
+</ul>
+<blockquote class="callout">
+<p><strong>"Kriging이 확률적"이라는 말의 정확한 뜻</strong>: 응답을 확률과정으로 모델링해서
+분산을 함께 준다는 뜻이지, <strong>알고리즘이 랜덤하다는 뜻이 아닙니다.</strong></p>
+</blockquote>
+<h3 id="4-rbf-radial-basis-function">④ RBF (Radial Basis Function) — 방사기저함수</h3>
+<pre class="diagram"><code>ŷ(x) = Σᵢ wᵢ · φ(‖x − xᵢ‖)
+</code></pre>
+<p>각 학습점을 중심으로 하는 기저함수 φ의 가중합. 가중치 w는 학습점을
+정확히 통과하도록(보간) 선형계를 풀어 구합니다.</p>
+<p><strong>φ 종류</strong>
+| 형태 | 수식 | 특징 |
+|---|---|---|
+| Gaussian | exp(−(εr)²) | 매끄러움, 전역 영향 |
+| Multiquadric | √(1 + (εr)²) | 전통적, 안정 |
+| Thin plate spline | r² ln r | 2D 보간에 자주 |
+| <strong>CS21 (Compact Support)</strong> | 유한 반경 밖에서 0 | <strong>HyperStudy 기본값.</strong> 희소행렬 → 빠름 |</p>
+<ul>
+<li><strong>[축A]</strong> 결정론적</li>
+<li><strong>장점</strong>: 학습점을 <strong>정확히 통과</strong>, 비선형 매우 강함, 빠름, 고차원 OK</li>
+<li><strong>단점</strong>: <strong>학습점 사이·바깥에서 과적합·진동 위험</strong>, 신뢰구간 없음</li>
+</ul>
+<blockquote class="callout">
+<p>HS-3000/4000이 쓰는 설정 (실측): <code>RbfType=CS21</code>, <code>AugmentedFunction=0</code>,
+<code>RelaxationParam=1</code>, <code>FeatureReduction=Off</code>, <code>MaxPoints=2000</code>,
+학습 데이터 = MELS 31런</p>
+</blockquote>
+<h3 id="5-fast">⑤ FAST — 자동 선택</h3>
+<p>여러 fit을 자동으로 만들어 교차검증 성능이 가장 좋은 것을 고릅니다.
+편하지만 <strong>어떤 게 선택됐는지 반드시 확인</strong>해야 합니다.</p>
+<h2 id="5-3">5-3. 성능 평가 지표</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>지표</th>
+<th>수식</th>
+<th>의미</th>
+<th>판정</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>R²</strong></td>
+<td>1 − SSE/SST</td>
+<td>학습 데이터 설명력</td>
+<td>1에 가까울수록 좋음. <strong>단 과적합이면 1이어도 예측은 엉망</strong></td>
+</tr>
+<tr>
+<td><strong>R² (cross-validation)</strong></td>
+<td>일부 빼고 학습→예측</td>
+<td><strong>진짜 예측력</strong></td>
+<td>★ 이게 핵심 지표</td>
+</tr>
+<tr>
+<td><strong>RMSE</strong></td>
+<td>√(Σ(y−ŷ)²/n)</td>
+<td>오차 크기 (단위 있음)</td>
+<td>작을수록</td>
+</tr>
+<tr>
+<td><strong>MAE</strong></td>
+<td>Σ</td>
+<td>y−ŷ</td>
+<td>/n</td>
+</tr>
+<tr>
+<td><strong>Max Error</strong></td>
+<td>max</td>
+<td>y−ŷ</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>CoP</strong></td>
+<td>OptiSLang 지표</td>
+<td>대리모델 예측력</td>
+<td>&gt; 0.8 이면 신뢰</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>교차검증(Cross-Validation)이 왜 중요한가</strong>
+RBF처럼 학습점을 정확히 통과하는 모델은 <strong>학습 R²가 항상 1.0</strong>입니다.
+그런데 학습점 사이에서는 엉뚱한 값을 낼 수 있습니다.
+데이터 일부를 빼고 학습한 뒤 그 점을 맞히는지 봐야 진짜 실력을 압니다.</p>
+<h2 id="5-4">5-4. ★ 실무에서 가장 중요한 교훈</h2>
+<p><strong>대리모델의 R²가 아무리 좋아도, 최적화는 응답면의 "가장 극단"을 찾아가기 때문에
+근사 오차가 가장 크게 드러나는 지점에서 답이 나옵니다.</strong></p>
+<p>Arm 모델에서 RBF(MELS 31런) 위에서 최적화한 뒤,
+그 최적해를 <strong>실제 솔버로 재해석</strong>한 결과:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>최적화 기법</th>
+<th>대리모델 예측 Max_Disp</th>
+<th><strong>실제 해석값</strong></th>
+<th>제약(≤1.5)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ARSM</strong></td>
+<td>1.5067</td>
+<td><strong>1.5049</strong></td>
+<td><strong>만족</strong></td>
+</tr>
+<tr>
+<td>GRSM</td>
+<td>1.5041</td>
+<td>1.5342</td>
+<td><strong>위반</strong></td>
+</tr>
+<tr>
+<td>SQP</td>
+<td><strong>1.5000</strong></td>
+<td>1.5325</td>
+<td><strong>위반</strong></td>
+</tr>
+<tr>
+<td>GA</td>
+<td>1.5072</td>
+<td>1.5481</td>
+<td><strong>위반</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Volume 오차도 +0.02% ~ +1.41%로 기법마다 크게 달랐습니다.</p>
+<p><strong>왜 SQP가 가장 위험한가</strong>: SQP는 제약 경계를 정밀하게 추종해 <strong>정확히 1.50000</strong>에
+수렴합니다. 여유가 0이니 근사 오차 약 2%가 그대로 위반이 됩니다.
+반면 ARSM은 1.5067에서 멈춰 근사 오차를 흡수했습니다.</p>
+<blockquote class="callout">
+<p><strong>결론: 대리모델 위에서 제약 경계에 정밀하게 붙는 기법일수록 실제 검증에서
+제약을 위반할 위험이 큽니다. 대리모델 기반 최적해는 반드시 실솔버로 검증할 것.</strong></p>
+</blockquote>
+<hr />
+</section><section class="doc-section" id="sec-6"><h1 id="6">6. 민감도 분석</h1>
+<h2 id="6-1-local-sensitivity">6-1. 국소 민감도 (Local Sensitivity)</h2>
+<p>한 점에서의 편미분:</p>
+<pre class="diagram"><code>Sᵢ = ∂f/∂xᵢ  (또는 정규화:  (xᵢ/f)·∂f/∂xᵢ )
+</code></pre>
+<ul>
+<li><strong>[축A]</strong> 결정론적</li>
+<li>계산이 쌈. 하지만 <strong>그 점 근처에서만 유효</strong></li>
+<li>gradient 기반 최적화(SQP, MFD)가 내부적으로 계속 사용</li>
+<li>FEA에서는 해석적 미분이 어려워 <strong>유한차분</strong>으로 근사:
+  <code>∂f/∂xᵢ ≈ [f(x + Δeᵢ) − f(x)] / Δ</code>
+  → 변수 n개면 매 반복마다 n+1회 해석 필요. <strong>SQP가 비싼 이유.</strong>
+  → 또한 <strong>솔버 노이즈에 매우 취약</strong> (Δ가 작으면 노이즈가 미분값을 지배)</li>
+</ul>
+<h2 id="6-2">6-2. 전역 민감도 — 회귀 기반</h2>
+<p>DOE 데이터 전체에 회귀를 적합해 <strong>표준화 회귀계수</strong>를 봅니다.</p>
+<pre class="diagram"><code>표준화 계수 βᵢ* = βᵢ · (σ_xᵢ / σ_y)
+기여도 [%] = |Eᵢ| / Σ|Eⱼ| × 100
+</code></pre>
+<p>Pareto plot(막대그래프)으로 표시하는 게 일반적입니다.</p>
+<ul>
+<li><strong>[축A]</strong> 결정론적</li>
+<li>선형 가정. 계산 쉬움. <strong>HyperStudy의 Linear Effects가 이것</strong></li>
+</ul>
+<h2 id="6-3-sobol">6-3. 전역 민감도 — 분산 기반 (Sobol 지수)</h2>
+<p>출력의 <strong>분산</strong>을 변수별 기여로 분해합니다.</p>
+<pre class="diagram"><code>V(y) = Σ Vᵢ + Σ Vᵢⱼ + ... + V₁₂...ₙ
+
+1차 지수:  Sᵢ = Vᵢ / V(y)            ← xᵢ 단독 기여
+총 지수:   S_Tᵢ = 1 − V₋ᵢ / V(y)     ← xᵢ가 관여한 모든 기여(교호작용 포함)
+</code></pre>
+<ul>
+<li><strong>[축B]</strong> 확률론적 — 입력을 확률변수로 보고 몬테카를로 샘플링</li>
+<li><strong>장점</strong>: 비선형·교호작용까지 정확히 잡음. 모델 형태 가정 불필요</li>
+<li><strong>단점</strong>: <strong>샘플이 매우 많이 필요</strong> (보통 수천~수만). 대리모델 위에서 돌리는 게 보통</li>
+<li><code>S_Tᵢ − Sᵢ</code> 가 크면 그 변수는 <strong>교호작용으로 작용</strong>한다는 뜻</li>
+</ul>
+<h2 id="6-4-cop-optislang-mop">6-4. CoP 기반 (OptiSLang MOP)</h2>
+<p>대리모델의 예측력(CoP)을 변수별로 분해해 중요도를 산출합니다.
+OptiSLang의 대표 기능이며, "어떤 변수를 빼면 예측력이 얼마나 떨어지는가"로 해석합니다.</p>
+<h2 id="6-5-arm">6-5. 스크리닝 실전 — Arm 모델 실측</h2>
+<p>Full Factorial 512런에서 주효과 기여도를 계산:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>설계변수</th>
+<th>Volume 기여도</th>
+<th>Max_Disp 기여도</th>
+<th>판정(임계 2%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>length_2</td>
+<td>22.16%</td>
+<td>22.47%</td>
+<td>채택</td>
+</tr>
+<tr>
+<td>length_5</td>
+<td>19.93%</td>
+<td><strong>25.76%</strong></td>
+<td>채택</td>
+</tr>
+<tr>
+<td>length_3</td>
+<td>18.40%</td>
+<td>15.85%</td>
+<td>채택</td>
+</tr>
+<tr>
+<td>height</td>
+<td>17.28%</td>
+<td>5.87%</td>
+<td>채택</td>
+</tr>
+<tr>
+<td>length_4</td>
+<td>14.49%</td>
+<td>18.48%</td>
+<td>채택</td>
+</tr>
+<tr>
+<td>length_1</td>
+<td>5.99%</td>
+<td>11.33%</td>
+<td>채택</td>
+</tr>
+<tr>
+<td>radius_1</td>
+<td>1.09%</td>
+<td>0.13%</td>
+<td><strong>제외</strong></td>
+</tr>
+<tr>
+<td>radius_3</td>
+<td>0.50%</td>
+<td>0.11%</td>
+<td><strong>제외</strong></td>
+</tr>
+<tr>
+<td>radius_2</td>
+<td>0.15%</td>
+<td>0.00%</td>
+<td><strong>제외</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>간격이 뚜렷합니다 (5.99% vs 1.09%). 임계값 2%면 깔끔하게 갈립니다.
+<strong>이 자동 판정이 튜토리얼에서 사람이 고른 6변수와 정확히 일치</strong>했습니다.</p>
+<p><strong>9변수 → 6변수 축소 효과 (실측)</strong></p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>9변수 Volume</th>
+<th>6변수 Volume</th>
+<th>차이</th>
+<th>평가횟수 변화</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GRSM</td>
+<td>1,645,450</td>
+<td>1,655,120</td>
+<td><strong>−0.59% 손해</strong></td>
+<td>50 → 50</td>
+</tr>
+<tr>
+<td>SQP</td>
+<td>1,652,200</td>
+<td>1,656,090</td>
+<td>−0.24% 손해</td>
+<td>209 → <strong>191</strong></td>
+</tr>
+<tr>
+<td>MFD</td>
+<td>1,657,010</td>
+<td>1,655,460</td>
+<td>+0.09% 개선</td>
+<td>62 → <strong>48</strong></td>
+</tr>
+<tr>
+<td>ARSM</td>
+<td>1,702,450</td>
+<td>1,703,330</td>
+<td>−0.05% 손해</td>
+<td>14 → <strong>11</strong></td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="callout">
+<p><strong>스크리닝은 "공짜"가 아닙니다.</strong> 비용은 확실히 줄지만 최적값이 조금 나빠질 수
+있습니다(GRSM에서 0.59%). radius 변수들이 미미하게나마 기여하고 있었던 것이죠.
+어느 쪽을 택할지는 <strong>해석 비용 vs 요구 정밀도</strong>의 트레이드오프입니다.</p>
+</blockquote>
+<hr />
+</section><section class="doc-section" id="sec-7"><h1 id="7">7. 최적화 알고리즘</h1>
+<h2 id="7-1">7-1. 큰 분류</h2>
+<pre class="diagram"><code>최적화 알고리즘
+├── ① 경사 기반 (Gradient-based)
+│      미분정보 사용. 빠르지만 국소최적해 위험, 노이즈 취약
+│      → SQP, MFD, Steepest Descent, Newton
+│
+├── ② 무경사 / 메타휴리스틱 (Gradient-free)
+│      미분 불필요. 전역탐색 강함, 평가 횟수 매우 많음
+│      → GA, MOGA, PSO, Simulated Annealing
+│
+└── ③ 반응면 기반 (Surrogate-assisted / Adaptive)
+       근사모델을 반복 갱신하며 탐색. 적은 평가로 좋은 성능
+       → ARSM, GRSM
+</code></pre>
+<h2 id="7-2">7-2. 경사 기반 알고리즘</h2>
+<h3 id="steepest-descent">Steepest Descent (최급강하법)</h3>
+<pre class="diagram"><code>x_{k+1} = x_k − α ∇f(x_k)
+</code></pre>
+<p>가장 단순. 수렴이 느리고 좁은 골짜기에서 지그재그.</p>
+<h3 id="newtons-method">Newton's Method</h3>
+<pre class="diagram"><code>x_{k+1} = x_k − H⁻¹ ∇f(x_k)      H = 헤시안(2차 미분 행렬)
+</code></pre>
+<p>2차 정보를 써서 훨씬 빠름. 하지만 헤시안 계산·저장 비용이 큼.
+<strong>Quasi-Newton(BFGS)</strong> 은 헤시안을 근사로 갱신해 이 문제를 완화합니다.</p>
+<h3 id="sqp-sequential-quadratic-programming">★ SQP (Sequential Quadratic Programming)</h3>
+<p>매 반복마다 <strong>목적함수를 2차, 제약을 1차로 근사한 QP 부문제</strong>를 풀어
+이동 방향 d를 얻습니다.</p>
+<pre class="diagram"><code>min_d   ½ dᵀ B_k d + ∇f(x_k)ᵀ d
+s.t.    ∇gⱼ(x_k)ᵀ d + gⱼ(x_k) ≤ 0
+        ∇hₖ(x_k)ᵀ d + hₖ(x_k) = 0
+
+B_k = 라그랑주 함수 헤시안의 근사 (BFGS로 갱신)
+x_{k+1} = x_k + α d          α는 line search로 결정
+</code></pre>
+<ul>
+<li><strong>[축A] 결정론적</strong> — 같은 시작점이면 완전히 재현됨</li>
+<li><strong>제약 있는 비선형 문제의 사실상 표준.</strong> HyperStudy/OptiSLang/PIAnO 모두 지원</li>
+<li><strong>장점</strong>: 국소 최적해를 정밀하게 찾음. 제약을 정확히 만족(모델 기준)</li>
+<li><strong>단점</strong>:</li>
+<li>유한차분 gradient 때문에 <strong>평가 횟수가 많음</strong> (실측 191~209회)</li>
+<li><strong>시작점에 민감</strong> — 비볼록 문제에서 다른 국소해로 감</li>
+<li><strong>솔버 노이즈에 취약</strong> — 1e-5 노이즈가 유한차분 미분을 오염시켜 탐색 경로가 갈림</li>
+<li>대리모델 위에서는 <strong>제약 경계에 정확히 붙어 검증 시 위반 위험</strong></li>
+</ul>
+<h3 id="mfd-method-of-feasible-directions">MFD (Method of Feasible Directions)</h3>
+<p>현재 실행가능한 점에서, <strong>① 목적함수를 개선하면서 ② 실행가능영역을 벗어나지 않는</strong>
+방향(usable-feasible direction)만 골라 이동합니다.</p>
+<pre class="diagram"><code>d 를 찾되:   ∇f ᵀd &lt; 0           (목적함수 개선)
+             ∇gⱼᵀd ≤ 0  (active 제약에 대해)   (실행가능 유지)
+</code></pre>
+<ul>
+<li><strong>[축A] 결정론적</strong></li>
+<li><strong>장점</strong>: 항상 실행가능영역 안에 머묾. 제약이 많은 구조최적화에 전통적으로 강함.
+  <strong>SQP보다 훨씬 적은 평가로 비슷한 품질</strong> (실측 48~62회 vs 191~209회)</li>
+<li><strong>단점</strong>: 자료가 적고 튜토리얼에 잘 안 나옴. 초기점이 실행가능해야 함</li>
+</ul>
+<h2 id="7-3">7-3. 메타휴리스틱</h2>
+<h3 id="ga-genetic-algorithm">★ GA (Genetic Algorithm)</h3>
+<p>생물 진화를 모사합니다.</p>
+<pre class="diagram"><code>1. 초기 개체군 무작위 생성 (예: 105개)
+2. 반복:
+   a. 평가     — 각 개체의 적합도 계산
+   b. 선택     — 좋은 개체를 확률적으로 뽑음 (룰렛휠, 토너먼트)
+   c. 교차     — 두 부모의 유전자를 섞어 자식 생성 (Crossover)
+   d. 변이     — 낮은 확률로 유전자를 무작위 변경 (Mutation, 보통 1%)
+   e. 엘리트 보존 — 최고 개체 일부는 그대로 다음 세대로
+3. 수렴 또는 최대 세대 도달 시 종료
+</code></pre>
+<ul>
+<li><strong>[축A] 확률적</strong> — 초기 개체군·교차점·변이가 전부 난수. <strong>매번 다른 답</strong></li>
+<li><strong>장점</strong>: 미분 불필요, 이산변수 가능, 비볼록·다봉에 강함, 전역탐색, 병렬화 쉬움</li>
+<li><strong>단점</strong>: <strong>평가 횟수 수천 회</strong> → 실솔버로는 비현실적. 반드시 대리모델 위에서.
+  수렴 판정이 애매</li>
+</ul>
+<blockquote class="callout">
+<p>HyperStudy 실측 파라미터: <code>GAPOPS=105</code>(개체군), <code>GAMUTR=0.01</code>(변이율),
+<code>GAELIT=10</code>(엘리트), <code>GATOUR=2</code>(토너먼트 크기), 총 2,913회 평가</p>
+</blockquote>
+<h3 id="pso-particle-swarm-optimization">PSO (Particle Swarm Optimization)</h3>
+<p>새떼/물고기떼를 모사. 각 입자가 <strong>자기 최고기록</strong>과 <strong>집단 최고기록</strong>을 향해 이동.</p>
+<pre class="diagram"><code>v_{k+1} = ω·v_k + c₁r₁(p_best − x_k) + c₂r₂(g_best − x_k)
+x_{k+1} = x_k + v_{k+1}
+</code></pre>
+<p>GA와 용도 비슷, 구현이 단순. <strong>[축A] 확률적</strong></p>
+<h3 id="simulated-annealing">Simulated Annealing (담금질 모사)</h3>
+<p>금속 열처리를 모사. 초반엔 나쁜 해도 확률 <code>exp(−Δf/T)</code> 로 수용해 국소해를 탈출하고,
+온도 T를 점차 낮춰 수렴시킵니다. 이산 최적화에 유용. <strong>[축A] 확률적</strong></p>
+<h2 id="7-4-hyperstudy">7-4. 반응면 기반 (HyperStudy 주력)</h2>
+<h3 id="arsm-adaptive-response-surface-method">★ ARSM (Adaptive Response Surface Method)</h3>
+<pre class="diagram"><code>1. 초기 설계점 몇 개 해석
+2. 반복:
+   a. 현재 데이터로 국소 반응면(보통 2차 다항식) 적합
+   b. 반응면 위에서 최적해를 찾음
+   c. 그 점을 실제로 해석
+   d. 신뢰영역(trust region)을 축소하며 반응면을 갱신
+3. 수렴
+</code></pre>
+<ul>
+<li><strong>[축A] 결정론적</strong> — 완전히 재현됨 (실측: 튜토리얼과 100% 일치)</li>
+<li><strong>장점</strong>: <strong>평가 횟수가 압도적으로 적음(10~15회)</strong>. 재현성 100%.
+  제약에 여유를 두고 수렴해 <strong>검증 통과율이 높음</strong></li>
+<li><strong>단점</strong>: <strong>국소 반응면 기반이라 전역최적해를 놓칠 수 있음.</strong>
+  실측에서 목적값이 다른 기법보다 명확히 나빴음 (1,702,450 vs GRSM 1,645,450)</li>
+</ul>
+<blockquote class="callout">
+<p>HyperStudy의 <strong>단일목적 기본 기법</strong>입니다. 튜토리얼도
+"ARSM이 기본이지만 전역해가 필요하면 GRSM을 쓰라"고 안내합니다.</p>
+</blockquote>
+<h3 id="grsm-global-response-search-method">★ GRSM (Global Response Search Method)</h3>
+<p>ARSM의 국소성 한계를 보완한 기법. <strong>전역 반응면 + 무작위 전역 탐색</strong>을 병행하며,
+매 반복마다 여러 점을 동시에 제안해 병렬 해석이 가능합니다.</p>
+<ul>
+<li><strong>[축A] 확률적</strong> — 전역탐색에 난수 사용. <strong>매번 다른 답</strong></li>
+<li><strong>장점</strong>: <strong>적은 평가(50회)로 최고 품질</strong>. 병렬화 유리. 다목적에도 사용 가능</li>
+<li><strong>단점</strong>: 재현성 없음 → 보고 시 여러 번 반복해 통계 제시 필요</li>
+</ul>
+<blockquote class="callout">
+<p>HyperStudy 실측 파라미터: <code>MAXDES=50</code>(최대 평가), <code>NPTGRS=8</code>(반복당 점 수),
+<code>PARALLE=2</code>(병렬 수), <code>EPSGRS=0.03</code>(수렴 판정)</p>
+</blockquote>
+<h2 id="7-5-hyperstudy-optimizationdesigntypes">7-5. HyperStudy 제공 최적화 기법 전체 (<code>OptimizationDesignTypes</code>)</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>정식 명칭</th>
+<th>분류</th>
+<th><strong>[축A]</strong></th>
+<th><strong>[축B]</strong></th>
+<th>용도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ARSM</strong></td>
+<td>Adaptive Response Surface Method</td>
+<td>반응면</td>
+<td>결정론적</td>
+<td>DDO</td>
+<td>단일목적 기본값</td>
+</tr>
+<tr>
+<td><strong>GRSM</strong></td>
+<td>Global Response Search Method</td>
+<td>반응면+전역</td>
+<td><strong>확률적</strong></td>
+<td>DDO</td>
+<td>전역해 필요 시</td>
+</tr>
+<tr>
+<td><strong>SQP</strong></td>
+<td>Sequential Quadratic Programming</td>
+<td>경사</td>
+<td>결정론적</td>
+<td>DDO</td>
+<td>제약 비선형 표준</td>
+</tr>
+<tr>
+<td><strong>MFD</strong></td>
+<td>Method of Feasible Directions</td>
+<td>경사</td>
+<td>결정론적</td>
+<td>DDO</td>
+<td>제약 많은 구조</td>
+</tr>
+<tr>
+<td><strong>GA</strong></td>
+<td>Genetic Algorithm</td>
+<td>진화</td>
+<td><strong>확률적</strong></td>
+<td>DDO</td>
+<td>이산·다봉</td>
+</tr>
+<tr>
+<td><strong>MOGA</strong></td>
+<td>Multi-Objective GA</td>
+<td>진화</td>
+<td><strong>확률적</strong></td>
+<td>DDO</td>
+<td>다목적 파레토</td>
+</tr>
+<tr>
+<td><strong>HMMO</strong></td>
+<td>Hybrid Multi-objective</td>
+<td>하이브리드</td>
+<td>확률적</td>
+<td>DDO</td>
+<td>다목적</td>
+</tr>
+<tr>
+<td><strong>SORA</strong></td>
+<td>Sequential Optimization &amp; Reliability Assessment</td>
+<td>RBDO</td>
+<td>결정론적</td>
+<td><strong>RBDO</strong></td>
+<td>신뢰성 기반</td>
+</tr>
+<tr>
+<td><strong>SORA_ARSM</strong></td>
+<td>SORA + ARSM</td>
+<td>RBDO</td>
+<td>결정론적</td>
+<td><strong>RBDO</strong></td>
+<td>위와 동일, 반응면</td>
+</tr>
+<tr>
+<td><strong>SRO</strong></td>
+<td>Sequential Robust Optimization</td>
+<td>강건</td>
+<td>결정론적</td>
+<td><strong>Robust</strong></td>
+<td>산포 둔감 설계</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="callout">
+<p><code>approachTool.getAvailableDesignTypes()</code> 를 호출하면 <strong>현재 문제 정의에서 실제로 쓸 수
+있는 기법만</strong> 반환합니다. 목적함수가 2개면 단일목적 기법이 목록에서 빠집니다.</p>
+</blockquote>
+<h2 id="7-6">7-6. 장단점 한눈 비교</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>평가 횟수</th>
+<th>재현성</th>
+<th>전역성</th>
+<th>검증 통과</th>
+<th>종합</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ARSM</td>
+<td>★★★★★ (11~14)</td>
+<td>★★★★★</td>
+<td>★★</td>
+<td>★★★★★</td>
+<td>빠른 1차 탐색</td>
+</tr>
+<tr>
+<td>GRSM</td>
+<td>★★★★ (50)</td>
+<td>★</td>
+<td>★★★★★</td>
+<td>★★★</td>
+<td><strong>가성비 최고</strong></td>
+</tr>
+<tr>
+<td>MFD</td>
+<td>★★★★ (48~62)</td>
+<td>★★★★★</td>
+<td>★★★</td>
+<td>★★★★</td>
+<td>숨은 강자</td>
+</tr>
+<tr>
+<td>SQP</td>
+<td>★★ (191~209)</td>
+<td>★★★★★</td>
+<td>★★</td>
+<td>★★</td>
+<td>정밀 국소해</td>
+</tr>
+<tr>
+<td>GA</td>
+<td>★ (2,913)</td>
+<td>★</td>
+<td>★★★★★</td>
+<td>★★</td>
+<td>대리모델 전용</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+</section><section class="doc-section" id="sec-8"><h1 id="8">8. 다목적 최적화</h1>
+<h2 id="8-1">8-1. 왜 필요한가</h2>
+<p>실제 설계는 목표가 여러 개고 서로 충돌합니다.
+"무게도 줄이고 강성도 높이고" — 둘 다 최고인 설계는 보통 없습니다.</p>
+<h2 id="8-2-dominance">8-2. 지배(Dominance)와 파레토 최적</h2>
+<p>설계 A가 설계 B를 <strong>지배(dominate)</strong> 한다:</p>
+<pre class="diagram"><code>모든 목적에서 A가 B보다 나쁘지 않고,
+적어도 하나의 목적에서 A가 B보다 확실히 좋다
+</code></pre>
+<p><strong>파레토 최적해</strong>: 어떤 다른 해에도 지배당하지 않는 해.
+이들의 집합이 <strong>파레토 프론트(Pareto Front)</strong> 입니다.</p>
+<pre class="diagram"><code>  Max_Disp ↑
+      │  ●  ← 지배당함 (둘 다 나쁨)
+      │
+      │ ○
+      │   ○           ○ = 파레토 최적해
+      │     ○           서로 우열을 가릴 수 없음
+      │        ○  ○     → 설계자가 취향/요구에 따라 선택
+      │             ○
+      └──────────────────→ Volume
+</code></pre>
+<h2 id="8-3">8-3. 기법</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>방식</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>가중합법</strong></td>
+<td><code>min w₁f₁ + w₂f₂</code></td>
+<td>간단하지만 가중치를 바꿔가며 여러 번 풀어야 함. <strong>비볼록 프론트는 못 찾음</strong></td>
+</tr>
+<tr>
+<td><strong>ε-제약법</strong></td>
+<td>f₁ 최소화, f₂ ≤ ε 제약</td>
+<td>ε를 바꿔가며 반복</td>
+</tr>
+<tr>
+<td><strong>MOGA / NSGA-II</strong></td>
+<td>GA를 다목적으로 확장. 비지배 정렬 + 밀집도 유지</td>
+<td><strong>한 번에 프론트 전체</strong>를 얻음. 평가 횟수 매우 많음</td>
+</tr>
+<tr>
+<td><strong>GRSM (다목적 모드)</strong></td>
+<td>반응면 기반</td>
+<td>MOGA보다 훨씬 적은 평가. <strong>대리모델 없으면 이쪽 권장</strong></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>[축A]</strong> MOGA/NSGA-II는 <strong>확률적</strong>, 가중합·ε-제약은 내부 알고리즘에 따름</li>
+</ul>
+<blockquote class="callout">
+<p>HS-4425가 다루는 주제입니다. 튜토리얼 안내:
+"Fit이 없으면 MOO는 평가가 많이 필요하므로 MOGA보다 <strong>GRSM이 효율적</strong>"</p>
+</blockquote>
+<hr />
+</section><section class="doc-section" id="sec-9-rbdo"><h1 id="9-rbdo">9. 신뢰성 · 강건설계 (RBDO)</h1>
+<p><strong>[축B] 확률론적 설계</strong>의 영역입니다.</p>
+<h2 id="9-1">9-1. 왜 필요한가</h2>
+<p>DDO의 최적해는 §1-2(KKT 상보조건)에서 봤듯 <strong>거의 항상 제약 경계 위</strong>에 놓입니다.
+여유가 0이라는 뜻입니다.</p>
+<pre class="diagram"><code>      제약 경계 (Max_Disp = 1.5)
+           │
+   확률밀도 │
+      ╱╲   │
+     ╱  ╲  │        실제 생산품의 분포
+    ╱    ╲ │
+   ╱      ╲│
+  ╱        ╳────── 이 오른쪽 절반이 전부 파손!
+ ╱         │╲
+───────────┼──────────→ Max_Disp
+          1.5
+</code></pre>
+<p>최적해가 정확히 경계에 있으면, 제조 산포가 대칭이라 가정할 때
+<strong>약 50%가 제약을 위반</strong>합니다. 이것이 RBDO의 존재 이유입니다.</p>
+<h2 id="9-2">9-2. 확률 기초</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>개념</th>
+<th>수식</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>정규분포</td>
+<td>X ~ N(μ, σ²)</td>
+<td>평균 μ, 분산 σ²</td>
+</tr>
+<tr>
+<td>표준화</td>
+<td>Z = (X − μ)/σ</td>
+<td>표준정규 N(0,1)로 변환</td>
+</tr>
+<tr>
+<td>한계상태함수</td>
+<td>g(x)</td>
+<td>g &lt; 0 이면 파손, g &gt; 0 이면 안전</td>
+</tr>
+<tr>
+<td>파손확률</td>
+<td>P_f = P[g(X) ≤ 0]</td>
+<td></td>
+</tr>
+<tr>
+<td>신뢰도</td>
+<td>R = 1 − P_f</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="9-3">9-3. 신뢰도 지수 β</h2>
+<pre class="diagram"><code>P_f = Φ(−β)        Φ = 표준정규 누적분포함수
+β = −Φ⁻¹(P_f)
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>목표 신뢰도</th>
+<th>파손확률 P_f</th>
+<th>β</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>90%</td>
+<td>1e-1</td>
+<td>1.28</td>
+</tr>
+<tr>
+<td><strong>95%</strong></td>
+<td>5e-2</td>
+<td><strong>1.645</strong></td>
+</tr>
+<tr>
+<td>99%</td>
+<td>1e-2</td>
+<td>2.33</td>
+</tr>
+<tr>
+<td>99.9%</td>
+<td>1e-3</td>
+<td>3.09</td>
+</tr>
+<tr>
+<td>99.99%</td>
+<td>1e-4</td>
+<td>3.72</td>
+</tr>
+<tr>
+<td>99.9999% (6σ)</td>
+<td>1e-6</td>
+<td>4.75</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="9-4-mpp-most-probable-point">9-4. MPP (Most Probable Point, 최확점)</h2>
+<p>표준정규공간(U-space)에서 <strong>한계상태면 위의 점 중 원점에 가장 가까운 점</strong>입니다.</p>
+<pre class="diagram"><code>MPP:  u* = argmin ‖u‖   subject to  G(u) = 0
+β = ‖u*‖
+</code></pre>
+<p><strong>왜 원점에서 가장 가까운 점인가</strong>: 표준정규공간에서 확률밀도는 원점에서 최대이고
+거리에 따라 지수적으로 감소합니다. 따라서 파손이 일어난다면 <strong>거기서 일어날
+확률이 가장 높습니다.</strong> 그래서 "최확점".</p>
+<pre class="diagram"><code>   u₂ ↑        한계상태면 G(u)=0
+      │       ╱
+      │      ╱
+      │     ● ← MPP (u*)
+      │    ╱ ╲
+      │   ╱   ╲ β = ‖u*‖
+      │  ╱     ╲
+      │ ╱       ╲
+   ───┼─────────●───────→ u₁
+      │ 원점(평균)
+</code></pre>
+<p><strong>RBDO 검증에서 MPP를 확인하는 이유</strong>: 어떤 변수 조합에서 파손이 가장 잘 일어나는지
+알려주므로, 그 방향의 공차를 조이는 등 실질적 대책을 세울 수 있습니다.</p>
+<h2 id="9-5-form-sorm">9-5. FORM / SORM</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>한계상태면 근사</th>
+<th>정확도</th>
+<th>비용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FORM</strong> (First Order Reliability Method)</td>
+<td>MPP에서 <strong>접평면(1차)</strong></td>
+<td>보통</td>
+<td>낮음</td>
+</tr>
+<tr>
+<td><strong>SORM</strong> (Second Order)</td>
+<td>MPP에서 <strong>2차 곡면</strong></td>
+<td>높음</td>
+<td>중간</td>
+</tr>
+<tr>
+<td><strong>Monte Carlo</strong></td>
+<td>근사 없이 직접 샘플링</td>
+<td>정확</td>
+<td><strong>매우 높음</strong> (P_f=1e-4면 10⁶회 필요)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="9-6-ria-vs-pma-rbdo">9-6. RIA vs PMA — RBDO를 푸는 두 방식</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>방식</th>
+<th>정식</th>
+<th>푸는 문제</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RIA</strong> (Reliability Index Approach)</td>
+<td>신뢰도 지수 접근</td>
+<td>현재 설계의 β를 계산 → 목표와 비교</td>
+<td>직관적. <strong>수렴 불안정</strong>할 수 있음</td>
+</tr>
+<tr>
+<td><strong>PMA</strong> (Performance Measure Approach)</td>
+<td>성능 척도 접근</td>
+<td>목표 β에 해당하는 성능값을 계산</td>
+<td><strong>수렴 안정적</strong>. 실무 선호</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="9-7-sora-sequential-optimization-reliability-assessment">9-7. SORA (Sequential Optimization &amp; Reliability Assessment)</h2>
+<p>신뢰성 해석과 최적화를 <strong>번갈아</strong> 수행해 계산량을 크게 줄입니다.</p>
+<pre class="diagram"><code>반복:
+  1. 결정론적 최적화를 푼다 (제약을 안전측으로 이동시킨 상태로)
+  2. 그 해에서 신뢰성 해석(MPP 탐색)을 한다
+  3. MPP 정보로 제약 이동량(shift)을 갱신한다
+  4. 수렴할 때까지 1~3 반복
+</code></pre>
+<ul>
+<li><strong>[축A] 결정론적</strong> (내부 최적화가 결정론적이면)</li>
+<li><strong>[축B] RBDO</strong></li>
+<li><strong>장점</strong>: 중첩 루프(nested loop)보다 훨씬 빠름. HyperStudy가 제공</li>
+<li><strong>단점</strong>: 설정 복잡. 분포 정보가 필요</li>
+</ul>
+<h2 id="9-8-robust-design">9-8. Robust Design (강건설계) — 자주 헷갈림</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>RBDO</th>
+<th>Robust Design</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>목표</strong></td>
+<td>파손확률을 목표 이하로</td>
+<td><strong>출력의 산포(분산) 자체를 줄임</strong></td>
+</tr>
+<tr>
+<td><strong>관심</strong></td>
+<td>분포의 <strong>꼬리</strong> (극단값)</td>
+<td>분포의 <strong>폭</strong></td>
+</tr>
+<tr>
+<td><strong>정식</strong></td>
+<td>min f, s.t. P(g≤0) ≥ R</td>
+<td>min (μ_f + k·σ_f)</td>
+</tr>
+<tr>
+<td><strong>예시</strong></td>
+<td>"10만 대 중 1대만 파손"</td>
+<td>"제품마다 성능 편차가 작게"</td>
+</tr>
+</tbody>
+</table></div>
+<pre class="diagram"><code>   Robust:  산포를 줄임          RBDO: 꼬리를 경계에서 밀어냄
+      ╱╲                              ╱╲
+     ╱  ╲    →    ╱▌▌╲               ╱  ╲  →    ╱╲
+    ╱    ╲       ╱ ▌▌ ╲             ╱    ╲     ╱  ╲
+   ─────────    ──────────    ──────┼────  ───┼──────
+                                   경계        경계
+</code></pre>
+<h2 id="9-9">9-9. 실습에서 확인된 것</h2>
+<p>Arm 모델 <strong>DDO</strong> 최적해들의 Max_Disp:</p>
+<pre class="diagram"><code>1.49999, 1.50115, 1.50125, 1.50197, 1.50337, 1.50486, 1.50543, 1.50680
+</code></pre>
+<p>전부 제약 1.5에 딱 붙어 있습니다 (여유 0~0.05%).</p>
+<p><strong>대리모델 오차 약 2%만으로도 이미 제약을 위반</strong>했는데(§5-4),
+여기에 제조 산포까지 얹히면 훨씬 나빠집니다.
+→ <strong>RBDO가 필요한 이유를 실험적으로 확인한 셈입니다.</strong></p>
+<blockquote class="callout">
+<p>HS-4000 문서가 언급한 후속 과제: "Max_disp &lt; 1.5 를 <strong>95% 신뢰도</strong>로,
+RBF 대리모델 위에서 <strong>SORA</strong>로, 6변수 정규분포 분산 0.1" → HS-5000 주제</p>
+</blockquote>
+<hr />
+</section><section class="doc-section" id="sec-10"><h1 id="10">10. 최적해 검증</h1>
+<h2 id="10-1">10-1. 왜 반드시 해야 하나</h2>
+<p>최적화가 내놓은 값은 <strong>그 알고리즘이 사용한 모델 기준의 값</strong>입니다.
+- 실솔버로 돌렸으면 → 그 값이 곧 실제값 (검증은 정합성 확인용)
+- 대리모델로 돌렸으면 → <strong>근사값일 뿐. 실제와 다를 수 있음</strong></p>
+<h2 id="10-2">10-2. 검증 절차</h2>
+<pre class="diagram"><code>1. 최적화 결과에서 최적 설계점 x* 를 추출
+2. x* 에서 실제 솔버로 재해석
+3. 비교:
+   - 목적함수:  예측값 vs 실측값,  오차율 = (예측−실측)/실측 × 100
+   - 제약:      실측값이 제약을 실제로 만족하는가
+4. 제약 위반이면 그 최적해는 채택 불가
+</code></pre>
+<p>HyperStudy GUI에서는 Iteration History에서 값을 복사해
+Edit Matrix &gt; Run Matrix에 붙여넣고 재실행하는 수작업입니다.
+(자동화 툴에서는 <code>Verify</code> approach의 <code>VerifyOptimal</code> 로 한 번에 처리)</p>
+<h2 id="10-3">10-3. 오차 해석 시 주의</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>실솔버 기법의 오차는 정의상 0</strong></td>
+<td>최적해 자체가 솔버 계산값이므로. 오차 비교의 실질적 대상은 대리모델 기반 기법뿐</td>
+</tr>
+<tr>
+<td><strong>솔버 자체의 수치 노이즈</strong></td>
+<td>실측 약 <strong>1e-5 상대</strong> (코어 배분에 따른 행렬 분해 순서 차이). 이보다 작은 차이엔 의미 부여 금지</td>
+</tr>
+<tr>
+<td><strong>제약 허용오차</strong></td>
+<td>HyperStudy는 기본 0.5% 허용오차를 둠 (<code>Standard</code>). 엄격히 보려면 <code>Strict</code></td>
+</tr>
+<tr>
+<td><strong>확률적 기법</strong></td>
+<td>1회 결과로 우열을 논하면 안 됨. 여러 번 돌려 평균±표준편차로</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+</section><section class="doc-section" id="sec-11-arm-16"><h1 id="11-arm-16">11. 실측 데이터 — Arm 모델 16종 전수 실행</h1>
+<blockquote class="callout">
+<p>2026-08-05 실행. 문제: Volume 최소화, Max_Disp ≤ 1.5mm
+베이스라인(모든 변수 0): Volume 1,766,760 / Max_Disp 1.41084 / Max_Stress 195.29</p>
+</blockquote>
+<h2 id="11-1-8">11-1. 실제 솔버 사용 — 8건 (제약 전부 만족)</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>순위</th>
+<th>기법</th>
+<th>변수</th>
+<th>평가 횟수</th>
+<th>Volume</th>
+<th>베이스라인 대비</th>
+<th>시간</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>GRSM</strong></td>
+<td>9</td>
+<td>50</td>
+<td><strong>1,645,450</strong></td>
+<td><strong>−6.87%</strong></td>
+<td>175s</td>
+</tr>
+<tr>
+<td>2</td>
+<td>SQP</td>
+<td>9</td>
+<td>209</td>
+<td>1,652,200</td>
+<td>−6.48%</td>
+<td>720s</td>
+</tr>
+<tr>
+<td>3</td>
+<td>GRSM</td>
+<td>6</td>
+<td>50</td>
+<td>1,655,120</td>
+<td>−6.32%</td>
+<td>178s</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>MFD</strong></td>
+<td>6</td>
+<td><strong>48</strong></td>
+<td>1,655,460</td>
+<td>−6.30%</td>
+<td>168s</td>
+</tr>
+<tr>
+<td>5</td>
+<td>SQP</td>
+<td>6</td>
+<td>191</td>
+<td>1,656,090</td>
+<td>−6.27%</td>
+<td>667s</td>
+</tr>
+<tr>
+<td>6</td>
+<td>MFD</td>
+<td>9</td>
+<td>62</td>
+<td>1,657,010</td>
+<td>−6.21%</td>
+<td>218s</td>
+</tr>
+<tr>
+<td>7</td>
+<td>ARSM</td>
+<td>9</td>
+<td><strong>14</strong></td>
+<td>1,702,450</td>
+<td>−3.64%</td>
+<td>50s</td>
+</tr>
+<tr>
+<td>8</td>
+<td>ARSM</td>
+<td>6</td>
+<td><strong>11</strong></td>
+<td>1,703,330</td>
+<td>−3.59%</td>
+<td>40s</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="11-2-rbf-8">11-2. 대리모델(RBF) 사용 — 8건</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>변수</th>
+<th>Vol 예측</th>
+<th><strong>Vol 실측</strong></th>
+<th>오차</th>
+<th>Disp 예측</th>
+<th><strong>Disp 실측</strong></th>
+<th>제약</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ARSM</strong></td>
+<td>9</td>
+<td>1,701,678</td>
+<td>1,701,110</td>
+<td><strong>+0.03%</strong></td>
+<td>1.50732</td>
+<td>1.50586</td>
+<td><strong>만족</strong></td>
+</tr>
+<tr>
+<td><strong>ARSM</strong></td>
+<td>6</td>
+<td>1,701,931</td>
+<td>1,701,660</td>
+<td><strong>+0.02%</strong></td>
+<td>1.50671</td>
+<td>1.50487</td>
+<td><strong>만족</strong></td>
+</tr>
+<tr>
+<td>GA</td>
+<td>9</td>
+<td>1,667,158</td>
+<td>1,656,300</td>
+<td>+0.66%</td>
+<td>1.50746</td>
+<td>1.51152</td>
+<td>위반</td>
+</tr>
+<tr>
+<td>GRSM</td>
+<td>6</td>
+<td>1,666,307</td>
+<td>1,650,420</td>
+<td>+0.96%</td>
+<td>1.50413</td>
+<td>1.53422</td>
+<td>위반</td>
+</tr>
+<tr>
+<td>GRSM</td>
+<td>9</td>
+<td>1,663,960</td>
+<td>1,647,320</td>
+<td>+1.01%</td>
+<td>1.50747</td>
+<td>1.54416</td>
+<td>위반</td>
+</tr>
+<tr>
+<td>SQP</td>
+<td>6/9</td>
+<td>1,666,993</td>
+<td>1,649,340</td>
+<td>+1.07%</td>
+<td><strong>1.50000</strong></td>
+<td>1.53246</td>
+<td>위반</td>
+</tr>
+<tr>
+<td>GA</td>
+<td>6</td>
+<td>1,665,650</td>
+<td>1,642,430</td>
+<td>+1.41%</td>
+<td>1.50723</td>
+<td>1.54809</td>
+<td>위반</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="11-3-a">11-3. 재현성 검증 <strong>[축A]</strong></h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>성질</th>
+<th>튜토리얼 Table 1</th>
+<th>실행 결과</th>
+<th>일치?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ARSM 6변수</td>
+<td>결정론적</td>
+<td>11회 / 1,703,330</td>
+<td>11회 / 1,703,330</td>
+<td><strong>완전 일치</strong></td>
+</tr>
+<tr>
+<td>ARSM 9변수</td>
+<td>결정론적</td>
+<td>14회 / 1,702,450</td>
+<td>14회 / 1,702,450</td>
+<td><strong>완전 일치</strong></td>
+</tr>
+<tr>
+<td>SQP 6변수</td>
+<td>결정론적</td>
+<td>173회 / 1,656,090</td>
+<td>173회 / 1,656,090</td>
+<td><strong>완전 일치</strong></td>
+</tr>
+<tr>
+<td>GRSM 6변수</td>
+<td><strong>확률적</strong></td>
+<td>19회 / 1,652,830</td>
+<td>26회 / 1,655,120</td>
+<td>불일치(정상)</td>
+</tr>
+<tr>
+<td>GA (대리모델)</td>
+<td><strong>확률적</strong></td>
+<td>2,998회 / 1,666,204</td>
+<td>2,825회 / 1,665,650</td>
+<td>불일치(정상)</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="callout">
+<p><strong>결정론적 알고리즘은 입력이 같으면 100% 재현됩니다.</strong>
+값이 다르다면 알고리즘 탓이 아니라 <strong>입력(모델·변수·대리모델)이 다른 것</strong>입니다.
+확률적 알고리즘은 입력이 같아도 매번 다릅니다 — 결함이 아니라 정상 동작.</p>
+</blockquote>
+<h2 id="11-4">11-4. 결론</h2>
+<ol>
+<li><strong>GRSM이 비용 대비 최고</strong> — 50회로 최고 품질</li>
+<li><strong>MFD가 숨은 가성비</strong> — 48~62회로 SQP(191~209회)와 동급. 튜토리얼이 안 다룸</li>
+<li><strong>ARSM은 가장 싸지만(11~14회) 품질이 명확히 떨어짐</strong> — 빠른 1차 탐색용.
+   다만 <strong>대리모델 위에서는 유일하게 검증을 통과</strong></li>
+<li><strong>SQP는 4배 비싸고 품질 이득 없음</strong> (이 문제에서는)</li>
+<li><strong>대리모델 기반 최적해는 ARSM 외에 전부 제약 위반</strong> — 반드시 검증할 것</li>
+</ol>
+<hr />
+</section><section class="doc-section" id="sec-12"><h1 id="12">12. 한 장 요약 — 언제 뭘 쓰나</h1>
+<pre class="diagram"><code>■ 변수 20개 이상, 뭐가 중요한지 모름
+    → Plackett-Burman 또는 Fractional Factorial III 로 스크리닝
+
+■ 변수 6~10개, 교호작용까지 확실히 보고 싶음
+    → Full Factorial (단, 2ⁿ 폭증 주의)
+
+■ 대리모델을 만들고 싶음
+    → MELS 30~50런 → RBF 또는 HK 학습 → 교차검증 R² 확인
+
+■ 빠르게 대략적인 최적해만
+    → ARSM (10~15회) — 재현성 100%, 제약 여유 있게 수렴
+
+■ 품질 좋은 최적해를 합리적 비용으로        ★ 이번 실습 1위
+    → GRSM (50회) — 단, 확률적이라 2~3회 돌려 확인 권장
+
+■ 제약이 많은 구조 문제, 비용도 아껴야
+    → MFD (48~62회)
+
+■ 정밀한 국소 최적해가 꼭 필요
+    → SQP — 단 평가 200회, 시작점 민감, 노이즈 취약
+
+■ 이산변수 / 다봉 / 다목적
+    → GA · MOGA — 반드시 대리모델 위에서 (수천 회 평가)
+
+■ 다목적인데 대리모델이 없음
+    → GRSM 다목적 모드 (MOGA보다 훨씬 경제적)
+
+■ 산포·신뢰성을 고려해야
+    → SORA (RBDO) — [축B] 확률론적 설계
+
+■ 성능 편차 자체를 줄여야
+    → Robust Design (SRO)
+
+────────────────────────────────────────────────────
+  어떤 경로를 택하든 마지막은 항상:
+     최적해를 실제 솔버로 재해석해서 검증   ← 생략 금지
+────────────────────────────────────────────────────
+</code></pre>
+<hr />
+</section><section class="doc-section" id="sec-13"><h1 id="13">13. 자주 하는 실수와 올바른 표현</h1>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>✗ 틀린 표현</th>
+<th>✓ 맞는 표현</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"GA는 확률론적 최적화다"</td>
+<td>"GA는 <strong>확률적 알고리즘</strong>이다(축A). 확률론적 <strong>설계</strong>(RBDO)와는 다른 개념이다"</td>
+</tr>
+<tr>
+<td>"SQP가 GA보다 정확하다"</td>
+<td>"SQP는 국소 최적해를 정밀하게 찾지만 전역성은 GA가 낫다. 이 문제에서는 GRSM이 둘 다보다 좋았다"</td>
+</tr>
+<tr>
+<td>"대리모델 R²가 0.99라 신뢰할 만하다"</td>
+<td>"학습 R²만으로는 부족하다. <strong>교차검증 R²</strong> 와 <strong>최적해의 실솔버 재해석</strong>으로 확인했다"</td>
+</tr>
+<tr>
+<td>"최적화 결과 Volume은 1,666,993이다"</td>
+<td>"대리모델 기준 1,666,993, <strong>실해석 검증값 1,649,340(오차 +1.07%)</strong>, 단 제약은 실제로 위반"</td>
+</tr>
+<tr>
+<td>"결과가 튜토리얼과 달라 알고리즘이 개선된 듯하다"</td>
+<td>"결정론적 기법(ARSM·SQP)은 완전히 일치했고, 차이가 난 것은 <strong>확률적 기법(GRSM·GA)</strong> 뿐이다"</td>
+</tr>
+<tr>
+<td>"GRSM이 GA보다 우수하다"</td>
+<td>"1회 실행 기준으로는 GRSM이 우수했다. 둘 다 확률적 기법이므로 <strong>N회 반복 통계</strong>가 필요하다"</td>
+</tr>
+<tr>
+<td>"최적화로 무게를 6.87% 줄였다"</td>
+<td>"제약을 <strong>실측 기준으로 만족하는 해</strong> 중 최선이 6.87% 감소였다"</td>
+</tr>
+<tr>
+<td>"민감도가 낮은 변수는 빼도 된다"</td>
+<td>"주효과 기준으로 낮았다. <strong>교호작용이 지배적이면 다를 수 있으므로</strong> 효과표를 함께 확인했다"</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+</section><section class="doc-section" id="sec-14"><h1 id="14">14. 용어집</h1>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>용어</th>
+<th>영문</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>설계변수</td>
+<td>Design Variable</td>
+<td>최적화가 바꾸는 값</td>
+</tr>
+<tr>
+<td>목적함수</td>
+<td>Objective Function</td>
+<td>최소/최대화 대상</td>
+</tr>
+<tr>
+<td>제약조건</td>
+<td>Constraint</td>
+<td>반드시 만족해야 할 조건</td>
+</tr>
+<tr>
+<td>응답</td>
+<td>Response</td>
+<td>해석으로 얻는 출력</td>
+</tr>
+<tr>
+<td>설계공간</td>
+<td>Design Space</td>
+<td>변수 상하한이 만드는 전체 영역</td>
+</tr>
+<tr>
+<td>실행가능영역</td>
+<td>Feasible Region</td>
+<td>제약을 모두 만족하는 영역</td>
+</tr>
+<tr>
+<td>활성 제약</td>
+<td>Active Constraint</td>
+<td>최적해에서 등호로 만족되는 제약</td>
+</tr>
+<tr>
+<td>국소/전역 최적해</td>
+<td>Local / Global Optimum</td>
+<td>주변 최적 / 진짜 최적</td>
+</tr>
+<tr>
+<td>KKT 조건</td>
+<td>KKT Conditions</td>
+<td>제약 최적화의 필요조건</td>
+</tr>
+<tr>
+<td>라그랑주 승수</td>
+<td>Lagrange Multiplier</td>
+<td>제약 완화 시 목적함수 개선량</td>
+</tr>
+<tr>
+<td>실험계획법</td>
+<td>DOE</td>
+<td>설계공간 샘플링 전략</td>
+</tr>
+<tr>
+<td>주효과</td>
+<td>Main Effect</td>
+<td>변수 단독의 응답 변화량</td>
+</tr>
+<tr>
+<td>교호작용</td>
+<td>Interaction</td>
+<td>변수 조합에서 생기는 추가 효과</td>
+</tr>
+<tr>
+<td>별칭</td>
+<td>Aliasing</td>
+<td>부분요인배치에서 효과가 섞이는 현상</td>
+</tr>
+<tr>
+<td>해상도</td>
+<td>Resolution</td>
+<td>별칭 정도 (III/IV/V)</td>
+</tr>
+<tr>
+<td>대리모델</td>
+<td>Surrogate / Metamodel</td>
+<td>솔버를 대신하는 근사 함수</td>
+</tr>
+<tr>
+<td>응답면</td>
+<td>Response Surface</td>
+<td>대리모델의 다른 표현</td>
+</tr>
+<tr>
+<td>과적합</td>
+<td>Overfitting</td>
+<td>학습 데이터만 잘 맞고 예측은 나쁨</td>
+</tr>
+<tr>
+<td>교차검증</td>
+<td>Cross-Validation</td>
+<td>데이터 일부를 빼고 예측력 평가</td>
+</tr>
+<tr>
+<td>민감도</td>
+<td>Sensitivity</td>
+<td>변수 변화에 대한 응답 변화 정도</td>
+</tr>
+<tr>
+<td>소볼 지수</td>
+<td>Sobol Index</td>
+<td>분산 기반 전역 민감도</td>
+</tr>
+<tr>
+<td>파레토 프론트</td>
+<td>Pareto Front</td>
+<td>서로 지배하지 않는 최적해 집합</td>
+</tr>
+<tr>
+<td>지배</td>
+<td>Dominance</td>
+<td>모든 목적에서 나쁘지 않고 하나는 우수</td>
+</tr>
+<tr>
+<td>결정론적 설계</td>
+<td>DDO</td>
+<td>산포를 고려하지 않는 최적화</td>
+</tr>
+<tr>
+<td>신뢰성기반설계</td>
+<td>RBDO</td>
+<td>확률 제약을 쓰는 최적화</td>
+</tr>
+<tr>
+<td>강건설계</td>
+<td>Robust Design</td>
+<td>출력 산포를 줄이는 설계</td>
+</tr>
+<tr>
+<td>신뢰도 지수</td>
+<td>β (Beta)</td>
+<td>파손확률에 대응하는 지수</td>
+</tr>
+<tr>
+<td>최확점</td>
+<td>MPP</td>
+<td>한계상태면 위 가장 확률 높은 점</td>
+</tr>
+<tr>
+<td>한계상태함수</td>
+<td>Limit State Function</td>
+<td>g(x)=0 이 파손 경계</td>
+</tr>
+<tr>
+<td>FORM / SORM</td>
+<td>—</td>
+<td>파손확률 1차/2차 근사법</td>
+</tr>
+<tr>
+<td>신뢰영역</td>
+<td>Trust Region</td>
+<td>반응면을 신뢰하는 국소 범위</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="_2">관련 문서</h2>
+<ul>
+<li><a href="02_DOE와_근사모델.md">02_DOE와_근사모델.md</a> · <a href="03_민감도분석.md">03_민감도분석.md</a></li>
+<li><a href="04_신뢰성기반설계_RBDO.md">04_신뢰성기반설계_RBDO.md</a> · <a href="05_최적화_알고리즘.md">05_최적화_알고리즘.md</a></li>
+<li><a href="14_HS시리즈_Arm모델_최적화_실전사례.md">14_HS시리즈_Arm모델_최적화_실전사례.md</a></li>
+<li><a href="../인수인계사항/자동화파이프라인_인수인계.md">자동화파이프라인_인수인계.md</a> — 본 문서의 실측값을 뽑은 툴</li>
+</ul></section>
+      <footer class="doc-footer">
+        업무내용/학습자료/17_기법총정리_결정론적_확률론적.md 을 그대로 옮긴 문서입니다.<br>
+        <a href="../../">← Study Vault 허브로</a>
+      </footer>
+    </main>
+  </div>
+</div>
+<a class="back-to-top" id="backToTop" href="#top" aria-label="맨 위로">↑</a>
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc-link'));
+  var sections = links.map(function(l){
+    return document.getElementById(l.getAttribute('data-target'));
+  }).filter(Boolean);
+
+  if ('IntersectionObserver' in window && sections.length){
+    var byId = {};
+    links.forEach(function(l){ byId[l.getAttribute('data-target')] = l; });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var link = byId[entry.target.id];
+        if (!link) return;
+        if (entry.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+    sections.forEach(function(s){ io.observe(s); });
+  }
+
+  var btn = document.getElementById('backToTop');
+  var onScroll = function(){
+    if (window.scrollY > 480) btn.classList.add('show');
+    else btn.classList.remove('show');
+  };
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+})();
+</script>
+<script src="../../shared/progress.js"></script>
+<script>
+/* Study Vault 어댑터 — 섹션별 읽음 토글 주입 (기획서 §6.4, 원문 콘텐츠 불변) */
+(function(){
+'use strict';
+var APP='optimal-design',VP=Vault.progress(APP),VM=Vault.meta(APP);
+var css=document.createElement('style');
+css.textContent='.sv-readrow{margin:26px 0 4px;text-align:right}'+
+'.sv-readbtn{font:inherit;font-size:.82rem;min-height:44px;padding:8px 16px;border-radius:99px;'+
+ 'border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-soft);cursor:pointer}'+
+'.sv-readbtn[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent-strong);border-color:var(--accent)}'+
+'.toc-link.sv-read::after{content:" \\2713";color:var(--accent);font-weight:600}'+
+'.sv-progress{display:block;margin-bottom:6px;font-size:.72rem;color:var(--ink-faint)}';
+document.head.appendChild(css);
+var secs=Array.prototype.slice.call(document.querySelectorAll('section.doc-section'));
+function refresh(){
+ var n=VP.count();
+ secs.forEach(function(sec){
+  var on=VP.get(sec.id);
+  var btn=sec.querySelector('.sv-readbtn');
+  if(btn){btn.setAttribute('aria-pressed',on?'true':'false');btn.textContent=on?'\u2713 \uC77D\uC74C':'\uC77D\uC74C\uC73C\uB85C \uD45C\uC2DC';}
+  var toc=document.querySelector('.toc-link[data-target="'+sec.id+'"]');
+  if(toc)toc.classList.toggle('sv-read',!!on);
+ });
+ var pr=document.getElementById('sv-progress');
+ if(pr)pr.textContent='\uC77D\uC74C '+n+' / '+secs.length;
+}
+secs.forEach(function(sec){
+ var row=document.createElement('div');row.className='sv-readrow';
+ var btn=document.createElement('button');btn.type='button';btn.className='sv-readbtn';
+ btn.setAttribute('data-rid',sec.id);
+ btn.addEventListener('click',function(){VP.toggle(sec.id);VM.touch('#'+sec.id);refresh();});
+ row.appendChild(btn);sec.appendChild(row);
+});
+function touchActive(){
+ var a=document.querySelector('.toc-link.active');
+ VM.touch(a?('#'+a.getAttribute('data-target')):(location.hash||'#top'));
+}
+window.addEventListener('hashchange',touchActive);
+var t=0;
+window.addEventListener('scroll',function(){
+ var now=Date.now();if(now-t>1500){t=now;touchActive();}
+},{passive:true});
+VM.touch(location.hash||undefined);
+refresh();
+})();
+</script>
+</body>
+</html>

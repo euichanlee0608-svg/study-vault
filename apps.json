@@ -57,6 +57,28 @@
         }
       ],
       "added": "2026-09-03"
+    },
+    {
+      "id": "course-phys152",
+      "title": "일반물리Ⅱ 문제은행",
+      "titleEn": "PHYS152 General Physics II Drill",
+      "icon": "🧲",
+      "path": "apps/course-phys152/",
+      "desc": "중간범위 7단원 · 280문제(전 문제 독립검산) — 쿨롱→가우스→전위→축전기→DC→자기력→전류의 자기장, HW-F 규정 대비 Halliday HW급 중심",
+      "pipeline": "문풀기반",
+      "category": "course",
+      "items": 21,
+      "exams": [
+        {
+          "label": "중간",
+          "date": "2026-10-26"
+        },
+        {
+          "label": "기말",
+          "date": "2026-12-14"
+        }
+      ],
+      "added": "2026-09-03"
     }
   ]
 }

@@ -1,0 +1,10 @@
+{
+  "id": "course-phys152",
+  "title": "일반물리II 문제은행",
+  "brand": "<b>일반물리Ⅱ</b> 문제은행",
+  "sub": "강의노트·Halliday 12판 · 중간범위",
+  "eyebrow": "PHYS152 General Physics II · 중간범위 (중간 10/26 · 퀴즈1 W4)",
+  "readme_intro": "일반물리II(PHYS152, Go Dongwook — 강의노트 정본+Halliday 12판) **중간범위** 문제풀이 앱. HW 50% 미만=F 규정에 맞춰 L2~L3가 Halliday HW급 중심.",
+  "extract": "course outline·노트 01/02 비전 판독 → 주차표·평가 실측(`pipeline/sources/강의자료분석.md`, 원문 미전재) + Halliday 12판 골격",
+  "status": "## 상태\n\n- 중간범위 U1~U7 (퀴즈1 = U1~U4 범위). 기말범위(유도·EM파·상대론·양자화)는 C2에서.\n- 상수: k=8.99×10⁹, ε₀=8.85×10⁻¹², e=1.602×10⁻¹⁹, µ₀=4π×10⁻⁷ 통일."
+}

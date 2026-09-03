@@ -300,6 +300,85 @@ SV_BANK.push({
         '읽는 값: \\(V_s \\dfrac{R\\|R_m}{R + R\\|R_m}\\) = '+SVH.fmt(Vread)+' V',
         '오차율 = ('+SVH.fmt(Vtrue)+'−'+SVH.fmt(Vread)+')/'+SVH.fmt(Vtrue)+' × 100 = '+SVH.fmt(err)+' %',
         '(전압계 내부저항이 클수록 오차↓ — 이상 전압계는 R_m→∞)' ] }; },
-    hints:['전압계는 측정 대상과 병렬로 붙는다.','병렬 등가를 만든 뒤 분압.'] }
+    hints:['전압계는 측정 대상과 병렬로 붙는다.','병렬 등가를 만든 뒤 분압.'] },
+
+  { id:'u1-l3-11', level:3, type:'num', tags:['정격·여유'], src:'창작 문제(검산됨)',
+    params:{ R:{choices:[100,220,470],unit:'Ω'}, Pr:{choices:[0.25,0.5,1],unit:'W'}, m:{choices:[2,4]} },
+    statement:function(p){ return p.Pr+' W 정격의 '+p.R+' Ω 저항을 정격의 1/'+p.m+'만 쓰는 보수 설계를 한다. (a) 허용 최대 전압 (b) 허용 최대 전류(mA)를 구하라.'; },
+    solve:function(p){ var P=p.Pr/p.m, V=Math.sqrt(P*p.R), I=Math.sqrt(P/p.R)*1000;
+      return { ans:{V:V, I:I}, unit:{V:'V', I:'mA'}, steps:[
+        '사용 전력 한도 P = '+p.Pr+'/'+p.m+' = '+SVH.fmt(P)+' W',
+        'V = √(PR) = '+SVH.fmt(V)+' V, I = √(P/R) = '+SVH.fmt(I)+' mA',
+        '검토: VI = '+SVH.fmt(V*I/1000)+' W = P ✓' ] }; },
+    hints:['여유율은 전력에 적용.','V·I 두 식이 같은 P에서 나온다.'] },
+  { id:'u1-l3-12', level:3, type:'num', tags:['비선형 동작점'], src:'창작 문제(검산됨)',
+    params:{ Vs:{min:6,max:12,step:2,unit:'V'}, R:{choices:[1,2],unit:'kΩ'}, k:{choices:[0.5,1],unit:'mA/V²'} },
+    statement:function(p){ return '전원 '+p.Vs+' V — R='+p.R+' kΩ — 비선형 소자(\\(i='+p.k+'v^2\\) [mA, V]) 직렬 회로의 동작점: 소자 전압 v를 구하라.'; },
+    solve:function(p){
+      // Vs = R·i + v = R·k·v² + v (R kΩ, k mA/V² → RK 곱은 V 단위 정합)
+      var a=p.R*p.k, b=1, c=-p.Vs;
+      var v=(-b+Math.sqrt(b*b-4*a*c))/(2*a);
+      return { ans:v, unit:'V', steps:[
+        'KVL: \\(V_s = R\\,i + v = '+SVH.fmt(a)+'v^2 + v\\) (kΩ×mA=V로 단위 정합)',
+        '이차방정식 '+SVH.fmt(a)+'v²+v−'+p.Vs+'=0 → v = '+SVH.fmt(v)+' V (양의 근)',
+        '검토: i = '+SVH.fmt(p.k*v*v)+' mA, R 강하 '+SVH.fmt(p.R*p.k*v*v)+' V, 합 = '+SVH.fmt(p.R*p.k*v*v+v)+' ≈ '+p.Vs+' ✓' ] }; },
+    hints:['KVL에 소자 특성식을 대입하면 v의 이차방정식.','물리적 근(양수)을 고른다.'] },
+  { id:'u1-l3-13', level:3, type:'num', tags:['적분 종합'], src:'창작 문제(검산됨)',
+    params:{ I1:{min:2,max:6,step:2,unit:'A'}, t1:{choices:[2,4],unit:'s'}, t2:{choices:[6,8],unit:'s'} },
+    statement:function(p){ return '전류 파형: 0→'+p.t1+' s 동안 0에서 '+p.I1+' A로 선형 증가, 이후 t='+p.t2+' s까지 '+p.I1+' A 유지. (a) 총 통과 전하 (b) 평균 전류를 구하라.'; },
+    solve:function(p){
+      var Q=0.5*p.I1*p.t1+p.I1*(p.t2-p.t1);
+      var Iavg=Q/p.t2;
+      return { ans:{Q:Q, Iavg:Iavg}, unit:{Q:'C', Iavg:'A'}, steps:[
+        '면적: 삼각형 ½·'+p.I1+'·'+p.t1+' = '+SVH.fmt(0.5*p.I1*p.t1)+' + 직사각형 '+p.I1+'×'+(p.t2-p.t1)+' = '+SVH.fmt(p.I1*(p.t2-p.t1)),
+        'Q = '+SVH.fmt(Q)+' C',
+        '평균 전류 = Q/전체시간 = '+SVH.fmt(Iavg)+' A' ] }; },
+    hints:['전하 = 그래프 면적을 조각으로.'] },
+  { id:'u1-l3-14', level:3, type:'num', tags:['배터리 용량'], src:'창작 문제(검산됨)',
+    params:{ Ah:{choices:[2,5,10],unit:'Ah'}, V:{choices:[3.7,12],unit:'V'}, P:{choices:[5,10,20],unit:'W'} },
+    statement:function(p){ return p.V+' V, '+p.Ah+' Ah 배터리가 있다. (a) 저장 에너지(Wh) (b) '+p.P+' W 부하를 몇 시간 구동할 수 있는가? (이상 방전 가정)'; },
+    solve:function(p){ var Wh=p.V*p.Ah, h=Wh/p.P;
+      return { ans:{Wh:Wh, h:h}, unit:{Wh:'Wh', h:'h'}, steps:[
+        '에너지 = V×Ah = '+SVH.fmt(Wh)+' Wh',
+        '구동 시간 = '+SVH.fmt(Wh)+'/'+p.P+' = '+SVH.fmt(h)+' h',
+        '(Ah는 전하 용량, Wh가 에너지 — 단위 구분이 채점 포인트)' ] }; },
+    hints:['Ah×V=Wh.'] },
+  { id:'u1-l4-06', level:4, type:'num', tags:['종속전원 전력 종합'], src:'기출 유형',
+    params:{ Is:{min:2,max:4,step:1,unit:'A'}, R1:{min:2,max:6,step:2,unit:'Ω'}, k:{choices:[0.5,1.5]} },
+    statement:function(p){ return '절점 v: 전류원 '+p.Is+' A 유입, R₁='+p.R1+' Ω로 접지, 종속 전류원 '+p.k+'v [A]가 절점에서 접지로. (a) v (b) 각 소자의 전력(공급 +/흡수 −로 부호 명시: 전류원, R₁, 종속 전원)을 구하고 합이 0임을 보여라.'; },
+    solve:function(p){
+      var v=p.Is/(1/p.R1+p.k);
+      var Ps=v*p.Is;            // 전류원 공급
+      var Pr=v*v/p.R1;          // R 흡수
+      var Pd=v*(p.k*v);         // 종속 전원 흡수(전류가 +v에서 접지로)
+      return { ans:{v:v, Ps:Ps, Pr:Pr, Pd:Pd}, unit:{v:'V', Ps:'W', Pr:'W', Pd:'W'}, steps:[
+        'KCL: v = I_s/(1/R₁+'+p.k+') = '+SVH.fmt(v)+' V',
+        '전류원 공급 = vI_s = '+SVH.fmt(Ps)+' W',
+        'R₁ 흡수 = v²/R₁ = '+SVH.fmt(Pr)+' W, 종속 전원 흡수 = v·('+p.k+'v) = '+SVH.fmt(Pd)+' W',
+        '수지: '+SVH.fmt(Ps)+' = '+SVH.fmt(Pr)+'+'+SVH.fmt(Pd)+' ✓ (종속 전원도 전력을 흡수/공급하는 실소자)' ] }; },
+    hints:['종속 전원 전력도 p=vi로 그냥 계산.','합이 안 맞으면 부호 실수.'] },
+  { id:'u1-l4-07', level:4, type:'num', tags:['허용오차 최악설계'], src:'기출 유형',
+    params:{ Vs:{choices:[10,15],unit:'V'}, R:{choices:[100,220],unit:'Ω'}, tol:{choices:[5,10],unit:'%'} },
+    statement:function(p){ return '±'+p.tol+'% 허용오차의 R='+p.R+' Ω 저항에 '+p.Vs+' V가 걸린다. 소비 전력의 (a) 최솟값 (b) 최댓값 (c) 공칭값 대비 최대 편차(%)를 구하라. (최악 상황 설계)'; },
+    solve:function(p){
+      var Rmin=p.R*(1-p.tol/100), Rmax=p.R*(1+p.tol/100);
+      var Pmax=p.Vs*p.Vs/Rmin, Pmin=p.Vs*p.Vs/Rmax, P0=p.Vs*p.Vs/p.R;
+      var dev=Math.max(Pmax-P0, P0-Pmin)/P0*100;
+      return { ans:{Pmin:Pmin, Pmax:Pmax, dev:dev}, unit:{Pmin:'W', Pmax:'W', dev:'%'}, steps:[
+        'P = V²/R → R 최소일 때 전력 최대: P_max = '+SVH.fmt(Pmax)+' W (R='+SVH.fmt(Rmin)+')',
+        'P_min = '+SVH.fmt(Pmin)+' W',
+        '최대 편차 = '+SVH.fmt(dev)+' % — 정격 선정 때 이 최악값 기준으로 (기출 1번 부품 진술의 실무 배경)' ] }; },
+    hints:['반비례라 R 최소가 전력 최대.','편차는 양쪽을 다 보고 큰 쪽.'] },
+  { id:'u1-l4-08', level:4, type:'derive', tags:['유도'], src:'교재 표준',
+    statement:'키르히호프 전압 법칙(KVL)이 에너지 보존에서 나옴을 보이고, "전위"가 정의되기 위한 조건(보존장)과 연결해 서술하라.',
+    steps:[
+      '단위 전하를 폐경로로 한 바퀴 옮긴다고 하자. 각 소자에서 주고받는 에너지 = 그 소자의 전압(정의 v=dw/dq) [왜] 전압의 정의를 경로에 적용',
+      '한 바퀴 돌아 제자리: 전하의 상태가 같으므로 순 에너지 변화 = 0 (에너지 보존)',
+      '따라서 \\(\\sum_k v_k = 0\\) — 경로의 방향 규약(강하 +, 상승 −)만 일관되면 된다',
+      '이것이 가능한 이유: 회로의 전기장이 보존장(∮E·dl=0)이라 "전위"라는 스칼라가 존재 — 절점전압법의 존재 근거',
+      '극한 체크: 소자 하나뿐인 루프면 v=0(단락) ✓ · 시변 자기장이 루프를 관통하면 이 전제가 깨진다(유도 기전력)는 한계까지 알면 만점'
+    ],
+    hints:['단위 전하 사고실험.','전위가 왜 존재하는가까지 잇는다.'],
+    expl:'기출 1번 개념 다지선다에서 "KVL의 근거"를 묻는 진술 판별의 근본.' },
   ]
 });

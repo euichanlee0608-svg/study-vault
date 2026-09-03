@@ -380,6 +380,95 @@ SV_BANK.push({
       '차원 체크: [S][V]=[A] ✓ · 극한 체크: \\(G_2\\to 0\\)이면 두 절점이 분리되어 대각행렬(독립 두 회로) ✓'
     ],
     hints:['각 절점 KCL을 컨덕턴스로 쓰고 행렬로 재배열.','비대각이 왜 마이너스인지 말로 설명해 보라.'],
-    expl:'행렬 규칙(대각=합, 비대각=−공유)을 "외우는 것"에서 "유도하는 것"으로 바꿔 준다 — 시험장에서 검산 도구가 된다.' }
+    expl:'행렬 규칙(대각=합, 비대각=−공유)을 "외우는 것"에서 "유도하는 것"으로 바꿔 준다 — 시험장에서 검산 도구가 된다.' },
+
+  { id:'u3-l3-11', level:3, type:'num', tags:['종속 VCCS 절점'], src:'기출 유형',
+    params:{ Is:{min:2,max:4,step:1,unit:'A'}, R1:{min:2,max:4,step:1,unit:'Ω'}, R2:{min:2,max:4,step:1,unit:'Ω'}, R3:{min:2,max:4,step:1,unit:'Ω'}, g:{choices:[0.25,0.5]} },
+    statement:function(p){ return '절점1: 전류원 '+p.Is+' A 유입, R₁='+p.R1+' Ω→접지, R₂='+p.R2+' Ω→절점2. 절점2: R₃='+p.R3+' Ω→접지. 추가로 VCCS '+p.g+'·v₂ [A]가 절점1로 유입된다(v₂는 절점2 전압). v₁, v₂를 구하라.'; },
+    solve:function(p){
+      // @1: Is + g v2 = v1/R1 + (v1-v2)/R2
+      // @2: (v1-v2)/R2 = v2/R3
+      var a11=1/p.R1+1/p.R2, a12=-1/p.R2-p.g, b1=p.Is;
+      var a21=-1/p.R2, a22=1/p.R2+1/p.R3, b2=0;
+      var s=SVH.solve2(a11,a12,b1,a21,a22,b2);
+      return { ans:{v1:s[0], v2:s[1]}, unit:{v1:'V', v2:'V'}, steps:[
+        'KCL@1: \\(I_s + '+p.g+'v_2 = v_1/R_1+(v_1-v_2)/R_2\\) — 종속항을 좌변으로 옮기면 비대각이 비대칭이 된다',
+        'KCL@2: \\((v_1-v_2)/R_2 = v_2/R_3\\)',
+        'v₁ = '+SVH.fmt(s[0])+' V, v₂ = '+SVH.fmt(s[1])+' V (행렬 대칭이 깨지는 것이 종속 전원의 흔적)' ] }; },
+    hints:['종속 전원 항을 미지수 쪽으로 정리.','대칭성 깨짐을 확인.'] },
+  { id:'u3-l3-12', level:3, type:'num', tags:['초노드+전류원'], src:'기출 유형',
+    params:{ Vs:{min:2,max:6,step:2,unit:'V'}, I1:{min:1,max:3,step:1,unit:'A'}, I2:{min:1,max:3,step:1,unit:'A'}, R1:{min:2,max:6,step:2,unit:'Ω'}, R2:{min:2,max:6,step:2,unit:'Ω'} },
+    statement:function(p){ return '절점1—절점2 사이 전압원 '+p.Vs+' V(+절점1). 전류원 '+p.I1+' A→절점1 유입, '+p.I2+' A→절점2 유입. R₁='+p.R1+' Ω(절점1—접지), R₂='+p.R2+' Ω(절점2—접지). v₁·v₂와 전압원 전류(1→2)를 구하라.'; },
+    solve:function(p){
+      var v2=(p.I1+p.I2-p.Vs/p.R1)/(1/p.R1+1/p.R2), v1=v2+p.Vs;
+      var i12=v2/p.R2-p.I2; // KCL@2
+      return { ans:{v1:v1, v2:v2, i12:i12}, unit:{v1:'V', v2:'V', i12:'A'}, steps:[
+        '초노드 KCL: \\(I_1+I_2 = v_1/R_1+v_2/R_2\\), 구속 \\(v_1-v_2='+p.Vs+'\\)',
+        'v₂ = '+SVH.fmt(v2)+' V, v₁ = '+SVH.fmt(v1)+' V',
+        '전압원 전류: KCL@2 → \\(i_{12}+I_2 = v_2/R_2\\) → '+SVH.fmt(i12)+' A' ] }; },
+    hints:['전류원 둘 다 초노드 우변에.','회수는 한쪽 절점에서.'] },
+  { id:'u3-l3-13', level:3, type:'num', tags:['망로 3개 2전원'], src:'기출 유형',
+    params:{ V1:{min:6,max:12,step:3,unit:'V'}, V3:{min:3,max:9,step:3,unit:'V'}, R:{min:1,max:3,step:1,unit:'Ω'} },
+    statement:function(p){ return '3메시 사다리(모든 저항 '+p.R+' Ω, 행렬 대각 [2R,3R,2R], 비대각 −R): 메시1에 '+p.V1+' V, 메시3에 '+p.V3+' V(둘 다 자기 메시를 미는 방향). i₂를 구하라.'; },
+    solve:function(p){
+      var s=SVH.solve3([[2*p.R,-p.R,0],[-p.R,3*p.R,-p.R],[0,-p.R,2*p.R]],[p.V1,0,p.V3]);
+      return { ans:s[1], unit:'A', steps:[
+        '우변 [V₁, 0, V₃]로 3×3 연립',
+        'i₁='+SVH.fmt(s[0])+', i₂='+SVH.fmt(s[1])+', i₃='+SVH.fmt(s[2])+' A',
+        '(양끝에서 미는 전류가 가운데에 겹친다 — 중첩으로도 검산 가능)' ] }; },
+    hints:['행렬 규칙 그대로, 우변만 두 곳.'] },
+  { id:'u3-l3-14', level:3, type:'num', tags:['전류원 전압 회수'], src:'기출 유형',
+    params:{ Is:{min:2,max:6,step:2,unit:'A'}, R1:{min:2,max:6,step:2,unit:'Ω'}, R2:{min:2,max:6,step:2,unit:'Ω'}, R3:{min:2,max:6,step:2,unit:'Ω'} },
+    statement:function(p){ return '전류원 '+p.Is+' A가 절점1로: R₁='+p.R1+' Ω(→접지), R₂='+p.R2+' Ω(→절점2), R₃='+p.R3+' Ω(절점2→접지). (a) 전류원 양단 전압 (b) 전류원이 공급하는 전력을 구하라.'; },
+    solve:function(p){
+      var s=SVH.solve2(1/p.R1+1/p.R2,-1/p.R2,p.Is,-1/p.R2,1/p.R2+1/p.R3,0);
+      var v1=s[0], P=v1*p.Is;
+      return { ans:{v1:v1, P:P}, unit:{v1:'V', P:'W'}, steps:[
+        '절점 연립 → v₁ = '+SVH.fmt(v1)+' V (전류원 양단 = 절점1—접지)',
+        'P = v₁I_s = '+SVH.fmt(P)+' W',
+        '(전류원의 전압은 "회로가 정해 준다" — 스스로는 전류만 고집)' ] }; },
+    hints:['전류원 전압 = 그 절점전압.'] },
+  { id:'u3-l4-06', level:4, type:'num', tags:['4절점 사다리 완주'], src:'기출 유형',
+    params:{ Vs:{min:8,max:16,step:4,unit:'V'}, R:{min:2,max:4,step:1,unit:'Ω'} },
+    statement:function(p){ return '전압원 '+p.Vs+' V(접지—절점1) 뒤로 모두 '+p.R+' Ω인 사다리: 절점1—2, 2—접지, 2—3, 3—접지, 3—4, 4—접지. v₄를 구하라. (절점법, v₁은 전원으로 확정)'; },
+    solve:function(p){
+      var R=p.R, G=1/R;
+      var s=SVH.solve3([[3*G,-G,0],[-G,3*G,-G],[0,-G,2*G]],[p.Vs*G,0,0]);
+      return { ans:s[2], unit:'V', steps:[
+        'v₁='+p.Vs+' V 확정 → 미지수 v₂,v₃,v₄',
+        '행렬 [[3G,−G,0],[−G,3G,−G],[0,−G,2G]]·v = [V_sG,0,0]',
+        'v₂='+SVH.fmt(s[0])+', v₃='+SVH.fmt(s[1])+', v₄='+SVH.fmt(s[2])+' V (단마다 줄어드는 감쇠 사다리)' ] }; },
+    hints:['접지 연결 전압원 = 미지수 하나 공짜.','3×3 기계 풀이.'] },
+  { id:'u3-l4-07', level:4, type:'num', tags:['CCVS 망로'], src:'기출 유형',
+    params:{ Vs:{min:10,max:20,step:5,unit:'V'}, R1:{min:2,max:4,step:1,unit:'Ω'}, R2:{min:2,max:4,step:1,unit:'Ω'}, R3:{min:2,max:4,step:1,unit:'Ω'}, r:{choices:[1,2],unit:'Ω'} },
+    statement:function(p){ return '2메시: 메시1 [전원 '+p.Vs+' V, R₁='+p.R1+' Ω], 공유 R₂='+p.R2+' Ω, 메시2 [R₃='+p.R3+' Ω, CCVS '+p.r+'·i₁ V(메시2 전류를 미는 극성)]. (a) i₁·i₂ (b) CCVS가 공급하는 전력을 구하라.'; },
+    solve:function(p){
+      var s=SVH.solve2(p.R1+p.R2,-p.R2,p.Vs,-(p.R2+p.r),p.R2+p.R3,0);
+      var Pd=p.r*s[0]*s[1];
+      return { ans:{i1:s[0], i2:s[1], Pd:Pd}, unit:{i1:'A', i2:'A', Pd:'W'}, steps:[
+        '메시2 KVL: \\('+p.r+'i_1 = (i_2-i_1)R_2 + i_2R_3\\) → 종속항 좌변 이항',
+        'i₁ = '+SVH.fmt(s[0])+' A, i₂ = '+SVH.fmt(s[1])+' A',
+        'CCVS 공급 = ('+p.r+'i₁)·i₂ = '+SVH.fmt(Pd)+' W (전압원의 전력 = 그 전압 × 지나는 전류)' ] }; },
+    hints:['CCVS 값이 i₁에 걸려 있으니 이항만 조심.'] },
+  { id:'u3-l4-08', level:4, type:'num', tags:['혼합 전원 완주'], src:'기출 유형',
+    params:{ Vs:{min:3,max:6,step:1,unit:'V'}, Is:{min:1,max:3,step:1,unit:'A'}, R1:{min:2,max:4,step:1,unit:'Ω'}, R2:{min:2,max:4,step:1,unit:'Ω'}, R3:{min:2,max:4,step:1,unit:'Ω'} },
+    statement:function(p){ return '기출 2(a) 완전형: 전압원 '+p.Vs+' V(접지—절점1), R₁='+p.R1+' Ω(절점1—절점2), R₂='+p.R2+' Ω(절점2—접지), R₃='+p.R3+' Ω(절점2—절점3), 전류원 '+p.Is+' A(절점3 유입), 절점3—접지는 개방. (a) v₂·v₃ (b) 전압원 전류 (c) 전체 전력 수지 확인값(공급 합)을 구하라.'; },
+    solve:function(p){
+      // 절점3: Is 유입, 나가는 길은 R3뿐 → (v3-v2)/R3 = Is... 방향: 전류원이 절점3에 넣으면 R3로 절점2로 흐른다
+      // KCL@2: (v1-v2)/R1 + (v3-v2)/R3 = v2/R2, v1=Vs
+      var v2=sv2(p), v3=v2+p.Is*p.R3;
+      function sv2(p){
+        var num=p.Vs/p.R1+p.Is;
+        var den=1/p.R1+1/p.R2;
+        return num/den;
+      }
+      var iV=(p.Vs-v2)/p.R1;
+      var Psrc=p.Vs*iV+ p.Is*v3;
+      return { ans:{v2:v2, v3:v3, iV:iV, Psrc:Psrc}, unit:{v2:'V', v3:'V', iV:'A', Psrc:'W'}, steps:[
+        '절점3: 나가는 길이 R₃뿐 → R₃ 전류 = I_s (전부 절점2로) → v₃ = v₂ + I_sR₃',
+        'KCL@2: \\((V_s-v_2)/R_1 + I_s = v_2/R_2\\) → v₂ = '+SVH.fmt(v2)+' V, v₃ = '+SVH.fmt(v3)+' V',
+        '전압원 전류 = (V_s−v₂)/R₁ = '+SVH.fmt(iV)+' A'+(iV<0?' (음수 — 전원이 흡수 중!)':''),
+        '공급 합 = V_s·i_V + I_s·v₃ = '+SVH.fmt(Psrc)+' W = 저항 소비 합(검산해 볼 것)' ] }; },
+    hints:['막다른 절점의 전류원은 경로가 하나뿐이다.','전력 수지로 마무리 검산.'] },
   ]
 });

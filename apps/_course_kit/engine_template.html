@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>전전개 문제은행</title>
+<title>[[APP_TITLE]]</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -113,6 +113,15 @@ details.dstep{border:1px solid var(--line);border-radius:7px;margin:0 0 8px;back
 details.dstep>summary{cursor:pointer;padding:9px 13px;font-weight:500;font-size:13.5px}
 details.dstep ol{margin:4px 0 10px;padding:0 14px 0 34px}
 details.dstep li{margin-bottom:7px;font-size:13.5px}
+/* 정석식 박스 */
+.jsbox{border:1.5px solid var(--acc);border-radius:9px;background:var(--acc-bg);padding:11px 15px;margin:12px 0;font-size:14px}
+.jsbox .jt{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;color:var(--acc);font-weight:600;display:block;margin-bottom:3px}
+.exbox{border:1px solid var(--line2);border-left:3px solid var(--acc);border-radius:8px;background:var(--surf);padding:12px 15px;margin:12px 0}
+.exbox .xh{font-weight:600;font-size:14px;margin-bottom:6px}
+.exbox .xh .xno{font-family:"IBM Plex Mono",monospace;color:var(--acc);font-size:11.5px;margin-right:6px}
+.exbox .xsol{border-top:1px dashed var(--line2);margin-top:8px;padding-top:8px;font-size:13.5px}
+.exbox .xsol ol{margin:4px 0 0;padding-left:20px}
+.exbox .xrel{font-size:12px;color:var(--ink3);margin-top:8px;font-family:"IBM Plex Mono",monospace}
 .readrow{margin:8px 0 2px;text-align:right}
 .readbtn{font:inherit;font-size:12.5px;min-height:40px;padding:7px 15px;border-radius:99px;border:1px solid var(--line2);background:var(--surf);color:var(--ink2);cursor:pointer}
 .readbtn[aria-pressed="true"]{background:var(--ok-bg);color:var(--ok);border-color:var(--ok)}
@@ -194,7 +203,7 @@ th{background:var(--surf2);white-space:nowrap}
 <body>
 <div class="layout">
 <aside class="side">
-  <div class="brand"><a href="#home"><b>전전개</b> 문제은행</a><span>Rizzoni · 중간범위 C0 · [[BUILD_DATE]]</span></div>
+  <div class="brand"><a href="#home">[[APP_BRAND]]</a><span>[[APP_SUB]] · [[BUILD_DATE]]</span></div>
   <div class="prog"><div class="prog-bar"><i id="pbar"></i></div><span id="ptxt"></span></div>
   <nav id="sidenav"></nav>
   <div class="foot-side">전 문제 검산 게이트 통과분만 탑재<br><a href="../../">← Study Vault 허브</a></div>
@@ -219,7 +228,7 @@ window.SV_BUILD = [[BUILD_INFO]];
 <script>
 (function(){
 'use strict';
-var APP='course-eecirc', VP=Vault.progress(APP), VD=Vault.drill(APP), VM=Vault.meta(APP);
+var APP='[[APP_ID]]', VP=Vault.progress(APP), VD=Vault.drill(APP), VM=Vault.meta(APP);
 var UNITS=SV_BANK, BYID={}, ALL=[];
 UNITS.forEach(function(u){ u.problems.forEach(function(p){ p._unit=u; BYID[p.id]=p; ALL.push(p); }); });
 var LAYERS=['concept','derive','worked'], LAYER_KO={concept:'개념',derive:'수식·유도',worked:'풀이된 예제'};
@@ -369,8 +378,8 @@ function setView(html){ view.innerHTML=html; }
 function renderHome(){
   var dc=VD.counts();
   var rate=dc.total?Math.round(dc.correct/dc.total*100):null;
-  setView('<div class="eyebrow">Introduction to Electrical Engineering · 중간범위</div>'+
-    '<h1>전전개 문제은행</h1>'+
+  setView('<div class="eyebrow">[[APP_EYEBROW]]</div>'+
+    '<h1>[[APP_TITLE]]</h1>'+
     '<p class="lede">개념 → 유도 → 예제 → 4단계 문제(L1~L4). 전 문제가 검산 게이트(sympy 독립 재계산 대조)를 통과했고, 계산형 문제는 <b>🎲 새 숫자로</b>를 눌러 무한 반복할 수 있다.</p>'+
     '<p class="note-line">현황 — 풀어본 문제 '+dc.total+' / '+ALL.length+(rate!==null?(' · 정답률 '+rate+'%'):'')+
     ' · <a href="#wrong">오답노트 '+wrongList().length+'문제</a> · 빌드 '+SV_BUILD.date+' (게이트 '+SV_BUILD.gate+')</p>'+

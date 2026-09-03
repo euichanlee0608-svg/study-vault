@@ -1,0 +1,10 @@
+{
+  "id": "course-eecirc",
+  "title": "전전개 문제은행",
+  "brand": "<b>전전개</b> 문제은행",
+  "sub": "Rizzoni · 중간범위",
+  "eyebrow": "Introduction to Electrical Engineering · 중간범위",
+  "readme_intro": "전자전기공학개론(Rizzoni 7판) **중간범위** 문제풀이 앱 — Course Mastery 아키타입.",
+  "extract": "기출 스캔 3부 비전 판독 → 유형·배점·스타일 분석만 기록(`pipeline/sources/기출분석.md`, 원문 미전재) + Rizzoni 범위 골격",
+  "status": "## 상태\n\n- U1~U7 중간범위 전체 + 정석급 개편(L3·L4 증강) 적용\n- 전전개 중간고사 날짜 공지 시 `apps.json`의 `exams`에 기입 → 허브 D-day 자동 표시"
+}

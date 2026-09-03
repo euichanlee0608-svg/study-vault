@@ -29,10 +29,10 @@
       "titleEn": "Intro. Electrical Engineering Drill",
       "icon": "⚡",
       "path": "apps/course-eecirc/",
-      "desc": "중간범위 4단원 × 40문제(전 문제 검산 게이트 통과) — 개념·유도·예제·리롤 문제·오답노트·모의고사",
+      "desc": "중간범위 7단원 · 308문제(전 문제 sympy 독립검산) — 정석식: 개념·정석박스·필수예제 + L3/L4 중심 드릴·리롤·오답노트·모의고사",
       "pipeline": "문풀기반",
       "category": "course",
-      "items": 12,
+      "items": 21,
       "exams": [],
       "added": "2026-09-03"
     }

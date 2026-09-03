@@ -286,6 +286,90 @@ SV_BANK.push({
       '차원 체크: 저항비는 무차원이므로 [V] 유지 ✓ — 부하가 붙으면 이 유도의 첫 줄(같은 전류)이 깨진다는 것까지 말할 수 있어야 한다'
     ],
     hints:['직렬 = 같은 전류에서 출발.','극한 3개(개방·단락·동일)로 검증.'],
-    expl:'유도 자체가 기출 1번 개념 문항들(부하 효과)의 뿌리다.' }
+    expl:'유도 자체가 기출 1번 개념 문항들(부하 효과)의 뿌리다.' },
+
+  { id:'u2-l3-11', level:3, type:'num', tags:['2단 분압 로딩'], src:'기출 유형',
+    params:{ Vs:{choices:[12,24],unit:'V'}, R:{choices:[1,10],unit:'kΩ'} },
+    statement:function(p){ return '모두 '+p.R+' kΩ인 분압기 2단을 버퍼 없이 직결: [R–R 분압] 출력에 다시 [R–R 분압]. 최종 출력 전압을 구하라. (이상적 ½×½='+SVH.fmt(p.Vs/4)+' V와 비교)'; },
+    solve:function(p){
+      var R=p.R;
+      // v1 절점: (Vs-v1)/R = v1/R + (v1-v2)/R ; v2: (v1-v2)/R = v2/R
+      var s=SVH.solve2(3/R,-1/R,p.Vs/R,-1/R,2/R,0);
+      return { ans:s[1], unit:'V', steps:[
+        '뒷단이 앞단의 아래 저항에 병렬로 걸린다 → 이상값(¼)보다 낮아진다',
+        '절점 2개 연립: v₁='+SVH.fmt(s[0])+' V, v₂='+SVH.fmt(s[1])+' V',
+        '이상 '+SVH.fmt(p.Vs/4)+' V 대비 '+SVH.fmt(s[1]/(p.Vs/4)*100)+'% — 버퍼가 필요한 이유의 정량화' ] }; },
+    hints:['단순 곱(½×½)이 왜 틀리는지부터.','절점법 2미지수.'] },
+  { id:'u2-l3-12', level:3, type:'num', tags:['4단 사다리'], src:'기출 유형',
+    params:{ R:{min:2,max:8,step:2,unit:'Ω'} },
+    statement:function(p){ return '모두 '+p.R+' Ω인 4단 사다리: 직렬R→병렬R→직렬R→병렬R (뒤가 개방). 입력 등가저항을 구하라.'; },
+    solve:function(p){
+      var R=p.R;
+      var z=R;            // 마지막 병렬 R (개방 종단)
+      z=R+z;              // 직렬
+      z=SVH.par(R,z);     // 병렬
+      z=R+z;              // 직렬
+      return { ans:z, unit:'Ω', steps:[
+        '뒤에서 접기: R(끝 병렬) → +R = '+SVH.fmt(2*R)+' → ∥R = '+SVH.fmt(SVH.par(R,2*R))+' → +R = '+SVH.fmt(z)+' Ω',
+        '(단수가 늘수록 황금비 R(1+√5)/2 ≈ '+SVH.fmt(R*1.618)+' Ω로 수렴한다는 것도 알아두면 검산 감각)' ] }; },
+    hints:['맨 끝부터 한 단씩.'] },
+  { id:'u2-l3-13', level:3, type:'num', tags:['온도 드리프트'], src:'창작 문제(검산됨)',
+    params:{ Vs:{choices:[10],unit:'V'}, R:{choices:[1000],unit:'Ω'}, alpha:{choices:[0.0039],unit:'1/°C'}, dT:{choices:[25,50],unit:'°C'} },
+    statement:function(p){ return '같은 1 kΩ 저항 두 개의 분압기(출력=½V_s)에서 아래 저항만 구리 권선형이라 온도가 '+p.dT+' °C 오르면 R(1+αΔT), α='+p.alpha+'/°C로 변한다. (a) 새 출력 전압 (b) 출력 변화율(%)을 구하라.'; },
+    solve:function(p){
+      var R2=p.R*(1+p.alpha*p.dT);
+      var v=p.Vs*R2/(p.R+R2), dv=(v-p.Vs/2)/(p.Vs/2)*100;
+      return { ans:{v:v, dv:dv}, unit:{v:'V', dv:'%'}, steps:[
+        'R₂ = 1000(1+'+p.alpha+'×'+p.dT+') = '+SVH.fmt(R2)+' Ω',
+        'V = '+p.Vs+'×'+SVH.fmt(R2)+'/'+SVH.fmt(p.R+R2)+' = '+SVH.fmt(v)+' V',
+        '변화율 = '+SVH.fmt(dv)+' % (기출 1번 "가변저항 온도 안정성" 진술의 정량판)' ] }; },
+    hints:['한쪽만 변하면 분압비가 틀어진다.'] },
+  { id:'u2-l3-14', level:3, type:'num', tags:['정격 한계 회로'], src:'기출 유형',
+    params:{ R:{choices:[100,220],unit:'Ω'}, Pr:{choices:[0.25,0.5],unit:'W'} },
+    statement:function(p){ return '같은 R='+p.R+' Ω('+p.Pr+' W 정격) 두 개를 (a) 직렬 (b) 병렬로 연결했을 때 전체에 걸 수 있는 최대 전압을 각각 구하라.'; },
+    solve:function(p){
+      var Vser=2*Math.sqrt(p.Pr*p.R); // 직렬: 각자에 절반 전압, 각자 P=Vh²/R ≤ Pr → Vh=√(PrR), 전체=2Vh
+      var Vpar=Math.sqrt(p.Pr*p.R);   // 병렬: 각자에 전체 전압
+      return { ans:{Vser:Vser, Vpar:Vpar}, unit:{Vser:'V', Vpar:'V'}, steps:[
+        '직렬: 각 저항에 V/2 → (V/2)²/R ≤ P_r → V_max = 2√(P_rR) = '+SVH.fmt(Vser)+' V',
+        '병렬: 각 저항에 V 전부 → V_max = √(P_rR) = '+SVH.fmt(Vpar)+' V',
+        '(직렬이 전압 한계 2배 — 총 정격 전력은 두 경우 모두 2P_r로 같다는 점이 함정)' ] }; },
+    hints:['한계는 "개별 저항"의 정격에서 나온다.'] },
+  { id:'u2-l4-06', level:4, type:'num', tags:['분류 설계 2조건'], src:'기출 유형',
+    params:{ Is:{choices:[10,20],unit:'mA'}, I1:{choices:[2,4],unit:'mA'}, R1:{choices:[6,12],unit:'kΩ'} },
+    constraint:function(p){ return p.I1<p.Is/2; },
+    statement:function(p){ return '전체 '+p.Is+' mA를 두 가지로 나눈다: R₁='+p.R1+' kΩ 가지에 정확히 '+p.I1+' mA가 흐르게 하는 (a) R₂ (b) 그때 공통 전압 (c) 각 저항의 소비 전력(mW)을 구하라.'; },
+    solve:function(p){
+      var V=p.I1*p.R1;                 // mA×kΩ=V
+      var I2=p.Is-p.I1, R2=V/I2;
+      var P1=V*p.I1, P2=V*I2;
+      return { ans:{R2:R2, V:V, P1:P1, P2:P2}, unit:{R2:'kΩ', V:'V', P1:'mW', P2:'mW'}, steps:[
+        '공통 전압 V = I₁R₁ = '+SVH.fmt(V)+' V',
+        'I₂ = '+SVH.fmt(I2)+' mA → R₂ = V/I₂ = '+SVH.fmt(R2)+' kΩ',
+        'P₁ = '+SVH.fmt(P1)+' mW, P₂ = '+SVH.fmt(P2)+' mW (전류 많이 가져간 쪽이 뜨겁다)' ] }; },
+    hints:['병렬 = 공통 전압에서 출발하면 설계가 한 줄씩 풀린다.'] },
+  { id:'u2-l4-07', level:4, type:'num', tags:['브리지 감도'], src:'기출 유형',
+    params:{ Vs:{choices:[10],unit:'V'}, R:{choices:[100,350],unit:'Ω'}, dR:{choices:[0.5,1],unit:'Ω'} },
+    statement:function(p){ return '스트레인게이지 브리지: 네 저항 모두 R='+p.R+' Ω로 평형, 한 저항만 R+ΔR(ΔR='+p.dR+' Ω)로 변했다. (a) 출력 전압(mV, 정확값) (b) 근사식 V_s·ΔR/4R와의 차이를 구하라.'; },
+    solve:function(p){
+      var Vex=p.Vs*( (p.R+p.dR)/(2*p.R+p.dR) - 0.5 )*1000;
+      var Vap=p.Vs*p.dR/(4*p.R)*1000;
+      return { ans:{Vex:Vex, Vap:Vap}, unit:{Vex:'mV', Vap:'mV'}, steps:[
+        '정확: V = V_s[(R+ΔR)/(2R+ΔR) − ½] = '+SVH.fmt(Vex)+' mV',
+        '근사: V ≈ V_sΔR/4R = '+SVH.fmt(Vap)+' mV',
+        '차이 '+SVH.fmt(Math.abs(Vex-Vap))+' mV — ΔR≪R라 근사가 잘 맞는다(센서 공학의 표준 결과)' ] }; },
+    hints:['변한 가지만 분압을 다시 쓴다.','ΔR 1차 근사와 비교.'] },
+  { id:'u2-l4-08', level:4, type:'num', tags:['전압 강하 규격 설계'], src:'기출 유형',
+    params:{ Vs:{choices:[12,24],unit:'V'}, RL:{choices:[6,12],unit:'Ω'}, reg:{choices:[95,98],unit:'%'} },
+    statement:function(p){ return p.Vs+' V 전원에서 부하 R_L='+p.RL+' Ω까지 배선한다. 부하 전압이 전원의 '+p.reg+'% 이상이어야 할 때 (a) 허용 최대 왕복 배선 저항 (b) 그때 배선 손실 전력을 구하라.'; },
+    solve:function(p){
+      var f=p.reg/100;
+      var Rw=p.RL*(1-f)/f;
+      var I=p.Vs/(Rw+p.RL), Pw=I*I*Rw;
+      return { ans:{Rw:Rw, Pw:Pw}, unit:{Rw:'Ω', Pw:'W'}, steps:[
+        '분압 조건: R_L/(R_w+R_L) ≥ '+f+' → R_w ≤ R_L(1−'+f+')/'+f+' = '+SVH.fmt(Rw)+' Ω',
+        '경계에서 I = '+SVH.fmt(I)+' A → 배선 손실 = I²R_w = '+SVH.fmt(Pw)+' W',
+        '(배선 굵기 선정 계산의 원형 — 실험·실무 공용)' ] }; },
+    hints:['조건을 분압 부등식으로.','경계값에서 손실 평가.'] },
   ]
 });

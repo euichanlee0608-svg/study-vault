@@ -113,6 +113,15 @@ details.dstep{border:1px solid var(--line);border-radius:7px;margin:0 0 8px;back
 details.dstep>summary{cursor:pointer;padding:9px 13px;font-weight:500;font-size:13.5px}
 details.dstep ol{margin:4px 0 10px;padding:0 14px 0 34px}
 details.dstep li{margin-bottom:7px;font-size:13.5px}
+/* 정석식 박스 */
+.jsbox{border:1.5px solid var(--acc);border-radius:9px;background:var(--acc-bg);padding:11px 15px;margin:12px 0;font-size:14px}
+.jsbox .jt{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;color:var(--acc);font-weight:600;display:block;margin-bottom:3px}
+.exbox{border:1px solid var(--line2);border-left:3px solid var(--acc);border-radius:8px;background:var(--surf);padding:12px 15px;margin:12px 0}
+.exbox .xh{font-weight:600;font-size:14px;margin-bottom:6px}
+.exbox .xh .xno{font-family:"IBM Plex Mono",monospace;color:var(--acc);font-size:11.5px;margin-right:6px}
+.exbox .xsol{border-top:1px dashed var(--line2);margin-top:8px;padding-top:8px;font-size:13.5px}
+.exbox .xsol ol{margin:4px 0 0;padding-left:20px}
+.exbox .xrel{font-size:12px;color:var(--ink3);margin-top:8px;font-family:"IBM Plex Mono",monospace}
 .readrow{margin:8px 0 2px;text-align:right}
 .readbtn{font:inherit;font-size:12.5px;min-height:40px;padding:7px 15px;border-radius:99px;border:1px solid var(--line2);background:var(--surf);color:var(--ink2);cursor:pointer}
 .readbtn[aria-pressed="true"]{background:var(--ok-bg);color:var(--ok);border-color:var(--ok)}
@@ -194,7 +203,7 @@ th{background:var(--surf2);white-space:nowrap}
 <body>
 <div class="layout">
 <aside class="side">
-  <div class="brand"><a href="#home"><b>전전개</b> 문제은행</a><span>Rizzoni · 중간범위 C0 · 2026-09-03</span></div>
+  <div class="brand"><a href="#home"><b>전전개</b> 문제은행</a><span>Rizzoni · 중간범위 · 2026-09-03</span></div>
   <div class="prog"><div class="prog-bar"><i id="pbar"></i></div><span id="ptxt"></span></div>
   <nav id="sidenav"></nav>
   <div class="foot-side">전 문제 검산 게이트 통과분만 탑재<br><a href="../../">← Study Vault 허브</a></div>
@@ -577,7 +586,86 @@ SV_BANK.push({
         '읽는 값: \\(V_s \\dfrac{R\\|R_m}{R + R\\|R_m}\\) = '+SVH.fmt(Vread)+' V',
         '오차율 = ('+SVH.fmt(Vtrue)+'−'+SVH.fmt(Vread)+')/'+SVH.fmt(Vtrue)+' × 100 = '+SVH.fmt(err)+' %',
         '(전압계 내부저항이 클수록 오차↓ — 이상 전압계는 R_m→∞)' ] }; },
-    hints:['전압계는 측정 대상과 병렬로 붙는다.','병렬 등가를 만든 뒤 분압.'] }
+    hints:['전압계는 측정 대상과 병렬로 붙는다.','병렬 등가를 만든 뒤 분압.'] },
+
+  { id:'u1-l3-11', level:3, type:'num', tags:['정격·여유'], src:'창작 문제(검산됨)',
+    params:{ R:{choices:[100,220,470],unit:'Ω'}, Pr:{choices:[0.25,0.5,1],unit:'W'}, m:{choices:[2,4]} },
+    statement:function(p){ return p.Pr+' W 정격의 '+p.R+' Ω 저항을 정격의 1/'+p.m+'만 쓰는 보수 설계를 한다. (a) 허용 최대 전압 (b) 허용 최대 전류(mA)를 구하라.'; },
+    solve:function(p){ var P=p.Pr/p.m, V=Math.sqrt(P*p.R), I=Math.sqrt(P/p.R)*1000;
+      return { ans:{V:V, I:I}, unit:{V:'V', I:'mA'}, steps:[
+        '사용 전력 한도 P = '+p.Pr+'/'+p.m+' = '+SVH.fmt(P)+' W',
+        'V = √(PR) = '+SVH.fmt(V)+' V, I = √(P/R) = '+SVH.fmt(I)+' mA',
+        '검토: VI = '+SVH.fmt(V*I/1000)+' W = P ✓' ] }; },
+    hints:['여유율은 전력에 적용.','V·I 두 식이 같은 P에서 나온다.'] },
+  { id:'u1-l3-12', level:3, type:'num', tags:['비선형 동작점'], src:'창작 문제(검산됨)',
+    params:{ Vs:{min:6,max:12,step:2,unit:'V'}, R:{choices:[1,2],unit:'kΩ'}, k:{choices:[0.5,1],unit:'mA/V²'} },
+    statement:function(p){ return '전원 '+p.Vs+' V — R='+p.R+' kΩ — 비선형 소자(\\(i='+p.k+'v^2\\) [mA, V]) 직렬 회로의 동작점: 소자 전압 v를 구하라.'; },
+    solve:function(p){
+      // Vs = R·i + v = R·k·v² + v (R kΩ, k mA/V² → RK 곱은 V 단위 정합)
+      var a=p.R*p.k, b=1, c=-p.Vs;
+      var v=(-b+Math.sqrt(b*b-4*a*c))/(2*a);
+      return { ans:v, unit:'V', steps:[
+        'KVL: \\(V_s = R\\,i + v = '+SVH.fmt(a)+'v^2 + v\\) (kΩ×mA=V로 단위 정합)',
+        '이차방정식 '+SVH.fmt(a)+'v²+v−'+p.Vs+'=0 → v = '+SVH.fmt(v)+' V (양의 근)',
+        '검토: i = '+SVH.fmt(p.k*v*v)+' mA, R 강하 '+SVH.fmt(p.R*p.k*v*v)+' V, 합 = '+SVH.fmt(p.R*p.k*v*v+v)+' ≈ '+p.Vs+' ✓' ] }; },
+    hints:['KVL에 소자 특성식을 대입하면 v의 이차방정식.','물리적 근(양수)을 고른다.'] },
+  { id:'u1-l3-13', level:3, type:'num', tags:['적분 종합'], src:'창작 문제(검산됨)',
+    params:{ I1:{min:2,max:6,step:2,unit:'A'}, t1:{choices:[2,4],unit:'s'}, t2:{choices:[6,8],unit:'s'} },
+    statement:function(p){ return '전류 파형: 0→'+p.t1+' s 동안 0에서 '+p.I1+' A로 선형 증가, 이후 t='+p.t2+' s까지 '+p.I1+' A 유지. (a) 총 통과 전하 (b) 평균 전류를 구하라.'; },
+    solve:function(p){
+      var Q=0.5*p.I1*p.t1+p.I1*(p.t2-p.t1);
+      var Iavg=Q/p.t2;
+      return { ans:{Q:Q, Iavg:Iavg}, unit:{Q:'C', Iavg:'A'}, steps:[
+        '면적: 삼각형 ½·'+p.I1+'·'+p.t1+' = '+SVH.fmt(0.5*p.I1*p.t1)+' + 직사각형 '+p.I1+'×'+(p.t2-p.t1)+' = '+SVH.fmt(p.I1*(p.t2-p.t1)),
+        'Q = '+SVH.fmt(Q)+' C',
+        '평균 전류 = Q/전체시간 = '+SVH.fmt(Iavg)+' A' ] }; },
+    hints:['전하 = 그래프 면적을 조각으로.'] },
+  { id:'u1-l3-14', level:3, type:'num', tags:['배터리 용량'], src:'창작 문제(검산됨)',
+    params:{ Ah:{choices:[2,5,10],unit:'Ah'}, V:{choices:[3.7,12],unit:'V'}, P:{choices:[5,10,20],unit:'W'} },
+    statement:function(p){ return p.V+' V, '+p.Ah+' Ah 배터리가 있다. (a) 저장 에너지(Wh) (b) '+p.P+' W 부하를 몇 시간 구동할 수 있는가? (이상 방전 가정)'; },
+    solve:function(p){ var Wh=p.V*p.Ah, h=Wh/p.P;
+      return { ans:{Wh:Wh, h:h}, unit:{Wh:'Wh', h:'h'}, steps:[
+        '에너지 = V×Ah = '+SVH.fmt(Wh)+' Wh',
+        '구동 시간 = '+SVH.fmt(Wh)+'/'+p.P+' = '+SVH.fmt(h)+' h',
+        '(Ah는 전하 용량, Wh가 에너지 — 단위 구분이 채점 포인트)' ] }; },
+    hints:['Ah×V=Wh.'] },
+  { id:'u1-l4-06', level:4, type:'num', tags:['종속전원 전력 종합'], src:'기출 유형',
+    params:{ Is:{min:2,max:4,step:1,unit:'A'}, R1:{min:2,max:6,step:2,unit:'Ω'}, k:{choices:[0.5,1.5]} },
+    statement:function(p){ return '절점 v: 전류원 '+p.Is+' A 유입, R₁='+p.R1+' Ω로 접지, 종속 전류원 '+p.k+'v [A]가 절점에서 접지로. (a) v (b) 각 소자의 전력(공급 +/흡수 −로 부호 명시: 전류원, R₁, 종속 전원)을 구하고 합이 0임을 보여라.'; },
+    solve:function(p){
+      var v=p.Is/(1/p.R1+p.k);
+      var Ps=v*p.Is;            // 전류원 공급
+      var Pr=v*v/p.R1;          // R 흡수
+      var Pd=v*(p.k*v);         // 종속 전원 흡수(전류가 +v에서 접지로)
+      return { ans:{v:v, Ps:Ps, Pr:Pr, Pd:Pd}, unit:{v:'V', Ps:'W', Pr:'W', Pd:'W'}, steps:[
+        'KCL: v = I_s/(1/R₁+'+p.k+') = '+SVH.fmt(v)+' V',
+        '전류원 공급 = vI_s = '+SVH.fmt(Ps)+' W',
+        'R₁ 흡수 = v²/R₁ = '+SVH.fmt(Pr)+' W, 종속 전원 흡수 = v·('+p.k+'v) = '+SVH.fmt(Pd)+' W',
+        '수지: '+SVH.fmt(Ps)+' = '+SVH.fmt(Pr)+'+'+SVH.fmt(Pd)+' ✓ (종속 전원도 전력을 흡수/공급하는 실소자)' ] }; },
+    hints:['종속 전원 전력도 p=vi로 그냥 계산.','합이 안 맞으면 부호 실수.'] },
+  { id:'u1-l4-07', level:4, type:'num', tags:['허용오차 최악설계'], src:'기출 유형',
+    params:{ Vs:{choices:[10,15],unit:'V'}, R:{choices:[100,220],unit:'Ω'}, tol:{choices:[5,10],unit:'%'} },
+    statement:function(p){ return '±'+p.tol+'% 허용오차의 R='+p.R+' Ω 저항에 '+p.Vs+' V가 걸린다. 소비 전력의 (a) 최솟값 (b) 최댓값 (c) 공칭값 대비 최대 편차(%)를 구하라. (최악 상황 설계)'; },
+    solve:function(p){
+      var Rmin=p.R*(1-p.tol/100), Rmax=p.R*(1+p.tol/100);
+      var Pmax=p.Vs*p.Vs/Rmin, Pmin=p.Vs*p.Vs/Rmax, P0=p.Vs*p.Vs/p.R;
+      var dev=Math.max(Pmax-P0, P0-Pmin)/P0*100;
+      return { ans:{Pmin:Pmin, Pmax:Pmax, dev:dev}, unit:{Pmin:'W', Pmax:'W', dev:'%'}, steps:[
+        'P = V²/R → R 최소일 때 전력 최대: P_max = '+SVH.fmt(Pmax)+' W (R='+SVH.fmt(Rmin)+')',
+        'P_min = '+SVH.fmt(Pmin)+' W',
+        '최대 편차 = '+SVH.fmt(dev)+' % — 정격 선정 때 이 최악값 기준으로 (기출 1번 부품 진술의 실무 배경)' ] }; },
+    hints:['반비례라 R 최소가 전력 최대.','편차는 양쪽을 다 보고 큰 쪽.'] },
+  { id:'u1-l4-08', level:4, type:'derive', tags:['유도'], src:'교재 표준',
+    statement:'키르히호프 전압 법칙(KVL)이 에너지 보존에서 나옴을 보이고, "전위"가 정의되기 위한 조건(보존장)과 연결해 서술하라.',
+    steps:[
+      '단위 전하를 폐경로로 한 바퀴 옮긴다고 하자. 각 소자에서 주고받는 에너지 = 그 소자의 전압(정의 v=dw/dq) [왜] 전압의 정의를 경로에 적용',
+      '한 바퀴 돌아 제자리: 전하의 상태가 같으므로 순 에너지 변화 = 0 (에너지 보존)',
+      '따라서 \\(\\sum_k v_k = 0\\) — 경로의 방향 규약(강하 +, 상승 −)만 일관되면 된다',
+      '이것이 가능한 이유: 회로의 전기장이 보존장(∮E·dl=0)이라 "전위"라는 스칼라가 존재 — 절점전압법의 존재 근거',
+      '극한 체크: 소자 하나뿐인 루프면 v=0(단락) ✓ · 시변 자기장이 루프를 관통하면 이 전제가 깨진다(유도 기전력)는 한계까지 알면 만점'
+    ],
+    hints:['단위 전하 사고실험.','전위가 왜 존재하는가까지 잇는다.'],
+    expl:'기출 1번 개념 다지선다에서 "KVL의 근거"를 묻는 진술 판별의 근본.' },
   ]
 });
 
@@ -871,7 +959,91 @@ SV_BANK.push({
       '차원 체크: 저항비는 무차원이므로 [V] 유지 ✓ — 부하가 붙으면 이 유도의 첫 줄(같은 전류)이 깨진다는 것까지 말할 수 있어야 한다'
     ],
     hints:['직렬 = 같은 전류에서 출발.','극한 3개(개방·단락·동일)로 검증.'],
-    expl:'유도 자체가 기출 1번 개념 문항들(부하 효과)의 뿌리다.' }
+    expl:'유도 자체가 기출 1번 개념 문항들(부하 효과)의 뿌리다.' },
+
+  { id:'u2-l3-11', level:3, type:'num', tags:['2단 분압 로딩'], src:'기출 유형',
+    params:{ Vs:{choices:[12,24],unit:'V'}, R:{choices:[1,10],unit:'kΩ'} },
+    statement:function(p){ return '모두 '+p.R+' kΩ인 분압기 2단을 버퍼 없이 직결: [R–R 분압] 출력에 다시 [R–R 분압]. 최종 출력 전압을 구하라. (이상적 ½×½='+SVH.fmt(p.Vs/4)+' V와 비교)'; },
+    solve:function(p){
+      var R=p.R;
+      // v1 절점: (Vs-v1)/R = v1/R + (v1-v2)/R ; v2: (v1-v2)/R = v2/R
+      var s=SVH.solve2(3/R,-1/R,p.Vs/R,-1/R,2/R,0);
+      return { ans:s[1], unit:'V', steps:[
+        '뒷단이 앞단의 아래 저항에 병렬로 걸린다 → 이상값(¼)보다 낮아진다',
+        '절점 2개 연립: v₁='+SVH.fmt(s[0])+' V, v₂='+SVH.fmt(s[1])+' V',
+        '이상 '+SVH.fmt(p.Vs/4)+' V 대비 '+SVH.fmt(s[1]/(p.Vs/4)*100)+'% — 버퍼가 필요한 이유의 정량화' ] }; },
+    hints:['단순 곱(½×½)이 왜 틀리는지부터.','절점법 2미지수.'] },
+  { id:'u2-l3-12', level:3, type:'num', tags:['4단 사다리'], src:'기출 유형',
+    params:{ R:{min:2,max:8,step:2,unit:'Ω'} },
+    statement:function(p){ return '모두 '+p.R+' Ω인 4단 사다리: 직렬R→병렬R→직렬R→병렬R (뒤가 개방). 입력 등가저항을 구하라.'; },
+    solve:function(p){
+      var R=p.R;
+      var z=R;            // 마지막 병렬 R (개방 종단)
+      z=R+z;              // 직렬
+      z=SVH.par(R,z);     // 병렬
+      z=R+z;              // 직렬
+      return { ans:z, unit:'Ω', steps:[
+        '뒤에서 접기: R(끝 병렬) → +R = '+SVH.fmt(2*R)+' → ∥R = '+SVH.fmt(SVH.par(R,2*R))+' → +R = '+SVH.fmt(z)+' Ω',
+        '(단수가 늘수록 황금비 R(1+√5)/2 ≈ '+SVH.fmt(R*1.618)+' Ω로 수렴한다는 것도 알아두면 검산 감각)' ] }; },
+    hints:['맨 끝부터 한 단씩.'] },
+  { id:'u2-l3-13', level:3, type:'num', tags:['온도 드리프트'], src:'창작 문제(검산됨)',
+    params:{ Vs:{choices:[10],unit:'V'}, R:{choices:[1000],unit:'Ω'}, alpha:{choices:[0.0039],unit:'1/°C'}, dT:{choices:[25,50],unit:'°C'} },
+    statement:function(p){ return '같은 1 kΩ 저항 두 개의 분압기(출력=½V_s)에서 아래 저항만 구리 권선형이라 온도가 '+p.dT+' °C 오르면 R(1+αΔT), α='+p.alpha+'/°C로 변한다. (a) 새 출력 전압 (b) 출력 변화율(%)을 구하라.'; },
+    solve:function(p){
+      var R2=p.R*(1+p.alpha*p.dT);
+      var v=p.Vs*R2/(p.R+R2), dv=(v-p.Vs/2)/(p.Vs/2)*100;
+      return { ans:{v:v, dv:dv}, unit:{v:'V', dv:'%'}, steps:[
+        'R₂ = 1000(1+'+p.alpha+'×'+p.dT+') = '+SVH.fmt(R2)+' Ω',
+        'V = '+p.Vs+'×'+SVH.fmt(R2)+'/'+SVH.fmt(p.R+R2)+' = '+SVH.fmt(v)+' V',
+        '변화율 = '+SVH.fmt(dv)+' % (기출 1번 "가변저항 온도 안정성" 진술의 정량판)' ] }; },
+    hints:['한쪽만 변하면 분압비가 틀어진다.'] },
+  { id:'u2-l3-14', level:3, type:'num', tags:['정격 한계 회로'], src:'기출 유형',
+    params:{ R:{choices:[100,220],unit:'Ω'}, Pr:{choices:[0.25,0.5],unit:'W'} },
+    statement:function(p){ return '같은 R='+p.R+' Ω('+p.Pr+' W 정격) 두 개를 (a) 직렬 (b) 병렬로 연결했을 때 전체에 걸 수 있는 최대 전압을 각각 구하라.'; },
+    solve:function(p){
+      var Vser=2*Math.sqrt(p.Pr*p.R); // 직렬: 각자에 절반 전압, 각자 P=Vh²/R ≤ Pr → Vh=√(PrR), 전체=2Vh
+      var Vpar=Math.sqrt(p.Pr*p.R);   // 병렬: 각자에 전체 전압
+      return { ans:{Vser:Vser, Vpar:Vpar}, unit:{Vser:'V', Vpar:'V'}, steps:[
+        '직렬: 각 저항에 V/2 → (V/2)²/R ≤ P_r → V_max = 2√(P_rR) = '+SVH.fmt(Vser)+' V',
+        '병렬: 각 저항에 V 전부 → V_max = √(P_rR) = '+SVH.fmt(Vpar)+' V',
+        '(직렬이 전압 한계 2배 — 총 정격 전력은 두 경우 모두 2P_r로 같다는 점이 함정)' ] }; },
+    hints:['한계는 "개별 저항"의 정격에서 나온다.'] },
+  { id:'u2-l4-06', level:4, type:'num', tags:['분류 설계 2조건'], src:'기출 유형',
+    params:{ Is:{choices:[10,20],unit:'mA'}, I1:{choices:[2,4],unit:'mA'}, R1:{choices:[6,12],unit:'kΩ'} },
+    constraint:function(p){ return p.I1<p.Is/2; },
+    statement:function(p){ return '전체 '+p.Is+' mA를 두 가지로 나눈다: R₁='+p.R1+' kΩ 가지에 정확히 '+p.I1+' mA가 흐르게 하는 (a) R₂ (b) 그때 공통 전압 (c) 각 저항의 소비 전력(mW)을 구하라.'; },
+    solve:function(p){
+      var V=p.I1*p.R1;                 // mA×kΩ=V
+      var I2=p.Is-p.I1, R2=V/I2;
+      var P1=V*p.I1, P2=V*I2;
+      return { ans:{R2:R2, V:V, P1:P1, P2:P2}, unit:{R2:'kΩ', V:'V', P1:'mW', P2:'mW'}, steps:[
+        '공통 전압 V = I₁R₁ = '+SVH.fmt(V)+' V',
+        'I₂ = '+SVH.fmt(I2)+' mA → R₂ = V/I₂ = '+SVH.fmt(R2)+' kΩ',
+        'P₁ = '+SVH.fmt(P1)+' mW, P₂ = '+SVH.fmt(P2)+' mW (전류 많이 가져간 쪽이 뜨겁다)' ] }; },
+    hints:['병렬 = 공통 전압에서 출발하면 설계가 한 줄씩 풀린다.'] },
+  { id:'u2-l4-07', level:4, type:'num', tags:['브리지 감도'], src:'기출 유형',
+    params:{ Vs:{choices:[10],unit:'V'}, R:{choices:[100,350],unit:'Ω'}, dR:{choices:[0.5,1],unit:'Ω'} },
+    statement:function(p){ return '스트레인게이지 브리지: 네 저항 모두 R='+p.R+' Ω로 평형, 한 저항만 R+ΔR(ΔR='+p.dR+' Ω)로 변했다. (a) 출력 전압(mV, 정확값) (b) 근사식 V_s·ΔR/4R와의 차이를 구하라.'; },
+    solve:function(p){
+      var Vex=p.Vs*( (p.R+p.dR)/(2*p.R+p.dR) - 0.5 )*1000;
+      var Vap=p.Vs*p.dR/(4*p.R)*1000;
+      return { ans:{Vex:Vex, Vap:Vap}, unit:{Vex:'mV', Vap:'mV'}, steps:[
+        '정확: V = V_s[(R+ΔR)/(2R+ΔR) − ½] = '+SVH.fmt(Vex)+' mV',
+        '근사: V ≈ V_sΔR/4R = '+SVH.fmt(Vap)+' mV',
+        '차이 '+SVH.fmt(Math.abs(Vex-Vap))+' mV — ΔR≪R라 근사가 잘 맞는다(센서 공학의 표준 결과)' ] }; },
+    hints:['변한 가지만 분압을 다시 쓴다.','ΔR 1차 근사와 비교.'] },
+  { id:'u2-l4-08', level:4, type:'num', tags:['전압 강하 규격 설계'], src:'기출 유형',
+    params:{ Vs:{choices:[12,24],unit:'V'}, RL:{choices:[6,12],unit:'Ω'}, reg:{choices:[95,98],unit:'%'} },
+    statement:function(p){ return p.Vs+' V 전원에서 부하 R_L='+p.RL+' Ω까지 배선한다. 부하 전압이 전원의 '+p.reg+'% 이상이어야 할 때 (a) 허용 최대 왕복 배선 저항 (b) 그때 배선 손실 전력을 구하라.'; },
+    solve:function(p){
+      var f=p.reg/100;
+      var Rw=p.RL*(1-f)/f;
+      var I=p.Vs/(Rw+p.RL), Pw=I*I*Rw;
+      return { ans:{Rw:Rw, Pw:Pw}, unit:{Rw:'Ω', Pw:'W'}, steps:[
+        '분압 조건: R_L/(R_w+R_L) ≥ '+f+' → R_w ≤ R_L(1−'+f+')/'+f+' = '+SVH.fmt(Rw)+' Ω',
+        '경계에서 I = '+SVH.fmt(I)+' A → 배선 손실 = I²R_w = '+SVH.fmt(Pw)+' W',
+        '(배선 굵기 선정 계산의 원형 — 실험·실무 공용)' ] }; },
+    hints:['조건을 분압 부등식으로.','경계값에서 손실 평가.'] },
   ]
 });
 
@@ -1259,7 +1431,96 @@ SV_BANK.push({
       '차원 체크: [S][V]=[A] ✓ · 극한 체크: \\(G_2\\to 0\\)이면 두 절점이 분리되어 대각행렬(독립 두 회로) ✓'
     ],
     hints:['각 절점 KCL을 컨덕턴스로 쓰고 행렬로 재배열.','비대각이 왜 마이너스인지 말로 설명해 보라.'],
-    expl:'행렬 규칙(대각=합, 비대각=−공유)을 "외우는 것"에서 "유도하는 것"으로 바꿔 준다 — 시험장에서 검산 도구가 된다.' }
+    expl:'행렬 규칙(대각=합, 비대각=−공유)을 "외우는 것"에서 "유도하는 것"으로 바꿔 준다 — 시험장에서 검산 도구가 된다.' },
+
+  { id:'u3-l3-11', level:3, type:'num', tags:['종속 VCCS 절점'], src:'기출 유형',
+    params:{ Is:{min:2,max:4,step:1,unit:'A'}, R1:{min:2,max:4,step:1,unit:'Ω'}, R2:{min:2,max:4,step:1,unit:'Ω'}, R3:{min:2,max:4,step:1,unit:'Ω'}, g:{choices:[0.25,0.5]} },
+    statement:function(p){ return '절점1: 전류원 '+p.Is+' A 유입, R₁='+p.R1+' Ω→접지, R₂='+p.R2+' Ω→절점2. 절점2: R₃='+p.R3+' Ω→접지. 추가로 VCCS '+p.g+'·v₂ [A]가 절점1로 유입된다(v₂는 절점2 전압). v₁, v₂를 구하라.'; },
+    solve:function(p){
+      // @1: Is + g v2 = v1/R1 + (v1-v2)/R2
+      // @2: (v1-v2)/R2 = v2/R3
+      var a11=1/p.R1+1/p.R2, a12=-1/p.R2-p.g, b1=p.Is;
+      var a21=-1/p.R2, a22=1/p.R2+1/p.R3, b2=0;
+      var s=SVH.solve2(a11,a12,b1,a21,a22,b2);
+      return { ans:{v1:s[0], v2:s[1]}, unit:{v1:'V', v2:'V'}, steps:[
+        'KCL@1: \\(I_s + '+p.g+'v_2 = v_1/R_1+(v_1-v_2)/R_2\\) — 종속항을 좌변으로 옮기면 비대각이 비대칭이 된다',
+        'KCL@2: \\((v_1-v_2)/R_2 = v_2/R_3\\)',
+        'v₁ = '+SVH.fmt(s[0])+' V, v₂ = '+SVH.fmt(s[1])+' V (행렬 대칭이 깨지는 것이 종속 전원의 흔적)' ] }; },
+    hints:['종속 전원 항을 미지수 쪽으로 정리.','대칭성 깨짐을 확인.'] },
+  { id:'u3-l3-12', level:3, type:'num', tags:['초노드+전류원'], src:'기출 유형',
+    params:{ Vs:{min:2,max:6,step:2,unit:'V'}, I1:{min:1,max:3,step:1,unit:'A'}, I2:{min:1,max:3,step:1,unit:'A'}, R1:{min:2,max:6,step:2,unit:'Ω'}, R2:{min:2,max:6,step:2,unit:'Ω'} },
+    statement:function(p){ return '절점1—절점2 사이 전압원 '+p.Vs+' V(+절점1). 전류원 '+p.I1+' A→절점1 유입, '+p.I2+' A→절점2 유입. R₁='+p.R1+' Ω(절점1—접지), R₂='+p.R2+' Ω(절점2—접지). v₁·v₂와 전압원 전류(1→2)를 구하라.'; },
+    solve:function(p){
+      var v2=(p.I1+p.I2-p.Vs/p.R1)/(1/p.R1+1/p.R2), v1=v2+p.Vs;
+      var i12=v2/p.R2-p.I2; // KCL@2
+      return { ans:{v1:v1, v2:v2, i12:i12}, unit:{v1:'V', v2:'V', i12:'A'}, steps:[
+        '초노드 KCL: \\(I_1+I_2 = v_1/R_1+v_2/R_2\\), 구속 \\(v_1-v_2='+p.Vs+'\\)',
+        'v₂ = '+SVH.fmt(v2)+' V, v₁ = '+SVH.fmt(v1)+' V',
+        '전압원 전류: KCL@2 → \\(i_{12}+I_2 = v_2/R_2\\) → '+SVH.fmt(i12)+' A' ] }; },
+    hints:['전류원 둘 다 초노드 우변에.','회수는 한쪽 절점에서.'] },
+  { id:'u3-l3-13', level:3, type:'num', tags:['망로 3개 2전원'], src:'기출 유형',
+    params:{ V1:{min:6,max:12,step:3,unit:'V'}, V3:{min:3,max:9,step:3,unit:'V'}, R:{min:1,max:3,step:1,unit:'Ω'} },
+    statement:function(p){ return '3메시 사다리(모든 저항 '+p.R+' Ω, 행렬 대각 [2R,3R,2R], 비대각 −R): 메시1에 '+p.V1+' V, 메시3에 '+p.V3+' V(둘 다 자기 메시를 미는 방향). i₂를 구하라.'; },
+    solve:function(p){
+      var s=SVH.solve3([[2*p.R,-p.R,0],[-p.R,3*p.R,-p.R],[0,-p.R,2*p.R]],[p.V1,0,p.V3]);
+      return { ans:s[1], unit:'A', steps:[
+        '우변 [V₁, 0, V₃]로 3×3 연립',
+        'i₁='+SVH.fmt(s[0])+', i₂='+SVH.fmt(s[1])+', i₃='+SVH.fmt(s[2])+' A',
+        '(양끝에서 미는 전류가 가운데에 겹친다 — 중첩으로도 검산 가능)' ] }; },
+    hints:['행렬 규칙 그대로, 우변만 두 곳.'] },
+  { id:'u3-l3-14', level:3, type:'num', tags:['전류원 전압 회수'], src:'기출 유형',
+    params:{ Is:{min:2,max:6,step:2,unit:'A'}, R1:{min:2,max:6,step:2,unit:'Ω'}, R2:{min:2,max:6,step:2,unit:'Ω'}, R3:{min:2,max:6,step:2,unit:'Ω'} },
+    statement:function(p){ return '전류원 '+p.Is+' A가 절점1로: R₁='+p.R1+' Ω(→접지), R₂='+p.R2+' Ω(→절점2), R₃='+p.R3+' Ω(절점2→접지). (a) 전류원 양단 전압 (b) 전류원이 공급하는 전력을 구하라.'; },
+    solve:function(p){
+      var s=SVH.solve2(1/p.R1+1/p.R2,-1/p.R2,p.Is,-1/p.R2,1/p.R2+1/p.R3,0);
+      var v1=s[0], P=v1*p.Is;
+      return { ans:{v1:v1, P:P}, unit:{v1:'V', P:'W'}, steps:[
+        '절점 연립 → v₁ = '+SVH.fmt(v1)+' V (전류원 양단 = 절점1—접지)',
+        'P = v₁I_s = '+SVH.fmt(P)+' W',
+        '(전류원의 전압은 "회로가 정해 준다" — 스스로는 전류만 고집)' ] }; },
+    hints:['전류원 전압 = 그 절점전압.'] },
+  { id:'u3-l4-06', level:4, type:'num', tags:['4절점 사다리 완주'], src:'기출 유형',
+    params:{ Vs:{min:8,max:16,step:4,unit:'V'}, R:{min:2,max:4,step:1,unit:'Ω'} },
+    statement:function(p){ return '전압원 '+p.Vs+' V(접지—절점1) 뒤로 모두 '+p.R+' Ω인 사다리: 절점1—2, 2—접지, 2—3, 3—접지, 3—4, 4—접지. v₄를 구하라. (절점법, v₁은 전원으로 확정)'; },
+    solve:function(p){
+      var R=p.R, G=1/R;
+      var s=SVH.solve3([[3*G,-G,0],[-G,3*G,-G],[0,-G,2*G]],[p.Vs*G,0,0]);
+      return { ans:s[2], unit:'V', steps:[
+        'v₁='+p.Vs+' V 확정 → 미지수 v₂,v₃,v₄',
+        '행렬 [[3G,−G,0],[−G,3G,−G],[0,−G,2G]]·v = [V_sG,0,0]',
+        'v₂='+SVH.fmt(s[0])+', v₃='+SVH.fmt(s[1])+', v₄='+SVH.fmt(s[2])+' V (단마다 줄어드는 감쇠 사다리)' ] }; },
+    hints:['접지 연결 전압원 = 미지수 하나 공짜.','3×3 기계 풀이.'] },
+  { id:'u3-l4-07', level:4, type:'num', tags:['CCVS 망로'], src:'기출 유형',
+    params:{ Vs:{min:10,max:20,step:5,unit:'V'}, R1:{min:2,max:4,step:1,unit:'Ω'}, R2:{min:2,max:4,step:1,unit:'Ω'}, R3:{min:2,max:4,step:1,unit:'Ω'}, r:{choices:[1,2],unit:'Ω'} },
+    statement:function(p){ return '2메시: 메시1 [전원 '+p.Vs+' V, R₁='+p.R1+' Ω], 공유 R₂='+p.R2+' Ω, 메시2 [R₃='+p.R3+' Ω, CCVS '+p.r+'·i₁ V(메시2 전류를 미는 극성)]. (a) i₁·i₂ (b) CCVS가 공급하는 전력을 구하라.'; },
+    solve:function(p){
+      var s=SVH.solve2(p.R1+p.R2,-p.R2,p.Vs,-(p.R2+p.r),p.R2+p.R3,0);
+      var Pd=p.r*s[0]*s[1];
+      return { ans:{i1:s[0], i2:s[1], Pd:Pd}, unit:{i1:'A', i2:'A', Pd:'W'}, steps:[
+        '메시2 KVL: \\('+p.r+'i_1 = (i_2-i_1)R_2 + i_2R_3\\) → 종속항 좌변 이항',
+        'i₁ = '+SVH.fmt(s[0])+' A, i₂ = '+SVH.fmt(s[1])+' A',
+        'CCVS 공급 = ('+p.r+'i₁)·i₂ = '+SVH.fmt(Pd)+' W (전압원의 전력 = 그 전압 × 지나는 전류)' ] }; },
+    hints:['CCVS 값이 i₁에 걸려 있으니 이항만 조심.'] },
+  { id:'u3-l4-08', level:4, type:'num', tags:['혼합 전원 완주'], src:'기출 유형',
+    params:{ Vs:{min:3,max:6,step:1,unit:'V'}, Is:{min:1,max:3,step:1,unit:'A'}, R1:{min:2,max:4,step:1,unit:'Ω'}, R2:{min:2,max:4,step:1,unit:'Ω'}, R3:{min:2,max:4,step:1,unit:'Ω'} },
+    statement:function(p){ return '기출 2(a) 완전형: 전압원 '+p.Vs+' V(접지—절점1), R₁='+p.R1+' Ω(절점1—절점2), R₂='+p.R2+' Ω(절점2—접지), R₃='+p.R3+' Ω(절점2—절점3), 전류원 '+p.Is+' A(절점3 유입), 절점3—접지는 개방. (a) v₂·v₃ (b) 전압원 전류 (c) 전체 전력 수지 확인값(공급 합)을 구하라.'; },
+    solve:function(p){
+      // 절점3: Is 유입, 나가는 길은 R3뿐 → (v3-v2)/R3 = Is... 방향: 전류원이 절점3에 넣으면 R3로 절점2로 흐른다
+      // KCL@2: (v1-v2)/R1 + (v3-v2)/R3 = v2/R2, v1=Vs
+      var v2=sv2(p), v3=v2+p.Is*p.R3;
+      function sv2(p){
+        var num=p.Vs/p.R1+p.Is;
+        var den=1/p.R1+1/p.R2;
+        return num/den;
+      }
+      var iV=(p.Vs-v2)/p.R1;
+      var Psrc=p.Vs*iV+ p.Is*v3;
+      return { ans:{v2:v2, v3:v3, iV:iV, Psrc:Psrc}, unit:{v2:'V', v3:'V', iV:'A', Psrc:'W'}, steps:[
+        '절점3: 나가는 길이 R₃뿐 → R₃ 전류 = I_s (전부 절점2로) → v₃ = v₂ + I_sR₃',
+        'KCL@2: \\((V_s-v_2)/R_1 + I_s = v_2/R_2\\) → v₂ = '+SVH.fmt(v2)+' V, v₃ = '+SVH.fmt(v3)+' V',
+        '전압원 전류 = (V_s−v₂)/R₁ = '+SVH.fmt(iV)+' A'+(iV<0?' (음수 — 전원이 흡수 중!)':''),
+        '공급 합 = V_s·i_V + I_s·v₃ = '+SVH.fmt(Psrc)+' W = 저항 소비 합(검산해 볼 것)' ] }; },
+    hints:['막다른 절점의 전류원은 경로가 하나뿐이다.','전력 수지로 마무리 검산.'] },
   ]
 });
 
@@ -1598,7 +1859,1210 @@ SV_BANK.push({
       '극한 체크: R_L→0이면 P→0 (전압 없음), R_L→∞이면 P→0 (전류 없음) — 사이 어딘가 최대가 있어야 한다는 직관과 일치 · 차원 체크: [V²/Ω]=[W] ✓'
     ],
     hints:['P_L(R_L)을 쓰고 미분해 0.','끝점 두 극한이 모두 0임을 먼저 보이면 논리가 탄탄해진다.'],
-    expl:'유도 과정 자체가 시험 단골. "몫의 미분에서 분자만 보면 된다"는 요령도 함께.' }
+    expl:'유도 과정 자체가 시험 단골. "몫의 미분에서 분자만 보면 된다"는 요령도 함께.' },
+
+  { id:'u4-l3-11', level:3, type:'num', tags:['3단 전원 변환'], src:'기출 유형',
+    params:{ Is:{min:2,max:4,step:1,unit:'A'}, R1:{min:2,max:4,step:1,unit:'Ω'}, R2:{min:2,max:4,step:1,unit:'Ω'}, R3:{min:2,max:6,step:2,unit:'Ω'}, RL:{min:2,max:6,step:2,unit:'Ω'} },
+    statement:function(p){ return '전류원 '+p.Is+' A ∥ R₁='+p.R1+' Ω → 직렬 R₂='+p.R2+' Ω → 병렬 R₃='+p.R3+' Ω → 부하 R_L='+p.RL+' Ω. 전원 변환을 반복해 부하 전류를 구하라.'; },
+    solve:function(p){
+      var V1=p.Is*p.R1;                    // 테브난 (V1, R1)
+      var Rs=p.R1+p.R2;                    // 직렬 흡수
+      var I2=V1/Rs, Rp=SVH.par(Rs,p.R3);   // 노턴 변환 후 R3 병합
+      var V2=I2*Rp;                        // 다시 테브난
+      var IL=V2/(Rp+p.RL);
+      return { ans:IL, unit:'A', steps:[
+        '노턴→테브난: ('+SVH.fmt(V1)+' V, '+p.R1+' Ω) → R₂ 흡수 → ('+SVH.fmt(V1)+' V, '+SVH.fmt(Rs)+' Ω)',
+        '테브난→노턴: ('+SVH.fmt(I2)+' A, '+SVH.fmt(Rs)+' Ω) → R₃ 병합 → R = '+SVH.fmt(Rp)+' Ω',
+        '다시 테브난 ('+SVH.fmt(V2)+' V, '+SVH.fmt(Rp)+' Ω) → I_L = '+SVH.fmt(IL)+' A' ] }; },
+    hints:['변환↔병합의 리듬을 몸에 붙이는 문제.'] },
+  { id:'u4-l3-12', level:3, type:'num', tags:['중첩과 전력'], src:'기출 유형',
+    params:{ V1:{choices:[6,12],unit:'V'}, V2:{choices:[6,12],unit:'V'}, R1:{min:2,max:4,step:2,unit:'Ω'}, R2:{min:2,max:4,step:2,unit:'Ω'}, RL:{min:2,max:6,step:2,unit:'Ω'} },
+    statement:function(p){ return '두 전압원이 각각 R₁·R₂를 거쳐 부하 R_L='+p.RL+' Ω에 연결(별 모양, 접지 공유). 중첩으로 부하 전류 성분 i′·i″을 구하고, "전력은 (i′)²R+(i″)²R의 합이 아님"을 실제 수치로 보여라. (a) i′ (b) i″ (c) 참 전력 (d) 잘못 더한 값.'; },
+    solve:function(p){
+      var i1=p.V1*1/(p.R1+SVH.par(p.R2,p.RL))*(SVH.par(p.R2,p.RL)/p.RL);
+      // V1만: 전류 분배까지 정확히
+      var Rp1=SVH.par(p.R2,p.RL), it1=p.V1/(p.R1+Rp1), ip1=it1*p.R2/(p.R2+p.RL);
+      var Rp2=SVH.par(p.R1,p.RL), it2=p.V2/(p.R2+Rp2), ip2=it2*p.R1/(p.R1+p.RL);
+      var i=ip1+ip2, P=i*i*p.RL, Pwrong=ip1*ip1*p.RL+ip2*ip2*p.RL;
+      return { ans:{i1:ip1, i2:ip2, P:P, Pw:Pwrong}, unit:{i1:'A', i2:'A', P:'W', Pw:'W'}, steps:[
+        'V₁만: i′ = '+SVH.fmt(ip1)+' A · V₂만: i″ = '+SVH.fmt(ip2)+' A',
+        '참 전력 = (i′+i″)²R_L = '+SVH.fmt(P)+' W',
+        '(i′)²R+(i″)²R = '+SVH.fmt(Pwrong)+' W ≠ 참값 — 교차항 2i′i″R_L이 빠졌기 때문',
+        '결론: 전류·전압은 중첩 가능, 전력은 불가(비선형) — 기출 개념 문항 단골' ] }; },
+    hints:['전력은 제곱이라 교차항이 생긴다.'] },
+  { id:'u4-l3-13', level:3, type:'num', tags:['비선형 부하+테브난'], src:'창작 문제(검산됨)',
+    params:{ VT:{choices:[6,9],unit:'V'}, RT:{choices:[1,2],unit:'kΩ'}, k:{choices:[0.5,1],unit:'mA/V²'} },
+    statement:function(p){ return '테브난 등가(V_T='+p.VT+' V, R_T='+p.RT+' kΩ)에 비선형 소자 \\(i='+p.k+'v^2\\) [mA, V]가 연결됐다. 소자 전압(동작점)을 구하라.'; },
+    solve:function(p){
+      var a=p.RT*p.k, b=1, c=-p.VT;
+      var v=(-b+Math.sqrt(b*b-4*a*c))/(2*a);
+      return { ans:v, unit:'V', steps:[
+        '부하선: \\(V_T = R_T i + v = '+SVH.fmt(a)+'v^2+v\\)',
+        '양의 근: v = '+SVH.fmt(v)+' V (i = '+SVH.fmt(p.k*v*v)+' mA)',
+        '(테브난의 진짜 위력: 비선형 부하도 "직선 하나 vs 특성곡선"으로 단순화된다)' ] }; },
+    hints:['테브난 후 KVL = 이차방정식.'] },
+  { id:'u4-l3-14', level:3, type:'num', tags:['전달 전력표'], src:'창작 문제(검산됨)',
+    params:{ VT:{choices:[12,20],unit:'V'}, RT:{choices:[4,6],unit:'Ω'} },
+    statement:function(p){ return 'V_T='+p.VT+' V, R_T='+p.RT+' Ω에서 R_L = R_T/2, R_T, 2R_T 세 경우의 부하 전력을 구해 정합이 최대임을 확인하라.'; },
+    solve:function(p){
+      function P(RL){ var i=p.VT/(p.RT+RL); return i*i*RL; }
+      return { ans:{Ph:P(p.RT/2), Pm:P(p.RT), Pd:P(2*p.RT)}, unit:{Ph:'W', Pm:'W', Pd:'W'}, steps:[
+        'R_T/2: '+SVH.fmt(P(p.RT/2))+' W · R_T: '+SVH.fmt(P(p.RT))+' W · 2R_T: '+SVH.fmt(P(2*p.RT))+' W',
+        '정합(R_T)이 최대 — 양옆이 대칭적으로 낮다(±비율이 같으면 같은 전력: ½배와 2배가 동일!)',
+        '(U4-l4-04의 "두 근의 곱=R_T²" 대칭성과 같은 이야기)' ] }; },
+    hints:['셋 다 같은 식에 대입.'] },
+  { id:'u4-l4-06', level:4, type:'num', tags:['2부하 측정 테브난'], src:'기출 유형',
+    params:{ R1:{choices:[10,20],unit:'Ω'}, V1:{choices:[8,10],unit:'V'}, R2:{choices:[40,60],unit:'Ω'}, },
+    statement:function(p){ return '미지 선형 회로에 R₁='+p.R1+' Ω를 달면 단자 전압 '+p.V1+' V, R₂='+p.R2+' Ω를 달면 '+SVH.fmt(p.V1*1.5)+' V다. (a) V_T (b) R_T를 구하라. (단락 불가 상황의 실전 측정법)'; },
+    solve:function(p){
+      var V2=p.V1*1.5;
+      // V1 = VT R1/(RT+R1), V2 = VT R2/(RT+R2) → 연립
+      var RT=(V2-p.V1)/(p.V1/p.R1-V2/p.R2);
+      var VT=p.V1*(RT+p.R1)/p.R1;
+      return { ans:{VT:VT, RT:RT}, unit:{VT:'V', RT:'Ω'}, steps:[
+        '분압식 2개: V₁=V_TR₁/(R_T+R₁), V₂=V_TR₂/(R_T+R₂)',
+        '나눠서 V_T 소거 → R_T = (V₂−V₁)/(V₁/R₁−V₂/R₂) = '+SVH.fmt(RT)+' Ω',
+        'V_T = V₁(R_T+R₁)/R₁ = '+SVH.fmt(VT)+' V — 검산: R₂ 대입 시 '+SVH.fmt(VT*p.R2/(RT+p.R2))+' = '+SVH.fmt(V2)+' ✓' ] }; },
+    hints:['미지수 2(V_T,R_T) = 측정 2회.','비를 만들면 V_T가 소거된다.'] },
+  { id:'u4-l4-07', level:4, type:'num', tags:['종속 전원 시험전원법'], src:'기출 유형',
+    params:{ R1:{min:2,max:4,step:1,unit:'Ω'}, R2:{min:2,max:4,step:1,unit:'Ω'}, b:{choices:[2,3]} },
+    statement:function(p){ return '독립 전원이 없는 2단자 회로: 단자→R₁='+p.R1+' Ω→절점A, A—접지 R₂='+p.R2+' Ω, 그리고 CCCS '+p.b+'·i₁(A에서 접지로, i₁은 R₁의 단자→A 전류). 시험 전원 1 A를 단자에 넣어 R_T를 구하라.'; },
+    solve:function(p){
+      // it=1 들어가면 i1=1. KCL@A: i1 + ... = vA/R2 + b i1 → vA = R2(1-b)·1? 방향 주의: CCCS가 A에서 접지로 => 나감
+      // @A: i1 = vA/R2 + b*i1 → vA = R2 i1 (1-b)
+      var vA=p.R2*(1-p.b);
+      var vt=1*p.R1+vA;
+      return { ans:vt, unit:'Ω', steps:[
+        'i_t=1 A → i₁=1 A. KCL@A: \\(i_1 = v_A/R_2 + '+p.b+'i_1\\) → v_A = R₂(1−'+p.b+') = '+SVH.fmt(vA)+' V',
+        'v_t = i₁R₁ + v_A = '+SVH.fmt(vt)+' V → R_T = v_t/i_t = '+SVH.fmt(vt)+' Ω',
+        (vt<0?'R_T가 음수! — 종속 전원이 에너지를 내놓는 능동 회로(발진기·부성저항의 원리)':'양수 확인') ] }; },
+    hints:['1 A를 넣고 단자 전압을 계산.','음수가 나와도 당황하지 말 것 — 해석이 있다.'] },
+  { id:'u4-l4-08', level:4, type:'num', tags:['전압 변동률 설계'], src:'기출 유형',
+    params:{ VT:{choices:[12,24],unit:'V'}, RT:{choices:[0.5,1],unit:'Ω'}, RLmin:{choices:[5,10],unit:'Ω'} },
+    statement:function(p){ return '전원(V_T='+p.VT+' V, R_T='+p.RT+' Ω)에 부하가 R_L='+p.RLmin+' Ω(최대 부하)에서 ∞(무부하)까지 변한다. (a) 무부하 전압 (b) 최대 부하 전압 (c) 전압 변동률 = (V_무부하−V_부하)/V_부하 ×100을 구하라.'; },
+    solve:function(p){
+      var Vnl=p.VT, Vfl=p.VT*p.RLmin/(p.RT+p.RLmin);
+      var reg=(Vnl-Vfl)/Vfl*100;
+      return { ans:{Vnl:Vnl, Vfl:Vfl, reg:reg}, unit:{Vnl:'V', Vfl:'V', reg:'%'}, steps:[
+        '무부하(R_L→∞): V = V_T = '+SVH.fmt(Vnl)+' V',
+        '최대 부하: 분압 '+SVH.fmt(Vfl)+' V',
+        '변동률 = '+SVH.fmt(reg)+' % — R_T가 작을수록 "단단한" 전원 (기출 1(j)의 설계 언어)' ] }; },
+    hints:['변동률 정의식 그대로.','좋은 전원 = 작은 R_T.'] },
+  ]
+});
+
+</script>
+<script>
+/* U5 축전기·인덕터·페이저 — C/L v-i, 에너지, DC 정상상태, 정현파, 페이저, 임피던스, AC 해석 */
+SV_BANK.push({
+  id: 'u5', no: 5, title: '축전기·인덕터·페이저', titleEn: 'C, L & Phasors',
+  scope: 'C·L의 v–i 관계와 에너지 · DC 정상상태(C개방·L단락) · 정현파 표현 · 페이저 변환 · 임피던스 · AC 정상상태 해석',
+  problems: [
+
+  /* ---------- L1 (6) ---------- */
+  { id:'u5-l1-01', level:1, type:'mc', tags:['v-i 관계'], src:'교재 표준',
+    statement:'축전기와 인덕터의 v–i 관계로 옳은 것은?',
+    choices:['\\(i_C=C\\,dv/dt\\), \\(v_L=L\\,di/dt\\)','\\(v_C=C\\,di/dt\\), \\(i_L=L\\,dv/dt\\)','\\(i_C=v/C\\), \\(v_L=i/L\\)','둘 다 \\(v=iR\\) 형태'],
+    answer:0, expl:'C는 전압 변화가 전류를, L은 전류 변화가 전압을 만든다. 그래서 vC와 iL은 불연속일 수 없다(다음 단원 초기조건의 근거).' },
+  { id:'u5-l1-02', level:1, type:'tf', tags:['DC 정상상태'], src:'교재 표준',
+    statement:'DC 정상상태에서 축전기는 개방 회로, 인덕터는 단락 회로처럼 동작한다.',
+    answer:true, expl:'정상상태 = 시간 변화 0 → i_C=C·0=0(개방), v_L=L·0=0(단락). 과도 문제의 t<0, t→∞ 계산이 전부 이 규칙이다.' },
+  { id:'u5-l1-03', level:1, type:'mc', tags:['연속성'], src:'교재 표준',
+    statement:'스위칭 순간에도 불연속일 수 없는 물리량 쌍은?',
+    choices:['축전기 전압 \\(v_C\\)와 인덕터 전류 \\(i_L\\)','축전기 전류와 인덕터 전압','모든 소자의 전압','모든 소자의 전류'],
+    answer:0, expl:'에너지(½Cv²·½Li²)가 순간 점프하려면 무한 전력이 필요하므로. i_C·v_L은 얼마든지 점프한다.' },
+  { id:'u5-l1-04', level:1, type:'mc', tags:['페이저'], src:'교재 표준',
+    statement:'\\(v(t)=V_m\\cos(\\omega t+\\phi)\\)의 페이저 표현과, 임피던스가 옳게 짝지어진 것은?',
+    choices:['\\(\\mathbf{V}=V_m\\angle\\phi\\), \\(Z_R=R,\\ Z_L=j\\omega L,\\ Z_C=1/j\\omega C\\)','\\(\\mathbf{V}=V_m\\angle\\omega t\\), \\(Z_L=1/j\\omega L\\)','\\(\\mathbf{V}=V_m e^{j\\omega t}\\), \\(Z_C=j\\omega C\\)','페이저는 크기만 갖는다'],
+    answer:0, expl:'페이저는 ω를 떼고 진폭·위상만 남긴 복소수. L은 +90°(전압 앞섬), C는 −90°.' },
+  { id:'u5-l1-05', level:1, type:'tf', tags:['위상'], src:'교재 표준',
+    statement:'직렬 RC 회로에 정현파 전압을 걸면 전류는 전압보다 위상이 앞선다(leading).',
+    answer:true, expl:'용량성 회로 = 전류 앞섬(ICE의 I 먼저), 유도성 = 전류 뒤짐(ELI). 임피던스 각이 음수(−)라는 말과 같다.' },
+  { id:'u5-l1-06', level:1, type:'mc', tags:['적용 조건'], src:'기출 유형',
+    statement:'페이저 해석에 대한 진술 중 옳은 것은?',
+    choices:['같은 주파수의 정현파 정상상태에서만 유효하다','과도응답도 페이저로 구한다','주파수가 달라도 페이저끼리 더할 수 있다','DC에는 절대 못 쓴다(ω=0 대입도 불가)'],
+    answer:0, expl:'페이저 = 단일 주파수 정상상태 도구. 서로 다른 ω는 중첩으로 각각 풀어야 한다. ω=0 극한은 DC와 일치(임피던스 극한 체크에 쓰인다).' },
+
+  /* ---------- L2 (12) ---------- */
+  { id:'u5-l2-01', level:2, type:'num', tags:['C 전류'], src:'창작 문제(검산됨)',
+    params:{ C:{choices:[10,22,47,100],unit:'µF'}, slope:{min:100,max:900,step:100,unit:'V/s'} },
+    statement:function(p){ return p.C+' µF 축전기 전압이 '+p.slope+' V/s로 일정하게 증가한다. 축전기 전류는 몇 mA인가?'; },
+    solve:function(p){ var I=p.C*1e-6*p.slope*1000;
+      return { ans:I, unit:'mA', steps:[
+        '\\(i_C=C\\,dv/dt\\)',
+        'i = '+p.C+'×10⁻⁶ × '+p.slope+' = '+SVH.fmt(p.C*1e-6*p.slope)+' A = '+SVH.fmt(I)+' mA' ] }; },
+    hints:['전압 기울기가 곧 dv/dt.','단위: µF×V/s = µA×10⁶?? — 지수 계산을 놓치지 말 것.'] },
+  { id:'u5-l2-02', level:2, type:'num', tags:['L 전압'], src:'창작 문제(검산됨)',
+    params:{ L:{choices:[10,50,100,200],unit:'mH'}, slope:{min:20,max:200,step:20,unit:'A/s'} },
+    statement:function(p){ return p.L+' mH 인덕터 전류가 '+p.slope+' A/s로 증가한다. 인덕터 양단 전압은?'; },
+    solve:function(p){ var V=p.L/1000*p.slope;
+      return { ans:V, unit:'V', steps:[
+        '\\(v_L=L\\,di/dt\\)',
+        'v = '+SVH.fmt(p.L/1000)+' × '+p.slope+' = '+SVH.fmt(V)+' V' ] }; },
+    hints:['mH → H 변환 먼저.'] },
+  { id:'u5-l2-03', level:2, type:'num', tags:['에너지'], src:'창작 문제(검산됨)',
+    params:{ C:{choices:[47,100,220,470],unit:'µF'}, V:{min:5,max:25,step:5,unit:'V'} },
+    statement:function(p){ return p.C+' µF 축전기가 '+p.V+' V로 충전되어 있다. 저장 에너지는 몇 mJ인가?'; },
+    solve:function(p){ var E=0.5*p.C*1e-6*p.V*p.V*1000;
+      return { ans:E, unit:'mJ', steps:[
+        '\\(w=\\tfrac12 Cv^2\\)',
+        'w = ½×'+p.C+'×10⁻⁶×'+p.V+'² = '+SVH.fmt(E)+' mJ' ] }; },
+    hints:['½Cv² — v가 제곱.'] },
+  { id:'u5-l2-04', level:2, type:'num', tags:['에너지'], src:'창작 문제(검산됨)',
+    params:{ L:{choices:[50,100,500],unit:'mH'}, I:{min:1,max:5,step:1,unit:'A'} },
+    statement:function(p){ return p.L+' mH 인덕터에 '+p.I+' A가 흐른다. 저장 에너지는 몇 mJ인가?'; },
+    solve:function(p){ var E=0.5*p.L/1000*p.I*p.I*1000;
+      return { ans:E, unit:'mJ', steps:[
+        '\\(w=\\tfrac12 Li^2\\)',
+        'w = ½×'+SVH.fmt(p.L/1000)+'×'+p.I+'² = '+SVH.fmt(E)+' mJ' ] }; },
+    hints:['½Li².'] },
+  { id:'u5-l2-05', level:2, type:'num', tags:['C 합성'], src:'창작 문제(검산됨)',
+    params:{ C1:{choices:[10,20,30,60],unit:'µF'}, C2:{choices:[10,20,30,60],unit:'µF'} },
+    statement:function(p){ return 'C₁='+p.C1+' µF, C₂='+p.C2+' µF일 때 (a) 병렬 합성 (b) 직렬 합성 용량을 구하라.'; },
+    solve:function(p){ var par=p.C1+p.C2, ser=p.C1*p.C2/(p.C1+p.C2);
+      return { ans:{par:par, ser:ser}, unit:{par:'µF', ser:'µF'}, steps:[
+        '병렬: \\(C_{eq}=C_1+C_2\\) = '+SVH.fmt(par)+' µF (저항과 반대!)',
+        '직렬: \\(C_{eq}=\\dfrac{C_1C_2}{C_1+C_2}\\) = '+SVH.fmt(ser)+' µF' ] }; },
+    hints:['C의 합성 규칙은 R과 반대다.'] },
+  { id:'u5-l2-06', level:2, type:'num', tags:['정현파 읽기'], src:'창작 문제(검산됨)',
+    params:{ Vm:{min:5,max:20,step:5,unit:'V'}, f:{choices:[50,60,100,400],unit:'Hz'} },
+    statement:function(p){ return '\\(v(t)='+p.Vm+'\\cos(2\\pi\\cdot'+p.f+'t)\\) V의 (a) 각주파수 ω (b) 주기 T(ms)를 구하라.'; },
+    solve:function(p){ var w=2*Math.PI*p.f, T=1000/p.f;
+      return { ans:{w:w, T:T}, unit:{w:'rad/s', T:'ms'}, steps:[
+        'ω = 2πf = '+SVH.fmt(w)+' rad/s',
+        'T = 1/f = '+SVH.fmt(T)+' ms' ] }; },
+    hints:['ω=2πf, T=1/f.'] },
+  { id:'u5-l2-07', level:2, type:'num', tags:['임피던스'], src:'창작 문제(검산됨)',
+    params:{ L:{choices:[0.1,0.5,1,2],unit:'H'}, C:{choices:[100,250,500],unit:'µF'}, w:{min:2,max:20,step:2,unit:'rad/s'} },
+    statement:function(p){ return 'ω='+p.w+' rad/s에서 (a) L='+p.L+' H의 임피던스 크기 (b) C='+p.C+' µF의 임피던스 크기를 구하라.'; },
+    solve:function(p){ var ZL=p.w*p.L, ZC=1/(p.w*p.C*1e-6);
+      return { ans:{ZL:ZL, ZC:ZC}, unit:{ZL:'Ω', ZC:'Ω'}, steps:[
+        '|Z_L| = ωL = '+SVH.fmt(ZL)+' Ω (각 +90°)',
+        '|Z_C| = 1/ωC = '+SVH.fmt(ZC)+' Ω (각 −90°)' ] }; },
+    hints:['ωL과 1/ωC.'] },
+  { id:'u5-l2-08', level:2, type:'num', tags:['직렬 임피던스'], src:'창작 문제(검산됨)',
+    params:{ R:{min:3,max:12,step:3,unit:'Ω'}, X:{min:4,max:16,step:4,unit:'Ω'} },
+    statement:function(p){ return 'R='+p.R+' Ω와 유도성 리액턴스 X_L='+p.X+' Ω가 직렬이다. 임피던스의 크기와 각을 구하라.'; },
+    solve:function(p){ var m=Math.hypot(p.R,p.X), a=SVH.deg(Math.atan2(p.X,p.R));
+      return { ans:{mag:m, ang:a}, unit:{mag:'Ω', ang:'°'}, steps:[
+        '\\(Z=R+jX_L\\) → |Z| = √('+p.R+'²+'+p.X+'²) = '+SVH.fmt(m)+' Ω',
+        '∠Z = tan⁻¹('+p.X+'/'+p.R+') = '+SVH.fmt(a)+'°' ] }; },
+    hints:['복소수 크기·각.'] },
+  { id:'u5-l2-09', level:2, type:'num', tags:['옴 법칙(페이저)'], src:'창작 문제(검산됨)',
+    params:{ Vm:{min:10,max:50,step:10,unit:'V'}, R:{min:3,max:9,step:3,unit:'Ω'}, X:{min:4,max:12,step:4,unit:'Ω'} },
+    statement:function(p){ return '전압 페이저 \\(\\mathbf{V}='+p.Vm+'\\angle 0°\\) V가 \\(Z='+p.R+'+j'+p.X+'\\) Ω에 걸린다. 전류 페이저(크기·각)를 구하라.'; },
+    solve:function(p){ var m=p.Vm/Math.hypot(p.R,p.X), a=-SVH.deg(Math.atan2(p.X,p.R));
+      return { ans:{mag:m, ang:a}, unit:{mag:'A', ang:'°'}, steps:[
+        '\\(\\mathbf{I}=\\mathbf{V}/Z\\): 크기 = '+p.Vm+'/'+SVH.fmt(Math.hypot(p.R,p.X))+' = '+SVH.fmt(m)+' A',
+        '각 = 0° − ∠Z = '+SVH.fmt(a)+'° (유도성이라 전류가 뒤진다)' ] }; },
+    hints:['나눗셈 = 크기 나누고 각 빼기.'] },
+  { id:'u5-l2-10', level:2, type:'num', tags:['시간영역 복원'], src:'기출 유형',
+    params:{ Im:{choices:[2,5,8],unit:'A'}, ang:{choices:[-60,-45,-30,30,45],unit:'°'}, w:{choices:[2,4,10],unit:'rad/s'} },
+    statement:function(p){ return '전류 페이저가 \\('+p.Im+'\\angle '+p.ang+'°\\) A, ω='+p.w+' rad/s이다. 시간영역 i(t)의 t=0에서의 값을 구하라.'; },
+    solve:function(p){ var v=p.Im*Math.cos(SVH.rad(p.ang));
+      return { ans:v, unit:'A', steps:[
+        '복원: \\(i(t)='+p.Im+'\\cos('+p.w+'t'+(p.ang>=0?'+':'−')+Math.abs(p.ang)+'°)\\) A',
+        't=0: i(0) = '+p.Im+'cos('+p.ang+'°) = '+SVH.fmt(v)+' A' ] }; },
+    hints:['페이저 → Vm cos(ωt+φ).','기출 3번이 요구하는 마지막 단계다.'] },
+  { id:'u5-l2-11', level:2, type:'num', tags:['공진'], src:'창작 문제(검산됨)',
+    params:{ L:{choices:[10,40,100],unit:'mH'}, C:{choices:[10,100,250],unit:'µF'} },
+    statement:function(p){ return 'L='+p.L+' mH, C='+p.C+' µF의 공진 각주파수 \\(\\omega_0=1/\\sqrt{LC}\\)를 구하라.'; },
+    solve:function(p){ var w0=1/Math.sqrt(p.L/1000*p.C*1e-6);
+      return { ans:w0, unit:'rad/s', steps:[
+        'ω₀ = 1/√(LC) = 1/√('+SVH.fmt(p.L/1000)+'×'+SVH.fmt(p.C*1e-6)+')',
+        '= '+SVH.fmt(w0)+' rad/s (이때 X_L=X_C — U7 필터의 기준점)' ] }; },
+    hints:['단위 변환부터 (mH·µF).'] },
+  { id:'u5-l2-12', level:2, type:'num', tags:['DC 정상상태'], src:'기출 유형',
+    params:{ Vs:{min:10,max:20,step:5,unit:'V'}, R1:{min:2,max:6,step:2,unit:'Ω'}, R2:{min:4,max:12,step:4,unit:'Ω'} },
+    statement:function(p){ return 'DC '+p.Vs+' V 전원 → R₁='+p.R1+' Ω → (C ∥ R₂='+p.R2+' Ω) 회로가 정상상태다. (a) C의 전압 (b) C의 전류를 구하라.'; },
+    solve:function(p){ var v=p.Vs*p.R2/(p.R1+p.R2);
+      return { ans:{vC:v, iC:0}, unit:{vC:'V', iC:'A'}, steps:[
+        '정상상태 C = 개방 → R₁·R₂ 분압만 남는다',
+        'v_C = '+p.Vs+'×'+p.R2+'/'+(p.R1+p.R2)+' = '+SVH.fmt(v)+' V, i_C = 0 A',
+        '(과도 단원에서 t<0 초기값 구하기가 정확히 이 계산)' ] }; },
+    hints:['C를 지우고(개방) 그려 본다.'] },
+
+  /* ---------- L3 (14) ---------- */
+  { id:'u5-l3-01', level:3, type:'num', tags:['RL 직렬 완전 해석'], src:'기출 유형',
+    params:{ Vm:{min:10,max:30,step:10,unit:'V'}, R:{min:3,max:9,step:3,unit:'Ω'}, L:{choices:[1,2,3],unit:'H'}, w:{choices:[2,3,4],unit:'rad/s'} },
+    statement:function(p){ return '\\(v_s='+p.Vm+'\\cos('+p.w+'t)\\) V가 R='+p.R+' Ω, L='+p.L+' H 직렬에 걸린다. 전류의 진폭과 위상(°)을 구하라.'; },
+    solve:function(p){ var X=p.w*p.L, m=p.Vm/Math.hypot(p.R,X), a=-SVH.deg(Math.atan2(X,p.R));
+      return { ans:{Im:m, ph:a}, unit:{Im:'A', ph:'°'}, steps:[
+        'X_L = ωL = '+SVH.fmt(X)+' Ω → Z = '+p.R+'+j'+SVH.fmt(X)+' Ω',
+        '|I| = '+p.Vm+'/√('+p.R+'²+'+SVH.fmt(X)+'²) = '+SVH.fmt(m)+' A',
+        '위상 = −tan⁻¹(X/R) = '+SVH.fmt(a)+'° → \\(i(t)='+SVH.fmt(m)+'\\cos('+p.w+'t'+(a>=0?'+':'−')+SVH.fmt(Math.abs(a))+'°)\\) A' ] }; },
+    hints:['임피던스부터.','전류 위상은 −∠Z.'] },
+  { id:'u5-l3-02', level:3, type:'num', tags:['RC 직렬 완전 해석'], src:'기출 유형',
+    params:{ Vm:{min:10,max:30,step:10,unit:'V'}, R:{min:4,max:12,step:4,unit:'Ω'}, Xc:{min:3,max:9,step:3,unit:'Ω'} },
+    statement:function(p){ return '전압 '+p.Vm+'∠0° V, R='+p.R+' Ω와 용량성 리액턴스 X_C='+p.Xc+' Ω 직렬 회로에서 축전기 양단 전압 페이저(크기·각)를 구하라.'; },
+    solve:function(p){
+      var Z=Math.hypot(p.R,p.Xc), Im=p.Vm/Z, phI=SVH.deg(Math.atan2(p.Xc,p.R));
+      var Vc=Im*p.Xc, phVc=phI-90;
+      return { ans:{Vc:Vc, ph:phVc}, unit:{Vc:'V', ph:'°'}, steps:[
+        'Z = '+p.R+'−j'+p.Xc+' → |Z|='+SVH.fmt(Z)+' Ω, ∠Z=−'+SVH.fmt(phI)+'°',
+        'I = '+SVH.fmt(Im)+'∠'+SVH.fmt(phI)+'° A (전류 앞섬)',
+        'V_C = I·(−jX_C) = '+SVH.fmt(Vc)+'∠'+SVH.fmt(phVc)+'° V (전류보다 90° 뒤)' ] }; },
+    hints:['V_C = I × Z_C — 크기 곱, 각 −90°.'] },
+  { id:'u5-l3-03', level:3, type:'num', tags:['페이저 분압'], src:'기출 유형',
+    params:{ Vm:{choices:[20,25,30],unit:'V'}, R:{min:6,max:12,step:3,unit:'Ω'}, X:{min:6,max:12,step:3,unit:'Ω'} },
+    statement:function(p){ return '기출 3번 축소형: '+p.Vm+'∠0° V → R='+p.R+' Ω 직렬 → L(X_L='+p.X+' Ω). 인덕터 전압 페이저(크기·각)를 분압으로 구하라.'; },
+    solve:function(p){
+      var Zm=Math.hypot(p.R,p.X), phZ=SVH.deg(Math.atan2(p.X,p.R));
+      var Vl=p.Vm*p.X/Zm, ph=90-phZ;
+      return { ans:{VL:Vl, ph:ph}, unit:{VL:'V', ph:'°'}, steps:[
+        '분압(페이저): \\(\\mathbf{V}_L=\\mathbf{V}\\dfrac{jX_L}{R+jX_L}\\)',
+        '크기 = '+p.Vm+'×'+p.X+'/'+SVH.fmt(Zm)+' = '+SVH.fmt(Vl)+' V',
+        '각 = 90° − '+SVH.fmt(phZ)+'° = '+SVH.fmt(ph)+'°' ] }; },
+    hints:['분압 공식은 페이저에서도 그대로 — 복소수로만.'] },
+  { id:'u5-l3-04', level:3, type:'num', tags:['병렬 어드미턴스'], src:'창작 문제(검산됨)',
+    params:{ R:{min:4,max:10,step:2,unit:'Ω'}, X:{min:4,max:10,step:2,unit:'Ω'}, Vm:{min:12,max:24,step:6,unit:'V'} },
+    statement:function(p){ return '전압원 '+p.Vm+'∠0° V에 R='+p.R+' Ω와 L(X_L='+p.X+' Ω)이 병렬이다. 전원 전류의 크기와 각을 구하라.'; },
+    solve:function(p){
+      var Ir=p.Vm/p.R, Il=p.Vm/p.X; // Il은 -90°
+      var m=Math.hypot(Ir,Il), a=-SVH.deg(Math.atan2(Il,Ir));
+      return { ans:{mag:m, ang:a}, unit:{mag:'A', ang:'°'}, steps:[
+        '가지별: I_R = '+SVH.fmt(Ir)+'∠0°, I_L = '+SVH.fmt(Il)+'∠−90°',
+        '합(직각): |I| = √('+SVH.fmt(Ir)+'²+'+SVH.fmt(Il)+'²) = '+SVH.fmt(m)+' A',
+        '각 = −tan⁻¹('+SVH.fmt(Il)+'/'+SVH.fmt(Ir)+') = '+SVH.fmt(a)+'°' ] }; },
+    hints:['병렬은 가지 전류를 페이저로 더한다.'] },
+  { id:'u5-l3-05', level:3, type:'num', tags:['정현파 합성'], src:'창작 문제(검산됨)',
+    params:{ A:{min:3,max:9,step:3}, B:{min:4,max:12,step:4} },
+    statement:function(p){ return '\\(v(t)='+p.A+'\\cos\\omega t + '+p.B+'\\sin\\omega t\\) 를 \\(V_m\\cos(\\omega t-\\phi)\\) 꼴로 바꿔 \\(V_m\\)과 \\(\\phi\\)(°)를 구하라.'; },
+    solve:function(p){ var m=Math.hypot(p.A,p.B), ph=SVH.deg(Math.atan2(p.B,p.A));
+      return { ans:{Vm:m, ph:ph}, unit:{Vm:'', ph:'°'}, steps:[
+        'sin = −90° cos → 페이저: '+p.A+'∠0° + '+p.B+'∠−90° = '+p.A+' − j'+p.B,
+        'V_m = √('+p.A+'²+'+p.B+'²) = '+SVH.fmt(m)+', φ = tan⁻¹('+p.B+'/'+p.A+') = '+SVH.fmt(ph)+'°',
+        '검토: t=0 값 '+p.A+' = V_m cos(−φ) = '+SVH.fmt(m*Math.cos(SVH.rad(-ph)))+' ✓' ] }; },
+    hints:['sinωt = cos(ωt−90°).','페이저 덧셈으로.'] },
+  { id:'u5-l3-06', level:3, type:'num', tags:['RLC 직렬'], src:'기출 유형',
+    params:{ R:{min:3,max:9,step:3,unit:'Ω'}, XL:{min:5,max:15,step:5,unit:'Ω'}, XC:{min:2,max:12,step:2,unit:'Ω'}, Vm:{min:10,max:30,step:10,unit:'V'} },
+    constraint:function(p){ return p.XL!==p.XC; },
+    statement:function(p){ return 'R='+p.R+' Ω, X_L='+p.XL+' Ω, X_C='+p.XC+' Ω 직렬에 '+p.Vm+'∠0° V. (a) 합성 임피던스 크기·각 (b) 회로가 유도성인지 용량성인지 판정하라. (유도성=1, 용량성=−1로 답)'; },
+    solve:function(p){
+      var X=p.XL-p.XC, m=Math.hypot(p.R,X), a=SVH.deg(Math.atan2(X,p.R));
+      return { ans:{mag:m, ang:a, type:X>0?1:-1}, unit:{mag:'Ω', ang:'°', type:''}, steps:[
+        '순 리액턴스 X = X_L − X_C = '+SVH.fmt(X)+' Ω',
+        '|Z| = √(R²+X²) = '+SVH.fmt(m)+' Ω, ∠Z = '+SVH.fmt(a)+'°',
+        (X>0?'X>0 → 유도성(전류 뒤짐)':'X<0 → 용량성(전류 앞섬)') ] }; },
+    hints:['리액턴스는 부호를 갖고 합쳐진다.'] },
+  { id:'u5-l3-07', level:3, type:'num', tags:['에너지 시간함수'], src:'창작 문제(검산됨)',
+    params:{ L:{choices:[0.5,1,2],unit:'H'}, Im:{min:2,max:6,step:2,unit:'A'}, w:{choices:[2,4],unit:'rad/s'} },
+    statement:function(p){ return 'L='+p.L+' H에 \\(i(t)='+p.Im+'\\cos('+p.w+'t)\\) A가 흐른다. (a) 최대 저장 에너지 (b) 에너지가 최대→0으로 가는 데 걸리는 시간을 구하라.'; },
+    solve:function(p){
+      var Emax=0.5*p.L*p.Im*p.Im, T4=(Math.PI/2)/p.w;
+      return { ans:{Emax:Emax, t:T4}, unit:{Emax:'J', t:'s'}, steps:[
+        'w(t)=½Li² — 최대는 |i|=I_m일 때: '+SVH.fmt(Emax)+' J',
+        'i가 최대→0: cos이 1→0, 즉 ¼주기 = (π/2)/ω = '+SVH.fmt(T4)+' s',
+        '(에너지는 전원↔인덕터를 주기의 절반마다 왕복한다)' ] }; },
+    hints:['에너지는 i²을 따라간다.','cos 1→0은 ωt=π/2.'] },
+  { id:'u5-l3-08', level:3, type:'num', tags:['C 충전 전하'], src:'창작 문제(검산됨)',
+    params:{ C1:{choices:[20,40,60],unit:'µF'}, C2:{choices:[20,40,60],unit:'µF'}, Vs:{min:10,max:30,step:10,unit:'V'} },
+    statement:function(p){ return 'C₁='+p.C1+' µF와 C₂='+p.C2+' µF가 직렬로 '+p.Vs+' V 전원에 연결되어 정상상태다. (a) 공통 전하 q (b) 각 축전기 전압을 구하라.'; },
+    solve:function(p){
+      var Ceq=p.C1*p.C2/(p.C1+p.C2), q=Ceq*1e-6*p.Vs*1e6; // µC
+      var v1=q/p.C1, v2=q/p.C2;
+      return { ans:{q:q, v1:v1, v2:v2}, unit:{q:'µC', v1:'V', v2:'V'}, steps:[
+        '직렬 = 같은 전하: C_eq = '+SVH.fmt(Ceq)+' µF → q = C_eqV = '+SVH.fmt(q)+' µC',
+        'v₁ = q/C₁ = '+SVH.fmt(v1)+' V, v₂ = q/C₂ = '+SVH.fmt(v2)+' V',
+        '검토: v₁+v₂ = '+SVH.fmt(v1+v2)+' = V_s ✓ (작은 C에 큰 전압!)' ] }; },
+    hints:['직렬 C는 전하가 공통.','전압은 C에 반비례 분배.'] },
+  { id:'u5-l3-09', level:3, type:'num', tags:['L 합성·전류 분배'], src:'창작 문제(검산됨)',
+    params:{ L1:{choices:[20,40,60],unit:'mH'}, L2:{choices:[30,60,120],unit:'mH'} },
+    statement:function(p){ return 'L₁='+p.L1+' mH ∥ L₂='+p.L2+' mH의 (a) 합성 인덕턴스 (b) 총 전류의 몇 %가 L₁로 흐르는가? (자속 결합 없음, AC 정상상태)'; },
+    solve:function(p){
+      var Leq=p.L1*p.L2/(p.L1+p.L2), pct=p.L2/(p.L1+p.L2)*100;
+      return { ans:{Leq:Leq, pct:pct}, unit:{Leq:'mH', pct:'%'}, steps:[
+        'L 병렬은 R과 같은 규칙: L_eq = '+SVH.fmt(Leq)+' mH',
+        '전류 분배도 저항처럼(리액턴스 ∝ L): L₁ 몫 = L₂/(L₁+L₂) = '+SVH.fmt(pct)+' %' ] }; },
+    hints:['L은 R과 같은 합성 규칙(C만 반대).'] },
+  { id:'u5-l3-10', level:3, type:'num', tags:['주파수에 따른 거동'], src:'창작 문제(검산됨)',
+    params:{ R:{min:10,max:50,step:10,unit:'Ω'}, C:{choices:[100,200,500],unit:'µF'}, k:{choices:[0.5,2,5]} },
+    statement:function(p){ return 'R='+p.R+' Ω, C='+p.C+' µF 직렬 회로에서 ω = '+p.k+'/(RC)일 때 |Z|를 R의 배수로 구하라. (|Z|/R)'; },
+    solve:function(p){
+      var ratio=Math.sqrt(1+1/(p.k*p.k));
+      return { ans:ratio, unit:'', steps:[
+        'X_C = 1/(ωC) = RC/(kC)·(1/R)⁻¹... 정리하면 X_C = R/k',
+        '|Z|/R = √(1+(X_C/R)²) = √(1+1/'+p.k+'²) = '+SVH.fmt(ratio),
+        '(ω가 커질수록(k↑) C가 투명해져 |Z|→R — U7 고역통과의 물리)' ] }; },
+    hints:['ω=k/RC를 X_C에 대입해 R로 정규화.'] },
+  { id:'u5-l3-11', level:3, type:'num', tags:['페이저 KCL'], src:'창작 문제(검산됨)',
+    params:{ I1:{min:2,max:6,step:2,unit:'A'}, I2:{min:2,max:6,step:2,unit:'A'} },
+    statement:function(p){ return '절점에 \\(i_1='+p.I1+'\\cos\\omega t\\) A가 들어오고 \\(i_2='+p.I2+'\\sin\\omega t\\) A가 나간다. 세 번째 가지로 나가는 전류의 진폭과 위상(°)을 구하라.'; },
+    solve:function(p){
+      var m=Math.hypot(p.I1,p.I2), a=SVH.deg(Math.atan2(-(-p.I2),p.I1)); // I3 = I1 - I2∠-90 = I1 + jI2
+      return { ans:{Im:m, ph:a}, unit:{Im:'A', ph:'°'}, steps:[
+        '페이저: I₁ = '+p.I1+'∠0°, I₂ = '+p.I2+'∠−90°',
+        'KCL: I₃ = I₁ − I₂ = '+p.I1+' + j'+p.I2,
+        '|I₃| = '+SVH.fmt(m)+' A, ∠ = '+SVH.fmt(a)+'° → \\(i_3='+SVH.fmt(m)+'\\cos(\\omega t+'+SVH.fmt(a)+'°)\\)' ] }; },
+    hints:['KCL은 페이저에서도 성립.','−(∠−90°) = +j.'] },
+  { id:'u5-l3-12', level:3, type:'num', tags:['C 그래프 해석'], src:'창작 문제(검산됨)',
+    params:{ C:{choices:[2,5,10],unit:'µF'}, V1:{min:4,max:10,step:2,unit:'V'}, t1:{choices:[2,4],unit:'ms'} },
+    statement:function(p){ return p.C+' µF 축전기 전압이 0에서 '+p.V1+' V까지 '+p.t1+' ms 동안 선형 증가 후 일정하다. (a) 증가 구간 전류 (b) 일정 구간 전류 (c) 최종 저장 에너지를 구하라.'; },
+    solve:function(p){
+      var i=p.C*1e-6*p.V1/(p.t1/1000)*1000, E=0.5*p.C*1e-6*p.V1*p.V1*1e6;
+      return { ans:{i:i, i2:0, E:E}, unit:{i:'mA', i2:'mA', E:'µJ'}, steps:[
+        '증가 구간: i = C·dv/dt = '+p.C+'µ × '+SVH.fmt(p.V1/(p.t1/1000))+' V/s = '+SVH.fmt(i)+' mA',
+        '일정 구간: dv/dt=0 → i = 0',
+        'E = ½CV² = '+SVH.fmt(E)+' µJ' ] }; },
+    hints:['구간별 기울기만 보면 된다.'] },
+  { id:'u5-l3-13', level:3, type:'num', tags:['위상차 측정'], src:'창작 문제(검산됨)',
+    params:{ f:{choices:[50,100,200],unit:'Hz'}, dt:{choices:[0.5,1,2],unit:'ms'} },
+    constraint:function(p){ return p.dt/1000 < 1/(2*p.f); },
+    statement:function(p){ return '오실로스코프에서 '+p.f+' Hz 정현파 두 개의 마루가 '+p.dt+' ms 어긋나 있다. 위상차는 몇 °인가?'; },
+    solve:function(p){ var ph=360*p.f*p.dt/1000;
+      return { ans:ph, unit:'°', steps:[
+        '한 주기 T = '+SVH.fmt(1000/p.f)+' ms = 360°',
+        'Δφ = 360°×Δt/T = 360×'+p.f+'×'+SVH.fmt(p.dt/1000)+' = '+SVH.fmt(ph)+'°',
+        '(실험 2 오실로스코프 측정의 표준 계산)' ] }; },
+    hints:['시간차/주기 × 360°.'] },
+  { id:'u5-l3-14', level:3, type:'num', tags:['복소 연산 종합'], src:'창작 문제(검산됨)',
+    params:{ R1:{min:2,max:6,step:2,unit:'Ω'}, X1:{min:2,max:6,step:2,unit:'Ω'}, R2:{min:2,max:6,step:2,unit:'Ω'}, X2:{min:2,max:6,step:2,unit:'Ω'} },
+    statement:function(p){ return '\\(Z_1='+p.R1+'+j'+p.X1+'\\) Ω(RL)과 \\(Z_2='+p.R2+'-j'+p.X2+'\\) Ω(RC)의 병렬 합성 임피던스 크기와 각을 구하라.'; },
+    solve:function(p){
+      var Z1=SVH.cx(p.R1,p.X1), Z2=SVH.cx(p.R2,-p.X2);
+      var Zp=SVH.cpar(Z1,Z2);
+      return { ans:{mag:SVH.cmag(Zp), ang:SVH.cang(Zp)}, unit:{mag:'Ω', ang:'°'}, steps:[
+        '곱: Z₁Z₂ = '+SVH.fmt(SVH.cmul(Z1,Z2).re)+'+j'+SVH.fmt(SVH.cmul(Z1,Z2).im),
+        '합: Z₁+Z₂ = '+(p.R1+p.R2)+'+j'+(p.X1-p.X2),
+        'Z_p = 곱/합 → |Z| = '+SVH.fmt(SVH.cmag(Zp))+' Ω, ∠ = '+SVH.fmt(SVH.cang(Zp))+'°' ] }; },
+    hints:['병렬 = 곱/합, 복소수로 그대로.','유도성과 용량성이 일부 상쇄된다.'] },
+
+  /* ---------- L4 (8) ---------- */
+  { id:'u5-l4-01', level:4, type:'mc', tags:['개념 종합'], src:'기출 유형',
+    statement:'옳은 것을 모두 고르면?<br>㉠ DC 정상상태에서 인덕터의 전압은 0이다<br>㉡ 축전기 전류는 스위칭 순간 불연속일 수 있다<br>㉢ 서로 다른 주파수의 두 페이저는 직접 더할 수 있다<br>㉣ 직렬 RLC에서 X_L=X_C이면 임피던스는 순저항 R이 된다',
+    choices:['㉠㉡㉣','㉠㉢㉣','㉡㉢','전부'],
+    answer:0, expl:'페이저는 같은 ω끼리만(㉢ ✗). 공진(㉣)에서 리액턴스 상쇄 → |Z| 최소 = R.' },
+  { id:'u5-l4-02', level:4, type:'num', tags:['기출 3번 재현'], src:'기출 유형',
+    params:{ Vm:{choices:[20,25,30],unit:'V'}, R:{choices:[12],unit:'Ω'}, L1:{choices:[3,6],unit:'H'}, R2:{choices:[6],unit:'Ω'}, w:{choices:[2],unit:'rad/s'} },
+    statement:function(p){ return '기출 3번 구조: \\(V='+p.Vm+'\\angle 0°\\) V, ω='+p.w+' rad/s. 직렬 R='+p.R+' Ω·L='+p.L1+' H 다음에 R₂='+p.R2+' Ω가 병렬로 매달린 구조에서 R₂ 양단 전압 \\(V_2\\)의 크기·각을 구하고 시간영역으로 써라. (t=0 값으로 검증)'; },
+    solve:function(p){
+      var ZL=SVH.cx(0,p.w*p.L1);
+      var Zser=SVH.cx(p.R,p.w*p.L1);
+      var Z2=SVH.cx(p.R2,0);
+      // V2 = V * Z2/(Zser+Z2)
+      var V=SVH.cx(p.Vm,0);
+      var V2=SVH.cmul(V, SVH.cdiv(Z2, SVH.cadd(Zser,Z2)));
+      var m=SVH.cmag(V2), a=SVH.cang(V2);
+      return { ans:{V2:m, ph:a, v0:m*Math.cos(SVH.rad(a))}, unit:{V2:'V', ph:'°', v0:'V'}, steps:[
+        'Z_직렬 = '+p.R+'+j'+SVH.fmt(p.w*p.L1)+' Ω, 분압: \\(V_2=V\\dfrac{R_2}{R+j\\omega L+R_2}\\)',
+        '분모 = '+(p.R+p.R2)+'+j'+SVH.fmt(p.w*p.L1)+' → |V₂| = '+SVH.fmt(m)+' V, ∠ = '+SVH.fmt(a)+'°',
+        '\\(v_2(t)='+SVH.fmt(m)+'\\cos('+p.w+'t'+(a>=0?'+':'−')+SVH.fmt(Math.abs(a))+'°)\\) V',
+        't=0 검증: v₂(0) = '+SVH.fmt(m*Math.cos(SVH.rad(a)))+' V' ] }; },
+    hints:['병렬 저항까지 분압 한 방으로.','시간영역 복원까지가 만점 조건(기출 채점 기준).'] },
+  { id:'u5-l4-03', level:4, type:'num', tags:['기말 P1형 2단 회로'], src:'기출 유형',
+    params:{ Im:{choices:[4,6],unit:'A'}, w:{choices:[2],unit:'rad/s'}, R:{choices:[5,10],unit:'Ω'}, L:{choices:[0.5,1],unit:'H'}, C:{choices:[0.1,0.5],unit:'F'} },
+    statement:function(p){ return '전류원 \\('+p.Im+'\\cos('+p.w+'t)\\) A가 [L='+p.L+' H 직렬 R='+p.R+' Ω] ∥ [C='+p.C+' F] 에 연결되어 있다. 저항 R에 흐르는 전류의 진폭·위상을 구하라. (기말 P1 유형)'; },
+    solve:function(p){
+      var ZRL=SVH.cx(p.R,p.w*p.L);
+      var ZC=SVH.cx(0,-1/(p.w*p.C));
+      // 분류: I_RL = I * ZC/(ZRL+ZC)
+      var I=SVH.cx(p.Im,0);
+      var IRL=SVH.cmul(I, SVH.cdiv(ZC, SVH.cadd(ZRL,ZC)));
+      return { ans:{Im:SVH.cmag(IRL), ph:SVH.cang(IRL)}, unit:{Im:'A', ph:'°'}, steps:[
+        'Z_RL = '+p.R+'+j'+SVH.fmt(p.w*p.L)+' Ω, Z_C = −j'+SVH.fmt(1/(p.w*p.C))+' Ω',
+        '전류 분배(반대편 임피던스): \\(I_{RL}=I\\dfrac{Z_C}{Z_{RL}+Z_C}\\)',
+        '|I_RL| = '+SVH.fmt(SVH.cmag(IRL))+' A, ∠ = '+SVH.fmt(SVH.cang(IRL))+'°' ] }; },
+    hints:['분류 법칙도 복소수 그대로.','분모의 리액턴스 상쇄에 주의.'] },
+  { id:'u5-l4-04', level:4, type:'num', tags:['미지 소자 판별'], src:'기출 유형',
+    params:{ Vm:{choices:[10,20],unit:'V'}, Im:{choices:[2,4],unit:'A'}, ph:{choices:[-60,-45,-30]} },
+    statement:function(p){ return '블랙박스에 \\(v='+p.Vm+'\\cos(100t)\\) V를 걸었더니 \\(i='+p.Im+'\\cos(100t'+p.ph+'°)\\) A가 흘렀다. 박스를 R+L 직렬로 모델링할 때 R과 L을 구하라.'; },
+    solve:function(p){
+      var Zm=p.Vm/p.Im, R=Zm*Math.cos(SVH.rad(-p.ph)), X=Zm*Math.sin(SVH.rad(-p.ph)), L=X/100;
+      return { ans:{R:R, L:L*1000}, unit:{R:'Ω', L:'mH'}, steps:[
+        '|Z| = V_m/I_m = '+SVH.fmt(Zm)+' Ω, ∠Z = −(전류 위상) = '+(-p.ph)+'°',
+        'R = |Z|cos∠ = '+SVH.fmt(R)+' Ω, X_L = |Z|sin∠ = '+SVH.fmt(X)+' Ω',
+        'L = X_L/ω = '+SVH.fmt(L*1000)+' mH — 전류가 뒤지므로(음의 위상) 유도성 판정과 일치' ] }; },
+    hints:['임피던스의 크기와 각을 측정치에서 역산.','∠Z = 전압 위상 − 전류 위상.'] },
+  { id:'u5-l4-05', level:4, type:'derive', tags:['유도'], src:'교재 표준',
+    statement:'축전기의 v–i 관계 \\(i=C\\,dv/dt\\)에서 출발해 임피던스 \\(Z_C=1/(j\\omega C)\\)를 유도하고, 극한으로 물리적 의미를 검증하라.',
+    steps:[
+      '정상상태 가정: \\(v(t)=V_m e^{j\\omega t}\\) (복소 지수 표기 — 실제 신호는 실수부) [왜] 미분을 곱셈으로 바꾸기 위해',
+      '대입: \\(i=C\\dfrac{d}{dt}(V_m e^{j\\omega t}) = j\\omega C\\,V_m e^{j\\omega t}\\) — 미분이 \\(j\\omega\\) 곱으로',
+      '임피던스 정의 \\(Z=\\mathbf{V}/\\mathbf{I}\\): \\(Z_C=\\dfrac{V_m}{j\\omega C V_m}=\\dfrac{1}{j\\omega C}=-\\dfrac{j}{\\omega C}\\)',
+      '각도 해석: −90° → 축전기 전압은 전류보다 90° 뒤진다(전류가 먼저 흘러 들어가야 전압이 쌓인다)',
+      '극한 체크: ω→0 ⇒ |Z_C|→∞ (DC 개방 ✓), ω→∞ ⇒ 0 (고주파 단락 ✓) · 차원: 1/[(1/s)(C/V)] = V·s/C = Ω ✓'
+    ],
+    hints:['e^{jωt}를 넣으면 d/dt가 jω로.','유도 후 ω 극한 2개로 DC 규칙을 회수해 본다.'],
+    expl:'기말 P4(임피던스로 H(ω) 유도)의 출발점. L도 같은 방법으로 Z_L=jωL.' },
+  { id:'u5-l4-06', level:4, type:'num', tags:['공진 설계'], src:'창작 문제(검산됨)',
+    params:{ f0:{choices:[1,5,10],unit:'kHz'}, L:{choices:[10,40],unit:'mH'}, R:{choices:[10,20],unit:'Ω'} },
+    statement:function(p){ return '직렬 RLC를 f₀='+p.f0+' kHz에서 공진시키려 한다. L='+p.L+' mH일 때 (a) 필요한 C(µF) (b) 공진에서 전류가 최대가 되는 이유를 반영한, '+p.R+' Ω·V_m=10 V 기준 공진 전류 진폭을 구하라.'; },
+    solve:function(p){
+      var w0=2*Math.PI*p.f0*1000, C=1/(w0*w0*p.L/1000)*1e6, I=10/p.R;
+      return { ans:{C:C, I:I}, unit:{C:'µF', I:'A'}, steps:[
+        'ω₀ = 2πf₀ = '+SVH.fmt(w0)+' rad/s, 공진 조건 ω₀²=1/LC',
+        'C = 1/(ω₀²L) = '+SVH.fmt(C)+' µF',
+        '공진에서 X_L=X_C 상쇄 → Z=R → I_max = V/R = '+SVH.fmt(I)+' A' ] }; },
+    hints:['공진 조건에서 C를 역산.','공진 = 리액턴스 소멸.'] },
+  { id:'u5-l4-07', level:4, type:'num', tags:['3소자 종합'], src:'기출 유형',
+    params:{ Vm:{choices:[10,20],unit:'V'}, R:{choices:[4,8],unit:'Ω'}, XL:{choices:[6,10],unit:'Ω'}, XC:{choices:[3,6],unit:'Ω'} },
+    constraint:function(p){ return p.XL!==p.XC; }, /* 병렬 LC 공진(Z→∞) 배제 */
+    statement:function(p){ return p.Vm+'∠0° V가 R='+p.R+' Ω 직렬 후 [L(X_L='+p.XL+' Ω) ∥ C(X_C='+p.XC+' Ω)]에 연결. 병렬부 양단 전압의 크기·각을 구하라.'; },
+    solve:function(p){
+      var ZL=SVH.cx(0,p.XL), ZC=SVH.cx(0,-p.XC);
+      var Zp=SVH.cpar(ZL,ZC);
+      var V=SVH.cx(p.Vm,0);
+      var Vp=SVH.cmul(V, SVH.cdiv(Zp, SVH.cadd(SVH.cx(p.R,0),Zp)));
+      return { ans:{V:SVH.cmag(Vp), ph:SVH.cang(Vp)}, unit:{V:'V', ph:'°'}, steps:[
+        'L∥C: \\(Z_p=\\dfrac{(jX_L)(-jX_C)}{j(X_L-X_C)}\\) = '+SVH.fmt(SVH.cmag(Zp))+'∠'+SVH.fmt(SVH.cang(Zp))+'° Ω (순수 리액턴스)',
+        '분압: V_p = V·Z_p/(R+Z_p)',
+        '|V_p| = '+SVH.fmt(SVH.cmag(Vp))+' V, ∠ = '+SVH.fmt(SVH.cang(Vp))+'°' ] }; },
+    hints:['L∥C는 순허수 — 부호가 어느 쪽 우세인지 먼저.','그 다음은 평범한 분압.'] },
+  { id:'u5-l4-08', level:4, type:'num', tags:['오실로스코프 역산'], src:'기출 유형',
+    params:{ Vm:{choices:[8,12],unit:'V'}, f:{choices:[100,200],unit:'Hz'}, R:{choices:[100,200],unit:'Ω'}, ph:{choices:[30,45,60]} },
+    statement:function(p){ return '실험: 함수발생기('+p.Vm+' V 진폭, '+p.f+' Hz)를 R='+p.R+' Ω와 미지 축전기 직렬에 연결했더니 전류(R 전압으로 측정)가 전압보다 '+p.ph+'° 앞섰다. C를 µF로 구하라.'; },
+    solve:function(p){
+      var Xc=p.R*Math.tan(SVH.rad(p.ph));
+      var C=1/(2*Math.PI*p.f*Xc)*1e6;
+      return { ans:C, unit:'µF', steps:[
+        '전류 앞섬 '+p.ph+'° → ∠Z = −'+p.ph+'° → tan'+p.ph+'° = X_C/R',
+        'X_C = R·tan'+p.ph+'° = '+SVH.fmt(Xc)+' Ω',
+        'C = 1/(2πf·X_C) = '+SVH.fmt(C)+' µF (실험 2에서 C 측정하는 실제 절차)' ] }; },
+    hints:['위상각에서 X_C/R를 얻는다.','X_C에서 C 역산.'] }
+  ]
+});
+
+</script>
+<script>
+/* U6 1차 과도응답 — RC/RL, 시정수, 스위칭(초기·최종·τ 3종 세트), 이중 스위칭, 실험 연계 */
+SV_BANK.push({
+  id: 'u6', no: 6, title: '1차 과도응답 (RC·RL)', titleEn: 'First-Order Transients',
+  scope: '시정수 τ=RC, L/R · 스위칭 전후 정상상태 · 테브난으로 τ 구하기 · 완전응답 v(t)=v∞+(v₀−v∞)e^{−t/τ} · 이중 스위칭 · 실험 시정수 오차',
+  problems: [
+
+  /* ---------- L1 (6) ---------- */
+  { id:'u6-l1-01', level:1, type:'mc', tags:['시정수'], src:'교재 표준',
+    statement:'RC·RL 회로의 시정수와 그 의미로 옳은 것은?',
+    choices:['\\(\\tau_{RC}=RC\\), \\(\\tau_{RL}=L/R\\), 한 τ 동안 최종값까지 남은 거리의 약 63.2%를 좁힌다','\\(\\tau_{RC}=R/C\\)','τ가 지나면 정확히 절반이 된다','\\(\\tau_{RL}=RL\\)'],
+    answer:0, expl:'1−e⁻¹≈0.632. 실무 규칙: 5τ면 사실상 완료(99.3%).' },
+  { id:'u6-l1-02', level:1, type:'tf', tags:['초기 조건'], src:'교재 표준',
+    statement:'스위칭 직후 초기값을 정할 때 쓰는 연속 조건은 \\(v_C(0^+)=v_C(0^-)\\), \\(i_L(0^+)=i_L(0^-)\\)이다.',
+    answer:true, expl:'U5의 에너지 연속성에서 나온다. 나머지 변수(i_C, v_L 등)는 점프 가능 — 0⁺ 회로를 새로 그려 구한다.' },
+  { id:'u6-l1-03', level:1, type:'mc', tags:['τ의 R'], src:'기출 유형',
+    statement:'복잡한 회로에 축전기 하나가 달려 있을 때, 시정수 τ=R_eq·C의 R_eq는?',
+    choices:['축전기 단자에서 본 테브난 저항(독립 전원 끔)','축전기와 직렬인 저항 하나','회로의 모든 저항 합','가장 큰 저항'],
+    answer:0, expl:'기출 5번 풀이의 핵심 절차. C를 떼고 그 단자에서 전원 끄고 본 등가 저항이다.' },
+  { id:'u6-l1-04', level:1, type:'tf', tags:['완전응답'], src:'교재 표준',
+    statement:'1차 회로의 모든 응답은 \\(x(t)=x(\\infty)+[x(0^+)-x(\\infty)]e^{-t/\\tau}\\) 한 식으로 쓸 수 있다.',
+    answer:true, expl:'초기값·최종값·τ 세 개만 구하면 끝 — "3종 세트" 공식. 자연응답+강제응답의 합이다.' },
+  { id:'u6-l1-05', level:1, type:'mc', tags:['방전'], src:'교재 표준',
+    statement:'V₀로 충전된 축전기가 저항 R로 방전할 때 옳은 것은?',
+    choices:['\\(v(t)=V_0e^{-t/RC}\\)이고 초기 방전 전류는 V₀/R','전압이 선형으로 감소한다','전류가 일정하다','에너지가 보존되어 저항이 뜨거워지지 않는다'],
+    answer:0, expl:'지수 감쇠. 초기 에너지 ½CV₀²는 전부 R에서 열로 소산된다(적분해 보면 정확히 일치).' },
+  { id:'u6-l1-06', level:1, type:'tf', tags:['실험'], src:'기출 유형',
+    statement:'실험에서 측정한 RC 시정수는 이론값과 다를 수 있는데, 원인으로 오실로스코프·함수발생기의 내부 저항, 부품 허용오차, 케이블·부유 커패시턴스 등이 있다.',
+    answer:true, expl:'기말 P3(a)의 서술형 그대로 — 계측기 저항이 R_eq에 병렬/직렬로 끼어들어 τ를 바꾼다는 논리까지 쓸 수 있어야 한다.' },
+
+  /* ---------- L2 (12) ---------- */
+  { id:'u6-l2-01', level:2, type:'num', tags:['τ 계산'], src:'창작 문제(검산됨)',
+    params:{ R:{choices:[1,2,4.7,10],unit:'kΩ'}, C:{choices:[10,47,100],unit:'µF'} },
+    statement:function(p){ return 'R='+p.R+' kΩ, C='+p.C+' µF인 RC 회로의 시정수(ms)와 5τ(ms)를 구하라.'; },
+    solve:function(p){ var tau=p.R*1000*p.C*1e-6*1000;
+      return { ans:{tau:tau, t5:5*tau}, unit:{tau:'ms', t5:'ms'}, steps:[
+        'τ = RC = '+SVH.fmt(p.R*1000)+'×'+SVH.fmt(p.C*1e-6)+' = '+SVH.fmt(tau)+' ms',
+        '5τ = '+SVH.fmt(5*tau)+' ms (정착 완료 기준)' ] }; },
+    hints:['kΩ×µF = ms — 외워 두면 빠르다.'] },
+  { id:'u6-l2-02', level:2, type:'num', tags:['τ 계산 RL'], src:'창작 문제(검산됨)',
+    params:{ L:{choices:[50,100,500],unit:'mH'}, R:{min:10,max:100,step:10,unit:'Ω'} },
+    statement:function(p){ return 'L='+p.L+' mH, R='+p.R+' Ω인 RL 회로의 시정수는 몇 ms인가?'; },
+    solve:function(p){ var tau=p.L/1000/p.R*1000;
+      return { ans:tau, unit:'ms', steps:[
+        'RL의 시정수: \\(\\tau = L/R\\) (RC와 달리 R이 분모)',
+        'τ = '+SVH.fmt(p.L/1000)+'/'+p.R+' = '+SVH.fmt(tau)+' ms' ] }; },
+    hints:['RL은 L/R — RC와 반대로 R이 분모.'] },
+  { id:'u6-l2-03', level:2, type:'num', tags:['방전 평가'], src:'창작 문제(검산됨)',
+    params:{ V0:{min:6,max:24,step:6,unit:'V'}, tau:{choices:[10,20,50],unit:'ms'}, t:{choices:[10,20,30],unit:'ms'} },
+    statement:function(p){ return 'V₀='+p.V0+' V에서 방전하는 RC 회로(τ='+p.tau+' ms)의 t='+p.t+' ms에서의 전압은?'; },
+    solve:function(p){ var v=p.V0*Math.exp(-p.t/p.tau);
+      return { ans:v, unit:'V', steps:[
+        'v(t) = V₀e^{−t/τ}',
+        'v = '+p.V0+'×e^{−'+p.t+'/'+p.tau+'} = '+p.V0+'×'+SVH.fmt(Math.exp(-p.t/p.tau))+' = '+SVH.fmt(v)+' V' ] }; },
+    hints:['지수에 −t/τ.'] },
+  { id:'u6-l2-04', level:2, type:'num', tags:['충전 평가'], src:'창작 문제(검산됨)',
+    params:{ Vs:{min:5,max:20,step:5,unit:'V'}, tau:{choices:[5,10,20],unit:'ms'}, t:{choices:[5,10,15],unit:'ms'} },
+    statement:function(p){ return '0 V에서 '+p.Vs+' V로 충전 중인 RC 회로(τ='+p.tau+' ms)의 t='+p.t+' ms 전압은?'; },
+    solve:function(p){ var v=p.Vs*(1-Math.exp(-p.t/p.tau));
+      return { ans:v, unit:'V', steps:[
+        'v(t) = V_s(1−e^{−t/τ})',
+        'v = '+p.Vs+'×(1−'+SVH.fmt(Math.exp(-p.t/p.tau))+') = '+SVH.fmt(v)+' V' ] }; },
+    hints:['최종값 − 남은 거리.'] },
+  { id:'u6-l2-05', level:2, type:'num', tags:['도달 시간'], src:'창작 문제(검산됨)',
+    params:{ tau:{choices:[10,25,50],unit:'ms'}, pct:{choices:[50,90,95]} },
+    statement:function(p){ return 'τ='+p.tau+' ms인 충전 회로가 최종값의 '+p.pct+'%에 도달하는 시간을 구하라.'; },
+    solve:function(p){ var t=-p.tau*Math.log(1-p.pct/100);
+      return { ans:t, unit:'ms', steps:[
+        '1−e^{−t/τ} = '+(p.pct/100)+' → e^{−t/τ} = '+SVH.fmt(1-p.pct/100),
+        't = −τ ln('+SVH.fmt(1-p.pct/100)+') = '+SVH.fmt(t)+' ms',
+        (p.pct===50?'(50% 도달 = τ·ln2 ≈ 0.693τ — 반감기 공식)':'') ] }; },
+    hints:['식을 t에 대해 풀어 ln.'] },
+  { id:'u6-l2-06', level:2, type:'num', tags:['초기·최종'], src:'기출 유형',
+    params:{ Vs:{min:10,max:20,step:5,unit:'V'}, R1:{min:2,max:6,step:2,unit:'Ω'}, R2:{min:4,max:12,step:4,unit:'Ω'} },
+    statement:function(p){ return 't<0에서 스위치가 오래 닫혀 있던 회로: '+p.Vs+' V → R₁='+p.R1+' Ω → (C ∥ R₂='+p.R2+' Ω). t=0에 전원 쪽 스위치가 열린다. (a) v_C(0⁺) (b) v_C(∞)를 구하라.'; },
+    solve:function(p){ var v0=p.Vs*p.R2/(p.R1+p.R2);
+      return { ans:{v0:v0, vinf:0}, unit:{v0:'V', vinf:'V'}, steps:[
+        't<0 정상상태(C 개방): v_C(0⁻) = 분압 '+SVH.fmt(v0)+' V = v_C(0⁺) (연속)',
+        't→∞: 전원이 끊겨 R₂로 완전 방전 → v_C(∞) = 0 V' ] }; },
+    hints:['0⁻ 회로와 ∞ 회로를 따로 그린다.'] },
+  { id:'u6-l2-07', level:2, type:'num', tags:['RL 초기 전류'], src:'창작 문제(검산됨)',
+    params:{ Vs:{min:12,max:24,step:6,unit:'V'}, R:{min:4,max:12,step:4,unit:'Ω'} },
+    statement:function(p){ return p.Vs+' V 전원과 R='+p.R+' Ω, L 직렬 회로에서 스위치가 오래 닫혀 있었다. (a) 그때 인덕터 전류 (b) 그 순간 인덕터에 걸린 전압을 구하라.'; },
+    solve:function(p){ var i=p.Vs/p.R;
+      return { ans:{iL:i, vL:0}, unit:{iL:'A', vL:'V'}, steps:[
+        '정상상태 L = 단락 → i_L = V/R = '+SVH.fmt(i)+' A',
+        'v_L = 0 V (단락이므로)' ] }; },
+    hints:['정상상태 L은 전선.'] },
+  { id:'u6-l2-08', level:2, type:'num', tags:['τ 설계'], src:'창작 문제(검산됨)',
+    params:{ C:{choices:[10,47,100],unit:'µF'}, tau:{choices:[10,47,100],unit:'ms'} },
+    statement:function(p){ return 'C='+p.C+' µF로 시정수 '+p.tau+' ms를 만들려면 R은 몇 kΩ이어야 하는가?'; },
+    solve:function(p){ var R=p.tau/1000/(p.C*1e-6)/1000;
+      return { ans:R, unit:'kΩ', steps:[
+        'τ = RC를 R에 대해 풀면 R = τ/C',
+        'R = '+SVH.fmt(p.tau/1000)+'/'+SVH.fmt(p.C*1e-6)+' = '+SVH.fmt(R*1000)+' Ω = '+SVH.fmt(R)+' kΩ' ] }; },
+    hints:['τ=RC를 R로 푼다.'] },
+  { id:'u6-l2-09', level:2, type:'num', tags:['남은 비율'], src:'창작 문제(검산됨)',
+    params:{ n:{choices:[1,2,3]} },
+    statement:function(p){ return '방전 회로에서 t='+p.n+'τ일 때 초기 전압의 몇 %가 남아 있는가?'; },
+    solve:function(p){ var r=Math.exp(-p.n)*100;
+      return { ans:r, unit:'%', steps:[
+        'e^{−'+p.n+'} = '+SVH.fmt(Math.exp(-p.n)),
+        '남은 비율 = '+SVH.fmt(r)+' % (1τ 36.8%, 2τ 13.5%, 3τ 5.0% — 표로 외워두면 스케치가 빨라진다)' ] }; },
+    hints:['e⁻ⁿ.'] },
+  { id:'u6-l2-10', level:2, type:'num', tags:['0⁺ 전류'], src:'기출 유형',
+    params:{ Vs:{min:10,max:20,step:5,unit:'V'}, R:{min:2,max:10,step:2,unit:'Ω'} },
+    statement:function(p){ return '방전되어 있던(0 V) 축전기를 t=0에 '+p.Vs+' V 전원+R='+p.R+' Ω에 연결했다. (a) i(0⁺) (b) i(∞)를 구하라.'; },
+    solve:function(p){ var i0=p.Vs/p.R;
+      return { ans:{i0:i0, iinf:0}, unit:{i0:'A', iinf:'A'}, steps:[
+        '0⁺: v_C 연속=0 → C가 순간 단락처럼 → i(0⁺) = V/R = '+SVH.fmt(i0)+' A',
+        '∞: C 개방 → i = 0 (전류는 점프했지만 v_C는 연속이었다는 점을 확인)' ] }; },
+    hints:['0⁺에서 C는 "그 순간 전압의 전지"처럼 그린다.'] },
+  { id:'u6-l2-11', level:2, type:'num', tags:['에너지 소산'], src:'창작 문제(검산됨)',
+    params:{ C:{choices:[100,220,470],unit:'µF'}, V0:{min:5,max:25,step:5,unit:'V'} },
+    statement:function(p){ return 'C='+p.C+' µF가 V₀='+p.V0+' V에서 저항으로 완전 방전했다. 저항에서 소산된 총 에너지는 몇 mJ이며, 저항값에 따라 달라지는가? (달라지면 1, 아니면 0)'; },
+    solve:function(p){ var E=0.5*p.C*1e-6*p.V0*p.V0*1000;
+      return { ans:{E:E, dep:0}, unit:{E:'mJ', dep:''}, steps:[
+        '에너지 보존: 소산 = 초기 저장 = ½CV₀² = '+SVH.fmt(E)+' mJ',
+        'R은 "얼마나 빨리"(τ)만 정하고 총량은 못 바꾼다 → 0' ] }; },
+    hints:['적분해도 되고, 보존으로 바로 가도 된다.'] },
+  { id:'u6-l2-12', level:2, type:'num', tags:['그래프 역산'], src:'기출 유형',
+    params:{ V0:{choices:[10,20],unit:'V'}, t1:{choices:[5,10],unit:'ms'}, frac:{choices:[0.368,0.135]} },
+    statement:function(p){ return '방전 곡선에서 전압이 '+p.V0+' V로 시작해 t='+p.t1+' ms에 '+SVH.fmt(p.V0*p.frac)+' V가 되었다. 시정수를 구하라.'; },
+    solve:function(p){ var tau=-p.t1/Math.log(p.frac);
+      return { ans:tau, unit:'ms', steps:[
+        'e^{−t₁/τ} = '+p.frac+' → τ = −t₁/ln('+p.frac+')',
+        'τ = '+SVH.fmt(tau)+' ms ('+p.frac+'≈e^{−'+SVH.fmt(-Math.log(p.frac))+'})',
+        '(실험 데이터에서 τ 읽는 표준법: 36.8% 지점의 시간)' ] }; },
+    hints:['36.8%가 1τ, 13.5%가 2τ.'] },
+
+  /* ---------- L3 (14) ---------- */
+  { id:'u6-l3-01', level:3, type:'num', tags:['3종 세트 풀코스'], src:'기출 유형',
+    params:{ Vs:{min:12,max:24,step:6,unit:'V'}, R1:{min:2,max:6,step:2,unit:'Ω'}, R2:{min:4,max:12,step:4,unit:'Ω'}, C:{choices:[0.5,1,2],unit:'F'} },
+    statement:function(p){ return 't<0: 스위치 열림, C는 0 V. t=0에 닫히며 '+p.Vs+' V → R₁='+p.R1+' Ω → (C='+p.C+' F ∥ R₂='+p.R2+' Ω). (a) v_C(∞) (b) τ (c) v_C(t) 식의 t=τ에서 값.'; },
+    solve:function(p){
+      var vinf=p.Vs*p.R2/(p.R1+p.R2);
+      var Rt=SVH.par(p.R1,p.R2), tau=Rt*p.C;
+      var vtau=vinf*(1-Math.exp(-1));
+      return { ans:{vinf:vinf, tau:tau, vtau:vtau}, unit:{vinf:'V', tau:'s', vtau:'V'}, steps:[
+        'v_C(∞): C 개방 → 분압 '+SVH.fmt(vinf)+' V',
+        'τ: C에서 본 R_eq = R₁∥R₂ = '+SVH.fmt(Rt)+' Ω (전원 단락) → τ = '+SVH.fmt(tau)+' s',
+        'v_C(t) = '+SVH.fmt(vinf)+'(1−e^{−t/'+SVH.fmt(tau)+'}) → t=τ: '+SVH.fmt(vtau)+' V (63.2%)' ] }; },
+    hints:['초기 0, 최종 분압, τ는 테브난 — 3종 세트.'] },
+  { id:'u6-l3-02', level:3, type:'num', tags:['방전형 3종'], src:'기출 유형',
+    params:{ Vs:{min:10,max:20,step:5,unit:'V'}, R1:{min:2,max:6,step:2,unit:'Ω'}, R2:{min:4,max:12,step:4,unit:'Ω'}, C:{choices:[1,2],unit:'F'}, t1:{choices:[2,5],unit:'s'} },
+    statement:function(p){ return 't<0 정상상태: '+p.Vs+' V → R₁='+p.R1+' Ω → (C='+p.C+' F ∥ R₂='+p.R2+' Ω). t=0에 전원+R₁ 가지가 분리된다. v_C(t) 식을 세우고 t='+p.t1+' s의 값을 구하라.'; },
+    solve:function(p){
+      var v0=p.Vs*p.R2/(p.R1+p.R2), tau=p.R2*p.C, v=v0*Math.exp(-p.t1/tau);
+      return { ans:{v0:v0, tau:tau, v:v}, unit:{v0:'V', tau:'s', v:'V'}, steps:[
+        'v_C(0) = 분압 '+SVH.fmt(v0)+' V',
+        '분리 후 τ = R₂C = '+SVH.fmt(tau)+' s (R₁은 이제 없음!)',
+        'v_C(t) = '+SVH.fmt(v0)+'e^{−t/'+SVH.fmt(tau)+'} → t='+p.t1+': '+SVH.fmt(v)+' V' ] }; },
+    hints:['스위칭 전후의 회로가 다르다 — τ도 달라진다.'] },
+  { id:'u6-l3-03', level:3, type:'num', tags:['RL 상승'], src:'창작 문제(검산됨)',
+    params:{ Vs:{min:12,max:24,step:6,unit:'V'}, R:{min:4,max:12,step:4,unit:'Ω'}, L:{choices:[0.2,0.5,1],unit:'H'}, t1:{choices:[50,100],unit:'ms'} },
+    statement:function(p){ return 't=0에 '+p.Vs+' V 전원이 R='+p.R+' Ω, L='+p.L+' H 직렬에 연결(초기 전류 0). i(t) 식을 세우고 t='+p.t1+' ms의 전류를 구하라.'; },
+    solve:function(p){
+      var iinf=p.Vs/p.R, tau=p.L/p.R, i=iinf*(1-Math.exp(-p.t1/1000/tau));
+      return { ans:{iinf:iinf, tau:tau*1000, i:i}, unit:{iinf:'A', tau:'ms', i:'A'}, steps:[
+        'i(∞) = V/R = '+SVH.fmt(iinf)+' A, τ = L/R = '+SVH.fmt(tau*1000)+' ms',
+        'i(t) = '+SVH.fmt(iinf)+'(1−e^{−t/τ})',
+        't='+p.t1+' ms: i = '+SVH.fmt(i)+' A' ] }; },
+    hints:['RL도 같은 3종 세트 — 변수만 i_L.'] },
+  { id:'u6-l3-04', level:3, type:'num', tags:['τ만 다른 두 구간'], src:'기출 유형',
+    params:{ V0:{choices:[10,20],unit:'V'}, R1:{choices:[1,2],unit:'kΩ'}, R2:{choices:[3,4],unit:'kΩ'}, C:{choices:[100,200],unit:'µF'} },
+    statement:function(p){ return 'V₀='+p.V0+' V로 충전된 C='+p.C+' µF가 t=0부터 R₁='+p.R1+' kΩ로 방전하다가, 회로가 바뀌어 R₁+R₂ 직렬('+(p.R1+p.R2)+' kΩ)로 방전하게 되면 τ가 몇 배가 되는가? 또, 첫 구성에서 t=τ₁일 때 전압을 구하라.'; },
+    solve:function(p){
+      var ratio=(p.R1+p.R2)/p.R1, v=p.V0*Math.exp(-1);
+      return { ans:{ratio:ratio, v:v}, unit:{ratio:'배', v:'V'}, steps:[
+        'τ ∝ R → τ₂/τ₁ = (R₁+R₂)/R₁ = '+SVH.fmt(ratio)+'배 (느려짐)',
+        't=τ₁에서 v = V₀e⁻¹ = '+SVH.fmt(v)+' V' ] }; },
+    hints:['τ 비교는 R 비교다.'] },
+  { id:'u6-l3-05', level:3, type:'num', tags:['일반형(0 아닌 초기·최종)'], src:'기출 유형',
+    params:{ V1:{choices:[4,6],unit:'V'}, V2:{choices:[10,12],unit:'V'}, tau:{choices:[2,4],unit:'ms'}, t1:{choices:[2,4],unit:'ms'} },
+    statement:function(p){ return 'v_C가 '+p.V1+' V에서 시작해 '+p.V2+' V를 향해 τ='+p.tau+' ms로 접근한다. (a) v(t) 식 (b) t='+p.t1+' ms 값 (c) '+SVH.fmt((p.V1+p.V2)/2)+' V(중간)에 도달하는 시각을 구하라.'; },
+    solve:function(p){
+      var v=p.V2+(p.V1-p.V2)*Math.exp(-p.t1/p.tau);
+      var tmid=-p.tau*Math.log(0.5);
+      return { ans:{v:v, tmid:tmid}, unit:{v:'V', tmid:'ms'}, steps:[
+        'v(t) = '+p.V2+' + ('+p.V1+'−'+p.V2+')e^{−t/'+p.tau+'}',
+        't='+p.t1+': '+SVH.fmt(v)+' V',
+        '중간 도달 = 남은 거리 절반 → t = τ·ln2 = '+SVH.fmt(tmid)+' ms (초기·최종이 무엇이든!)' ] }; },
+    hints:['일반형에 그대로 대입.','중간점은 항상 ln2·τ.'] },
+  { id:'u6-l3-06', level:3, type:'num', tags:['전류 응답'], src:'창작 문제(검산됨)',
+    params:{ Vs:{min:10,max:20,step:5,unit:'V'}, R:{min:2,max:10,step:2,unit:'kΩ'}, C:{choices:[100,470],unit:'µF'}, t1:{choices:[0.5,1],unit:'s'} },
+    statement:function(p){ return 't=0에 '+p.Vs+' V가 R='+p.R+' kΩ와 방전된 C='+p.C+' µF 직렬에 인가. 충전 전류 i(t) 식과 t='+p.t1+' s 값(mA)을 구하라.'; },
+    solve:function(p){
+      var i0=p.Vs/p.R, tau=p.R*1000*p.C*1e-6, i=i0*Math.exp(-p.t1/tau);
+      return { ans:{i0:i0, i:i}, unit:{i0:'mA', i:'mA'}, steps:[
+        'i(0⁺) = V/R = '+SVH.fmt(i0)+' mA, i(∞)=0 → i(t) = '+SVH.fmt(i0)+'e^{−t/τ}, τ='+SVH.fmt(tau)+' s',
+        't='+p.t1+': i = '+SVH.fmt(i)+' mA',
+        '(전압은 올라가고 전류는 같은 τ로 내려간다 — 둘 다 그릴 수 있어야)' ] }; },
+    hints:['전류는 항상 지수 "감쇠" 쪽.'] },
+  { id:'u6-l3-07', level:3, type:'num', tags:['테브난 τ'], src:'기출 유형',
+    params:{ R1:{min:2,max:6,step:2,unit:'Ω'}, R2:{min:4,max:12,step:4,unit:'Ω'}, R3:{min:2,max:6,step:2,unit:'Ω'}, C:{choices:[0.5,1],unit:'F'} },
+    statement:function(p){ return 'C='+p.C+' F가 회로에 연결: C 단자에서 보면 R₃='+p.R3+' Ω 직렬 뒤에 (R₁='+p.R1+' Ω ∥ R₂='+p.R2+' Ω), 전원은 전압원 하나. 시정수를 구하라.'; },
+    solve:function(p){ var Rt=p.R3+SVH.par(p.R1,p.R2), tau=Rt*p.C;
+      return { ans:tau, unit:'s', steps:[
+        '전원 단락 → R_eq = R₃ + R₁∥R₂ = '+SVH.fmt(Rt)+' Ω',
+        'τ = R_eq·C = '+SVH.fmt(tau)+' s (기출 5번: R_T=6 Ω 구하는 바로 그 절차)' ] }; },
+    hints:['U4 테브난 저항이 여기서 재등장.'] },
+  { id:'u6-l3-08', level:3, type:'num', tags:['RL 감쇠'], src:'창작 문제(검산됨)',
+    params:{ I0:{min:2,max:6,step:2,unit:'A'}, R:{min:5,max:20,step:5,unit:'Ω'}, L:{choices:[0.1,0.5],unit:'H'}, t1:{choices:[10,20],unit:'ms'} },
+    statement:function(p){ return '인덕터 L='+p.L+' H에 I₀='+p.I0+' A가 흐르다가 t=0에 전원이 분리되고 R='+p.R+' Ω로만 감쇠한다. (a) i(t) (b) t='+p.t1+' ms 값 (c) 초기 저항 전압을 구하라.'; },
+    solve:function(p){
+      var tau=p.L/p.R, i=p.I0*Math.exp(-p.t1/1000/tau), v0=p.I0*p.R;
+      return { ans:{i:i, v0:v0}, unit:{i:'A', v0:'V'}, steps:[
+        'τ = L/R = '+SVH.fmt(tau*1000)+' ms → i(t) = '+p.I0+'e^{−t/τ}',
+        't='+p.t1+' ms: '+SVH.fmt(i)+' A',
+        'v_R(0⁺) = I₀R = '+SVH.fmt(v0)+' V (인덕터가 전류를 유지하려고 만드는 전압 — 스파크의 원리)' ] }; },
+    hints:['전류 연속 → 초기 전류가 그대로 R로.'] },
+  { id:'u6-l3-09', level:3, type:'num', tags:['이중 전원 최종값'], src:'창작 문제(검산됨)',
+    params:{ V1:{choices:[6,12],unit:'V'}, V2:{choices:[18,24],unit:'V'}, R:{min:2,max:6,step:2,unit:'Ω'}, C:{choices:[1,2],unit:'F'} },
+    statement:function(p){ return 'C가 V₁='+p.V1+' V로 충전된 상태에서, t=0에 V₂='+p.V2+' V 전원+R='+p.R+' Ω에 연결된다. (a) v_C(t) 식 (b) 전압이 '+SVH.fmt((p.V1+p.V2)/2)+' V가 되는 시각(τ 단위)을 구하라.'; },
+    solve:function(p){
+      var tau=p.R*p.C;
+      return { ans:{tau:tau, tmid:tau*Math.LN2}, unit:{tau:'s', tmid:'s'}, steps:[
+        'v(t) = '+p.V2+' + ('+p.V1+'−'+p.V2+')e^{−t/'+SVH.fmt(tau)+'}, τ=RC='+SVH.fmt(tau)+' s',
+        '중간값 도달 t = τ ln2 = '+SVH.fmt(tau*Math.LN2)+' s',
+        '(재충전도 같은 일반형 — 부호는 식이 알아서 처리한다)' ] }; },
+    hints:['초기≠0, 최종≠0인 일반형 그대로.'] },
+  { id:'u6-l3-10', level:3, type:'num', tags:['실험 오차 정량'], src:'기출 유형',
+    params:{ R:{choices:[10,20,50],unit:'kΩ'}, Rs:{choices:[1,10],unit:'MΩ'}, C:{choices:[1,10],unit:'µF'} },
+    statement:function(p){ return 'RC 방전 실험: R='+p.R+' kΩ, C='+p.C+' µF인데 오실로스코프 입력저항 '+p.Rs+' MΩ이 C에 병렬로 붙는다. (a) 이론 τ (b) 실측될 τ (c) 오차율(%)을 구하라. (기말 P3(a)의 정량판)'; },
+    solve:function(p){
+      var tau0=p.R*1000*p.C*1e-6*1000;
+      var Rp=SVH.par(p.R*1000,p.Rs*1e6), tau1=Rp*p.C*1e-6*1000;
+      var err=(tau0-tau1)/tau0*100;
+      return { ans:{tau0:tau0, tau1:tau1, err:err}, unit:{tau0:'ms', tau1:'ms', err:'%'}, steps:[
+        '이론: τ = RC = '+SVH.fmt(tau0)+' ms',
+        '실측: R∥R_scope = '+SVH.fmt(Rp/1000)+' kΩ → τ = '+SVH.fmt(tau1)+' ms (더 빨리 방전)',
+        '오차 = '+SVH.fmt(err)+' % — R가 클수록 계측기 영향이 커진다는 결론까지' ] }; },
+    hints:['계측기 저항이 방전 경로에 병렬로 추가된다.'] },
+  { id:'u6-l3-11', level:3, type:'num', tags:['도달시간 설계'], src:'창작 문제(검산됨)',
+    params:{ C:{choices:[10,100],unit:'µF'}, t99:{choices:[1,5],unit:'s'} },
+    statement:function(p){ return '카메라 플래시: C='+p.C+' µF를 '+p.t99+' s 안에 최종값의 99%까지 충전시키려 한다. 허용되는 최대 R(kΩ)은? (99% ≈ 4.6τ)'; },
+    solve:function(p){
+      var tau=p.t99/(-Math.log(0.01)), R=tau/(p.C*1e-6)/1000;
+      return { ans:R, unit:'kΩ', steps:[
+        '99% → e^{−t/τ}=0.01 → t = τ·ln100 = 4.605τ',
+        'τ_max = '+p.t99+'/4.605 = '+SVH.fmt(tau)+' s',
+        'R_max = τ/C = '+SVH.fmt(R)+' kΩ' ] }; },
+    hints:['목표 %에서 필요한 τ부터.'] },
+  { id:'u6-l3-12', level:3, type:'num', tags:['스위치 닫기 전류 점프'], src:'기출 유형',
+    params:{ Vs:{min:12,max:24,step:6,unit:'V'}, R1:{min:2,max:6,step:2,unit:'Ω'}, R2:{min:2,max:6,step:2,unit:'Ω'} },
+    statement:function(p){ return p.Vs+' V → R₁='+p.R1+' Ω → C, 그리고 C에 병렬인 R₂='+p.R2+' Ω 스위치 가지가 t=0에 닫힌다(그 전은 정상상태). (a) v_C(0⁺) (b) 닫힌 직후 R₂의 전류 (c) v_C(∞)를 구하라.'; },
+    solve:function(p){
+      var v0=p.Vs; // t<0: C 개방, R1 전류 0 → vC = Vs
+      var i2=v0/p.R2;
+      var vinf=p.Vs*p.R2/(p.R1+p.R2);
+      return { ans:{v0:v0, i2:i2, vinf:vinf}, unit:{v0:'V', i2:'A', vinf:'V'}, steps:[
+        't<0: R₁ 전류 0(C 개방) → 강하 없음 → v_C(0⁻) = '+p.Vs+' V = v_C(0⁺)',
+        '0⁺: R₂에 바로 '+SVH.fmt(v0)+' V → i₂(0⁺) = '+SVH.fmt(i2)+' A',
+        '∞: 분압 v_C(∞) = '+SVH.fmt(vinf)+' V (전압이 "내려가는" 과도)' ] }; },
+    hints:['t<0에 전류가 안 흐르면 R₁ 강하도 없다.'] },
+  { id:'u6-l3-13', level:3, type:'num', tags:['두 C 병합 아님·독립 τ'], src:'창작 문제(검산됨)',
+    params:{ R:{choices:[1,2],unit:'kΩ'}, C1:{choices:[10,20],unit:'µF'}, C2:{choices:[30,60],unit:'µF'} },
+    statement:function(p){ return '같은 R='+p.R+' kΩ로 각각 방전하는 두 회로: C₁='+p.C1+' µF, C₂='+p.C2+' µF. 같은 시각에 시작해 C₁의 전압이 절반이 됐을 때, C₂의 전압은 초기값의 몇 %인가?'; },
+    solve:function(p){
+      var t=p.R*1000*p.C1*1e-6*Math.LN2;
+      var frac=Math.exp(-t/(p.R*1000*p.C2*1e-6))*100;
+      return { ans:frac, unit:'%', steps:[
+        'C₁ 절반 시각: t = τ₁ln2 = '+SVH.fmt(t*1000)+' ms',
+        'C₂: e^{−t/τ₂} = e^{−(C₁/C₂)ln2} = '+SVH.fmt(frac)+' %',
+        '(큰 C가 더 천천히 — 비율만으로도 답이 나오는 구조)' ] }; },
+    hints:['시각을 τ₁로 표현해 τ₂에 대입.'] },
+  { id:'u6-l3-14', level:3, type:'num', tags:['펄스 응답'], src:'기출 유형',
+    params:{ Vs:{choices:[5,10],unit:'V'}, tau:{choices:[1,2],unit:'ms'}, Tp:{choices:[1,2,4],unit:'ms'} },
+    statement:function(p){ return 'RC 회로(τ='+p.tau+' ms)에 폭 '+p.Tp+' ms, 높이 '+p.Vs+' V의 펄스가 들어온다(그 전 0 V). (a) 펄스 끝(t=T_p)의 v_C (b) 펄스가 끝난 뒤 T_p ms 더 지난 시점의 v_C를 구하라.'; },
+    solve:function(p){
+      var v1=p.Vs*(1-Math.exp(-p.Tp/p.tau));
+      var v2=v1*Math.exp(-p.Tp/p.tau);
+      return { ans:{v1:v1, v2:v2}, unit:{v1:'V', v2:'V'}, steps:[
+        '구간1(충전): v(T_p) = '+p.Vs+'(1−e^{−'+p.Tp+'/'+p.tau+'}) = '+SVH.fmt(v1)+' V',
+        '구간2(방전, 초기값 '+SVH.fmt(v1)+'): v = '+SVH.fmt(v1)+'e^{−'+p.Tp+'/'+p.tau+'} = '+SVH.fmt(v2)+' V',
+        '(구간을 나누고 앞 구간의 끝이 뒷 구간의 초기값 — 이중 스위칭의 원형)' ] }; },
+    hints:['구간별로 3종 세트를 다시 세팅.'] },
+
+  /* ---------- L4 (8) ---------- */
+  { id:'u6-l4-01', level:4, type:'mc', tags:['개념 종합'], src:'기출 유형',
+    statement:'옳은 것을 모두 고르면?<br>㉠ τ를 구할 때 보는 저항은 C(또는 L) 단자에서의 테브난 저항이다<br>㉡ 스위칭 순간 축전기 전류는 연속이어야 한다<br>㉢ 방전에서 저항이 크면 총 소산 에너지도 커진다<br>㉣ 5τ가 지나면 응답은 사실상 정상상태다',
+    choices:['㉠㉣','㉠㉡㉣','㉢㉣','전부'],
+    answer:0, expl:'연속인 건 v_C(㉡ ✗). 소산 총량은 ½CV₀²로 R와 무관(㉢ ✗) — R는 속도만 바꾼다.' },
+  { id:'u6-l4-02', level:4, type:'num', tags:['기출 5번 완전 재현'], src:'기출 유형',
+    params:{ Vs:{choices:[20],unit:'V'}, R1:{choices:[5],unit:'Ω'}, R2:{choices:[4],unit:'Ω'}, R3:{choices:[3],unit:'Ω'}, R4:{choices:[6],unit:'Ω'}, C:{choices:[8],unit:'F'}, Is:{choices:[4],unit:'A'} },
+    statement:function(p){ return '기출 5번 구조: t<0 — '+p.Vs+' V 전원(직렬 R₁='+p.R1+' Ω)이 C='+p.C+' F를 충전(다른 가지 분리, 정상상태). t=0 — 전원 분리되고 C가 [R₂='+p.R2+' Ω 직렬 후 (R₃='+p.R3+' Ω ∥ R₄='+p.R4+' Ω)] + 전류원 '+p.Is+' A(R₄ 가지 쪽에서 유입, 유입 절점은 R₃∥R₄ 위)와 연결. (a) v_C(0⁺) (b) τ (c) v_C(∞) (d) v_C(t) — t=τ 값으로 답하라.'; },
+    solve:function(p){
+      var v0=p.Vs; // t<0 정상상태: 전류 0 → R1 강하 0
+      var Rp=SVH.par(p.R3,p.R4);
+      var Rt=p.R2+Rp, tau=Rt*p.C;
+      var vinf=p.Is*Rp; // C 개방: Is가 R3||R4로 → 그 전압이 C까지 (R2 전류 0)
+      var vtau=vinf+(v0-vinf)*Math.exp(-1);
+      return { ans:{v0:v0, tau:tau, vinf:vinf, vtau:vtau}, unit:{v0:'V', tau:'s', vinf:'V', vtau:'V'}, steps:[
+        '(a) t<0: C 개방 → R₁ 전류 0 → v_C(0⁻)=V_s='+p.Vs+' V = v_C(0⁺)',
+        '(b) 전류원 개방 후 C에서 본 R: R₂+(R₃∥R₄) = '+p.R2+'+'+SVH.fmt(Rp)+' = '+SVH.fmt(Rt)+' Ω → τ = '+SVH.fmt(tau)+' s',
+        '(c) t→∞: C 개방 → I_s가 R₃∥R₄에 전압 '+SVH.fmt(vinf)+' V 형성, R₂ 전류 0 → v_C(∞) = '+SVH.fmt(vinf)+' V',
+        '(d) v_C(t) = '+SVH.fmt(vinf)+'+('+SVH.fmt(v0)+'−'+SVH.fmt(vinf)+')e^{−t/'+SVH.fmt(tau)+'} → t=τ: '+SVH.fmt(vtau)+' V',
+        '스케치: '+SVH.fmt(v0)+' V에서 '+SVH.fmt(vinf)+' V로 지수 접근 (기출 정답 흐름과 동일 구조)' ] }; },
+    hints:['네 값(초기·τ·최종·식)이 각각 소문항 — 순서대로.','∞ 회로에서 R₂에 전류가 흐르는지부터 따져라.'] },
+  { id:'u6-l4-03', level:4, type:'num', tags:['기말 P2형 이중 스위칭'], src:'기출 유형',
+    params:{ VB:{choices:[15],unit:'V'}, R1:{choices:[1],unit:'kΩ'}, R2:{choices:[1],unit:'kΩ'}, C:{choices:[25],unit:'µF'}, ts:{choices:[50],unit:'ms'} },
+    statement:function(p){ return '기말 P2 구조: t=0에 스위치가 닫혀 V_B='+p.VB+' V → R₁='+p.R1+' kΩ → (C='+p.C+' µF ∥ R₂='+p.R2+' kΩ)로 충전(초기 0 V), t='+p.ts+' ms에 스위치가 다시 열려 C가 R₂로만 방전. (a) 구간1의 τ₁·최종값 (b) v_C('+p.ts+' ms) (c) 구간2의 τ₂ (d) t='+(2*p.ts)+' ms의 v_C를 구하라.'; },
+    solve:function(p){
+      var R1=p.R1*1000, R2=p.R2*1000, C=p.C*1e-6;
+      var tau1=SVH.par(R1,R2)*C*1000; // ms
+      var vf1=p.VB*R2/(R1+R2);
+      var vs=vf1*(1-Math.exp(-p.ts/tau1));
+      var tau2=R2*C*1000;
+      var v2=vs*Math.exp(-p.ts/tau2);
+      return { ans:{tau1:tau1, vf1:vf1, vs:vs, tau2:tau2, v2:v2}, unit:{tau1:'ms', vf1:'V', vs:'V', tau2:'ms', v2:'V'}, steps:[
+        '구간1: τ₁=(R₁∥R₂)C = '+SVH.fmt(tau1)+' ms, 목표값 = 분압 '+SVH.fmt(vf1)+' V',
+        'v_C('+p.ts+' ms) = '+SVH.fmt(vf1)+'(1−e^{−'+p.ts+'/'+SVH.fmt(tau1)+'}) = '+SVH.fmt(vs)+' V',
+        '구간2: 전원 제거 → τ₂=R₂C = '+SVH.fmt(tau2)+' ms (τ가 2배로!)',
+        'v_C('+(2*p.ts)+' ms) = '+SVH.fmt(vs)+'e^{−'+p.ts+'/'+SVH.fmt(tau2)+'} = '+SVH.fmt(v2)+' V',
+        '스케치: 상승(빠름)→꺾여서 하강(느림) — 두 τ가 다른 것이 채점 포인트' ] }; },
+    hints:['구간마다 회로가 다르다: τ도 목표값도 다시.','구간1의 끝값이 구간2의 초기값.'] },
+  { id:'u6-l4-04', level:4, type:'num', tags:['RL 스위칭 종합'], src:'기출 유형',
+    params:{ Vs:{choices:[12,24],unit:'V'}, R1:{choices:[4,6],unit:'Ω'}, R2:{choices:[8,12],unit:'Ω'}, L:{choices:[2],unit:'H'} },
+    statement:function(p){ return 't<0: '+p.Vs+' V → R₁='+p.R1+' Ω → L='+p.L+' H (정상상태). t=0에 전원 가지가 끊기고 L이 R₁ 대신 R₂='+p.R2+' Ω 경로로 감쇠한다. (a) i_L(0⁺) (b) τ (c) L 양단 전압의 0⁺ 값(극성 포함) (d) i가 초기의 10%가 되는 시각을 구하라.'; },
+    solve:function(p){
+      var i0=p.Vs/p.R1, tau=p.L/p.R2, vL0=-i0*p.R2, t10=tau*Math.log(10);
+      return { ans:{i0:i0, tau:tau, vL0:vL0, t10:t10}, unit:{i0:'A', tau:'s', vL0:'V', t10:'s'}, steps:[
+        'i_L(0⁺) = i_L(0⁻) = V/R₁ = '+SVH.fmt(i0)+' A',
+        'τ = L/R₂ = '+SVH.fmt(tau)+' s (감쇠 경로의 R!)',
+        'v_L(0⁺) = −i₀R₂ = '+SVH.fmt(vL0)+' V — 전류 유지를 위해 극성이 뒤집힌다 (|v_L|이 V_s보다 클 수 있음: 유도 킥)',
+        '10%: e^{−t/τ}=0.1 → t = τln10 = '+SVH.fmt(t10)+' s' ] }; },
+    hints:['τ는 "지금" 연결된 R로.','v_L 부호는 KVL로 확인.'] },
+  { id:'u6-l4-05', level:4, type:'derive', tags:['유도'], src:'교재 표준',
+    statement:'RC 방전 회로의 미분방정식을 세우고 \\(v(t)=V_0e^{-t/RC}\\)를 유도하라. 충전(전원 V_s 포함)의 일반해까지 확장하라.',
+    steps:[
+      'KCL(방전 루프): \\(C\\dfrac{dv}{dt}+\\dfrac{v}{R}=0\\) [무엇을] C 전류 + R 전류 = 0 [왜] 외부 전원이 없으므로',
+      '변수 분리: \\(\\dfrac{dv}{v}=-\\dfrac{dt}{RC}\\) → 적분 \\(\\ln v = -t/RC + K\\)',
+      '초기조건 v(0)=V₀ → \\(v(t)=V_0e^{-t/RC}\\) — τ=RC가 지수에서 자연히 등장',
+      '충전: \\(C\\dfrac{dv}{dt}+\\dfrac{v-V_s}{R}=0\\) → 같은 방법으로 \\(v=V_s+(V_0-V_s)e^{-t/\\tau}\\) (일반형)',
+      '극한 체크: t=0 ⇒ V₀ ✓, t→∞ ⇒ V_s ✓, R→∞ ⇒ 변화 없음(개방) ✓ · 차원: RC=[Ω][F]=[s] ✓'
+    ],
+    hints:['KCL 한 줄 → 변수 분리.','일반형이 어떻게 나오는지가 시험 서술형 포인트.'],
+    expl:'"3종 세트 공식"의 출처. 유도를 알면 이중 스위칭·펄스도 그냥 구간별 재적용이다.' },
+  { id:'u6-l4-06', level:4, type:'num', tags:['설계: 타이머'], src:'창작 문제(검산됨)',
+    params:{ Vs:{choices:[9,12],unit:'V'}, Vth:{choices:[6,8],unit:'V'}, C:{choices:[10,100],unit:'µF'}, td:{choices:[1,5],unit:'s'} },
+    constraint:function(p){ return p.Vth<p.Vs*0.9; },
+    statement:function(p){ return '타이머 설계: '+p.Vs+' V로 충전되는 RC 회로가 임계 전압 '+p.Vth+' V에 정확히 '+p.td+' s 만에 도달해야 한다. C='+p.C+' µF일 때 R(kΩ)을 구하라.'; },
+    solve:function(p){
+      var tau=p.td/(-Math.log(1-p.Vth/p.Vs));
+      var R=tau/(p.C*1e-6)/1000;
+      return { ans:R, unit:'kΩ', steps:[
+        '조건: '+p.Vth+' = '+p.Vs+'(1−e^{−t_d/τ}) → e^{−t_d/τ} = '+SVH.fmt(1-p.Vth/p.Vs),
+        'τ = t_d/ln('+SVH.fmt(1/(1-p.Vth/p.Vs))+') = '+SVH.fmt(tau)+' s',
+        'R = τ/C = '+SVH.fmt(R)+' kΩ (555 타이머류의 실제 설계 계산)' ] }; },
+    hints:['도달 조건식을 τ로 풀고 R 역산.'] },
+  { id:'u6-l4-07', level:4, type:'num', tags:['에너지 수지 종합'], src:'기출 유형',
+    params:{ Vs:{choices:[10,20],unit:'V'}, R:{choices:[1,2],unit:'kΩ'}, C:{choices:[100,470],unit:'µF'} },
+    statement:function(p){ return '방전된 C='+p.C+' µF를 '+p.Vs+' V·R='+p.R+' kΩ로 완전 충전할 때 (a) C에 저장되는 에너지 (b) R에서 소산되는 에너지 (c) 전원이 공급한 총 에너지를 구하고, 충전 효율이 50%임을 확인하라. (mJ)'; },
+    solve:function(p){
+      var E=0.5*p.C*1e-6*p.Vs*p.Vs*1000;
+      return { ans:{Ec:E, Er:E, Es:2*E}, unit:{Ec:'mJ', Er:'mJ', Es:'mJ'}, steps:[
+        'E_C = ½CV² = '+SVH.fmt(E)+' mJ',
+        '전원 공급 = ∫V_s i dt = V_s·Q = V_s·CV_s = CV² = '+SVH.fmt(2*E)+' mJ',
+        'E_R = 공급 − 저장 = '+SVH.fmt(E)+' mJ — 정확히 절반. R값과 무관하게 효율 50% (놀랍지만 적분해도 같다)' ] }; },
+    hints:['전원 에너지는 V_s×총 전하.','저장분을 빼면 소산분.'] },
+  { id:'u6-l4-08', level:4, type:'num', tags:['미지 회로 역추정'], src:'기출 유형',
+    params:{ V0:{choices:[12,15],unit:'V'}, vA:{choices:[3,5],unit:'V'}, t1:{choices:[10,20],unit:'ms'} },
+    constraint:function(p){ return p.vA<p.V0*0.6; },
+    statement:function(p){ return '실험 데이터: 방전 곡선이 '+p.V0+' V에서 시작, t='+p.t1+' ms에 '+p.vA+' V. (a) τ (b) C=10 µF일 때 방전 저항 R (c) t=0에서의 방전 전류를 구하라.'; },
+    solve:function(p){
+      var tau=p.t1/Math.log(p.V0/p.vA);
+      var R=tau/1000/(10e-6)/1000; // kΩ
+      var i0=p.V0/(R*1000)*1000; // mA
+      return { ans:{tau:tau, R:R, i0:i0}, unit:{tau:'ms', R:'kΩ', i0:'mA'}, steps:[
+        'e^{−t₁/τ} = '+p.vA+'/'+p.V0+' → τ = t₁/ln('+p.V0+'/'+p.vA+') = '+SVH.fmt(tau)+' ms',
+        'R = τ/C = '+SVH.fmt(R)+' kΩ',
+        'i(0) = V₀/R = '+SVH.fmt(i0)+' mA (데이터 2점이면 회로가 역추정된다 — 실험 보고서의 핵심 계산)' ] }; },
+    hints:['두 점 비율에 ln.','τ에서 R, R에서 초기 전류.'] }
+  ]
+});
+
+</script>
+<script>
+/* U7 주파수응답·필터 — H(jω), LPF/HPF, -3dB 차단, dB, 보드 개형, 2차(RLC) 기초 */
+SV_BANK.push({
+  id: 'u7', no: 7, title: '주파수응답·필터', titleEn: 'Frequency Response & Filters',
+  scope: '전달함수 H(jω) · 저역/고역통과 · 차단주파수(−3dB) · 데시벨 · 보드 개형 · RLC 2차 특성(ζ, ω₀) 기초',
+  problems: [
+
+  /* ---------- L1 (6) ---------- */
+  { id:'u7-l1-01', level:1, type:'mc', tags:['H(jω)'], src:'교재 표준',
+    statement:'주파수 응답 함수 \\(H(j\\omega)=\\mathbf{V}_{out}/\\mathbf{V}_{in}\\)에 대한 설명으로 옳은 것은?',
+    choices:['크기 |H|는 이득, 각 ∠H는 출력의 위상 이동을 뜻한다','H는 항상 실수다','H는 입력 진폭에 따라 변한다','시간영역 과도응답을 직접 준다'],
+    answer:0, expl:'선형 회로에서 H는 ω만의 복소함수. 입력 크기와 무관(선형성) — 정상상태 정현파 도구다.' },
+  { id:'u7-l1-02', level:1, type:'mc', tags:['LPF 구조'], src:'기출 유형',
+    statement:'저항 R과 축전기 C 각 1개로 저역통과 필터(LPF)를 만들 때 올바른 구성은?',
+    choices:['R 직렬 + C에서 출력(출력을 C 양단에서)','C 직렬 + R에서 출력','R·C 병렬 후 직렬 출력','어느 쪽이든 같다'],
+    answer:0, expl:'기출 6(a). 저주파: C 개방 → 입력 그대로 통과. 고주파: C 단락 → 출력 0. 출력을 R에서 따면 반대로 HPF.' },
+  { id:'u7-l1-03', level:1, type:'tf', tags:['-3dB'], src:'교재 표준',
+    statement:'차단 주파수 \\(\\omega_0=1/RC\\)에서 1차 필터의 이득은 최대의 \\(1/\\sqrt{2}\\)(≈0.707, −3 dB)이고 위상은 −45°다.',
+    answer:true, expl:'|H|=1/√(1+1)=1/√2, ∠H=−tan⁻¹(1)=−45°. 전력으로는 절반이라 "반전력점"이라고도 한다.' },
+  { id:'u7-l1-04', level:1, type:'mc', tags:['보드 기울기'], src:'교재 표준',
+    statement:'1차 저역통과 필터에서 ω ≫ ω₀ 영역의 |H| 감쇠 기울기는?',
+    choices:['−20 dB/decade (= −6 dB/octave)','−40 dB/decade','−3 dB/decade','0 dB/decade'],
+    answer:0, expl:'|H|≈ω₀/ω → 10배마다 1/10 = −20 dB. 2차면 −40 dB/dec — 차수가 기울기를 정한다.' },
+  { id:'u7-l1-05', level:1, type:'tf', tags:['위상 극한'], src:'기출 유형',
+    statement:'1차 RC 저역통과 필터의 위상은 ω→0에서 0°, ω=ω₀에서 −45°, ω→∞에서 −90°로 변한다.',
+    answer:true, expl:'기출 6(c)의 3점 세트. ∠H = −tan⁻¹(ω/ω₀)의 세 극한값이다.' },
+  { id:'u7-l1-06', level:1, type:'mc', tags:['2차 분류'], src:'교재 표준',
+    statement:'직렬 RLC 회로의 감쇠 특성 분류로 옳은 것은? (\\(\\zeta\\) = 감쇠비)',
+    choices:['ζ<1 부족감쇠(진동), ζ=1 임계감쇠, ζ>1 과감쇠','ζ<1 과감쇠','ζ는 항상 1','ζ>1이면 진동한다'],
+    answer:0, expl:'ζ = (R/2)√(C/L). 부족감쇠일 때만 링잉(진동)이 보인다 — 스코프 파형 판독 기준.' },
+
+  /* ---------- L2 (12) ---------- */
+  { id:'u7-l2-01', level:2, type:'num', tags:['차단주파수'], src:'기출 유형',
+    params:{ R:{choices:[1,4.7,10],unit:'kΩ'}, C:{choices:[10,100,470],unit:'nF'} },
+    statement:function(p){ return 'R='+p.R+' kΩ, C='+p.C+' nF인 RC 필터의 (a) ω₀(rad/s) (b) f₀(Hz)를 구하라.'; },
+    solve:function(p){ var w0=1/(p.R*1000*p.C*1e-9), f0=w0/(2*Math.PI);
+      return { ans:{w0:w0, f0:f0}, unit:{w0:'rad/s', f0:'Hz'}, steps:[
+        'ω₀ = 1/RC = 1/('+SVH.fmt(p.R*1000)+'×'+SVH.fmt(p.C*1e-9)+') = '+SVH.fmt(w0)+' rad/s',
+        'f₀ = ω₀/2π = '+SVH.fmt(f0)+' Hz' ] }; },
+    hints:['ω₀=1/RC, f=ω/2π.'] },
+  { id:'u7-l2-02', level:2, type:'num', tags:['LPF 이득'], src:'창작 문제(검산됨)',
+    params:{ k:{choices:[0.5,1,2,5,10]} },
+    statement:function(p){ return '1차 LPF에서 ω='+p.k+'ω₀일 때 |H|를 구하라.'; },
+    solve:function(p){ var m=1/Math.sqrt(1+p.k*p.k);
+      return { ans:m, unit:'', steps:[
+        '|H| = 1/√(1+(ω/ω₀)²) = 1/√(1+'+p.k+'²)',
+        '= '+SVH.fmt(m)+(p.k===1?' (−3dB 지점 ✓)':'') ] }; },
+    hints:['정규화 ω/ω₀만 대입.'] },
+  { id:'u7-l2-03', level:2, type:'num', tags:['dB 변환'], src:'창작 문제(검산됨)',
+    params:{ g:{choices:[0.01,0.1,0.5,2,10,100]} },
+    statement:function(p){ return '전압 이득 '+p.g+'를 데시벨로 변환하라.'; },
+    solve:function(p){ var db=20*Math.log10(p.g);
+      return { ans:db, unit:'dB', steps:[
+        'dB = 20log₁₀|H| = 20log₁₀('+p.g+')',
+        '= '+SVH.fmt(db)+' dB (10배=+20dB, 절반≈−6dB 등 기준점을 외워두면 빠르다)' ] }; },
+    hints:['전압비는 20log.'] },
+  { id:'u7-l2-04', level:2, type:'num', tags:['위상'], src:'기출 유형',
+    params:{ k:{choices:[0.5,1,2,4]} },
+    statement:function(p){ return '1차 LPF에서 ω='+p.k+'ω₀일 때 위상 ∠H(°)를 구하라.'; },
+    solve:function(p){ var ph=-SVH.deg(Math.atan(p.k));
+      return { ans:ph, unit:'°', steps:[
+        '∠H = −tan⁻¹(ω/ω₀) = −tan⁻¹('+p.k+')',
+        '= '+SVH.fmt(ph)+'°' ] }; },
+    hints:['위상은 arctan.'] },
+  { id:'u7-l2-05', level:2, type:'num', tags:['HPF 이득'], src:'창작 문제(검산됨)',
+    params:{ k:{choices:[0.1,0.5,1,2]} },
+    statement:function(p){ return '1차 고역통과 필터(HPF)에서 ω='+p.k+'ω₀일 때 |H|를 구하라.'; },
+    solve:function(p){ var m=p.k/Math.sqrt(1+p.k*p.k);
+      return { ans:m, unit:'', steps:[
+        'HPF: |H| = (ω/ω₀)/√(1+(ω/ω₀)²) = '+p.k+'/√(1+'+p.k+'²)',
+        '= '+SVH.fmt(m)+' (LPF와 거울상)' ] }; },
+    hints:['분자에 ω/ω₀가 올라온다.'] },
+  { id:'u7-l2-06', level:2, type:'num', tags:['설계 C'], src:'기출 유형',
+    params:{ f0:{choices:[100,1000,5000],unit:'Hz'}, R:{choices:[1,10],unit:'kΩ'} },
+    statement:function(p){ return '차단 주파수 f₀='+p.f0+' Hz인 RC LPF를 R='+p.R+' kΩ로 만들려 한다. C(nF)를 구하라.'; },
+    solve:function(p){ var C=1/(2*Math.PI*p.f0*p.R*1000)*1e9;
+      return { ans:C, unit:'nF', steps:[
+        'C = 1/(2πf₀R)',
+        '= 1/(2π×'+p.f0+'×'+SVH.fmt(p.R*1000)+') = '+SVH.fmt(C)+' nF' ] }; },
+    hints:['f₀=1/2πRC를 C로.'] },
+  { id:'u7-l2-07', level:2, type:'num', tags:['감쇠량 dB'], src:'창작 문제(검산됨)',
+    params:{ k:{choices:[10,100,1000]} },
+    statement:function(p){ return '1차 LPF에서 잡음 주파수가 ω='+p.k+'ω₀에 있다. 그 주파수에서의 감쇠량(dB, 근사 아님 정확값)을 구하라.'; },
+    solve:function(p){ var db=-20*Math.log10(Math.sqrt(1+p.k*p.k));
+      return { ans:db, unit:'dB', steps:[
+        '|H| = 1/√(1+'+p.k+'²) → dB = −20log₁₀√(1+'+p.k+'²)',
+        '= '+SVH.fmt(db)+' dB (근사 −20log'+p.k+' = '+SVH.fmt(-20*Math.log10(p.k))+' dB와 비교)' ] }; },
+    hints:['정확식과 점근 근사를 둘 다.'] },
+  { id:'u7-l2-08', level:2, type:'num', tags:['RLC ω₀·ζ'], src:'창작 문제(검산됨)',
+    params:{ R:{choices:[10,40,100],unit:'Ω'}, L:{choices:[10,40],unit:'mH'}, C:{choices:[1,10],unit:'µF'} },
+    statement:function(p){ return '직렬 RLC: R='+p.R+' Ω, L='+p.L+' mH, C='+p.C+' µF. (a) ω₀ (b) 감쇠비 ζ를 구하라.'; },
+    solve:function(p){
+      var L=p.L/1000, C=p.C*1e-6;
+      var w0=1/Math.sqrt(L*C), z=p.R/2*Math.sqrt(C/L);
+      return { ans:{w0:w0, z:z}, unit:{w0:'rad/s', z:''}, steps:[
+        'ω₀ = 1/√(LC) = '+SVH.fmt(w0)+' rad/s',
+        'ζ = (R/2)√(C/L) = '+SVH.fmt(z)+' → '+(z<1?'부족감쇠(진동)':(z>1?'과감쇠':'임계감쇠')) ] }; },
+    hints:['ζ 공식의 √(C/L)에 주의(반대로 쓰기 쉬움).'] },
+  { id:'u7-l2-09', level:2, type:'num', tags:['임계 저항'], src:'창작 문제(검산됨)',
+    params:{ L:{choices:[10,100],unit:'mH'}, C:{choices:[0.1,1,10],unit:'µF'} },
+    statement:function(p){ return 'L='+p.L+' mH, C='+p.C+' µF 직렬 RLC가 임계감쇠가 되는 저항 R을 구하라.'; },
+    solve:function(p){ var R=2*Math.sqrt(p.L/1000/(p.C*1e-6));
+      return { ans:R, unit:'Ω', steps:[
+        'ζ=1 → R = 2√(L/C)',
+        '= 2√('+SVH.fmt(p.L/1000)+'/'+SVH.fmt(p.C*1e-6)+') = '+SVH.fmt(R)+' Ω',
+        '(이보다 작으면 링잉, 크면 느릿한 과감쇠)' ] }; },
+    hints:['ζ=1 조건을 R로.'] },
+  { id:'u7-l2-10', level:2, type:'num', tags:['출력 진폭'], src:'기출 유형',
+    params:{ Vin:{choices:[2,5,10],unit:'V'}, k:{choices:[0.5,2,3]} },
+    statement:function(p){ return '진폭 '+p.Vin+' V, ω='+p.k+'ω₀인 정현파가 1차 LPF를 지난다. 출력 진폭을 구하라.'; },
+    solve:function(p){ var v=p.Vin/Math.sqrt(1+p.k*p.k);
+      return { ans:v, unit:'V', steps:[
+        'V_out = V_in·|H| = '+p.Vin+'/√(1+'+p.k+'²)',
+        '= '+SVH.fmt(v)+' V' ] }; },
+    hints:['|H|를 곱하면 끝.'] },
+  { id:'u7-l2-11', level:2, type:'num', tags:['보드 점근'], src:'창작 문제(검산됨)',
+    params:{ dec:{choices:[1,2,3]} },
+    statement:function(p){ return '1차 LPF의 점근 보드 선도에서 ω₀보다 '+p.dec+' decade 위 주파수의 근사 이득(dB)은?'; },
+    solve:function(p){ var db=-20*p.dec;
+      return { ans:db, unit:'dB', steps:[
+        '점근선: ω₀ 이후 −20 dB/decade',
+        p.dec+' decade → '+SVH.fmt(db)+' dB' ] }; },
+    hints:['기울기 × decade 수.'] },
+  { id:'u7-l2-12', level:2, type:'num', tags:['감쇠 진동수'], src:'창작 문제(검산됨)',
+    params:{ w0:{choices:[100,1000],unit:'rad/s'}, z:{choices:[0.2,0.5,0.8]} },
+    statement:function(p){ return 'ω₀='+p.w0+' rad/s, ζ='+p.z+'인 부족감쇠 2차계의 감쇠 진동수 \\(\\omega_d=\\omega_0\\sqrt{1-\\zeta^2}\\)를 구하라.'; },
+    solve:function(p){ var wd=p.w0*Math.sqrt(1-p.z*p.z);
+      return { ans:wd, unit:'rad/s', steps:[
+        'ω_d = '+p.w0+'×√(1−'+p.z+'²)',
+        '= '+SVH.fmt(wd)+' rad/s (실제 링잉의 주파수 — ζ가 클수록 느려진다)' ] }; },
+    hints:['√(1−ζ²)만 붙이면 된다.'] },
+
+  /* ---------- L3 (14) ---------- */
+  { id:'u7-l3-01', level:3, type:'num', tags:['기출 6 설계'], src:'기출 유형',
+    params:{ ws:{choices:[2,5,10],unit:'rad/s'}, wn:{choices:[2000,5000],unit:'rad/s'}, R:{choices:[1,10],unit:'kΩ'} },
+    statement:function(p){ return '로봇팔 전위차계 신호(최대 ω='+p.ws+' rad/s)에 ω≳'+p.wn+' rad/s 잡음이 실린다. R='+p.R+' kΩ로 RC LPF를 만들되 차단을 신호 최대의 10배(ω₀=10×'+p.ws+')에 두기로 했다. (a) C(µF) (b) 그때 잡음('+p.wn+' rad/s)의 감쇠량(dB)을 구하라.'; },
+    solve:function(p){
+      var w0=10*p.ws, C=1/(w0*p.R*1000)*1e6;
+      var k=p.wn/w0, att=-20*Math.log10(Math.sqrt(1+k*k));
+      return { ans:{C:C, att:att}, unit:{C:'µF', att:'dB'}, steps:[
+        'ω₀ = '+w0+' rad/s → C = 1/(ω₀R) = '+SVH.fmt(C)+' µF',
+        '잡음 위치 ω/ω₀ = '+SVH.fmt(k)+' → |H| = 1/√(1+'+SVH.fmt(k)+'²)',
+        '감쇠 = '+SVH.fmt(att)+' dB — 신호(ω≤ω₀/10)는 거의 무손실, 잡음만 죽는다 (기출 6의 완성형)' ] }; },
+    hints:['차단을 신호와 잡음 "사이"에.','신호 손실과 잡음 감쇠를 모두 확인.'] },
+  { id:'u7-l3-02', level:3, type:'num', tags:['H(ω) 값 계산'], src:'기출 유형',
+    params:{ R:{choices:[1,2],unit:'kΩ'}, C:{choices:[1,0.5],unit:'µF'}, w:{choices:[500,1000,2000],unit:'rad/s'} },
+    statement:function(p){ return 'RC LPF(R='+p.R+' kΩ, C='+p.C+' µF)의 ω='+p.w+' rad/s에서 |H|와 ∠H(°)를 구하라.'; },
+    solve:function(p){
+      var w0=1/(p.R*1000*p.C*1e-6), k=p.w/w0;
+      var m=1/Math.sqrt(1+k*k), ph=-SVH.deg(Math.atan(k));
+      return { ans:{mag:m, ph:ph}, unit:{mag:'', ph:'°'}, steps:[
+        'ω₀ = 1/RC = '+SVH.fmt(w0)+' rad/s → ω/ω₀ = '+SVH.fmt(k),
+        '|H| = '+SVH.fmt(m)+', ∠H = −tan⁻¹('+SVH.fmt(k)+') = '+SVH.fmt(ph)+'°' ] }; },
+    hints:['ω₀부터 계산해 정규화.'] },
+  { id:'u7-l3-03', level:3, type:'num', tags:['HPF 허밍 제거'], src:'창작 문제(검산됨)',
+    params:{ f0:{choices:[300,500],unit:'Hz'}, fh:{choices:[50,60],unit:'Hz'} },
+    statement:function(p){ return '오디오 입력에서 '+p.fh+' Hz 전원 험을 줄이려 f₀='+p.f0+' Hz HPF를 쓴다. (a) 험의 감쇠량(dB) (b) 1 kHz 신호의 이득을 구하라.'; },
+    solve:function(p){
+      var k1=p.fh/p.f0, att=20*Math.log10(k1/Math.sqrt(1+k1*k1));
+      var k2=1000/p.f0, g=k2/Math.sqrt(1+k2*k2);
+      return { ans:{att:att, g:g}, unit:{att:'dB', g:''}, steps:[
+        '험: ω/ω₀ = '+SVH.fmt(k1)+' → |H| = '+SVH.fmt(k1/Math.sqrt(1+k1*k1))+' = '+SVH.fmt(att)+' dB',
+        '1 kHz: ω/ω₀ = '+SVH.fmt(k2)+' → |H| = '+SVH.fmt(g)+' (거의 통과)',
+        '(HPF는 "낮은 것"을 버리는 필터 — 용도 매칭 연습)' ] }; },
+    hints:['HPF 식에 두 주파수를 각각.'] },
+  { id:'u7-l3-04', level:3, type:'num', tags:['위상→주파수 역산'], src:'창작 문제(검산됨)',
+    params:{ ph:{choices:[30,60],unit:'°'}, f0:{choices:[200,400],unit:'Hz'} },
+    statement:function(p){ return 'f₀='+p.f0+' Hz인 1차 LPF의 출력 위상이 −'+p.ph+'°가 되는 주파수 f를 구하라.'; },
+    solve:function(p){ var f=p.f0*Math.tan(SVH.rad(p.ph));
+      return { ans:f, unit:'Hz', steps:[
+        'tan('+p.ph+'°) = f/f₀',
+        'f = '+p.f0+'×'+SVH.fmt(Math.tan(SVH.rad(p.ph)))+' = '+SVH.fmt(f)+' Hz',
+        '(위상 측정으로 주파수·차단을 역산하는 실험 기법)' ] }; },
+    hints:['위상식을 뒤집는다.'] },
+  { id:'u7-l3-05', level:3, type:'num', tags:['RLC 판별'], src:'기출 유형',
+    params:{ R:{choices:[20,100,400],unit:'Ω'}, L:{choices:[10],unit:'mH'}, C:{choices:[1],unit:'µF'} },
+    statement:function(p){ return '직렬 RLC(R='+p.R+' Ω, L='+p.L+' mH, C='+p.C+' µF)의 스텝 응답 형태를 판별하라: (a) ζ (b) 임계 저항 (c) 판정(부족=−1, 임계=0, 과=1).'; },
+    solve:function(p){
+      var L=p.L/1000, C=p.C*1e-6;
+      var Rc=2*Math.sqrt(L/C), z=p.R/Rc;
+      var t=z<0.999?-1:(z>1.001?1:0);
+      return { ans:{z:z, Rc:Rc, t:t}, unit:{z:'', Rc:'Ω', t:''}, steps:[
+        'R_c = 2√(L/C) = '+SVH.fmt(Rc)+' Ω',
+        'ζ = R/R_c = '+SVH.fmt(z),
+        (t<0?'ζ<1 → 부족감쇠: 오버슈트·링잉이 보인다':(t>0?'ζ>1 → 과감쇠: 느린 단조 접근':'임계감쇠: 가장 빠른 무진동')) ] }; },
+    hints:['임계 저항과 비교가 제일 빠르다.'] },
+  { id:'u7-l3-06', level:3, type:'num', tags:['대역 선택'], src:'창작 문제(검산됨)',
+    params:{ f1:{choices:[100],unit:'Hz'}, f2:{choices:[10000],unit:'Hz'} },
+    statement:function(p){ return '신호 대역이 '+p.f1+' Hz~'+p.f2+' Hz다. 양끝에서 이득이 최소 0.9 이상이 되도록 (a) LPF 차단 f_L의 최소값 (b) HPF 차단 f_H의 최대값을 구하라.'; },
+    solve:function(p){
+      var kmax=Math.sqrt(1/(0.9*0.9)-1); // |H|=0.9 → k
+      var fL=p.f2/kmax, fH=p.f1*kmax;
+      return { ans:{fL:fL, fH:fH}, unit:{fL:'Hz', fH:'Hz'}, steps:[
+        '|H|=0.9 → (ω/ω₀) = √(1/0.81−1) = '+SVH.fmt(kmax),
+        'LPF: 최악은 '+p.f2+' Hz → f_L ≥ '+p.f2+'/'+SVH.fmt(kmax)+' = '+SVH.fmt(fL)+' Hz',
+        'HPF: 최악은 '+p.f1+' Hz → f_H ≤ '+SVH.fmt(fH)+' Hz (대역 확보 설계의 기본기)' ] }; },
+    hints:['이득 조건을 k로 바꿔 경계 주파수에 적용.'] },
+  { id:'u7-l3-07', level:3, type:'num', tags:['직렬 2단 dB 합'], src:'창작 문제(검산됨)',
+    params:{ k:{choices:[2,5,10]} },
+    statement:function(p){ return '동일한 1차 LPF 2단을 버퍼로 격리해 종속 연결했다. ω='+p.k+'ω₀에서 총 이득(dB)을 구하라.'; },
+    solve:function(p){
+      var db1=-20*Math.log10(Math.sqrt(1+p.k*p.k));
+      return { ans:2*db1, unit:'dB', steps:[
+        '1단 이득 = '+SVH.fmt(db1)+' dB',
+        '종속(격리) = dB 합 → '+SVH.fmt(2*db1)+' dB (기울기도 −40 dB/dec로 — 2차 필터의 효과)' ] }; },
+    hints:['dB는 곱을 합으로 바꾼다.'] },
+  { id:'u7-l3-08', level:3, type:'num', tags:['|H|→주파수'], src:'창작 문제(검산됨)',
+    params:{ att:{choices:[20,40],unit:'dB'}, f0:{choices:[100,1000],unit:'Hz'} },
+    statement:function(p){ return 'f₀='+p.f0+' Hz LPF에서 감쇠가 정확히 '+p.att+' dB가 되는 주파수를 구하라.'; },
+    solve:function(p){
+      var g=Math.pow(10,-p.att/20), k=Math.sqrt(1/(g*g)-1);
+      return { ans:p.f0*k, unit:'Hz', steps:[
+        '|H| = 10^{−'+p.att+'/20} = '+SVH.fmt(g),
+        'k = √(1/|H|²−1) = '+SVH.fmt(k)+' → f = '+SVH.fmt(p.f0*k)+' Hz',
+        '(점근 근사 '+SVH.fmt(p.f0*Math.pow(10,p.att/20))+' Hz와 비교 — 큰 감쇠에선 거의 같다)' ] }; },
+    hints:['dB→비율→k 순서로 역산.'] },
+  { id:'u7-l3-09', level:3, type:'num', tags:['RL 필터'], src:'창작 문제(검산됨)',
+    params:{ R:{choices:[100,500],unit:'Ω'}, L:{choices:[10,50],unit:'mH'}, k:{choices:[0.5,2]} },
+    statement:function(p){ return 'RL 회로(직렬 L, 출력은 R 양단)는 어떤 필터인가? ω₀=R/L을 구하고 ω='+p.k+'ω₀에서 |H|를 구하라. (LPF=0, HPF=1로 유형 답)'; },
+    solve:function(p){
+      var w0=p.R/(p.L/1000), m=1/Math.sqrt(1+p.k*p.k);
+      return { ans:{type:0, w0:w0, mag:m}, unit:{type:'', w0:'rad/s', mag:''}, steps:[
+        '고주파: Z_L=jωL 커짐 → R 출력 작아짐 → 저역통과(0)',
+        'ω₀ = R/L = '+SVH.fmt(w0)+' rad/s',
+        '|H| = 1/√(1+(ω/ω₀)²) = '+SVH.fmt(m)+' (RC LPF와 같은 함수형!)' ] }; },
+    hints:['극한(ω→0, ∞)으로 유형 판정.'] },
+  { id:'u7-l3-10', level:3, type:'num', tags:['Q와 대역폭'], src:'창작 문제(검산됨)',
+    params:{ w0:{choices:[1000,5000],unit:'rad/s'}, z:{choices:[0.05,0.1,0.25]} },
+    statement:function(p){ return '직렬 RLC 대역통과 응답에서 ω₀='+p.w0+' rad/s, ζ='+p.z+'. (a) 품질계수 Q=1/(2ζ) (b) −3dB 대역폭 B=ω₀/Q를 구하라.'; },
+    solve:function(p){ var Q=1/(2*p.z), B=p.w0/Q;
+      return { ans:{Q:Q, B:B}, unit:{Q:'', B:'rad/s'}, steps:[
+        'Q = 1/(2ζ) = '+SVH.fmt(Q),
+        'B = ω₀/Q = '+SVH.fmt(B)+' rad/s (ζ가 작을수록 뾰족한 공진 — 라디오 선국의 원리)' ] }; },
+    hints:['Q와 ζ는 역수 관계(×2).'] },
+  { id:'u7-l3-11', level:3, type:'num', tags:['λ 근 계산'], src:'창작 문제(검산됨)',
+    params:{ w0:{choices:[10,100],unit:'rad/s'}, z:{choices:[0.6,0.8]} },
+    statement:function(p){ return '특성방정식 \\(s^2+2\\zeta\\omega_0 s+\\omega_0^2=0\\) (ω₀='+p.w0+', ζ='+p.z+')의 근의 (a) 실수부 (b) 허수부(양수 쪽)를 구하라.'; },
+    solve:function(p){
+      var re=-p.z*p.w0, im=p.w0*Math.sqrt(1-p.z*p.z);
+      return { ans:{re:re, im:im}, unit:{re:'1/s', im:'rad/s'}, steps:[
+        's = −ζω₀ ± jω₀√(1−ζ²)',
+        '실수부 = '+SVH.fmt(re)+' (감쇠율), 허수부 = '+SVH.fmt(im)+' (=ω_d)',
+        '(실수부가 지수 봉투, 허수부가 진동 주파수 — 파형 읽기와 직결)' ] }; },
+    hints:['근의 공식 표준형 그대로.'] },
+  { id:'u7-l3-12', level:3, type:'num', tags:['입력 스펙트럼 필터링'], src:'기출 유형',
+    params:{ A1:{choices:[4,6],unit:'V'}, A2:{choices:[2,3],unit:'V'}, k2:{choices:[10,20]} },
+    statement:function(p){ return '입력 \\(v_{in}='+p.A1+'\\cos(0.1\\omega_0 t)+'+p.A2+'\\cos('+p.k2+'\\omega_0 t)\\)가 1차 LPF를 지난다. 출력 각 성분의 진폭을 구하라.'; },
+    solve:function(p){
+      var g1=1/Math.sqrt(1+0.01), g2=1/Math.sqrt(1+p.k2*p.k2);
+      return { ans:{V1:p.A1*g1, V2:p.A2*g2}, unit:{V1:'V', V2:'V'}, steps:[
+        '선형 → 성분별 |H| 곱(중첩): 0.1ω₀: |H|='+SVH.fmt(g1)+' → '+SVH.fmt(p.A1*g1)+' V',
+        p.k2+'ω₀: |H|='+SVH.fmt(g2)+' → '+SVH.fmt(p.A2*g2)+' V',
+        '(신호는 살고 고주파만 죽는다 — 필터링의 정량 그림)' ] }; },
+    hints:['주파수 성분마다 따로 |H|.'] },
+  { id:'u7-l3-13', level:3, type:'num', tags:['버퍼 없는 2단 로딩'], src:'창작 문제(검산됨)',
+    params:{ R:{choices:[1,10],unit:'kΩ'} },
+    statement:function(p){ return '같은 R='+p.R+' kΩ·C인 RC LPF 2단을 버퍼 없이 직결하면 DC 근처(ω→0)에서 뒷단이 앞단에 주는 부하 때문에 이득이 1보다 작아질까? ω→0 극한 이득과, 부하 효과가 사라지는 이유를 답하라. (이득 값으로)'; },
+    solve:function(p){
+      return { ans:1, unit:'', steps:[
+        'ω→0: C 개방 → 뒷단 입력 임피던스 ∞ → 부하 효과 없음',
+        '따라서 DC 이득 = 1 (문제는 중간 주파수 — 거기선 상호작용으로 −3dB점이 이동한다)',
+        '(버퍼가 필요한 이유는 "차단 근처"의 로딩 때문이라는 것까지)' ] }; },
+    hints:['ω→0에서 C가 어떻게 보이는지.'] },
+  { id:'u7-l3-14', level:3, type:'num', tags:['오버슈트'], src:'창작 문제(검산됨)',
+    params:{ z:{choices:[0.2,0.4,0.6]} },
+    statement:function(p){ return 'ζ='+p.z+'인 부족감쇠 2차계의 스텝 응답 오버슈트 \\(M_p=e^{-\\pi\\zeta/\\sqrt{1-\\zeta^2}}\\)를 %로 구하라.'; },
+    solve:function(p){
+      var Mp=Math.exp(-Math.PI*p.z/Math.sqrt(1-p.z*p.z))*100;
+      return { ans:Mp, unit:'%', steps:[
+        'M_p = e^{−πζ/√(1−ζ²)}×100',
+        '= '+SVH.fmt(Mp)+' % (ζ 0.2→~53%, 0.7→~5% — 자동제어(MECH387)와 공유되는 공식)' ] }; },
+    hints:['지수 안 분모의 √(1−ζ²).'] },
+
+  /* ---------- L4 (8) ---------- */
+  { id:'u7-l4-01', level:4, type:'mc', tags:['개념 종합'], src:'기출 유형',
+    statement:'옳은 것을 모두 고르면?<br>㉠ 수동 RC 필터의 통과대역 이득은 1을 넘을 수 없다<br>㉡ −3dB점에서 출력 전력은 절반이다<br>㉢ 1차 LPF의 위상은 −90°를 넘어 지연될 수 있다<br>㉣ 필터 차수가 높을수록 저지대역 기울기가 가파르다',
+    choices:['㉠㉡㉣','㉠㉢','㉡㉢㉣','전부'],
+    answer:0, expl:'1차는 −90°가 한계(㉢ ✗). 수동 소자는 증폭 불가·전력 절반·차수∝기울기 모두 표준 결과.' },
+  { id:'u7-l4-02', level:4, type:'derive', tags:['기출 6(b) 유도'], src:'기출 유형',
+    statement:'RC 저역통과 필터의 \\(H(j\\omega)=V_o/V_i\\)를 임피던스 분압으로 유도하고, 크기·위상 식과 세 극한(ω→0, ω₀, ∞)을 정리하라. (기출 6(b)·(c) 완전 재현)',
+    steps:[
+      '구성: 입력 → R 직렬 → 출력 = C 양단. 임피던스 분압: \\(H=\\dfrac{Z_C}{R+Z_C}=\\dfrac{1/j\\omega C}{R+1/j\\omega C}\\) [왜] AC에서 분압 법칙은 복소 임피던스로 그대로',
+      '분자·분모에 jωC 곱: \\(H=\\dfrac{1}{1+j\\omega RC}=\\dfrac{1}{1+j\\omega/\\omega_0}\\), \\(\\omega_0=1/RC\\)',
+      '크기: \\(|H|=1/\\sqrt{1+(\\omega/\\omega_0)^2}\\), 위상: \\(\\angle H=-\\tan^{-1}(\\omega/\\omega_0)\\)',
+      '세 극한: ω→0 ⇒ |H|=1, 0° (통과) · ω=ω₀ ⇒ 1/√2(−3dB), −45° · ω→∞ ⇒ ω₀/ω→0, −90° (차단)',
+      '차원 체크: ωRC = (1/s)(Ω)(F) = 무차원 ✓ · 극한이 DC(C 개방)·고주파(C 단락) 직관과 일치 ✓'
+    ],
+    hints:['분압 → 정규화(ω/ω₀) → 크기/위상 분리.','세 극한 값 6개(크기3+위상3)를 표로.'],
+    expl:'기출 6(b)(c)가 요구하는 서술 전체. 이 유도를 통째로 쓸 수 있으면 15점 문항이 안정권이다.' },
+  { id:'u7-l4-03', level:4, type:'num', tags:['기출 6 풀세트'], src:'기출 유형',
+    params:{ wmax:{choices:[2],unit:'rad/s'}, wn:{choices:[2000],unit:'rad/s'}, C:{choices:[1,10],unit:'µF'}, marg:{choices:[10,20]} },
+    statement:function(p){ return '기출 6 완전판: 신호 최대 ω='+p.wmax+' rad/s, 잡음 ω≳'+p.wn+' rad/s. 차단을 ω₀='+p.marg+'×'+p.wmax+' rad/s로 두고 C='+p.C+' µF를 쓴다. (a) R(kΩ) (b) 신호 최대 주파수에서의 이득 (c) 잡음 하한에서의 감쇠(dB)를 구하라.'; },
+    solve:function(p){
+      var w0=p.marg*p.wmax, R=1/(w0*p.C*1e-6)/1000;
+      var ks=p.wmax/w0, gs=1/Math.sqrt(1+ks*ks);
+      var kn=p.wn/w0, an=-20*Math.log10(Math.sqrt(1+kn*kn));
+      return { ans:{R:R, gs:gs, an:an}, unit:{R:'kΩ', gs:'', an:'dB'}, steps:[
+        'R = 1/(ω₀C) = '+SVH.fmt(R)+' kΩ',
+        '신호: ω/ω₀ = '+SVH.fmt(ks)+' → |H| = '+SVH.fmt(gs)+' (사실상 무손실)',
+        '잡음: ω/ω₀ = '+SVH.fmt(kn)+' → '+SVH.fmt(an)+' dB',
+        '(차단 위치 선택의 트레이드오프: 너무 낮으면 신호 손실, 너무 높으면 잡음 잔존)' ] }; },
+    hints:['ω₀부터 확정 → R → 두 주파수 평가.'] },
+  { id:'u7-l4-04', level:4, type:'num', tags:['미지 필터 역공학'], src:'기출 유형',
+    params:{ g1:{choices:[0.995,0.99]}, f1:{choices:[100],unit:'Hz'}, g2:{choices:[0.1,0.05]}, },
+    statement:function(p){ return '측정: f₁='+p.f1+' Hz에서 |H|='+p.g1+', 어떤 f₂에서 |H|='+p.g2+'인 1차 LPF다. (a) f₀ (b) f₂를 구하라.'; },
+    solve:function(p){
+      var k1=Math.sqrt(1/(p.g1*p.g1)-1), f0=p.f1/k1;
+      var k2=Math.sqrt(1/(p.g2*p.g2)-1), f2=f0*k2;
+      return { ans:{f0:f0, f2:f2}, unit:{f0:'Hz', f2:'Hz'}, steps:[
+        'f₁에서: (f₁/f₀) = √(1/|H|²−1) = '+SVH.fmt(k1)+' → f₀ = '+SVH.fmt(f0)+' Hz',
+        'f₂ = f₀×√(1/'+p.g2+'²−1) = '+SVH.fmt(f2)+' Hz',
+        '(측정 두 점이면 1차 필터는 완전히 결정된다)' ] }; },
+    hints:['|H|→k 역산을 두 번.'] },
+  { id:'u7-l4-05', level:4, type:'num', tags:['RLC 스텝 종합'], src:'기출 유형',
+    params:{ R:{choices:[40,80],unit:'Ω'}, L:{choices:[10],unit:'mH'}, C:{choices:[2.5,10],unit:'µF'} },
+    statement:function(p){ return '직렬 RLC(R='+p.R+' Ω, L='+p.L+' mH, C='+p.C+' µF)의 스텝 응답에 대해 (a) ω₀ (b) ζ (c) ω_d(부족감쇠 아니면 0) (d) 오버슈트 %(부족감쇠 아니면 0)를 구하라.'; },
+    solve:function(p){
+      var L=p.L/1000, C=p.C*1e-6;
+      var w0=1/Math.sqrt(L*C), z=p.R/2*Math.sqrt(C/L);
+      var wd=z<1?w0*Math.sqrt(1-z*z):0;
+      var Mp=z<1?Math.exp(-Math.PI*z/Math.sqrt(1-z*z))*100:0;
+      return { ans:{w0:w0, z:z, wd:wd, Mp:Mp}, unit:{w0:'rad/s', z:'', wd:'rad/s', Mp:'%'}, steps:[
+        'ω₀ = 1/√(LC) = '+SVH.fmt(w0)+' rad/s, ζ = (R/2)√(C/L) = '+SVH.fmt(z),
+        (z<1?'부족감쇠: ω_d = '+SVH.fmt(wd)+' rad/s':'ζ≥1: 진동 없음(ω_d=0)'),
+        (z<1?'M_p = e^{−πζ/√(1−ζ²)} = '+SVH.fmt(Mp)+' %':'오버슈트 0 %'),
+        '(2차 3대 수치: ω₀·ζ·M_p — MECH387 시간응답의 예고편)' ] }; },
+    hints:['ζ 판정 후 분기.'] },
+  { id:'u7-l4-06', level:4, type:'num', tags:['설계 트레이드오프'], src:'창작 문제(검산됨)',
+    params:{ fs:{choices:[1000],unit:'Hz'}, fn:{choices:[50000],unit:'Hz'}, gmin:{choices:[0.95,0.99]}, amin:{choices:[26,32],unit:'dB'} },
+    statement:function(p){ return '요구: 신호 f_s='+p.fs+' Hz에서 이득 ≥'+p.gmin+', 잡음 f_n='+SVH.si(p.fn,'Hz')+'에서 감쇠 ≥'+p.amin+' dB. 1차 LPF의 f₀ 허용 범위 [f₀min, f₀max]를 구하고, 설계 가능 여부를 판정하라(가능=1/불가=0).'; },
+    solve:function(p){
+      var kg=Math.sqrt(1/(p.gmin*p.gmin)-1), f0min_g=p.fs/kg;      // 신호 조건: f0 ≥ fs/kg
+      var ga=Math.pow(10,-p.amin/20), ka=Math.sqrt(1/(ga*ga)-1);   // 잡음 조건: f0 ≤ fn/ka
+      var f0max=p.fn/ka;
+      var ok=f0min_g<=f0max?1:0;
+      return { ans:{f0min:f0min_g, f0max:f0max, ok:ok}, unit:{f0min:'Hz', f0max:'Hz', ok:''}, steps:[
+        '신호: (f_s/f₀) ≤ '+SVH.fmt(kg)+' → f₀ ≥ '+SVH.fmt(f0min_g)+' Hz',
+        '잡음: (f_n/f₀) ≥ '+SVH.fmt(ka)+' → f₀ ≤ '+SVH.fmt(f0max)+' Hz',
+        (ok?'교집합 존재 → 설계 가능(1). 여유를 반씩 두는 기하평균 f₀=√(min·max)가 무난':'교집합 없음(0) → 1차로는 불가: 2차 이상 필요 — 차수 선택의 근거'),
+        ] }; },
+    hints:['두 부등식을 f₀로 정리해 교집합.'] },
+  { id:'u7-l4-07', level:4, type:'num', tags:['보드 스케치 수치'], src:'기출 유형',
+    params:{ f0:{choices:[1000],unit:'Hz'} },
+    statement:function(p){ return 'f₀='+p.f0+' Hz LPF의 보드 크기 선도를 그리기 위한 5점: f = 0.1f₀, f₀/2, f₀, 2f₀, 10f₀의 정확한 이득(dB)을 구하라.'; },
+    solve:function(p){
+      function db(k){ return -20*Math.log10(Math.sqrt(1+k*k)); }
+      return { ans:{a:db(0.1), b:db(0.5), c:db(1), d:db(2), e:db(10)}, unit:{a:'dB',b:'dB',c:'dB',d:'dB',e:'dB'}, steps:[
+        '0.1f₀: '+SVH.fmt(db(0.1))+' dB (≈0), 0.5f₀: '+SVH.fmt(db(0.5))+' dB',
+        'f₀: '+SVH.fmt(db(1))+' dB (−3), 2f₀: '+SVH.fmt(db(2))+' dB, 10f₀: '+SVH.fmt(db(10))+' dB (≈−20)',
+        '점근선(0dB, −20dB/dec)과의 최대 오차가 f₀에서 3dB — 스케치 채점 포인트' ] }; },
+    hints:['각 점에 정확식 대입 — 점근선과 비교.'] },
+  { id:'u7-l4-08', level:4, type:'num', tags:['실험: 스코프 링잉'], src:'기출 유형',
+    params:{ T:{choices:[2,4],unit:'ms'}, r:{choices:[0.5,0.25]} },
+    statement:function(p){ return '스텝 입력 후 스코프 파형: 진동 주기 '+p.T+' ms, 연속한 두 봉우리의 진폭비 '+p.r+'. (a) ω_d (b) 감쇠율 σ=−ln(r)/T (c) ζ를 구하라. (로그 감쇠법)'; },
+    solve:function(p){
+      var wd=2*Math.PI/(p.T/1000);
+      var sg=-Math.log(p.r)/(p.T/1000);
+      var z=sg/Math.hypot(sg,wd);
+      return { ans:{wd:wd, sg:sg, z:z}, unit:{wd:'rad/s', sg:'1/s', z:''}, steps:[
+        'ω_d = 2π/T = '+SVH.fmt(wd)+' rad/s',
+        'σ = −ln('+p.r+')/T = '+SVH.fmt(sg)+' 1/s (봉우리들이 e^{−σt} 봉투를 따른다)',
+        'ζ = σ/√(σ²+ω_d²) = '+SVH.fmt(z)+' — 파형만으로 2차계 파라미터 완전 복원 (실험 3 대비)' ] }; },
+    hints:['주기→ω_d, 진폭비→σ.','ζ = σ/ω₀, ω₀=√(σ²+ω_d²).'] }
   ]
 });
 
@@ -1606,8 +3070,8 @@ SV_BANK.push({
 
 <script src="../../shared/progress.js"></script>
 <script>
-window.SV_CONTENT = {"u1": {"concept": "\n<p class=\"easy\"><b>⚡ 이 단원 한 줄</b> — 회로의 4대 변수(전하·전류·전압·전력)와 2대 법칙(KCL·KVL), 그리고 부호 규약 하나(수동부호규약)면 모든 회로 해석의 언어가 갖춰진다.</p>\n<h4>핵심 정의 <span class=\"src\">(전문용어 병기)</span></h4>\n<ul>\n<li><b>전류</b>(current) \\(i=dq/dt\\) [A=C/s] — 단면 통과 전하율. <b>시험 포인트:</b> q(t) 주고 미분시키거나, i–t 그래프 면적으로 전하 역산.</li>\n<li><b>전압</b>(voltage) \\(v=dw/dq\\) [V=J/C] — 두 점 사이 단위 전하의 에너지 차. 항상 \"어디 기준\"인지가 붙는다.</li>\n<li><b>전력</b>(power) \\(p=vi\\) [W] — <b>수동부호규약</b>(passive sign convention): 전류가 + 단자로 들어가게 기준을 잡으면 p&gt;0 = 흡수, p&lt;0 = 공급. 회로 전체 합은 항상 0.</li>\n<li><b>옴 법칙</b> \\(v=iR\\) — <u>선형 저항에만</u>. 컨덕턴스 \\(G=1/R\\) [S].</li>\n<li><b>전원</b>: 이상 전압원(내부저항 0)·이상 전류원(내부저항 ∞)·<b>종속 전원</b> 4종(VCVS·VCCS·CCVS·CCCS) — 트랜지스터/OP-amp의 모델.</li>\n<li><b>KCL</b>: 절점 유입 전류 합 = 유출 합 (전하 보존). <b>KVL</b>: 폐루프 전압 합 = 0 (에너지 보존).</li>\n</ul>\n<p class=\"note-line\">시험에 어떻게 나오나 — 기출 1번(30점)은 이런 정의·조건·한계의 진위 판별 다지선다. \"옴 법칙은 모든 소자에?\"(✗), \"중첩의 근거는 결합법칙?\"(✗, 선형성) 같은 함정이 반복된다.</p>", "derive": [{"title": "p = vi 가 '흡수'인 이유 (정의에서 전력까지)", "steps": ["전압 정의 \\(v=dw/dq\\): + → − 로 단위 전하가 이동하며 소자에 에너지를 넘긴다.", "전류 기준을 + 단자 유입으로: \\(i=dq/dt\\).", "연쇄율: \\(p=\\dfrac{dw}{dt}=\\dfrac{dw}{dq}\\cdot\\dfrac{dq}{dt}=vi\\) — w가 '소자가 받은' 에너지이므로 p>0 = 흡수.", "부호 반전 2경우: 실제 전류가 기준과 반대(i<0), 또는 극성 반대(v<0) → 공급.", "차원 체크: (J/C)(C/s)=J/s=W ✓ · 극한 체크: v=0 또는 i=0 → p=0 ✓"]}, {"title": "KCL·KVL은 어디서 오는가", "steps": ["KCL: 절점은 전하를 저장하지 못한다(이상 도체 접합) → \\(\\sum i_{in}=\\sum i_{out}\\).", "KVL: 폐루프를 한 바퀴 돈 단위 전하의 에너지 변화 = 0 (보존장) → \\(\\sum v = 0\\).", "따라서 KCL 식은 절점 수−1개, KVL 식은 독립 루프 수만큼만 독립 — U3 해석법의 뼈대.", "극한 체크: 가지 하나뿐인 절점이면 i=0 (막다른 길) ✓"]}], "worked": "\n<h4>예제 1 — 수동부호규약 판정</h4>\n<p>소자 양단 전압 12 V(+가 위), 전류 2 A가 <u>아래에서 위로</u>(− 단자로 유입) 흐른다. 흡수 전력은?</p>\n<ol><li>기준: 전류가 + 단자로 들어가야 p=vi가 흡수. 지금은 반대 → i = −2 A로 잡는다.</li>\n<li>p = vi = 12 × (−2) = <b>−24 W → 24 W 공급</b>.</li>\n<li>검산: 이 소자가 전원 역할(전류를 + 쪽으로 밀어 올림) — 방향 그림과 일치 ✓</li></ol>\n<h4>예제 2 — q(t)에서 전력까지</h4>\n<p>\\(q(t)=3t^2+2t\\) C가 5 Ω 저항을 지난다. t=2 s의 순시 전력은?</p>\n<ol><li>\\(i=dq/dt=6t+2\\) → i(2)=14 A</li>\n<li>\\(p=i^2R=14^2×5=\\) <b>980 W</b></li>\n<li>차원: [A²·Ω]=[W] ✓</li></ol>"}, "u2": {"concept": "\n<p class=\"easy\"><b>⚡ 이 단원 한 줄</b> — 직렬은 전류 공유(저항 합), 병렬은 전압 공유(컨덕턴스 합). 분압·분류 두 공식과 \"부하를 달면 분배가 깨진다\"는 감각까지가 시험 범위다.</p>\n<h4>핵심 공식</h4>\n<ul>\n<li><b>직렬</b>: \\(R_{eq}=\\sum R_i\\) · <b>분압</b>(voltage divider) \\(v_k=v_s\\dfrac{R_k}{\\sum R}\\)</li>\n<li><b>병렬</b>: \\(1/R_{eq}=\\sum 1/R_i\\) (2개면 곱/합) · <b>분류</b>(current divider) \\(i_1=i_s\\dfrac{R_2}{R_1+R_2}\\) — <u>반대편</u> 저항이 분자.</li>\n<li>같은 값 n개 병렬 = R/n. 병렬 등가는 항상 최솟값보다 작다.</li>\n<li><b>휘트스톤 브리지</b> 평형: \\(R_1R_4=R_2R_3\\) (교차곱) → 평형이면 가운데 소자 제거 가능.</li>\n<li><b>부하 효과</b>: 분압기 출력에 R_L이 붙으면 아래 저항이 \\(R_2\\|R_L\\)로 바뀌어 출력이 떨어진다 — 계측기의 입력저항 문제와 같은 뿌리(기출 1번 단골).</li>\n</ul>\n<p class=\"note-line\">시험에 어떻게 나오나 — 사다리 회로를 \"뒤에서 접고 앞으로 전개\"(기출 4번 스케일), 브리지 평형/불평형(전압계 읽기), 전위차계(로봇팔 각도 센서, 기출 6번 맥락).</p>", "derive": [{"title": "분압 법칙 유도와 3중 극한 검증", "steps": ["직렬 = 같은 전류: 갈라질 절점이 없다 (KCL).", "KVL: \\(v_s=i(R_1+R_2)\\) → \\(i=v_s/(R_1+R_2)\\).", "옴: \\(v_2=iR_2=v_s\\dfrac{R_2}{R_1+R_2}\\).", "극한: R₂→∞ ⇒ v₂→v_s ✓ · R₂→0 ⇒ 0 ✓ · R₁=R₂ ⇒ 절반 ✓", "부하가 붙으면 1행(같은 전류)이 깨진다 — 부하 효과의 정확한 원인. 차원: 무차원 비 × [V] ✓"]}, {"title": "분류 법칙 — 왜 '반대편'이 분자인가", "steps": ["병렬 = 같은 전압 v: \\(i_1=v/R_1,\\ i_2=v/R_2\\).", "KCL: \\(i_s=v(1/R_1+1/R_2)\\) → \\(v=i_s\\dfrac{R_1R_2}{R_1+R_2}\\).", "대입: \\(i_1=v/R_1=i_s\\dfrac{R_2}{R_1+R_2}\\) — 분자에 R₂가 남는다.", "직관: 전류는 쉬운 길(작은 저항)로 더 — R₁이 작을수록 i₁이 커지는 형태 ✓", "극한: R₂→∞이면 전부 R₁로(i₁=i_s) ✓ · 차원: 무차원 비 × [A] ✓"]}], "worked": "\n<h4>예제 1 — 혼합 회로망 접기</h4>\n<p>24 V 전원 → 6 Ω 직렬 → (12 Ω ∥ 4 Ω). 병렬부 전압은?</p>\n<ol><li>12∥4 = 48/16 = 3 Ω</li>\n<li>분압: \\(V = 24×\\dfrac{3}{6+3}\\) = <b>8 V</b></li>\n<li>검산: 전원 전류 24/9 = 2.67 A → 병렬부 8/3+8/12... 아니라 12 Ω에 0.67 A + 4 Ω에 2 A = 2.67 A ✓ (KCL 일치)</li></ol>\n<h4>예제 2 — 부하 효과 정량</h4>\n<p>10 kΩ–10 kΩ 분압기(입력 10 V) 출력에 10 kΩ 부하 연결. 출력 변화는?</p>\n<ol><li>무부하: 5 V</li>\n<li>부하 시 아래쪽 = 10∥10 = 5 kΩ → \\(V=10×\\dfrac{5}{10+5}\\) = <b>3.33 V</b> (33% 하락!)</li>\n<li>교훈: 부하 저항이 분압기 저항과 비슷하면 크게 무너진다 — R_L ≫ 출력임피던스(R₁∥R₂)가 원칙.</li></ol>"}, "u3": {"concept": "\n<p class=\"easy\"><b>⚡ 이 단원 한 줄</b> — 절점법 = 절점마다 KCL, 망로법 = 메시마다 KVL. 행렬 규칙(대각=자기 합, 비대각=−공유)까지 외우면 어떤 회로든 기계적으로 풀린다. 기출 2·4번이 통째로 이 단원이다.</p>\n<h4>표준 절차</h4>\n<ul>\n<li><b>절점전압법</b>: ① 기준 절점(연결 많은 곳) ② 미지수 = 절점 수−1 ③ 각 절점 KCL: \"나가는 전류 \\((v_{me}-v_{other})/R\\)의 합 = 유입 전류원\" ④ 연립.</li>\n<li><b>초노드</b>(supernode): 두 비기준 절점 사이 전압원 → 경계를 묶어 KCL 1개 + 구속식 \\(v_a-v_b=V_s\\).</li>\n<li><b>망로전류법</b>: 평면 회로의 각 \"창문\"에 시계방향 전류 → KVL. 행렬 규칙: 대각 = 그 메시 저항 합, 비대각 = −공유 저항, 우변 = 미는 전압원.</li>\n<li><b>초메시</b>(supermesh): 공유 가지 전류원 → 두 메시 합쳐 KVL + \\(i_a-i_b=I_s\\).</li>\n<li><b>종속 전원</b>: 틀은 유지, 제어 변수를 절점전압/메시전류로 표현하는 보조식 1개 추가.</li>\n<li><b>전압원 전류·전류원 전압</b>은 다 푼 뒤 KCL/KVL 되짚기로 회수(기출 2(a)).</li>\n</ul>\n<p class=\"note-line\">검증 습관 — 절점법으로 풀었으면 임의 루프 KVL로, 망로법이면 임의 절점 KCL로, 아니면 전력 수지(공급=흡수)로 교차 검산. 같은 방법 재계산은 같은 실수를 재현한다.</p>", "derive": [{"title": "절점 방정식의 행렬 구조 (대칭·대각우세)", "steps": ["2절점 예: KCL@1 \\(G_1v_1+G_2(v_1-v_2)=I_s\\), KCL@2 \\(G_3v_2+G_2(v_2-v_1)=0\\).", "행렬형: \\(\\begin{bmatrix}G_1+G_2&-G_2\\\\-G_2&G_2+G_3\\end{bmatrix}\\!\\begin{bmatrix}v_1\\\\v_2\\end{bmatrix}=\\begin{bmatrix}I_s\\\\0\\end{bmatrix}\\).", "대칭: 비대각 = −(공유 컨덕턴스), 같은 소자를 양쪽에서 본 것 → 종속 전원이 끼면 깨진다.", "대각 우세: 자기 행 대각 ≥ |비대각 합| — '내 전압을 올리면 나가는 전류가 는다'는 안정성.", "극한 체크: G₂→0 → 대각행렬(두 독립 회로) ✓ · 차원: [S][V]=[A] ✓"]}, {"title": "초노드가 필요한 이유", "steps": ["이상 전압원의 전류는 소자식이 없다(전류가 미지수) → 그 절점 KCL에 바로 못 쓴다.", "해결: 전압원을 포함하는 경계로 가우스면을 넓혀(두 절점 묶음) KCL을 세우면 전원 전류가 내부 변수로 사라진다.", "부족해진 식 1개는 전압원 자신이 준다: \\(v_a-v_b=V_s\\).", "쌍대: 공유 전류원 ↔ 초메시, \\(i_a-i_b=I_s\\).", "극한 체크: V_s=0이면 두 절점이 한 절점으로 합쳐지는 것과 동일 ✓"]}], "worked": "\n<h4>예제 1 — 기출 2(a)형: 전압원 전류</h4>\n<p>3 V 전압원(접지—절점1), 절점1—절점2에 2 Ω, 절점2—접지에 4 Ω, 전류원 2 A가 절점2로 유입. 전압원 전류는?</p>\n<ol><li>v₁ = 3 V (접지 연결 전압원 → 미지수 소거)</li>\n<li>KCL@2: \\((3-v_2)/2+2=v_2/4\\) → 6−2v₂+16 = v₂... 정리: v₂ = 22/3 ≈ 7.33 V</li>\n<li>전압원 전류 = 절점1에서 나가는 유일 경로 = (3−7.33)/2 = <b>−2.17 A</b> (음수: 실제로는 전원으로 역류 — 전류원이 밀어 넣고 있다)</li>\n<li>검산: 절점2 KCL 재확인 −2.17+2 = 7.33/4−... ✓</li></ol>\n<h4>예제 2 — 초메시</h4>\n<p>2메시, 공유 가지에 1 A 전류원, 메시1에 10 V·2 Ω, 메시2에 3 Ω.</p>\n<ol><li>구속: i₁−i₂ = 1</li>\n<li>초메시 KVL: 10 = 2i₁+3i₂ → 10 = 2(i₂+1)+3i₂ → i₂ = 1.6 A, i₁ = 2.6 A</li>\n<li>검산(전류원 전압 회수): v = 10−2×2.6 = 4.8 V → 메시2 KVL: 4.8 = 3×1.6 ✓</li></ol>"}, "u4": {"concept": "\n<p class=\"easy\"><b>⚡ 이 단원 한 줄</b> — 복잡한 선형 회로는 단자에서 보면 전압원 하나+저항 하나(테브난)다. 중첩·전원변환은 그 등가로 가는 도구, 최대 전력 전달(R_L=R_T, 효율 50%)은 그 대표 응용이다.</p>\n<h4>도구 상자</h4>\n<ul>\n<li><b>중첩</b>(superposition): 근거는 <u>선형성</u>(기출 함정: 결합·교환법칙 ✗). 독립 전원 하나씩 — 끈 전압원=단락, 끈 전류원=개방. <u>종속 전원은 끄지 않는다</u>.</li>\n<li><b>전원 변환</b>: \\(V_s\\)+직렬 R ↔ \\(I_s{=}V_s/R\\)+병렬 R. 반복하면 사다리가 한 루프로 줄어든다.</li>\n<li><b>테브난/노턴</b>: \\(V_T=V_{oc}\\), \\(I_N=I_{sc}\\), \\(R_T=V_{oc}/I_{sc}\\). 독립 전원만이면 \"끄고 접기\"로도 R_T. <u>종속 전원 있으면</u> V_oc/I_sc 또는 시험 전원법만 가능.</li>\n<li><b>최대 전력 전달</b>: \\(R_L=R_T\\)에서 \\(P_{max}=V_T^2/4R_T\\), 이때 효율 50% — 전력 최대와 고효율은 다른 목표.</li>\n<li><b>측정 관점</b>(기출 1(g)·(j)): V_oc와 I_sc를 재면 등가 완성. 단락이 위험하면 부하 걸고 분압 역산.</li>\n</ul>\n<p class=\"note-line\">적용 조건 주의 — 테브난·노턴·중첩 모두 \"내부가 선형\"일 때만. 비선형 소자는 부하로 밖에 두면 OK(로드라인 해석의 기반).</p>", "derive": [{"title": "최대 전력 전달 정리", "steps": ["\\(P_L=\\left(\\dfrac{V_T}{R_T+R_L}\\right)^2R_L\\) — 변수 R_L 하나의 함수로.", "\\(\\dfrac{dP_L}{dR_L}=V_T^2\\dfrac{R_T-R_L}{(R_T+R_L)^3}=0\\) → \\(R_L=R_T\\).", "부호: R_L<R_T에서 +, R_L>R_T에서 − → 최대 확정.", "\\(P_{max}=V_T^2/4R_T\\), 이때 R_T에도 같은 전력 → 효율 50%.", "극한 체크: R_L→0, R_L→∞ 모두 P→0 (사이에 최대가 있어야 함) ✓ · 차원 [V²/Ω]=[W] ✓"]}, {"title": "전원 변환이 성립하는 조건", "steps": ["테브난형 단자식: \\(v=V_s-iR\\).", "노턴형 단자식: \\(i=I_s-v/R\\) → \\(v=I_sR-iR\\).", "두 직선이 모든 (v,i)에서 일치할 조건: \\(V_s=I_sR\\), 기울기 −R 동일.", "즉 외부에서 본 v–i 특성의 절편(V_oc)과 기울기(R_T)만 같으면 내부는 무엇이든 등가.", "극한 체크: 개방(i=0)에서 v=V_s=I_sR ✓, 단락(v=0)에서 i=V_s/R=I_s ✓"]}], "worked": "\n<h4>예제 1 — 테브난 풀코스 (기출 5번의 전반부)</h4>\n<p>12 V 전원 — 4 Ω — 절점A(—접지 12 Ω), 절점A — 3 Ω — 단자B. 단자 테브난 등가와 정합 시 최대 전력은?</p>\n<ol><li>개방 시 3 Ω 전류 0 → V_oc = 절점A 분압 = 12×12/16 = <b>9 V</b> (3 Ω에는 강하 없음!)</li>\n<li>전원 단락 → R_T = 3 + (4∥12) = 3+3 = <b>6 Ω</b></li>\n<li>P_max = 81/24 = <b>3.375 W</b> (R_L=6 Ω일 때)</li></ol>\n<h4>예제 2 — 중첩 (V원+I원)</h4>\n<p>10 V — 2 Ω — 절점 — 3 Ω — 접지, 전류원 2 A가 절점 유입. 절점 전압?</p>\n<ol><li>I원 개방: 분압 10×3/5 = 6 V</li>\n<li>V원 단락: 2 A × (2∥3) = 2.4 V</li>\n<li>합 <b>8.4 V</b>. 검산(절점법): (10−v)/2+2 = v/3 → v = 8.4 ✓</li></ol>"}};
-window.SV_BUILD = {"date": "2026-09-03", "units": 4, "problems": 160, "gate": "PASS 2026-09-03 (N=50/문제)"};
+window.SV_CONTENT = {"u1": {"concept": "\n<p class=\"easy\"><b>⚡ 한 줄</b> — 4대 변수(전하·전류·전압·전력)와 2대 법칙(KCL·KVL), 부호 규약 하나(수동부호규약)면 회로 해석의 언어가 완성된다.</p>\n<h4>1. 전하와 전류</h4>\n<p>전류는 단면 통과 전하율 \\(i=dq/dt\\) [A=C/s]. 그래프 문제의 양방향: q(t)를 주면 <b>미분</b>, i(t)를 주면 <b>면적(적분)</b>이 전하다.</p><div class=\"jsbox\"><span class=\"jt\">정석 1.1</span>전류의 두 얼굴: \\(i=dq/dt\\) ↔ \\(q=\\int i\\,dt\\) (그래프 면적). 어느 쪽을 물어도 반대 연산으로 오간다.</div><h4>2. 전압·전력·수동부호규약</h4>\n<p>전압 \\(v=dw/dq\\) [V=J/C]는 항상 <b>두 점 사이</b>. 전력 \\(p=vi\\)의 부호는 기준 방향이 정한다 — 전류가 + 단자로 들어가는 기준이면 p&gt;0=흡수, p&lt;0=공급. 회로 전체의 전력 합은 0(보존).</p><div class=\"jsbox\"><span class=\"jt\">정석 1.2</span>전력 3형: \\(p=vi=i^2R=v^2/R\\). 무엇이 주어졌는지 보고 즉시 고른다. 부호 판정은 항상 '전류가 + 단자로 들어가는가'.</div><h4>3. 소자와 전원</h4>\n<ul>\n<li><b>저항</b>: \\(v=iR\\)(옴 법칙, <u>선형 저항만</u>) · 컨덕턴스 \\(G=1/R\\) [S]. 금속피막(정밀·저렴)/탄소피막, 정격 전력 초과 금지.</li>\n<li><b>이상 전압원</b>(내부저항 0)·<b>이상 전류원</b>(내부저항 ∞). 전압원 단락·전류원 개방은 정의 모순.</li>\n<li><b>종속 전원</b> 4종(VCVS·VCCS·CCVS·CCCS) — 트랜지스터·OP-amp의 모델. 끄는 대상이 아니다.</li>\n</ul>\n<h4>4. KCL · KVL</h4>\n<p>KCL(전하 보존): 절점 유입 합=유출 합. KVL(에너지 보존): 폐루프 전압 합=0. 브랜치=2단자로 볼 수 있는 임의 부분, 노드=접합점, 루프=폐경로 — 기출 1번이 이 정의들을 진위로 묻는다.</p><div class=\"jsbox\"><span class=\"jt\">정석 1.3</span>기출 1번(30점) 대비 3대 함정: ① 옴 법칙은 모든 소자에? ✗(선형 저항만) ② 중첩의 근거는 결합·교환법칙? ✗(선형성) ③ 테브난은 비선형에도? ✗(선형 회로만)</div>", "derive": [{"title": "p = vi 가 '흡수'인 이유 (정의→전력)", "steps": ["전압 정의 \\(v=dw/dq\\): + → − 로 단위 전하가 이동하며 소자에 에너지를 넘긴다.", "전류 기준을 + 단자 유입으로: \\(i=dq/dt\\).", "연쇄율: \\(p=\\dfrac{dw}{dt}=\\dfrac{dw}{dq}\\cdot\\dfrac{dq}{dt}=vi\\) — w가 '소자가 받은' 에너지이므로 p>0 = 흡수.", "부호 반전 2경우: 실제 전류가 기준과 반대(i<0), 또는 극성 반대(v<0) → 공급.", "차원 체크: (J/C)(C/s)=J/s=W ✓ · 극한 체크: v=0 또는 i=0 → p=0 ✓"]}, {"title": "KCL·KVL의 출처 (보존 법칙)", "steps": ["KCL: 절점은 전하를 저장하지 못한다(이상 도체 접합) → \\(\\sum i_{in}=\\sum i_{out}\\).", "KVL: 폐루프를 돈 단위 전하의 에너지 변화 = 0 (보존장) → \\(\\sum v = 0\\).", "독립 식 수: KCL은 절점−1개, KVL은 독립 루프 수 — U3 해석법의 뼈대.", "전위가 존재하는 이유: ∮E·dl=0 (시변 자기장이 관통하면 깨진다 — 한계까지).", "극한 체크: 가지 하나뿐인 절점이면 i=0 ✓ · 소자 하나뿐인 루프면 v=0 ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 1-1</span>소자 양단 12 V(+가 위), 전류 2 A가 −단자로 유입. 이 소자는 전력을 흡수하는가 공급하는가, 얼마나?</div><div class=\"xsol\"><b>풀이</b><ol><li>기준 확인: 전류가 +단자로 들어가야 p=vi가 흡수 → 지금은 반대이므로 i=−2 A.</li><li>p = 12×(−2) = −24 W → <b>24 W 공급</b>.</li><li>검토: 전류를 +쪽으로 밀어올리는 소자 = 전원 역할 ✓</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u1-l2-05 · u1-l2-12 · u1-l4-06</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 1-2</span>\\(q(t)=3t^2+2t\\) C가 5 Ω 저항을 지난다. t=2 s의 순시 전력은?</div><div class=\"xsol\"><b>풀이</b><ol><li>\\(i=dq/dt=6t+2\\) → i(2)=14 A.</li><li>\\(p=i^2R=14^2×5=\\) <b>980 W</b>.</li><li>차원: [A²·Ω]=[W] ✓</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u1-l2-02 · u1-l3-01 · u1-l3-13</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 1-3</span>기전력 12 V·내부저항 0.5 Ω 전원이 부하에 4 A를 공급한다. 단자 전압과 효율은?</div><div class=\"xsol\"><b>풀이</b><ol><li>\\(V_t=12−4×0.5=\\) <b>10 V</b>.</li><li>효율 = V_t/V_s = 10/12 = <b>83.3%</b> (전류 약분).</li><li>내부저항 손실 = 4²×0.5 = 8 W가 어디로 갔는지 설명할 수 있어야 한다.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u1-l3-09 · u1-l3-04 · u1-l4-02</div></div>"}, "u2": {"concept": "\n<p class=\"easy\"><b>⚡ 한 줄</b> — 직렬=전류 공유(저항 합), 병렬=전압 공유(컨덕턴스 합). 분압·분류 두 공식과 \"부하가 붙으면 분배가 깨진다\"는 감각까지가 시험 범위다.</p>\n<h4>1. 합성 규칙</h4>\n<p>직렬 \\(R_{eq}=\\sum R_i\\), 병렬 \\(1/R_{eq}=\\sum 1/R_i\\)(2개면 곱/합, 같은 값 n개면 R/n). 병렬 등가는 항상 최솟값보다 작다. 단락(0)을 병렬로 → 0, 개방(∞)을 병렬로 → 변화 없음.</p><div class=\"jsbox\"><span class=\"jt\">정석 2.1</span>복잡한 회로망은 <b>가장 안쪽(또는 맨 끝)부터 접는다</b>. 사다리는 '뒤에서 앞으로 접고, 다시 앞에서 뒤로 전개'가 정석 순서다.</div><h4>2. 분압·분류</h4>\n<p>분압 \\(v_k=v_s\\dfrac{R_k}{\\sum R}\\)(자기 것/합), 분류 \\(i_1=i_s\\dfrac{R_2}{R_1+R_2}\\)(<u>반대편</u>/합 — 전류는 쉬운 길로). 컨덕턴스로 쓰면 분류가 '자기 것/합'이 되어 3가지 이상에서 실수가 준다.</p><div class=\"jsbox\"><span class=\"jt\">정석 2.2</span>분압기에 부하 R_L이 붙으면 아래 저항이 \\(R_2\\|R_L\\)로 바뀐다 → 출력은 <b>항상 무부하보다 낮다</b>. R_L ≫ R₁∥R₂(출력임피던스)일 때만 무시 가능 — 계측기 부하 효과(기출 1번)와 같은 뿌리.</div><h4>3. 브리지</h4>\n<p>휘트스톤 브리지 평형 조건 \\(R_1R_4=R_2R_3\\)(교차곱). 평형이면 가운데 소자는 지워도 된다. 불평형이면 두 가지를 독립 분압기로 보고 중점 전압차를 구한다(이상 전압계 = 개방).</p>", "derive": [{"title": "분압 법칙 유도와 3중 극한 검증", "steps": ["직렬 = 같은 전류: 갈라질 절점이 없다 (KCL).", "KVL: \\(v_s=i(R_1+R_2)\\) → \\(i=v_s/(R_1+R_2)\\).", "옴: \\(v_2=iR_2=v_s\\dfrac{R_2}{R_1+R_2}\\).", "극한: R₂→∞ ⇒ v₂→v_s ✓ · R₂→0 ⇒ 0 ✓ · R₁=R₂ ⇒ 절반 ✓", "부하가 붙으면 1행(같은 전류)이 깨진다 — 부하 효과의 정확한 원인. 차원: 무차원 비 × [V] ✓"]}, {"title": "분류 법칙 — 왜 '반대편'이 분자인가", "steps": ["병렬 = 같은 전압 v: \\(i_1=v/R_1,\\ i_2=v/R_2\\).", "KCL: \\(i_s=v(1/R_1+1/R_2)\\) → \\(v=i_s\\dfrac{R_1R_2}{R_1+R_2}\\).", "대입: \\(i_1=v/R_1=i_s\\dfrac{R_2}{R_1+R_2}\\) — 분자에 R₂.", "직관: R₁이 작을수록 i₁ 커짐(쉬운 길) ✓", "극한: R₂→∞이면 전부 R₁로 ✓ · 차원: 무차원 비 × [A] ✓"]}, {"title": "브리지 평형 조건", "steps": ["왼쪽 가지 중점: \\(v_A=v_s\\dfrac{R_3}{R_1+R_3}\\), 오른쪽: \\(v_B=v_s\\dfrac{R_4}{R_2+R_4}\\) (가운데 개방 가정).", "평형 = \\(v_A=v_B\\): \\(R_3(R_2+R_4)=R_4(R_1+R_3)\\).", "전개·정리: \\(R_2R_3=R_1R_4\\) — 교차곱 조건.", "평형이면 가운데 어떤 소자를 달아도 전류 0 → 제거 가능(등가 불변).", "극한 체크: 네 저항이 모두 같으면 자명하게 평형 ✓ · 차원: [Ω²]=[Ω²] ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 2-1</span>24 V → 6 Ω 직렬 → (12 Ω ∥ 4 Ω). 병렬부 전압과 12 Ω의 전류는?</div><div class=\"xsol\"><b>풀이</b><ol><li>12∥4 = 3 Ω → 분압 \\(V=24×\\frac{3}{9}\\) = <b>8 V</b>.</li><li>12 Ω 전류 = 8/12 = <b>0.667 A</b>.</li><li>검산: 4 Ω 전류 2 A, 합 2.67 A = 전원 전류 24/9 ✓</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u2-l2-14 · u2-l2-04 · u2-l3-03</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 2-2</span>10 kΩ–10 kΩ 분압기(입력 10 V) 출력에 10 kΩ 부하를 달면 출력은?</div><div class=\"xsol\"><b>풀이</b><ol><li>무부하 5 V.</li><li>부하 시 아래쪽 = 10∥10 = 5 kΩ → \\(V=10×\\frac{5}{15}\\) = <b>3.33 V</b> (33% 하락!).</li><li>교훈: R_L이 출력임피던스와 비슷하면 크게 무너진다.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u2-l3-01 · u2-l4-08 · u2-l3-11</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 2-3</span>브리지 R₁=100, R₂=200, R₃=150 Ω일 때 평형 R₄는? 그리고 R₄가 5% 커지면 중점 전압차의 부호는? (V_s=10 V)</div><div class=\"xsol\"><b>풀이</b><ol><li>교차곱: R₄ = R₂R₃/R₁ = <b>300 Ω</b>.</li><li>R₄↑ → 오른쪽 중점 전압 \\(v_B=v_s\\frac{R_4}{R_2+R_4}\\)↑ → \\(v_A−v_B\\) <b>음수</b>.</li><li>스트레인게이지가 이 부호로 인장/압축을 구분한다.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u2-l3-02 · u2-l4-03 · u2-l4-07</div></div>"}, "u3": {"concept": "\n<p class=\"easy\"><b>⚡ 한 줄</b> — 절점법=절점마다 KCL, 망로법=메시마다 KVL. 행렬 규칙(대각=자기 합, 비대각=−공유)까지 몸에 붙이면 기출 2·4번은 기계적으로 풀린다.</p>\n<h4>1. 절점전압법 (nodal analysis)</h4>\n<ol>\n<li>기준 절점(연결 많은 곳)을 0 V로.</li>\n<li>각 절점에서 KCL: \"나가는 전류 \\((v_{me}-v_{other})/R\\)의 합 = 유입 전류원\".</li>\n<li>접지 연결 전압원 → 그 절점전압 확정(미지수 공짜). 두 비기준 절점 사이 전압원 → <b>초노드</b>(묶어서 KCL + 구속식 \\(v_a-v_b=V_s\\)).</li>\n<li>전압원의 전류는 <b>다 푼 뒤</b> 그 절점 KCL로 회수(기출 2(a)).</li>\n</ol><div class=\"jsbox\"><span class=\"jt\">정석 3.1</span>절점 행렬 즉석 작성법: 대각 = 그 절점에 붙은 컨덕턴스 전부의 합, 비대각 = −(두 절점을 잇는 컨덕턴스), 우변 = 유입 전류원. 종속 전원이 있으면 대칭이 깨진다 — 깨졌다면 종속 전원 처리를 했다는 흔적.</div><h4>2. 망로전류법 (mesh analysis)</h4>\n<p>평면 회로의 각 '창문'에 시계방향 전류. 행렬: 대각 = 메시 저항 합, 비대각 = −공유 저항, 우변 = 미는 전압원. 공유 가지 전류원 → <b>초메시</b> + \\(i_a-i_b=I_s\\). 공유 가지의 실제 전류는 \\(i_1-i_2\\).</p><div class=\"jsbox\"><span class=\"jt\">정석 3.2</span>해 검증의 정석: 절점법으로 풀었으면 임의 루프 KVL로, 망로법이면 임의 절점 KCL로, 아니면 <b>전력 수지</b>(공급 합=흡수 합)로. 같은 방법 재계산은 같은 실수를 재현한다.</div><h4>3. 방법 선택</h4>\n<p>전류원 많음→절점법, 전압원 많음→망로법이 기본. 단 \"구하려는 양\"이 절점전압이면 절점법, 가지 전류면 망로법이 지름길. 종속 전원은 어느 쪽이든 보조식 1개 추가로 끝.</p>", "derive": [{"title": "절점 방정식의 행렬 구조 (대칭·대각우세)", "steps": ["2절점 예: KCL@1 \\(G_1v_1+G_2(v_1-v_2)=I_s\\), KCL@2 \\(G_3v_2+G_2(v_2-v_1)=0\\).", "행렬형: \\(\\begin{bmatrix}G_1+G_2&-G_2\\\\-G_2&G_2+G_3\\end{bmatrix}\\!\\begin{bmatrix}v_1\\\\v_2\\end{bmatrix}=\\begin{bmatrix}I_s\\\\0\\end{bmatrix}\\).", "대칭: 비대각 = −(공유 컨덕턴스) — 같은 소자를 양쪽에서 본 것 (종속 전원이 끼면 깨진다).", "대각 우세: 대각 ≥ |비대각 합| — '내 전압을 올리면 나가는 전류가 는다'는 안정성.", "극한 체크: G₂→0 → 대각행렬(두 독립 회로) ✓ · 차원: [S][V]=[A] ✓"]}, {"title": "초노드가 필요한 이유", "steps": ["이상 전압원의 전류는 소자식이 없다(미지수) → 그 절점 KCL에 바로 못 쓴다.", "가우스면을 넓혀 전압원을 포함한 경계(두 절점 묶음)로 KCL → 전원 전류가 내부로 사라진다.", "부족한 식 1개는 전압원이 준다: \\(v_a-v_b=V_s\\).", "쌍대: 공유 전류원 ↔ 초메시, \\(i_a-i_b=I_s\\).", "극한 체크: V_s=0이면 두 절점 병합과 동일 ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 3-1</span>(기출 2(a)형) 3 V 전압원(접지—절점1), 절점1—절점2에 2 Ω, 절점2—접지에 4 Ω, 전류원 2 A가 절점2 유입. 전압원 전류는?</div><div class=\"xsol\"><b>풀이</b><ol><li>v₁=3 V 확정.</li><li>KCL@2: \\((3−v_2)/2+2=v_2/4\\) → v₂=22/3≈7.33 V.</li><li>전압원 전류 = (3−7.33)/2 = <b>−2.17 A</b> (음수: 전류원이 역으로 밀어넣는 중).</li><li>검산: 절점2 KCL 재대입 ✓</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u3-l3-07 · u3-l4-02 · u3-l4-08</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 3-2</span>(초메시) 2메시, 공유 가지에 1 A 전류원, 메시1에 10 V·2 Ω, 메시2에 3 Ω. 두 메시 전류는?</div><div class=\"xsol\"><b>풀이</b><ol><li>구속: i₁−i₂=1.</li><li>초메시 KVL: 10=2i₁+3i₂ → 10=2(i₂+1)+3i₂ → i₂=<b>1.6 A</b>, i₁=<b>2.6 A</b>.</li><li>검산: 전류원 전압 v=10−2×2.6=4.8 V, 메시2 KVL 4.8=3×1.6 ✓</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u3-l2-08 · u3-l3-04 · u3-l3-12</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 3-3</span>(종속 전원) 절점 v: 전류원 4 A 유입, R₁=4 Ω→접지, VCCS 0.5v가 절점에서 접지로. v와 종속 전원의 흡수 전력은?</div><div class=\"xsol\"><b>풀이</b><ol><li>KCL: 4 = v/4 + 0.5v = 0.75v → v = <b>5.33 V</b>.</li><li>종속 전원 전류 = 2.67 A(v에서 접지로) → 흡수 p = 5.33×2.67 = <b>14.2 W</b>.</li><li>수지: 전류원 공급 21.3 W = R(7.1)+종속(14.2) ✓</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u3-l2-10 · u3-l4-04 · u1-l4-06</div></div>"}, "u4": {"concept": "\n<p class=\"easy\"><b>⚡ 한 줄</b> — 어떤 복잡한 선형 회로도 단자에서 보면 전압원+저항 하나(테브난). 중첩·전원변환은 거기 가는 길, 최대 전력 전달(R_L=R_T, 효율 50%)은 대표 응용.</p>\n<h4>1. 중첩 (superposition)</h4>\n<p>근거는 <u>선형성</u>(기출 함정: \"결합·교환법칙\" ✗). 독립 전원을 하나씩 살리고 나머지는 끔 — 전압원=단락, 전류원=개방. <b>종속 전원은 끄지 않는다.</b> 전류·전압은 더해도 되지만 <u>전력은 중첩 불가</u>(제곱의 교차항).</p>\n<h4>2. 전원 변환·테브난·노턴</h4>\n<p>\\(V_s\\)+직렬R ↔ \\(I_s{=}V_s/R\\)+병렬R. 테브난: \\(V_T=V_{oc}\\), \\(R_T\\)는 ①전원 끄고 접기(독립 전원만) ②\\(V_{oc}/I_{sc}\\) ③시험 전원법(종속 전원 있으면 ②·③만).</p><div class=\"jsbox\"><span class=\"jt\">정석 4.1</span>테브난 절차의 정석: V_oc는 절점법으로, R_T는 끄고 접기로 — 역할 분담. 개방 단자에 직렬로 붙은 저항은 V_oc에 안 나타나고 R_T에만 더해진다(전류 0이므로).</div><div class=\"jsbox\"><span class=\"jt\">정석 4.2</span>최대 전력 전달: \\(R_L=R_T\\)에서 \\(P_{max}=V_T^2/4R_T\\), 효율 50%. '최대 전력'과 '고효율'은 다른 목표 — 전력계는 정합, 전력망은 R_T≪R_L을 택한다.</div><h4>3. 측정 관점 (기출 1(g)·(j))</h4>\n<p>실물 회로는 V_oc·I_sc 측정으로 등가 완성. 단락이 위험하면 부하 1~2개를 걸어 분압 역산. 소스 저항 ≈ 부하 저항이면 연결 순간 전압이 눈에 띄게 낮아진다(부하 효과) — 전압 변동률(regulation)의 언어로도 나온다.</p>", "derive": [{"title": "최대 전력 전달 정리", "steps": ["\\(P_L=\\left(\\dfrac{V_T}{R_T+R_L}\\right)^2R_L\\) — 변수 R_L 하나의 함수.", "\\(\\dfrac{dP_L}{dR_L}=V_T^2\\dfrac{R_T-R_L}{(R_T+R_L)^3}=0\\) → \\(R_L=R_T\\).", "부호: R_L<R_T에서 +, 지나면 − → 최대 확정.", "\\(P_{max}=V_T^2/4R_T\\), R_T에도 같은 전력 → 효율 50%.", "극한 체크: R_L→0, ∞ 모두 P→0 ✓ · 차원 [V²/Ω]=[W] ✓"]}, {"title": "전원 변환의 성립 조건", "steps": ["테브난형 단자식: \\(v=V_s-iR\\).", "노턴형 단자식: \\(i=I_s-v/R\\) → \\(v=I_sR-iR\\).", "모든 (v,i)에서 일치 조건: \\(V_s=I_sR\\), 기울기 −R 동일.", "외부에서 본 v–i 직선(절편 V_oc, 기울기 −R_T)만 같으면 내부는 무엇이든 등가.", "극한 체크: 개방 v=V_s=I_sR ✓, 단락 i=V_s/R=I_s ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 4-1</span>12 V — 4 Ω — 절점A(—접지 12 Ω), A — 3 Ω — 단자B. 테브난 등가와 정합 최대 전력은?</div><div class=\"xsol\"><b>풀이</b><ol><li>개방 시 3 Ω 전류 0 → V_oc = 분압 12×12/16 = <b>9 V</b>.</li><li>전원 단락 → R_T = 3+(4∥12) = <b>6 Ω</b>.</li><li>P_max = 81/24 = <b>3.375 W</b> (R_L=6 Ω).</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u4-l3-01 · u4-l4-02 · u4-l3-06</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 4-2</span>(중첩) 10 V — 2 Ω — 절점 — 3 Ω — 접지, 전류원 2 A 절점 유입. 절점 전압?</div><div class=\"xsol\"><b>풀이</b><ol><li>I원 개방: 분압 6 V.</li><li>V원 단락: 2×(2∥3) = 2.4 V.</li><li>합 <b>8.4 V</b>. 절점법 검산: (10−v)/2+2=v/3 → 8.4 ✓</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u4-l2-09 · u4-l3-03 · u4-l3-10</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 4-3</span>(측정 기반) 개방 전압 10 V, 20 Ω을 달았더니 8 V. R_T와, 이 전원에서 뽑을 수 있는 최대 전력은?</div><div class=\"xsol\"><b>풀이</b><ol><li>분압 역산: R_T = R_L(V_oc−V_L)/V_L = 20×2/8 = <b>5 Ω</b>.</li><li>P_max = 100/20 = <b>5 W</b> (R_L=5 Ω일 때).</li><li>단락 없이 등가를 완성하는 실전 절차.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u4-l3-04 · u4-l2-05 · u4-l4-06</div></div>"}, "u5": {"concept": "\n<p class=\"easy\"><b>⚡ 한 줄</b> — C는 전압 변화가 전류를(\\(i=C\\,dv/dt\\)), L은 전류 변화가 전압을(\\(v=L\\,di/dt\\)) 만든다. 정현파 정상상태에선 이 미분이 \\(j\\omega\\) 곱이 되어 — 페이저와 임피던스로 저항 회로처럼 풀린다.</p>\n<h4>1. C와 L의 기본기</h4>\n<ul>\n<li>에너지: \\(w_C=\\tfrac12Cv^2\\), \\(w_L=\\tfrac12Li^2\\) — 그래서 \\(v_C, i_L\\)은 <b>불연속 불가</b>(과도 단원 초기조건의 근거).</li>\n<li>DC 정상상태: C=개방, L=단락.</li>\n<li>합성: L은 R과 같은 규칙, <b>C는 반대</b>(병렬=합, 직렬=곱/합). 직렬 C는 전하 공통 → 전압은 C에 반비례.</li>\n</ul><div class=\"jsbox\"><span class=\"jt\">정석 5.1</span>단위 환산 반사신경: kΩ×µF=ms, ωL[Ω], 1/ωC[Ω], mA×kΩ=V. 지수(10⁻⁶·10⁻³) 실수가 이 단원 오답의 절반이다.</div><h4>2. 정현파와 페이저</h4>\n<p>\\(v=V_m\\cos(\\omega t+\\phi)\\) ↔ 페이저 \\(\\mathbf{V}=V_m\\angle\\phi\\) (ω는 떼어 둔다). sin은 cos(−90°)로 통일. 같은 ω끼리만 페이저 연산 가능. 마지막엔 반드시 시간영역 복원(기출 3번 채점 기준).</p>\n<h4>3. 임피던스</h4>\n<p>\\(Z_R=R\\), \\(Z_L=j\\omega L\\)(+90°, ELI: 전압 앞섬), \\(Z_C=1/j\\omega C\\)(−90°, ICE: 전류 앞섬). 직렬·병렬·분압·분류·절점·망로 — <b>저항 회로의 모든 기법이 복소수로 그대로</b> 작동한다.</p><div class=\"jsbox\"><span class=\"jt\">정석 5.2</span>페이저 계산의 정석: 곱셈/나눗셈은 극형식(크기 곱·나눔, 각 합·차), 덧셈/뺄셈은 직교형식(실·허 따로). 변환을 두려워하지 않는 쪽이 이긴다.</div>", "derive": [{"title": "Z_C = 1/jωC 유도", "steps": ["정상상태 가정: \\(v(t)=V_m e^{j\\omega t}\\) (실신호는 실수부) [왜] 미분을 곱셈으로 바꾸려고.", "\\(i=C\\,dv/dt=j\\omega C\\,V_me^{j\\omega t}\\) — 미분이 \\(j\\omega\\) 곱으로.", "\\(Z_C=\\mathbf{V}/\\mathbf{I}=1/(j\\omega C)=-j/(\\omega C)\\) — 각 −90°.", "해석: 전류가 먼저 흘러야 전압이 쌓인다(전류 앞섬).", "극한 체크: ω→0 ⇒ |Z|→∞(DC 개방) ✓, ω→∞ ⇒ 0(고주파 단락) ✓ · 차원: V·s/C=Ω ✓"]}, {"title": "A cosωt + B sinωt 합성", "steps": ["sinωt = cos(ωt−90°) → 페이저: \\(A\\angle 0° + B\\angle(-90°) = A - jB\\).", "크기 \\(\\sqrt{A^2+B^2}\\), 각 \\(-\\tan^{-1}(B/A)\\).", "복원: \\(\\sqrt{A^2+B^2}\\cos(\\omega t - \\tan^{-1}(B/A))\\).", "t=0 값으로 검산: 원식=A, 합성식=크기·cos(−φ)=A ✓.", "극한 체크: B=0이면 그대로 A cos ✓ · A=0이면 B sin ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 5-1</span>(기출 3번형) 25∠0° V, ω=2 rad/s. 직렬 12 Ω + L=6 H 뒤에 6 Ω 병렬. 6 Ω 전압을 시간영역까지.</div><div class=\"xsol\"><b>풀이</b><ol><li>Z_L = jωL = j12 Ω. 분압: \\(\\mathbf{V}_2=25\\cdot\\frac{6}{18+j12}\\).</li><li>분모 = 21.63∠33.7° → \\(\\mathbf{V}_2\\) = <b>6.93∠−33.7° V</b>.</li><li>복원: \\(v_2(t)=6.93\\cos(2t−33.7°)\\) V — ω를 다시 붙이는 것까지가 답.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u5-l4-02 · u5-l3-03 · u5-l2-10</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 5-2</span>C₁=20 µF(직렬)C₂=60 µF를 12 V에 연결. 각 전압은?</div><div class=\"xsol\"><b>풀이</b><ol><li>직렬 C: 전하 공통. C_eq=15 µF → q=180 µC.</li><li>v₁=q/C₁=<b>9 V</b>, v₂=<b>3 V</b> (작은 C에 큰 전압).</li><li>합=12 V ✓ — R 분압과 반대 방향인 것에 주의.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u5-l3-08 · u5-l2-05 · u5-l3-12</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 5-3</span>블랙박스: v=20cos(100t) V에 i=4cos(100t−30°) A. R+L 직렬 모델의 R·L은?</div><div class=\"xsol\"><b>풀이</b><ol><li>|Z|=5 Ω, ∠Z=+30°.</li><li>R=5cos30°=<b>4.33 Ω</b>, X_L=5sin30°=2.5 Ω → L=<b>25 mH</b>.</li><li>전류 뒤짐=유도성 판정과 부호 일치 ✓</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u5-l4-04 · u5-l3-01 · u5-l4-08</div></div>"}, "u6": {"concept": "\n<p class=\"easy\"><b>⚡ 한 줄</b> — 1차 과도는 셋만 구하면 끝: 초기값 \\(x(0^+)\\), 최종값 \\(x(\\infty)\\), 시정수 \\(\\tau\\). 그러면 \\(x(t)=x(\\infty)+[x(0^+)-x(\\infty)]e^{-t/\\tau}\\) — 기출 5번(20점)의 전부다.</p>\n<h4>1. 3종 세트 구하는 법</h4>\n<ol>\n<li><b>초기값</b>: t&lt;0 정상상태 회로(C 개방·L 단락)에서 \\(v_C\\) 또는 \\(i_L\\)을 구하고, 연속성으로 0⁺에 넘긴다. 나머지 변수는 0⁺ 회로를 새로 그려서.</li>\n<li><b>최종값</b>: t→∞ 정상상태 회로에서.</li>\n<li><b>시정수</b>: 소자를 떼고 그 단자에서 본 <b>테브난 저항</b>(전원 끔)으로 \\(\\tau=R_{eq}C\\) 또는 \\(L/R_{eq}\\).</li>\n</ol><div class=\"jsbox\"><span class=\"jt\">정석 6.1</span>스위칭 문제의 정석 4단계: ① t<0 회로 → 초기값 ② t>0 회로에서 R_eq → τ ③ t→∞ 회로 → 최종값 ④ 일반형에 대입 + 스케치. 스위칭 전후 '회로가 달라진다'는 것만 잊지 않으면 된다.</div><h4>2. 수치 감각</h4>\n<p>1τ에 63.2% 진행(남은 36.8%), 2τ 86.5%, 3τ 95.0%, 5τ ≈ 완료. 절반 도달은 τ·ln2≈0.693τ — 초기·최종값이 무엇이든. kΩ×µF=ms.</p>\n<h4>3. 이중 스위칭·펄스 (기말 P2)</h4>\n<p>구간마다 3종 세트를 다시 세팅하고, <b>앞 구간의 끝값이 뒷 구간의 초기값</b>. τ가 구간마다 달라지는 것이 채점 포인트.</p><div class=\"jsbox\"><span class=\"jt\">정석 6.2</span>실험 τ가 이론과 다른 이유(기말 P3(a) 서술 대비): 계측기 입력저항이 병렬로 끼어 R_eq를 바꿈 · 부품 허용오차 · 함수발생기 출력저항(직렬 추가) · 케이블 부유 용량. '어느 방향으로 틀어지는가'까지 말하면 만점.</div>", "derive": [{"title": "RC 방전·충전의 일반해", "steps": ["KCL(방전): \\(C\\dfrac{dv}{dt}+\\dfrac{v}{R}=0\\) [왜] 전원 없는 루프의 전류 보존.", "변수 분리 → \\(\\ln v = -t/RC + K\\) → \\(v=V_0e^{-t/RC}\\), τ=RC 자연 등장.", "충전: \\(C\\dfrac{dv}{dt}+\\dfrac{v-V_s}{R}=0\\) → \\(v=V_s+(V_0-V_s)e^{-t/\\tau}\\) (일반형).", "에너지: 방전 시 R 소산 = ½CV₀² 전량, 충전 시 효율 정확히 50%(R와 무관).", "극한 체크: t=0 ⇒ V₀ ✓, t→∞ ⇒ V_s ✓, R→∞ ⇒ 불변 ✓ · 차원: RC=[s] ✓"]}, {"title": "τ에 테브난 저항이 들어가는 이유", "steps": ["복잡한 선형 회로 + C 하나 = (테브난 등가 V_T, R_T) + C 로 항상 축약 가능 (U4).", "그 등가 회로의 ODE가 \\(R_TC\\,dv/dt + v = V_T\\) → τ=R_TC.", "따라서 '전원 끄고 C에서 본 저항'이 유일하게 옳은 R.", "L도 동일: τ=L/R_T.", "극한 체크: R_T→0(이상 전압원 직결)이면 τ→0, 즉각 추종 ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 6-1</span>(기출 5번형) t<0: 20 V—5 Ω—C(8 F), 전류 0 정상상태. t=0에 전원 분리, C가 [4 Ω 직렬 후 (3 Ω∥6 Ω)] + 전류원 4 A(병렬부 유입)에 연결. v_C(t)는?</div><div class=\"xsol\"><b>풀이</b><ol><li>초기: 전류 0 → 5 Ω 강하 없음 → v_C(0)=<b>20 V</b>.</li><li>τ: 전류원 개방 → R=4+(3∥6)=6 Ω → τ=<b>48 s</b>.</li><li>최종: C 개방 → 4 A가 3∥6=2 Ω에 → v(∞)=<b>8 V</b> (4Ω 전류 0).</li><li>\\(v_C=8+12e^{-t/48}\\) V — 스케치: 20→8 지수 하강.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u6-l4-02 · u6-l3-01 · u6-l3-07</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 6-2</span>(기말 P2형) 15 V—1 kΩ—(C=25 µF ∥ 1 kΩ), t=0 충전 시작(0 V), t=50 ms에 전원 스위치 개방. 전 구간 v_C는?</div><div class=\"xsol\"><b>풀이</b><ol><li>구간1: τ₁=(1k∥1k)·25µ=12.5 ms, 목표 7.5 V → v(50ms)=7.5(1−e⁻⁴)=<b>7.36 V</b>.</li><li>구간2: τ₂=1k·25µ=25 ms(2배!), v=7.36e^{−(t−50ms)/25ms}.</li><li>스케치: 빠른 상승 → 꺾여 느린 하강. τ 변화가 채점 핵심.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u6-l4-03 · u6-l3-14 · u6-l3-02</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 6-3</span>RL: t<0에 12 V—4 Ω—L(2 H) 정상상태, t=0에 전원 끊고 8 Ω로 방전. i(t)와 v_L(0⁺)는?</div><div class=\"xsol\"><b>풀이</b><ol><li>i(0)=12/4=<b>3 A</b> (연속).</li><li>τ=L/R₂=2/8=0.25 s → i=3e^{−4t} A.</li><li>v_L(0⁺)=−3×8=<b>−24 V</b> — 전원(12 V)보다 큰 역전압(유도 킥). 릴레이에 다이오드를 다는 이유.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u6-l4-04 · u6-l3-08 · u6-l3-03</div></div>"}, "u7": {"concept": "\n<p class=\"easy\"><b>⚡ 한 줄</b> — 필터는 임피던스 분압이다: \\(H(j\\omega)=Z_{out}/(Z_{in}+Z_{out})\\). 1차 RC의 모든 것은 \\(\\omega_0=1/RC\\) 하나로 정규화되고, 2차(RLC)는 \\(\\omega_0\\)와 \\(\\zeta\\) 둘로 끝난다.</p>\n<h4>1. 1차 필터 (기출 6번)</h4>\n<ul>\n<li>LPF(출력=C 양단): \\(|H|=1/\\sqrt{1+(\\omega/\\omega_0)^2}\\), \\(\\angle H=-\\tan^{-1}(\\omega/\\omega_0)\\).</li>\n<li>HPF(출력=R 양단): \\(|H|=(\\omega/\\omega_0)/\\sqrt{1+(\\omega/\\omega_0)^2}\\) — 거울상.</li>\n<li>차단점(ω₀): 이득 1/√2(−3 dB, 반전력), 위상 ∓45°.</li>\n</ul><div class=\"jsbox\"><span class=\"jt\">정석 7.1</span>기출 6번 3종 세트: ① 회로 그리기(R 직렬 + C에서 출력=LPF) ② 임피던스 분압으로 H(ω) 유도 ③ 극한 3점(ω→0: 1·0° / ω₀: 0.707·−45° / ω→∞: 0·−90°). 이 셋을 통째로 재현할 수 있으면 15점 안정권.</div><h4>2. 데시벨과 보드 개형</h4>\n<p>dB = 20log₁₀|H| (전압비). 기준점: ×10=+20 dB, ×2≈+6 dB, 1/√2=−3 dB. 1차 LPF 점근선: 통과대역 0 dB, ω₀ 이후 −20 dB/dec — 점근선과 실제의 최대 오차는 ω₀에서 3 dB.</p>\n<h4>3. 2차(직렬 RLC) 기초</h4>\n<p>\\(\\omega_0=1/\\sqrt{LC}\\), \\(\\zeta=(R/2)\\sqrt{C/L}\\). ζ<1 부족감쇠(링잉, \\(\\omega_d=\\omega_0\\sqrt{1-\\zeta^2}\\), 오버슈트 \\(M_p=e^{-\\pi\\zeta/\\sqrt{1-\\zeta^2}}\\)), ζ=1 임계, ζ>1 과감쇠. 임계 저항 \\(R_c=2\\sqrt{L/C}\\).</p><div class=\"jsbox\"><span class=\"jt\">정석 7.2</span>설계의 정석: 차단 ω₀는 '신호 최대'와 '잡음 최소' 사이에 — 보통 신호의 10배 위. 신호 이득과 잡음 감쇠를 <b>둘 다</b> 계산해 트레이드오프를 보여야 설계 문항 만점.</div>", "derive": [{"title": "RC LPF의 H(jω) 완전 유도 (기출 6(b)(c))", "steps": ["임피던스 분압: \\(H=\\dfrac{Z_C}{R+Z_C}=\\dfrac{1/j\\omega C}{R+1/j\\omega C}\\).", "정리: \\(H=\\dfrac{1}{1+j\\omega RC}=\\dfrac{1}{1+j\\omega/\\omega_0}\\), \\(\\omega_0=1/RC\\).", "크기 \\(1/\\sqrt{1+(\\omega/\\omega_0)^2}\\), 위상 \\(-\\tan^{-1}(\\omega/\\omega_0)\\).", "3극한: ω→0 ⇒ 1∠0°(통과) · ω₀ ⇒ 0.707∠−45°(−3dB) · ω→∞ ⇒ 0∠−90°(차단).", "차원 체크: ωRC 무차원 ✓ · 극한이 C 개방/단락 직관과 일치 ✓"]}, {"title": "2차 특성방정식과 감쇠 분류", "steps": ["직렬 RLC KVL: \\(L\\ddot q + R\\dot q + q/C = 0\\) → \\(s^2 + (R/L)s + 1/LC = 0\\).", "표준형 \\(s^2+2\\zeta\\omega_0 s+\\omega_0^2=0\\)과 비교: \\(\\omega_0=1/\\sqrt{LC}\\), \\(2\\zeta\\omega_0=R/L\\) → \\(\\zeta=(R/2)\\sqrt{C/L}\\).", "근: \\(s=-\\zeta\\omega_0\\pm\\omega_0\\sqrt{\\zeta^2-1}\\) — ζ<1이면 복소(진동), ζ>1이면 실근 둘(과감쇠).", "부족감쇠 근 \\(-\\zeta\\omega_0\\pm j\\omega_d\\): 실수부=감쇠 봉투, 허수부=링잉 주파수.", "극한 체크: R=0 ⇒ ζ=0, 무감쇠 진동 ✓ · C→∞ ⇒ ω₀→0(L-R 1차로 퇴화) ✓ · 차원: ζ 무차원 ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 7-1</span>(기출 6 완성형) 신호 최대 ω=2 rad/s, 잡음 ω≳2000 rad/s. C=10 µF로 LPF 설계(차단=신호의 10배).</div><div class=\"xsol\"><b>풀이</b><ol><li>ω₀=20 rad/s → R=1/(ω₀C)=<b>5 kΩ</b>.</li><li>신호: ω/ω₀=0.1 → |H|=0.995 (무손실).</li><li>잡음: ω/ω₀=100 → −40 dB (1/100).</li><li>유도·극한 3점(7.1 정석 박스)까지 쓰면 풀세트.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u7-l4-03 · u7-l3-01 · u7-l4-02</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 7-2</span>RLC: R=40 Ω, L=10 mH, C=2.5 µF의 스텝 응답 성격은?</div><div class=\"xsol\"><b>풀이</b><ol><li>R_c=2√(L/C)=2√4000=<b>126.5 Ω</b> → ζ=40/126.5=<b>0.316</b><1 부족감쇠.</li><li>ω₀=1/√(LC)=6325 rad/s, ω_d=6000 rad/s.</li><li>M_p=e^{−πζ/√(1−ζ²)}=<b>35%</b> 오버슈트 — 스코프에 링잉이 보인다.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u7-l4-05 · u7-l3-05 · u7-l3-14</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 7-3</span>(파형 역산) 스텝 후 링잉: 주기 4 ms, 연속 봉우리 진폭비 0.25. 이 2차계의 ζ는?</div><div class=\"xsol\"><b>풀이</b><ol><li>ω_d=2π/T=1571 rad/s.</li><li>σ=−ln(0.25)/T=347 1/s.</li><li>ζ=σ/√(σ²+ω_d²)=<b>0.216</b> — 파형만으로 파라미터 복원(실험 3).</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u7-l4-08 · u7-l2-12 · u7-l3-11</div></div>"}};
+window.SV_BUILD = {"date": "2026-09-03", "units": 7, "problems": 308, "gate": "PASS 2026-09-03 (N=50/문제)"};
 </script>
 <script>
 (function(){

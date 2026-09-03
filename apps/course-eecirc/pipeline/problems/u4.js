@@ -331,6 +331,94 @@ SV_BANK.push({
       '극한 체크: R_L→0이면 P→0 (전압 없음), R_L→∞이면 P→0 (전류 없음) — 사이 어딘가 최대가 있어야 한다는 직관과 일치 · 차원 체크: [V²/Ω]=[W] ✓'
     ],
     hints:['P_L(R_L)을 쓰고 미분해 0.','끝점 두 극한이 모두 0임을 먼저 보이면 논리가 탄탄해진다.'],
-    expl:'유도 과정 자체가 시험 단골. "몫의 미분에서 분자만 보면 된다"는 요령도 함께.' }
+    expl:'유도 과정 자체가 시험 단골. "몫의 미분에서 분자만 보면 된다"는 요령도 함께.' },
+
+  { id:'u4-l3-11', level:3, type:'num', tags:['3단 전원 변환'], src:'기출 유형',
+    params:{ Is:{min:2,max:4,step:1,unit:'A'}, R1:{min:2,max:4,step:1,unit:'Ω'}, R2:{min:2,max:4,step:1,unit:'Ω'}, R3:{min:2,max:6,step:2,unit:'Ω'}, RL:{min:2,max:6,step:2,unit:'Ω'} },
+    statement:function(p){ return '전류원 '+p.Is+' A ∥ R₁='+p.R1+' Ω → 직렬 R₂='+p.R2+' Ω → 병렬 R₃='+p.R3+' Ω → 부하 R_L='+p.RL+' Ω. 전원 변환을 반복해 부하 전류를 구하라.'; },
+    solve:function(p){
+      var V1=p.Is*p.R1;                    // 테브난 (V1, R1)
+      var Rs=p.R1+p.R2;                    // 직렬 흡수
+      var I2=V1/Rs, Rp=SVH.par(Rs,p.R3);   // 노턴 변환 후 R3 병합
+      var V2=I2*Rp;                        // 다시 테브난
+      var IL=V2/(Rp+p.RL);
+      return { ans:IL, unit:'A', steps:[
+        '노턴→테브난: ('+SVH.fmt(V1)+' V, '+p.R1+' Ω) → R₂ 흡수 → ('+SVH.fmt(V1)+' V, '+SVH.fmt(Rs)+' Ω)',
+        '테브난→노턴: ('+SVH.fmt(I2)+' A, '+SVH.fmt(Rs)+' Ω) → R₃ 병합 → R = '+SVH.fmt(Rp)+' Ω',
+        '다시 테브난 ('+SVH.fmt(V2)+' V, '+SVH.fmt(Rp)+' Ω) → I_L = '+SVH.fmt(IL)+' A' ] }; },
+    hints:['변환↔병합의 리듬을 몸에 붙이는 문제.'] },
+  { id:'u4-l3-12', level:3, type:'num', tags:['중첩과 전력'], src:'기출 유형',
+    params:{ V1:{choices:[6,12],unit:'V'}, V2:{choices:[6,12],unit:'V'}, R1:{min:2,max:4,step:2,unit:'Ω'}, R2:{min:2,max:4,step:2,unit:'Ω'}, RL:{min:2,max:6,step:2,unit:'Ω'} },
+    statement:function(p){ return '두 전압원이 각각 R₁·R₂를 거쳐 부하 R_L='+p.RL+' Ω에 연결(별 모양, 접지 공유). 중첩으로 부하 전류 성분 i′·i″을 구하고, "전력은 (i′)²R+(i″)²R의 합이 아님"을 실제 수치로 보여라. (a) i′ (b) i″ (c) 참 전력 (d) 잘못 더한 값.'; },
+    solve:function(p){
+      var i1=p.V1*1/(p.R1+SVH.par(p.R2,p.RL))*(SVH.par(p.R2,p.RL)/p.RL);
+      // V1만: 전류 분배까지 정확히
+      var Rp1=SVH.par(p.R2,p.RL), it1=p.V1/(p.R1+Rp1), ip1=it1*p.R2/(p.R2+p.RL);
+      var Rp2=SVH.par(p.R1,p.RL), it2=p.V2/(p.R2+Rp2), ip2=it2*p.R1/(p.R1+p.RL);
+      var i=ip1+ip2, P=i*i*p.RL, Pwrong=ip1*ip1*p.RL+ip2*ip2*p.RL;
+      return { ans:{i1:ip1, i2:ip2, P:P, Pw:Pwrong}, unit:{i1:'A', i2:'A', P:'W', Pw:'W'}, steps:[
+        'V₁만: i′ = '+SVH.fmt(ip1)+' A · V₂만: i″ = '+SVH.fmt(ip2)+' A',
+        '참 전력 = (i′+i″)²R_L = '+SVH.fmt(P)+' W',
+        '(i′)²R+(i″)²R = '+SVH.fmt(Pwrong)+' W ≠ 참값 — 교차항 2i′i″R_L이 빠졌기 때문',
+        '결론: 전류·전압은 중첩 가능, 전력은 불가(비선형) — 기출 개념 문항 단골' ] }; },
+    hints:['전력은 제곱이라 교차항이 생긴다.'] },
+  { id:'u4-l3-13', level:3, type:'num', tags:['비선형 부하+테브난'], src:'창작 문제(검산됨)',
+    params:{ VT:{choices:[6,9],unit:'V'}, RT:{choices:[1,2],unit:'kΩ'}, k:{choices:[0.5,1],unit:'mA/V²'} },
+    statement:function(p){ return '테브난 등가(V_T='+p.VT+' V, R_T='+p.RT+' kΩ)에 비선형 소자 \\(i='+p.k+'v^2\\) [mA, V]가 연결됐다. 소자 전압(동작점)을 구하라.'; },
+    solve:function(p){
+      var a=p.RT*p.k, b=1, c=-p.VT;
+      var v=(-b+Math.sqrt(b*b-4*a*c))/(2*a);
+      return { ans:v, unit:'V', steps:[
+        '부하선: \\(V_T = R_T i + v = '+SVH.fmt(a)+'v^2+v\\)',
+        '양의 근: v = '+SVH.fmt(v)+' V (i = '+SVH.fmt(p.k*v*v)+' mA)',
+        '(테브난의 진짜 위력: 비선형 부하도 "직선 하나 vs 특성곡선"으로 단순화된다)' ] }; },
+    hints:['테브난 후 KVL = 이차방정식.'] },
+  { id:'u4-l3-14', level:3, type:'num', tags:['전달 전력표'], src:'창작 문제(검산됨)',
+    params:{ VT:{choices:[12,20],unit:'V'}, RT:{choices:[4,6],unit:'Ω'} },
+    statement:function(p){ return 'V_T='+p.VT+' V, R_T='+p.RT+' Ω에서 R_L = R_T/2, R_T, 2R_T 세 경우의 부하 전력을 구해 정합이 최대임을 확인하라.'; },
+    solve:function(p){
+      function P(RL){ var i=p.VT/(p.RT+RL); return i*i*RL; }
+      return { ans:{Ph:P(p.RT/2), Pm:P(p.RT), Pd:P(2*p.RT)}, unit:{Ph:'W', Pm:'W', Pd:'W'}, steps:[
+        'R_T/2: '+SVH.fmt(P(p.RT/2))+' W · R_T: '+SVH.fmt(P(p.RT))+' W · 2R_T: '+SVH.fmt(P(2*p.RT))+' W',
+        '정합(R_T)이 최대 — 양옆이 대칭적으로 낮다(±비율이 같으면 같은 전력: ½배와 2배가 동일!)',
+        '(U4-l4-04의 "두 근의 곱=R_T²" 대칭성과 같은 이야기)' ] }; },
+    hints:['셋 다 같은 식에 대입.'] },
+  { id:'u4-l4-06', level:4, type:'num', tags:['2부하 측정 테브난'], src:'기출 유형',
+    params:{ R1:{choices:[10,20],unit:'Ω'}, V1:{choices:[8,10],unit:'V'}, R2:{choices:[40,60],unit:'Ω'}, },
+    statement:function(p){ return '미지 선형 회로에 R₁='+p.R1+' Ω를 달면 단자 전압 '+p.V1+' V, R₂='+p.R2+' Ω를 달면 '+SVH.fmt(p.V1*1.5)+' V다. (a) V_T (b) R_T를 구하라. (단락 불가 상황의 실전 측정법)'; },
+    solve:function(p){
+      var V2=p.V1*1.5;
+      // V1 = VT R1/(RT+R1), V2 = VT R2/(RT+R2) → 연립
+      var RT=(V2-p.V1)/(p.V1/p.R1-V2/p.R2);
+      var VT=p.V1*(RT+p.R1)/p.R1;
+      return { ans:{VT:VT, RT:RT}, unit:{VT:'V', RT:'Ω'}, steps:[
+        '분압식 2개: V₁=V_TR₁/(R_T+R₁), V₂=V_TR₂/(R_T+R₂)',
+        '나눠서 V_T 소거 → R_T = (V₂−V₁)/(V₁/R₁−V₂/R₂) = '+SVH.fmt(RT)+' Ω',
+        'V_T = V₁(R_T+R₁)/R₁ = '+SVH.fmt(VT)+' V — 검산: R₂ 대입 시 '+SVH.fmt(VT*p.R2/(RT+p.R2))+' = '+SVH.fmt(V2)+' ✓' ] }; },
+    hints:['미지수 2(V_T,R_T) = 측정 2회.','비를 만들면 V_T가 소거된다.'] },
+  { id:'u4-l4-07', level:4, type:'num', tags:['종속 전원 시험전원법'], src:'기출 유형',
+    params:{ R1:{min:2,max:4,step:1,unit:'Ω'}, R2:{min:2,max:4,step:1,unit:'Ω'}, b:{choices:[2,3]} },
+    statement:function(p){ return '독립 전원이 없는 2단자 회로: 단자→R₁='+p.R1+' Ω→절점A, A—접지 R₂='+p.R2+' Ω, 그리고 CCCS '+p.b+'·i₁(A에서 접지로, i₁은 R₁의 단자→A 전류). 시험 전원 1 A를 단자에 넣어 R_T를 구하라.'; },
+    solve:function(p){
+      // it=1 들어가면 i1=1. KCL@A: i1 + ... = vA/R2 + b i1 → vA = R2(1-b)·1? 방향 주의: CCCS가 A에서 접지로 => 나감
+      // @A: i1 = vA/R2 + b*i1 → vA = R2 i1 (1-b)
+      var vA=p.R2*(1-p.b);
+      var vt=1*p.R1+vA;
+      return { ans:vt, unit:'Ω', steps:[
+        'i_t=1 A → i₁=1 A. KCL@A: \\(i_1 = v_A/R_2 + '+p.b+'i_1\\) → v_A = R₂(1−'+p.b+') = '+SVH.fmt(vA)+' V',
+        'v_t = i₁R₁ + v_A = '+SVH.fmt(vt)+' V → R_T = v_t/i_t = '+SVH.fmt(vt)+' Ω',
+        (vt<0?'R_T가 음수! — 종속 전원이 에너지를 내놓는 능동 회로(발진기·부성저항의 원리)':'양수 확인') ] }; },
+    hints:['1 A를 넣고 단자 전압을 계산.','음수가 나와도 당황하지 말 것 — 해석이 있다.'] },
+  { id:'u4-l4-08', level:4, type:'num', tags:['전압 변동률 설계'], src:'기출 유형',
+    params:{ VT:{choices:[12,24],unit:'V'}, RT:{choices:[0.5,1],unit:'Ω'}, RLmin:{choices:[5,10],unit:'Ω'} },
+    statement:function(p){ return '전원(V_T='+p.VT+' V, R_T='+p.RT+' Ω)에 부하가 R_L='+p.RLmin+' Ω(최대 부하)에서 ∞(무부하)까지 변한다. (a) 무부하 전압 (b) 최대 부하 전압 (c) 전압 변동률 = (V_무부하−V_부하)/V_부하 ×100을 구하라.'; },
+    solve:function(p){
+      var Vnl=p.VT, Vfl=p.VT*p.RLmin/(p.RT+p.RLmin);
+      var reg=(Vnl-Vfl)/Vfl*100;
+      return { ans:{Vnl:Vnl, Vfl:Vfl, reg:reg}, unit:{Vnl:'V', Vfl:'V', reg:'%'}, steps:[
+        '무부하(R_L→∞): V = V_T = '+SVH.fmt(Vnl)+' V',
+        '최대 부하: 분압 '+SVH.fmt(Vfl)+' V',
+        '변동률 = '+SVH.fmt(reg)+' % — R_T가 작을수록 "단단한" 전원 (기출 1(j)의 설계 언어)' ] }; },
+    hints:['변동률 정의식 그대로.','좋은 전원 = 작은 R_T.'] },
   ]
 });

@@ -22,6 +22,19 @@
       "pipeline": "개념기반",
       "items": 15,
       "added": "2026-09-02"
+    },
+    {
+      "id": "course-eecirc",
+      "title": "전전개 문제은행",
+      "titleEn": "Intro. Electrical Engineering Drill",
+      "icon": "⚡",
+      "path": "apps/course-eecirc/",
+      "desc": "중간범위 4단원 × 40문제(전 문제 검산 게이트 통과) — 개념·유도·예제·리롤 문제·오답노트·모의고사",
+      "pipeline": "문풀기반",
+      "category": "course",
+      "items": 12,
+      "exams": [],
+      "added": "2026-09-03"
     }
   ]
 }

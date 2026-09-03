@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>전전개 문제은행</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'},
+ startup:{typeset:false, pageReady:function(){return MathJax.startup.defaultPageReady().then(function(){
+   (window.__mjq||[]).forEach(function(el){MathJax.typesetPromise([el]).catch(function(){});});
+   window.__mjready=true;});}}};
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+:root{
+  --bg:#FBFAF8; --surf:#FFFFFF; --surf2:#F4F1EC; --side:#F6F3EE;
+  --ink:#1C1A18; --ink2:#57514B; --ink3:#8A8177;
+  --line:#E4DFD7; --line2:#D2CBC1;
+  --acc:#B4491C; --acc-bg:#FBEDE6;
+  --ok:#3E7A46; --ok-bg:#E8F2E9;
+  --warn:#8A6410; --warn-bg:#F8F0DC;
+  --bad:#A33B3B; --bad-bg:#F8E7E7;
+  --info:#5B6B75; --info-bg:#ECEFF1;
+  --code:#F1EDE7;
+  --shadow:0 1px 2px rgba(28,26,24,.05),0 2px 10px rgba(28,26,24,.04);
+}
+@media (prefers-color-scheme:dark){
+ :root:not([data-theme="light"]){
+  --bg:#141210; --surf:#1D1A17; --surf2:#252119; --side:#181512;
+  --ink:#EFEBE4; --ink2:#B3ABA1; --ink3:#847B71;
+  --line:#332E28; --line2:#453E36;
+  --acc:#E4763F; --acc-bg:#332016;
+  --ok:#7FBF88; --ok-bg:#1B2A1D;
+  --warn:#D6A54D; --warn-bg:#302614;
+  --bad:#D98080; --bad-bg:#331B1B;
+  --info:#9FB2BC; --info-bg:#20262A;
+  --code:#26221C;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 2px 12px rgba(0,0,0,.25);
+ }
+}
+:root[data-theme="dark"]{
+  --bg:#141210; --surf:#1D1A17; --surf2:#252119; --side:#181512;
+  --ink:#EFEBE4; --ink2:#B3ABA1; --ink3:#847B71;
+  --line:#332E28; --line2:#453E36;
+  --acc:#E4763F; --acc-bg:#332016;
+  --ok:#7FBF88; --ok-bg:#1B2A1D;
+  --warn:#D6A54D; --warn-bg:#302614;
+  --bad:#D98080; --bad-bg:#331B1B;
+  --info:#9FB2BC; --info-bg:#20262A;
+  --code:#26221C;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 2px 12px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font-family:"IBM Plex Sans KR",system-ui,-apple-system,"Malgun Gothic",sans-serif;
+ line-height:1.68;font-size:15px;-webkit-font-smoothing:antialiased;
+ word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--acc);text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:3px}
+mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%}
+.layout{display:flex;min-height:100vh}
+.side{width:250px;flex:0 0 250px;background:var(--side);border-right:1px solid var(--line);
+ padding:22px 18px;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.brand a{color:var(--ink);text-decoration:none;font-family:Newsreader,Georgia,serif;font-size:19px;letter-spacing:-.01em}
+.brand b{color:var(--acc);font-weight:600}
+.brand span{display:block;font-size:10.5px;color:var(--ink3);font-family:"IBM Plex Mono",monospace;margin-top:2px}
+.prog-bar{height:5px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:4px}
+.prog-bar i{display:block;height:100%;width:0;background:var(--acc);border-radius:99px;transition:width .3s}
+.prog span{font-size:10.5px;color:var(--ink3);font-family:"IBM Plex Mono",monospace}
+.side nav{display:flex;flex-direction:column;gap:2px}
+.ng{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-family:"IBM Plex Mono",monospace;margin:10px 0 4px;padding-left:10px}
+.side nav a{display:block;padding:7px 10px;border-radius:6px;color:var(--ink2);text-decoration:none;font-size:13.5px}
+.side nav a:hover{background:var(--surf2)}
+.side nav a.on{background:var(--acc-bg);color:var(--acc);font-weight:600}
+.side nav a .nv{float:right;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink3)}
+.foot-side{margin-top:auto;font-size:10.5px;color:var(--ink3);line-height:1.5;font-family:"IBM Plex Mono",monospace}
+.foot-side a{color:var(--ink3)}
+.main{flex:1;min-width:0;padding:clamp(22px,4vw,48px) clamp(16px,4.5vw,56px) 120px;display:flex;justify-content:center}
+.view{width:100%;max-width:820px}
+h1{font-family:Newsreader,"Gowun Batang",Georgia,serif;font-weight:600;font-size:clamp(25px,4vw,34px);line-height:1.16;letter-spacing:-.015em;margin:6px 0 12px;text-wrap:balance}
+h3{font-family:Newsreader,Georgia,serif;font-size:20px;font-weight:600;margin:30px 0 10px;letter-spacing:-.01em}
+h4{font-size:15.5px;font-weight:600;margin:22px 0 8px}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 13px;padding-left:22px}
+li{margin-bottom:6px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--acc);font-weight:500}
+.lede{font-size:15.5px;color:var(--ink2)}
+.easy{background:var(--acc-bg);border-radius:8px;padding:13px 16px;margin:0 0 14px}
+.easy b{color:var(--acc)}
+.note-line{font-size:13.5px;color:var(--ink2);background:var(--surf2);border-radius:6px;padding:10px 14px;margin:0 0 12px}
+.src{font-size:12px;color:var(--ink3);font-weight:400}
+/* unit cards on home */
+.ucards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin:16px 0}
+.ucard{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:16px 17px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:7px;color:var(--ink);text-decoration:none}
+.ucard:hover{border-color:var(--acc)}
+.uc-no{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--acc);font-weight:600}
+.uc-ti{font-family:Newsreader,Georgia,serif;font-size:18px;font-weight:600}
+.uc-scope{font-size:12.5px;color:var(--ink2);line-height:1.55}
+.uc-stat{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink3)}
+/* collapsible layers */
+details.layer{border:1px solid var(--line);border-radius:9px;background:var(--surf);margin-bottom:10px;box-shadow:var(--shadow)}
+details.layer>summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:15px;list-style:none;display:flex;align-items:center;gap:8px}
+details.layer>summary::-webkit-details-marker{display:none}
+details.layer>summary .lb{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;padding:2px 8px;border-radius:99px;background:var(--info-bg);color:var(--info)}
+details.layer>summary .arrow{margin-left:auto;color:var(--ink3);transition:transform .2s}
+details.layer[open]>summary .arrow{transform:rotate(90deg)}
+details.layer>.body{padding:4px 18px 14px;border-top:1px solid var(--line)}
+details.dstep{border:1px solid var(--line);border-radius:7px;margin:0 0 8px;background:var(--surf2)}
+details.dstep>summary{cursor:pointer;padding:9px 13px;font-weight:500;font-size:13.5px}
+details.dstep ol{margin:4px 0 10px;padding:0 14px 0 34px}
+details.dstep li{margin-bottom:7px;font-size:13.5px}
+.readrow{margin:8px 0 2px;text-align:right}
+.readbtn{font:inherit;font-size:12.5px;min-height:40px;padding:7px 15px;border-radius:99px;border:1px solid var(--line2);background:var(--surf);color:var(--ink2);cursor:pointer}
+.readbtn[aria-pressed="true"]{background:var(--ok-bg);color:var(--ok);border-color:var(--ok)}
+/* drill */
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.fchip{font:inherit;font-size:12.5px;min-height:36px;padding:5px 14px;border-radius:99px;border:1px solid var(--line2);background:var(--surf);color:var(--ink2);cursor:pointer}
+.fchip.on{background:var(--acc-bg);color:var(--acc);border-color:var(--acc);font-weight:600}
+.pcard{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:15px 17px;margin-bottom:12px;box-shadow:var(--shadow)}
+.pc-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:8px}
+.lv{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:99px}
+.lv1{background:var(--ok-bg);color:var(--ok)} .lv2{background:var(--info-bg);color:var(--info)}
+.lv3{background:var(--warn-bg);color:var(--warn)} .lv4{background:var(--acc-bg);color:var(--acc)}
+.tagc{font-size:11px;color:var(--ink3);font-family:"IBM Plex Mono",monospace}
+.srcb{font-size:10px;color:var(--ink3);border:1px solid var(--line);border-radius:99px;padding:1px 8px}
+.sdot{width:9px;height:9px;border-radius:99px;background:var(--line2);margin-left:auto;flex:0 0 auto}
+.sdot.correct{background:var(--ok)} .sdot.partial{background:var(--warn)} .sdot.wrong{background:var(--bad)}
+.pc-st{font-size:14.5px;margin-bottom:10px}
+.pc-btns{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.pbtn{font:inherit;font-size:12.5px;min-height:40px;padding:7px 14px;border-radius:8px;border:1px solid var(--line2);background:var(--surf2);color:var(--ink2);cursor:pointer}
+.pbtn:hover{border-color:var(--acc);color:var(--acc)}
+.pbtn.grade-c{border-color:var(--ok);color:var(--ok)}
+.pbtn.grade-p{border-color:var(--warn);color:var(--warn)}
+.pbtn.grade-w{border-color:var(--bad);color:var(--bad)}
+.pbtn.grade-c.sel{background:var(--ok-bg)} .pbtn.grade-p.sel{background:var(--warn-bg)} .pbtn.grade-w.sel{background:var(--bad-bg)}
+.hintbox{background:var(--warn-bg);border-radius:7px;padding:9px 13px;font-size:13px;margin:8px 0 0}
+.solbox{background:var(--surf2);border-radius:8px;padding:11px 14px;margin:10px 0 0}
+.solbox ol{margin:0;padding-left:20px}
+.solbox li{font-size:13.5px;margin-bottom:7px}
+.ansline{margin-top:8px;font-weight:600;color:var(--acc);font-size:14px}
+.choices{display:flex;flex-direction:column;gap:7px;margin:4px 0 2px}
+.choice{font:inherit;text-align:left;font-size:13.5px;min-height:44px;padding:9px 13px;border-radius:8px;border:1px solid var(--line2);background:var(--surf);color:var(--ink);cursor:pointer}
+.choice:hover{border-color:var(--acc)}
+.choice.right{border-color:var(--ok);background:var(--ok-bg)}
+.choice.wrongpick{border-color:var(--bad);background:var(--bad-bg)}
+.expl{background:var(--info-bg);border-radius:7px;padding:9px 13px;font-size:13px;margin-top:8px;color:var(--ink2)}
+/* exam */
+.exam-setup .grp{margin-bottom:14px}
+.exam-setup label.ck{display:inline-flex;align-items:center;gap:6px;margin:0 12px 6px 0;font-size:13.5px;min-height:36px}
+.exam-setup input[type=checkbox]{accent-color:var(--acc);width:17px;height:17px}
+.exam-setup select{font:inherit;font-size:14px;padding:8px 12px;border:1px solid var(--line2);border-radius:8px;background:var(--surf);color:var(--ink)}
+.bigbtn{font:inherit;font-size:14.5px;font-weight:600;min-height:46px;padding:10px 22px;border-radius:99px;border:none;background:var(--acc);color:#fff;cursor:pointer}
+.bigbtn:disabled{opacity:.5;cursor:default}
+.exam-top{display:flex;align-items:center;gap:10px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink3);margin-bottom:12px}
+.exam-top .bar{flex:1;height:5px;background:var(--line);border-radius:99px;overflow:hidden}
+.exam-top .bar i{display:block;height:100%;background:var(--acc)}
+.report{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:18px 20px;box-shadow:var(--shadow)}
+.report .score{font-family:Newsreader,Georgia,serif;font-size:34px;font-weight:600;color:var(--acc)}
+table{border-collapse:collapse;width:100%;margin:10px 0 14px;font-size:13px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left}
+th{background:var(--surf2);white-space:nowrap}
+.empty{border:1px dashed var(--line2);border-radius:10px;padding:24px;color:var(--ink3);font-size:13.5px;text-align:center}
+/* mobile */
+.tabbar{display:none}
+#tb-sheet{display:none}
+@media(max-width:960px){
+ body{font-size:16px}
+ input,textarea,select{font-size:16px}
+ .layout{flex-direction:column}
+ .side{width:100%;flex:none;height:auto;position:static;border-right:none;border-bottom:1px solid var(--line);
+  padding:12px 16px;flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap}
+ .side nav,.ng,.foot-side{display:none}
+ .side .prog{flex:1;min-width:110px}
+ .main{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
+ .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;background:var(--side);border-top:1px solid var(--line);
+  padding:4px 4px calc(4px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.06)}
+ .tabbar a,.tabbar button{flex:1;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font:inherit;font-size:16px;line-height:1;background:none;border:none;border-radius:8px;color:var(--ink2);text-decoration:none;cursor:pointer;padding:5px 2px}
+ .tabbar a span,.tabbar button span{font-size:10.5px;font-family:"IBM Plex Mono",monospace}
+ .tabbar a.on{color:var(--acc);background:var(--acc-bg)}
+ #tb-sheet{position:fixed;right:10px;bottom:calc(64px + env(safe-area-inset-bottom));z-index:51;background:var(--surf);
+  border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:8px;display:flex;flex-direction:column;min-width:190px}
+ #tb-sheet[hidden]{display:none!important}
+ #tb-sheet a{display:flex;align-items:center;padding:11px 14px;min-height:44px;border-radius:8px;color:var(--ink2);text-decoration:none;font-size:14.5px}
+ #tb-sheet a:active{background:var(--surf2)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="side">
+  <div class="brand"><a href="#home"><b>전전개</b> 문제은행</a><span>Rizzoni · 중간범위 C0 · [[BUILD_DATE]]</span></div>
+  <div class="prog"><div class="prog-bar"><i id="pbar"></i></div><span id="ptxt"></span></div>
+  <nav id="sidenav"></nav>
+  <div class="foot-side">전 문제 검산 게이트 통과분만 탑재<br><a href="../../">← Study Vault 허브</a></div>
+</aside>
+<main class="main"><div class="view" id="view"></div></main>
+</div>
+<nav class="tabbar" aria-label="하단 탭">
+<a href="../../">🏠<span>허브</span></a>
+<a href="#home" data-tv="home">📚<span>홈</span></a>
+<a href="#wrong" data-tv="wrong">🔁<span>오답</span></a>
+<a href="#exam" data-tv="exam">📝<span>모의고사</span></a>
+<button id="tb-more" type="button">☰<span>단원</span></button>
+</nav>
+<div id="tb-sheet" hidden></div>
+
+[[BANK_JS]]
+<script src="../../shared/progress.js"></script>
+<script>
+window.SV_CONTENT = [[CONTENT_JSON]];
+window.SV_BUILD = [[BUILD_INFO]];
+</script>
+<script>
+(function(){
+'use strict';
+var APP='course-eecirc', VP=Vault.progress(APP), VD=Vault.drill(APP), VM=Vault.meta(APP);
+var UNITS=SV_BANK, BYID={}, ALL=[];
+UNITS.forEach(function(u){ u.problems.forEach(function(p){ p._unit=u; BYID[p.id]=p; ALL.push(p); }); });
+var LAYERS=['concept','derive','worked'], LAYER_KO={concept:'개념',derive:'수식·유도',worked:'풀이된 예제'};
+var $=function(s,el){ return (el||document).querySelector(s); };
+var esc=function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); };
+function typeset(el){
+  if(window.MathJax&&window.__mjready){ MathJax.typesetPromise([el]).catch(function(){}); }
+  else { (window.__mjq=window.__mjq||[]).push(el); }
+}
+
+/* ---------- 파라미터 추출/리롤 (러너와 동일 규칙) ---------- */
+function draw(spec){ 
+  if(spec.choices) return spec.choices[Math.floor(Math.random()*spec.choices.length)];
+  var steps=Math.round((spec.max-spec.min)/spec.step);
+  return spec.min+spec.step*Math.floor(Math.random()*(steps+1));
+}
+function sample(prob){
+  for(var t=0;t<500;t++){
+    var p={}; for(var k in prob.params) p[k]=draw(prob.params[k]);
+    if(!prob.constraint||prob.constraint(p)) return p;
+  }
+  return null;
+}
+var CUR={}; // 문제별 현재 파라미터
+function statementOf(prob){
+  if(!prob.params) return (typeof prob.statement==='function')?prob.statement({}):prob.statement;
+  if(!CUR[prob.id]) CUR[prob.id]=sample(prob);
+  return prob.statement(CUR[prob.id]);
+}
+function ansText(r){
+  if(r==null) return '';
+  var a=r.ans, u=r.unit;
+  if(typeof a==='number') return SVH.fmt(a)+' '+(u||'');
+  var parts=[]; for(var k in a){ parts.push(k+' = '+SVH.fmt(a[k])+' '+((u&&u[k])||'')); }
+  return parts.join(' · ');
+}
+
+/* ---------- 진도 ---------- */
+function readItems(){ var ids=[]; UNITS.forEach(function(u){ LAYERS.forEach(function(l){ ids.push(u.id+'-'+l); }); }); return ids; }
+function refreshProg(){
+  var ids=readItems(), n=0; ids.forEach(function(id){ if(VP.get(id)) n++; });
+  $('#pbar').style.width=Math.round(n/ids.length*100)+'%';
+  $('#ptxt').textContent='읽음 '+n+' / '+ids.length+' · 문제 '+VD.counts().total+'/'+ALL.length;
+  document.querySelectorAll('.readbtn[data-read]').forEach(function(b){
+    var on=VP.get(b.getAttribute('data-read'));
+    b.setAttribute('aria-pressed',on?'true':'false');
+    b.textContent=on?'✓ 읽음':'읽음으로 표시';
+  });
+  var wc=wrongList().length, badge=$('#nav-wrong .nv'); if(badge) badge.textContent=wc||'';
+}
+function wrongList(){
+  var all=VD.all(), ids=[];
+  for(var k in all){ if((all[k]==='wrong'||all[k]==='partial')&&BYID[k]) ids.push(k); }
+  return ids;
+}
+
+/* ---------- 문제 카드 ---------- */
+function grade(prob, status, card){
+  VD.set(prob.id, status);
+  card.querySelectorAll('.pbtn.sel').forEach(function(b){ b.classList.remove('sel'); });
+  var btn=card.querySelector('.pbtn.grade-'+status[0]); if(btn) btn.classList.add('sel');
+  var dot=card.querySelector('.sdot'); if(dot){ dot.className='sdot '+status; }
+  refreshProg();
+  if(EXAM.running) examAnswered(prob.id, status);
+}
+function renderProblem(prob){
+  var card=document.createElement('article'); card.className='pcard'; card.setAttribute('data-pid',prob.id);
+  var st=VD.get(prob.id);
+  var srcb=prob.src?'<span class="srcb">'+esc(prob.src)+'</span>':'';
+  card.innerHTML='<div class="pc-head"><span class="lv lv'+prob.level+'">L'+prob.level+'</span>'+
+    '<span class="tagc">'+esc(prob.id)+' · '+esc((prob.tags||[]).join('·'))+'</span>'+srcb+
+    '<span class="sdot'+(st?' '+st:'')+'"></span></div>'+
+    '<div class="pc-st"></div><div class="pc-body"></div><div class="pc-btns"></div>';
+  var stEl=$('.pc-st',card), body=$('.pc-body',card), btns=$('.pc-btns',card);
+  stEl.innerHTML=statementOf(prob);
+
+  function addBtn(label, cls, fn){
+    var b=document.createElement('button'); b.type='button'; b.className='pbtn'+(cls?' '+cls:''); b.textContent=label;
+    b.addEventListener('click',fn); btns.appendChild(b); return b;
+  }
+  function gradeBtns(){
+    addBtn('맞음 ✓','grade-c',function(){ grade(prob,'correct',card); });
+    addBtn('부분 △','grade-p',function(){ grade(prob,'partial',card); });
+    addBtn('틀림 ✗','grade-w',function(){ grade(prob,'wrong',card); });
+    if(st){ var b=card.querySelector('.pbtn.grade-'+st[0]); if(b) b.classList.add('sel'); }
+  }
+
+  if(prob.type==='mc'||prob.type==='tf'){
+    var choices = prob.type==='tf' ? ['참 (O)','거짓 (X)'] : prob.choices;
+    var correctIdx = prob.type==='tf' ? (prob.answer?0:1) : prob.answer;
+    var wrap=document.createElement('div'); wrap.className='choices';
+    choices.forEach(function(c,i){
+      var b=document.createElement('button'); b.type='button'; b.className='choice'; b.innerHTML=c;
+      b.addEventListener('click',function(){
+        if(card.__done) return; card.__done=true;
+        wrap.children[correctIdx].classList.add('right');
+        if(i!==correctIdx) b.classList.add('wrongpick');
+        var ex=document.createElement('div'); ex.className='expl'; ex.innerHTML='<b>해설</b> — '+prob.expl;
+        body.appendChild(ex); typeset(ex);
+        grade(prob, i===correctIdx?'correct':'wrong', card);
+      });
+      wrap.appendChild(b);
+    });
+    body.appendChild(wrap);
+  } else {
+    var hintIdx=0, hb=null;
+    if(prob.hints&&prob.hints.length){
+      addBtn('💡 힌트','',function(){
+        if(hintIdx>=prob.hints.length) return;
+        if(!hb){ hb=document.createElement('div'); hb.className='hintbox'; body.appendChild(hb); }
+        var d=document.createElement('div'); d.innerHTML='힌트 '+(hintIdx+1)+'. '+prob.hints[hintIdx];
+        hb.appendChild(d); typeset(d); hintIdx++;
+        this.textContent = hintIdx>=prob.hints.length ? '힌트 끝' : '💡 힌트 '+(hintIdx+1);
+      });
+    }
+    var solBtn=addBtn('풀이 보기','',function(){
+      if(card.__sol){ card.__sol.hidden=!card.__sol.hidden; this.textContent=card.__sol.hidden?'풀이 보기':'풀이 닫기'; return; }
+      var box=document.createElement('div'); box.className='solbox';
+      var steps, aline='';
+      if(prob.type==='derive'){ steps=prob.steps; }
+      else{
+        var r=prob.solve(prob.params?CUR[prob.id]:{});
+        steps=r.steps; aline='<div class="ansline">답: '+esc(ansText(r))+'</div>';
+      }
+      box.innerHTML='<ol>'+steps.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ol>'+aline+
+        (prob.expl?'<div class="expl">'+prob.expl+'</div>':'');
+      body.appendChild(box); typeset(box);
+      card.__sol=box; this.textContent='풀이 닫기';
+      if(!card.__graded){ card.__graded=true; gradeBtns(); }
+    });
+    if(prob.params){
+      addBtn('🎲 새 숫자로','',function(){
+        CUR[prob.id]=sample(prob);
+        stEl.innerHTML=statementOf(prob); typeset(stEl);
+        if(card.__sol){ card.__sol.remove(); card.__sol=null; solBtn.textContent='풀이 보기'; }
+        if(hb){ hb.remove(); hb=null; hintIdx=0; }
+      });
+    }
+    if(st&&!card.__graded){ card.__graded=true; gradeBtns(); }
+  }
+  return card;
+}
+
+/* ---------- 뷰 ---------- */
+var view=$('#view');
+function setView(html){ view.innerHTML=html; }
+function renderHome(){
+  var dc=VD.counts();
+  var rate=dc.total?Math.round(dc.correct/dc.total*100):null;
+  setView('<div class="eyebrow">Introduction to Electrical Engineering · 중간범위</div>'+
+    '<h1>전전개 문제은행</h1>'+
+    '<p class="lede">개념 → 유도 → 예제 → 4단계 문제(L1~L4). 전 문제가 검산 게이트(sympy 독립 재계산 대조)를 통과했고, 계산형 문제는 <b>🎲 새 숫자로</b>를 눌러 무한 반복할 수 있다.</p>'+
+    '<p class="note-line">현황 — 풀어본 문제 '+dc.total+' / '+ALL.length+(rate!==null?(' · 정답률 '+rate+'%'):'')+
+    ' · <a href="#wrong">오답노트 '+wrongList().length+'문제</a> · 빌드 '+SV_BUILD.date+' (게이트 '+SV_BUILD.gate+')</p>'+
+    '<div class="ucards" id="ucards"></div>'+
+    '<h3>모드</h3><div class="ucards">'+
+    '<a class="ucard" href="#exam"><span class="uc-no">MOCK EXAM</span><span class="uc-ti">📝 모의고사</span><span class="uc-scope">범위·난이도·문항수를 골라 랜덤 출제 — 매번 새 수치, 종료 리포트 제공.</span></a>'+
+    '<a class="ucard" href="#wrong"><span class="uc-no">RETRY QUEUE</span><span class="uc-ti">🔁 오답노트</span><span class="uc-scope">틀림·부분 문제만 모아 재도전. 맞음으로 바꾸면 큐에서 빠진다.</span></a></div>');
+  var uc=$('#ucards');
+  UNITS.forEach(function(u){
+    var solved=0, ok=0;
+    u.problems.forEach(function(p){ var s=VD.get(p.id); if(s){solved++; if(s==='correct')ok++;} });
+    var reads=LAYERS.filter(function(l){return VP.get(u.id+'-'+l);}).length;
+    var a=document.createElement('a'); a.className='ucard'; a.href='#'+u.id;
+    a.innerHTML='<span class="uc-no">UNIT '+u.no+'</span><span class="uc-ti">'+esc(u.title)+'</span>'+
+      '<span class="uc-scope">'+esc(u.scope)+'</span>'+
+      '<span class="uc-stat">읽음 '+reads+'/3 · 문제 '+solved+'/'+u.problems.length+(solved?' · 정답 '+ok:'')+'</span>';
+    uc.appendChild(a);
+  });
+  typeset(view);
+}
+function renderUnit(u){
+  var c=SV_CONTENT[u.id]||{};
+  setView('<div class="eyebrow">UNIT '+u.no+' / '+UNITS.length+'</div><h1>'+esc(u.title)+'</h1>'+
+    '<p class="lede">'+esc(u.scope)+'</p><div id="layers"></div>'+
+    '<h3>문제 세트 <span class="src">L1 개념확인 → L4 시험급 · '+u.problems.length+'문제</span></h3>'+
+    '<div class="filters" id="filters"></div><div id="plist"></div>');
+  var layers=$('#layers');
+  LAYERS.forEach(function(l){
+    var d=document.createElement('details'); d.className='layer'; if(l==='concept') d.open=true;
+    var inner='';
+    if(l==='derive'){
+      (c.derive||[]).forEach(function(dv){
+        inner+='<details class="dstep"><summary>'+esc(dv.title)+'</summary><ol>'+
+          dv.steps.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ol></details>';
+      });
+    } else inner=c[l]||'';
+    d.innerHTML='<summary><span class="lb">'+(l.toUpperCase())+'</span>'+LAYER_KO[l]+'<span class="arrow">›</span></summary>'+
+      '<div class="body">'+inner+'<div class="readrow"><button type="button" class="readbtn" data-read="'+u.id+'-'+l+'"></button></div></div>';
+    layers.appendChild(d);
+  });
+  layers.addEventListener('click',function(e){
+    var b=e.target.closest('.readbtn'); if(!b) return;
+    VP.toggle(b.getAttribute('data-read')); refreshProg();
+  });
+  var lv=0, fl=$('#filters'), pl=$('#plist');
+  function renderList(){
+    pl.innerHTML='';
+    u.problems.filter(function(p){ return !lv||p.level===lv; }).forEach(function(p){ pl.appendChild(renderProblem(p)); });
+    typeset(pl);
+  }
+  [['전체',0],['L1 개념',1],['L2 기본',2],['L3 응용',3],['L4 시험급',4]].forEach(function(f){
+    var b=document.createElement('button'); b.type='button'; b.className='fchip'+(f[1]===0?' on':''); b.textContent=f[0];
+    b.addEventListener('click',function(){ lv=f[1]; fl.querySelectorAll('.fchip').forEach(function(x){x.classList.remove('on');}); b.classList.add('on'); renderList(); });
+    fl.appendChild(b);
+  });
+  renderList(); typeset(layers);
+}
+function renderWrong(){
+  var ids=wrongList();
+  setView('<div class="eyebrow">RETRY QUEUE</div><h1>오답노트</h1>'+
+    '<p class="lede">틀림·부분 표시 문제 '+ids.length+'개. 다시 풀어 <b>맞음</b>으로 바꾸면 큐에서 빠진다. 계산형은 자동으로 새 수치다.</p><div id="plist"></div>');
+  var pl=$('#plist');
+  if(!ids.length){ pl.innerHTML='<div class="empty">비어 있음 — 문제를 풀고 자가채점하면 틀림/부분이 여기 모인다.</div>'; return; }
+  ids.forEach(function(id){ var p=BYID[id]; if(p&&p.params) CUR[id]=sample(p); pl.appendChild(renderProblem(BYID[id])); });
+  typeset(pl);
+}
+/* ---------- 모의고사 ---------- */
+var EXAM={running:false};
+function renderExam(){
+  if(EXAM.running){ renderExamRun(); return; }
+  var uchecks=UNITS.map(function(u){ return '<label class="ck"><input type="checkbox" class="exu" value="'+u.id+'" checked> U'+u.no+' '+esc(u.title)+'</label>'; }).join('');
+  setView('<div class="eyebrow">MOCK EXAM</div><h1>모의고사</h1>'+
+    '<p class="lede">범위와 난이도를 고르면 랜덤 출제. 채점은 문제마다(객관식 자동 · 계산형 자가채점), 종료하면 리포트.</p>'+
+    '<div class="exam-setup">'+
+    '<div class="grp"><h4>범위</h4>'+uchecks+'</div>'+
+    '<div class="grp"><h4>난이도</h4>'+[1,2,3,4].map(function(l){return '<label class="ck"><input type="checkbox" class="exl" value="'+l+'" '+(l>1?'checked':'')+'> L'+l+'</label>';}).join('')+'</div>'+
+    '<div class="grp"><h4>문항 수</h4><select id="exn"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></div>'+
+    '<button class="bigbtn" id="exgo">모의고사 시작 →</button></div>');
+  $('#exgo').addEventListener('click',function(){
+    var us={}, ls={};
+    document.querySelectorAll('.exu:checked').forEach(function(c){us[c.value]=1;});
+    document.querySelectorAll('.exl:checked').forEach(function(c){ls[+c.value]=1;});
+    var pool=ALL.filter(function(p){ return us[p._unit.id]&&ls[p.level]; });
+    var n=Math.min(+$('#exn').value, pool.length);
+    if(!n){ alert('선택한 범위에 문제가 없습니다'); return; }
+    for(var i=pool.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=pool[i]; pool[i]=pool[j]; pool[j]=t; }
+    EXAM={running:true, list:pool.slice(0,n), idx:0, res:{}};
+    EXAM.list.forEach(function(p){ if(p.params) CUR[p.id]=sample(p); });
+    renderExamRun();
+  });
+}
+function examAnswered(pid, status){ if(EXAM.running&&EXAM.res) EXAM.res[pid]=status; }
+function renderExamRun(){
+  var i=EXAM.idx, p=EXAM.list[i];
+  setView('<div class="eyebrow">MOCK EXAM · '+(i+1)+' / '+EXAM.list.length+'</div>'+
+    '<div class="exam-top"><span>'+(i+1)+'/'+EXAM.list.length+'</span><div class="bar"><i style="width:'+Math.round(i/EXAM.list.length*100)+'%"></i></div>'+
+    '<button class="pbtn" id="exquit">종료</button></div><div id="pslot"></div>'+
+    '<div class="pc-btns" style="margin-top:14px"><button class="bigbtn" id="exnext">'+(i+1<EXAM.list.length?'다음 문제 →':'리포트 보기 →')+'</button></div>');
+  $('#pslot').appendChild(renderProblem(p)); typeset($('#pslot'));
+  $('#exnext').addEventListener('click',function(){
+    if(EXAM.idx+1<EXAM.list.length){ EXAM.idx++; renderExamRun(); } else renderExamReport();
+  });
+  $('#exquit').addEventListener('click',renderExamReport);
+}
+function renderExamReport(){
+  var res=EXAM.res, list=EXAM.list; EXAM.running=false;
+  var c=0,pt=0,w=0,na=0;
+  var perUnit={};
+  list.forEach(function(p){
+    var s=res[p.id];
+    var u=perUnit[p._unit.id]=perUnit[p._unit.id]||{t:0,c:0,title:p._unit.title,no:p._unit.no};
+    u.t++;
+    if(s==='correct'){c++;u.c++;} else if(s==='partial'){pt++;} else if(s==='wrong'){w++;} else na++;
+  });
+  var score=Math.round((c+0.5*pt)/list.length*100);
+  var rows=Object.keys(perUnit).sort().map(function(k){var u=perUnit[k];return '<tr><td>U'+u.no+' '+esc(u.title)+'</td><td>'+u.c+' / '+u.t+'</td></tr>';}).join('');
+  setView('<div class="eyebrow">MOCK EXAM · REPORT</div><h1>결과 리포트</h1>'+
+    '<div class="report"><div class="score">'+score+'점</div>'+
+    '<p>맞음 '+c+' · 부분 '+pt+' · 틀림 '+w+(na?' · 무응답 '+na:'')+' (총 '+list.length+'문제)</p>'+
+    '<table><thead><tr><th>단원</th><th>정답</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<div class="pc-btns"><a class="pbtn" href="#wrong">🔁 오답노트로</a><a class="pbtn" href="#exam" onclick="">다시 설정</a><a class="pbtn" href="#home">홈</a></div></div>');
+}
+
+/* ---------- 내비 · 라우팅 ---------- */
+function buildNav(){
+  var nav=$('#sidenav'), sheet=$('#tb-sheet');
+  var html='<div class="ng">학습</div><a href="#home" data-v="home">홈 · 현황</a>';
+  UNITS.forEach(function(u){ html+='<a href="#'+u.id+'" data-v="'+u.id+'">U'+u.no+' '+esc(u.title)+'</a>'; });
+  html+='<div class="ng">훈련</div><a href="#wrong" data-v="wrong" id="nav-wrong">오답노트<span class="nv"></span></a><a href="#exam" data-v="exam">모의고사</a>';
+  nav.innerHTML=html;
+  sheet.innerHTML=UNITS.map(function(u){ return '<a href="#'+u.id+'">U'+u.no+' '+esc(u.title)+'</a>'; }).join('');
+}
+function route(){
+  var h=(location.hash||'#home').slice(1);
+  var valid={home:1,wrong:1,exam:1}; UNITS.forEach(function(u){valid[u.id]=1;});
+  if(!valid[h]) h='home';
+  if(h!=='exam') EXAM.running=false;
+  document.querySelectorAll('.side nav a').forEach(function(a){ a.classList.toggle('on',a.getAttribute('data-v')===h); });
+  document.querySelectorAll('.tabbar [data-tv]').forEach(function(a){ a.classList.toggle('on',a.getAttribute('data-tv')===h); });
+  var sh=$('#tb-sheet'); if(sh) sh.hidden=true;
+  VM.touch(location.hash||'#home');
+  if(h==='home') renderHome();
+  else if(h==='wrong') renderWrong();
+  else if(h==='exam') renderExam();
+  else renderUnit(UNITS.filter(function(u){return u.id===h;})[0]);
+  window.scrollTo(0,0);
+  refreshProg();
+}
+var tbMore=$('#tb-more'), tbSheet=$('#tb-sheet');
+if(tbMore){ tbMore.addEventListener('click',function(e){ e.stopPropagation(); tbSheet.hidden=!tbSheet.hidden; });
+  document.addEventListener('click',function(e){ if(!tbSheet.hidden&&!tbSheet.contains(e.target)) tbSheet.hidden=true; }); }
+window.addEventListener('hashchange',route);
+buildNav(); route();
+})();
+</script>
+</body>
+</html>

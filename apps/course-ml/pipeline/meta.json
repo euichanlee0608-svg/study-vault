@@ -1,0 +1,10 @@
+{
+  "id": "course-ml",
+  "title": "기계학습 문제은행",
+  "brand": "<b>기계학습</b> 문제은행",
+  "sub": "COSE362 · 중간범위",
+  "eyebrow": "COSE362 Machine Learning · 중간범위 (8주 중간)",
+  "readme_intro": "기계학습(COSE362, 김현철) **중간범위** 문제풀이 앱 — 손계산(정보이득·지니·NB·혼동행렬) 중심 + 개념 판별 + 알고리즘 비교.",
+  "extract": "LearningX 강의계획서 스크린샷 판독 → 요목·평가 분석(`pipeline/sources/강의자료분석.md`, 원문 미전재) + 표준 커리큘럼(Mitchell·ESL 골격)",
+  "status": "## 상태\n\n- 중간범위 U1~U6. 기말범위(KNN·SVM·신경망·앙상블·비지도)와 텀프로젝트 전략 절은 C2에서.\n- 중간고사 날짜(8주) 공지 시 apps.json exams 기입."
+}

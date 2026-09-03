@@ -79,6 +79,19 @@
         }
       ],
       "added": "2026-09-03"
+    },
+    {
+      "id": "course-ml",
+      "title": "기계학습 문제은행",
+      "titleEn": "COSE362 Machine Learning Drill",
+      "icon": "🤖",
+      "path": "apps/course-ml/",
+      "desc": "중간범위 6단원 · 240문제(전 문제 독립검산) — 개념학습→회귀→평가→결정트리(엔트로피·지니)→베이즈, 손계산 중심",
+      "pipeline": "문풀기반",
+      "category": "course",
+      "items": 18,
+      "exams": [],
+      "added": "2026-09-03"
     }
   ]
 }

@@ -1,0 +1,2746 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>기계학습 문제은행</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'},
+ startup:{typeset:false, pageReady:function(){return MathJax.startup.defaultPageReady().then(function(){
+   (window.__mjq||[]).forEach(function(el){MathJax.typesetPromise([el]).catch(function(){});});
+   window.__mjready=true;});}}};
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+:root{
+  --bg:#FBFAF8; --surf:#FFFFFF; --surf2:#F4F1EC; --side:#F6F3EE;
+  --ink:#1C1A18; --ink2:#57514B; --ink3:#8A8177;
+  --line:#E4DFD7; --line2:#D2CBC1;
+  --acc:#B4491C; --acc-bg:#FBEDE6;
+  --ok:#3E7A46; --ok-bg:#E8F2E9;
+  --warn:#8A6410; --warn-bg:#F8F0DC;
+  --bad:#A33B3B; --bad-bg:#F8E7E7;
+  --info:#5B6B75; --info-bg:#ECEFF1;
+  --code:#F1EDE7;
+  --shadow:0 1px 2px rgba(28,26,24,.05),0 2px 10px rgba(28,26,24,.04);
+}
+@media (prefers-color-scheme:dark){
+ :root:not([data-theme="light"]){
+  --bg:#141210; --surf:#1D1A17; --surf2:#252119; --side:#181512;
+  --ink:#EFEBE4; --ink2:#B3ABA1; --ink3:#847B71;
+  --line:#332E28; --line2:#453E36;
+  --acc:#E4763F; --acc-bg:#332016;
+  --ok:#7FBF88; --ok-bg:#1B2A1D;
+  --warn:#D6A54D; --warn-bg:#302614;
+  --bad:#D98080; --bad-bg:#331B1B;
+  --info:#9FB2BC; --info-bg:#20262A;
+  --code:#26221C;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 2px 12px rgba(0,0,0,.25);
+ }
+}
+:root[data-theme="dark"]{
+  --bg:#141210; --surf:#1D1A17; --surf2:#252119; --side:#181512;
+  --ink:#EFEBE4; --ink2:#B3ABA1; --ink3:#847B71;
+  --line:#332E28; --line2:#453E36;
+  --acc:#E4763F; --acc-bg:#332016;
+  --ok:#7FBF88; --ok-bg:#1B2A1D;
+  --warn:#D6A54D; --warn-bg:#302614;
+  --bad:#D98080; --bad-bg:#331B1B;
+  --info:#9FB2BC; --info-bg:#20262A;
+  --code:#26221C;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 2px 12px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font-family:"IBM Plex Sans KR",system-ui,-apple-system,"Malgun Gothic",sans-serif;
+ line-height:1.68;font-size:15px;-webkit-font-smoothing:antialiased;
+ word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--acc);text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:3px}
+mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%}
+.layout{display:flex;min-height:100vh}
+.side{width:250px;flex:0 0 250px;background:var(--side);border-right:1px solid var(--line);
+ padding:22px 18px;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.brand a{color:var(--ink);text-decoration:none;font-family:Newsreader,Georgia,serif;font-size:19px;letter-spacing:-.01em}
+.brand b{color:var(--acc);font-weight:600}
+.brand span{display:block;font-size:10.5px;color:var(--ink3);font-family:"IBM Plex Mono",monospace;margin-top:2px}
+.prog-bar{height:5px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:4px}
+.prog-bar i{display:block;height:100%;width:0;background:var(--acc);border-radius:99px;transition:width .3s}
+.prog span{font-size:10.5px;color:var(--ink3);font-family:"IBM Plex Mono",monospace}
+.side nav{display:flex;flex-direction:column;gap:2px}
+.ng{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-family:"IBM Plex Mono",monospace;margin:10px 0 4px;padding-left:10px}
+.side nav a{display:block;padding:7px 10px;border-radius:6px;color:var(--ink2);text-decoration:none;font-size:13.5px}
+.side nav a:hover{background:var(--surf2)}
+.side nav a.on{background:var(--acc-bg);color:var(--acc);font-weight:600}
+.side nav a .nv{float:right;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink3)}
+.foot-side{margin-top:auto;font-size:10.5px;color:var(--ink3);line-height:1.5;font-family:"IBM Plex Mono",monospace}
+.foot-side a{color:var(--ink3)}
+.main{flex:1;min-width:0;padding:clamp(22px,4vw,48px) clamp(16px,4.5vw,56px) 120px;display:flex;justify-content:center}
+.view{width:100%;max-width:820px}
+h1{font-family:Newsreader,"Gowun Batang",Georgia,serif;font-weight:600;font-size:clamp(25px,4vw,34px);line-height:1.16;letter-spacing:-.015em;margin:6px 0 12px;text-wrap:balance}
+h3{font-family:Newsreader,Georgia,serif;font-size:20px;font-weight:600;margin:30px 0 10px;letter-spacing:-.01em}
+h4{font-size:15.5px;font-weight:600;margin:22px 0 8px}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 13px;padding-left:22px}
+li{margin-bottom:6px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--acc);font-weight:500}
+.lede{font-size:15.5px;color:var(--ink2)}
+.easy{background:var(--acc-bg);border-radius:8px;padding:13px 16px;margin:0 0 14px}
+.easy b{color:var(--acc)}
+.note-line{font-size:13.5px;color:var(--ink2);background:var(--surf2);border-radius:6px;padding:10px 14px;margin:0 0 12px}
+.src{font-size:12px;color:var(--ink3);font-weight:400}
+/* unit cards on home */
+.ucards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin:16px 0}
+.ucard{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:16px 17px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:7px;color:var(--ink);text-decoration:none}
+.ucard:hover{border-color:var(--acc)}
+.uc-no{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--acc);font-weight:600}
+.uc-ti{font-family:Newsreader,Georgia,serif;font-size:18px;font-weight:600}
+.uc-scope{font-size:12.5px;color:var(--ink2);line-height:1.55}
+.uc-stat{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink3)}
+/* collapsible layers */
+details.layer{border:1px solid var(--line);border-radius:9px;background:var(--surf);margin-bottom:10px;box-shadow:var(--shadow)}
+details.layer>summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:15px;list-style:none;display:flex;align-items:center;gap:8px}
+details.layer>summary::-webkit-details-marker{display:none}
+details.layer>summary .lb{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;padding:2px 8px;border-radius:99px;background:var(--info-bg);color:var(--info)}
+details.layer>summary .arrow{margin-left:auto;color:var(--ink3);transition:transform .2s}
+details.layer[open]>summary .arrow{transform:rotate(90deg)}
+details.layer>.body{padding:4px 18px 14px;border-top:1px solid var(--line)}
+details.dstep{border:1px solid var(--line);border-radius:7px;margin:0 0 8px;background:var(--surf2)}
+details.dstep>summary{cursor:pointer;padding:9px 13px;font-weight:500;font-size:13.5px}
+details.dstep ol{margin:4px 0 10px;padding:0 14px 0 34px}
+details.dstep li{margin-bottom:7px;font-size:13.5px}
+/* 정석식 박스 */
+.jsbox{border:1.5px solid var(--acc);border-radius:9px;background:var(--acc-bg);padding:11px 15px;margin:12px 0;font-size:14px}
+.jsbox .jt{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;color:var(--acc);font-weight:600;display:block;margin-bottom:3px}
+.exbox{border:1px solid var(--line2);border-left:3px solid var(--acc);border-radius:8px;background:var(--surf);padding:12px 15px;margin:12px 0}
+.exbox .xh{font-weight:600;font-size:14px;margin-bottom:6px}
+.exbox .xh .xno{font-family:"IBM Plex Mono",monospace;color:var(--acc);font-size:11.5px;margin-right:6px}
+.exbox .xsol{border-top:1px dashed var(--line2);margin-top:8px;padding-top:8px;font-size:13.5px}
+.exbox .xsol ol{margin:4px 0 0;padding-left:20px}
+.exbox .xrel{font-size:12px;color:var(--ink3);margin-top:8px;font-family:"IBM Plex Mono",monospace}
+.readrow{margin:8px 0 2px;text-align:right}
+.readbtn{font:inherit;font-size:12.5px;min-height:40px;padding:7px 15px;border-radius:99px;border:1px solid var(--line2);background:var(--surf);color:var(--ink2);cursor:pointer}
+.readbtn[aria-pressed="true"]{background:var(--ok-bg);color:var(--ok);border-color:var(--ok)}
+/* drill */
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.fchip{font:inherit;font-size:12.5px;min-height:36px;padding:5px 14px;border-radius:99px;border:1px solid var(--line2);background:var(--surf);color:var(--ink2);cursor:pointer}
+.fchip.on{background:var(--acc-bg);color:var(--acc);border-color:var(--acc);font-weight:600}
+.pcard{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:15px 17px;margin-bottom:12px;box-shadow:var(--shadow)}
+.pc-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:8px}
+.lv{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:99px}
+.lv1{background:var(--ok-bg);color:var(--ok)} .lv2{background:var(--info-bg);color:var(--info)}
+.lv3{background:var(--warn-bg);color:var(--warn)} .lv4{background:var(--acc-bg);color:var(--acc)}
+.tagc{font-size:11px;color:var(--ink3);font-family:"IBM Plex Mono",monospace}
+.srcb{font-size:10px;color:var(--ink3);border:1px solid var(--line);border-radius:99px;padding:1px 8px}
+.sdot{width:9px;height:9px;border-radius:99px;background:var(--line2);margin-left:auto;flex:0 0 auto}
+.sdot.correct{background:var(--ok)} .sdot.partial{background:var(--warn)} .sdot.wrong{background:var(--bad)}
+.pc-st{font-size:14.5px;margin-bottom:10px}
+.pc-btns{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.pbtn{font:inherit;font-size:12.5px;min-height:40px;padding:7px 14px;border-radius:8px;border:1px solid var(--line2);background:var(--surf2);color:var(--ink2);cursor:pointer}
+.pbtn:hover{border-color:var(--acc);color:var(--acc)}
+.pbtn.grade-c{border-color:var(--ok);color:var(--ok)}
+.pbtn.grade-p{border-color:var(--warn);color:var(--warn)}
+.pbtn.grade-w{border-color:var(--bad);color:var(--bad)}
+.pbtn.grade-c.sel{background:var(--ok-bg)} .pbtn.grade-p.sel{background:var(--warn-bg)} .pbtn.grade-w.sel{background:var(--bad-bg)}
+.hintbox{background:var(--warn-bg);border-radius:7px;padding:9px 13px;font-size:13px;margin:8px 0 0}
+.solbox{background:var(--surf2);border-radius:8px;padding:11px 14px;margin:10px 0 0}
+.solbox ol{margin:0;padding-left:20px}
+.solbox li{font-size:13.5px;margin-bottom:7px}
+.ansline{margin-top:8px;font-weight:600;color:var(--acc);font-size:14px}
+.choices{display:flex;flex-direction:column;gap:7px;margin:4px 0 2px}
+.choice{font:inherit;text-align:left;font-size:13.5px;min-height:44px;padding:9px 13px;border-radius:8px;border:1px solid var(--line2);background:var(--surf);color:var(--ink);cursor:pointer}
+.choice:hover{border-color:var(--acc)}
+.choice.right{border-color:var(--ok);background:var(--ok-bg)}
+.choice.wrongpick{border-color:var(--bad);background:var(--bad-bg)}
+.expl{background:var(--info-bg);border-radius:7px;padding:9px 13px;font-size:13px;margin-top:8px;color:var(--ink2)}
+/* exam */
+.exam-setup .grp{margin-bottom:14px}
+.exam-setup label.ck{display:inline-flex;align-items:center;gap:6px;margin:0 12px 6px 0;font-size:13.5px;min-height:36px}
+.exam-setup input[type=checkbox]{accent-color:var(--acc);width:17px;height:17px}
+.exam-setup select{font:inherit;font-size:14px;padding:8px 12px;border:1px solid var(--line2);border-radius:8px;background:var(--surf);color:var(--ink)}
+.bigbtn{font:inherit;font-size:14.5px;font-weight:600;min-height:46px;padding:10px 22px;border-radius:99px;border:none;background:var(--acc);color:#fff;cursor:pointer}
+.bigbtn:disabled{opacity:.5;cursor:default}
+.exam-top{display:flex;align-items:center;gap:10px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink3);margin-bottom:12px}
+.exam-top .bar{flex:1;height:5px;background:var(--line);border-radius:99px;overflow:hidden}
+.exam-top .bar i{display:block;height:100%;background:var(--acc)}
+.report{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:18px 20px;box-shadow:var(--shadow)}
+.report .score{font-family:Newsreader,Georgia,serif;font-size:34px;font-weight:600;color:var(--acc)}
+table{border-collapse:collapse;width:100%;margin:10px 0 14px;font-size:13px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left}
+th{background:var(--surf2);white-space:nowrap}
+.empty{border:1px dashed var(--line2);border-radius:10px;padding:24px;color:var(--ink3);font-size:13.5px;text-align:center}
+/* mobile */
+.tabbar{display:none}
+#tb-sheet{display:none}
+@media(max-width:960px){
+ body{font-size:16px}
+ input,textarea,select{font-size:16px}
+ .layout{flex-direction:column}
+ .side{width:100%;flex:none;height:auto;position:static;border-right:none;border-bottom:1px solid var(--line);
+  padding:12px 16px;flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap}
+ .side nav,.ng,.foot-side{display:none}
+ .side .prog{flex:1;min-width:110px}
+ .main{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
+ .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;background:var(--side);border-top:1px solid var(--line);
+  padding:4px 4px calc(4px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.06)}
+ .tabbar a,.tabbar button{flex:1;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font:inherit;font-size:16px;line-height:1;background:none;border:none;border-radius:8px;color:var(--ink2);text-decoration:none;cursor:pointer;padding:5px 2px}
+ .tabbar a span,.tabbar button span{font-size:10.5px;font-family:"IBM Plex Mono",monospace}
+ .tabbar a.on{color:var(--acc);background:var(--acc-bg)}
+ #tb-sheet{position:fixed;right:10px;bottom:calc(64px + env(safe-area-inset-bottom));z-index:51;background:var(--surf);
+  border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:8px;display:flex;flex-direction:column;min-width:190px}
+ #tb-sheet[hidden]{display:none!important}
+ #tb-sheet a{display:flex;align-items:center;padding:11px 14px;min-height:44px;border-radius:8px;color:var(--ink2);text-decoration:none;font-size:14.5px}
+ #tb-sheet a:active{background:var(--surf2)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="side">
+  <div class="brand"><a href="#home"><b>기계학습</b> 문제은행</a><span>COSE362 · 중간범위 · 2026-09-03</span></div>
+  <div class="prog"><div class="prog-bar"><i id="pbar"></i></div><span id="ptxt"></span></div>
+  <nav id="sidenav"></nav>
+  <div class="foot-side">전 문제 검산 게이트 통과분만 탑재<br><a href="../../">← Study Vault 허브</a></div>
+</aside>
+<main class="main"><div class="view" id="view"></div></main>
+</div>
+<nav class="tabbar" aria-label="하단 탭">
+<a href="../../">🏠<span>허브</span></a>
+<a href="#home" data-tv="home">📚<span>홈</span></a>
+<a href="#wrong" data-tv="wrong">🔁<span>오답</span></a>
+<a href="#exam" data-tv="exam">📝<span>모의고사</span></a>
+<button id="tb-more" type="button">☰<span>단원</span></button>
+</nav>
+<div id="tb-sheet" hidden></div>
+
+<script>window.SV_BANK=[];</script>
+<script>
+/* 문제은행 공용 헬퍼 — 브라우저(런타임)와 node(검산 러너) 양쪽에서 동일 코드 실행 (이중 구현 금지) */
+(function (g) {
+  'use strict';
+  g.SV_BANK = g.SV_BANK || [];
+  var SVH = {
+    /* 유효숫자 정리 (부동소수 노이즈 제거). 표시용 — ans에는 절대 쓰지 말 것 */
+    fmt: function (x, sig) {
+      if (typeof x !== 'number' || !isFinite(x)) return String(x);
+      if (x === 0) return '0';
+      var v = Number(x.toPrecision(sig || 4));
+      return String(v);
+    },
+    /* SI 접두 표기 (표시용) */
+    si: function (x, unit, sig) {
+      if (x === 0) return '0 ' + unit;
+      var a = Math.abs(x);
+      var P = [[1e9,'G'],[1e6,'M'],[1e3,'k'],[1,''],[1e-3,'m'],[1e-6,'µ'],[1e-9,'n'],[1e-12,'p']];
+      for (var i = 0; i < P.length; i++) {
+        if (a >= P[i][0] * 0.9999) return SVH.fmt(x / P[i][0], sig) + ' ' + P[i][1] + unit;
+      }
+      return SVH.fmt(x, sig) + ' ' + unit;
+    },
+    par: function (a, b) { return a * b / (a + b); },        // 병렬 저항
+    par3: function (a, b, c) { return 1 / (1/a + 1/b + 1/c); },
+    deg: function (rad) { return rad * 180 / Math.PI; },
+    rad: function (d) { return d * Math.PI / 180; },
+    /* 복소수 최소 연산 (페이저용) */
+    cx: function (re, im) { return { re: re, im: im }; },
+    cadd: function (a, b) { return { re: a.re + b.re, im: a.im + b.im }; },
+    csub: function (a, b) { return { re: a.re - b.re, im: a.im - b.im }; },
+    cmul: function (a, b) { return { re: a.re * b.re - a.im * b.im, im: a.re * b.im + a.im * b.re }; },
+    cdiv: function (a, b) {
+      var d = b.re * b.re + b.im * b.im;
+      return { re: (a.re * b.re + a.im * b.im) / d, im: (a.im * b.re - a.re * b.im) / d };
+    },
+    cmag: function (a) { return Math.hypot(a.re, a.im); },
+    cang: function (a) { return Math.atan2(a.im, a.re) * 180 / Math.PI; }, // deg
+    cpar: function (a, b) { return SVH.cdiv(SVH.cmul(a, b), SVH.cadd(a, b)); },
+    /* 2x2 / 3x3 실계수 선형계 풀이 (절점/망로 검산·풀이 공용) */
+    solve2: function (a11, a12, b1, a21, a22, b2) {
+      var D = a11 * a22 - a12 * a21;
+      return [ (b1 * a22 - a12 * b2) / D, (a11 * b2 - b1 * a21) / D ];
+    },
+    solve3: function (A, b) { // A: 3x3 배열, b: [3]
+      var d = SVH.det3(A);
+      function rep(A, i, b) {
+        var M = A.map(function (r) { return r.slice(); });
+        for (var r = 0; r < 3; r++) M[r][i] = b[r];
+        return M;
+      }
+      return [SVH.det3(rep(A,0,b))/d, SVH.det3(rep(A,1,b))/d, SVH.det3(rep(A,2,b))/d];
+    },
+    det3: function (A) {
+      return A[0][0]*(A[1][1]*A[2][2]-A[1][2]*A[2][1])
+           - A[0][1]*(A[1][0]*A[2][2]-A[1][2]*A[2][0])
+           + A[0][2]*(A[1][0]*A[2][1]-A[1][1]*A[2][0]);
+    }
+  };
+  g.SVH = SVH;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* U1 ML 개요·개념학습 — 학습 정의, 유형, 가설공간, 귀납 편향, 버전공간, 과제 정형화 */
+SV_BANK.push({
+  id: 'u1', no: 1, title: 'ML 개요·개념학습', titleEn: 'Intro & Concept Learning',
+  scope: '학습의 정의(T·P·E) · 지도/비지도/강화 · 가설공간과 귀납 편향 · 개념학습·버전공간 · 과제의 입출력 정형화',
+  problems: [
+
+  /* ---------- L1 (6) ---------- */
+  { id:'u1-l1-01', level:1, type:'mc', tags:['정의'], src:'교재 표준',
+    statement:'미첼(Mitchell)의 학습 정의로 옳은 것은?',
+    choices:['과제 T의 성능 P가 경험 E로 향상되면 학습한다','데이터를 저장하면 학습이다','규칙을 코딩하면 학습이다','P와 무관하게 E가 늘면 학습이다'],
+    answer:0, expl:'⟨T, P, E⟩ 3요소 — 문제를 받으면 셋을 먼저 명시하는 것이 이 과목의 문법이다.' },
+  { id:'u1-l1-02', level:1, type:'mc', tags:['학습 유형'], src:'교재 표준',
+    statement:'짝이 옳지 않은 것은?',
+    choices:['강화학습 — 정답 레이블 쌍 (x, y)로 학습','지도학습 — 레이블 있는 데이터','비지도학습 — 레이블 없이 구조 발견','강화학습 — 보상 신호로 정책 개선'],
+    answer:0, expl:'강화학습은 (상태, 행동, 보상) — 레이블 쌍이 아니라 지연 보상. 스팸분류=지도, 군집=비지도.' },
+  { id:'u1-l1-03', level:1, type:'tf', tags:['귀납 편향'], src:'교재 표준',
+    statement:'귀납 편향(inductive bias) 없이는 학습기가 본 적 없는 입력에 대해 일반화할 수 없다.',
+    answer:true, expl:'편향 = 가설공간 제한/선호. 무편향이면 훈련 데이터 암기만 가능 — "공짜 점심 없음"의 뿌리.' },
+  { id:'u1-l1-04', level:1, type:'mc', tags:['분류 vs 회귀'], src:'교재 표준',
+    statement:'출력이 옳게 짝지어진 것은?',
+    choices:['분류=이산 레이블, 회귀=연속 값','분류=연속, 회귀=이산','둘 다 이산','군집=지도학습'],
+    answer:0, expl:'스팸 여부=분류, 집값=회귀. 출력 공간이 알고리즘 선택의 첫 분기.' },
+  { id:'u1-l1-05', level:1, type:'tf', tags:['버전공간'], src:'교재 표준',
+    statement:'버전공간(version space)은 훈련 데이터와 일치(consistent)하는 모든 가설의 집합이다.',
+    answer:true, expl:'개념학습의 핵심 객체. 데이터가 늘수록 줄어들며, S(최특수)와 G(최일반) 경계로 표현된다.' },
+  { id:'u1-l1-06', level:1, type:'mc', tags:['과적합 예고'], src:'교재 표준',
+    statement:'훈련 정확도 99%, 시험 정확도 60%인 모델의 진단은?',
+    choices:['과적합 — 훈련 데이터의 잡음까지 암기','과소적합','데이터 부족과 무관하게 정상','시험이 쉬웠다'],
+    answer:0, expl:'훈련↔시험 격차가 과적합의 지문. U3(평가)·U5(가지치기)의 중심 서사.' },
+
+  /* ---------- L2 (12) ---------- */
+  { id:'u1-l2-01', level:2, type:'num', tags:['가설공간 크기'], src:'교재 표준',
+    params:{ n:{choices:[3,4,5]} },
+    statement:function(p){ return '불리언 특징 '+p.n+'개의 (a) 서로 다른 입력 개수 (b) 가능한 불리언 함수(개념) 개수를 구하라.'; },
+    solve:function(p){ var inp=Math.pow(2,p.n);
+      return { ans:{inp:inp, fn:Math.pow(2,inp)}, unit:{inp:'개', fn:'개'}, steps:[
+        '입력 = 2^'+p.n+' = '+inp,
+        '함수 = 2^(2^'+p.n+') = '+SVH.fmt(Math.pow(2,inp))+' (폭발 — 편향 없는 탐색이 불가능한 이유)' ] }; },
+    hints:['이중 지수.'] },
+  { id:'u1-l2-02', level:2, type:'num', tags:['연언 가설 수'], src:'교재 표준',
+    params:{ n:{choices:[3,4,6]} },
+    statement:function(p){ return '각 특징이 {0, 1, ?(무관)} 값을 갖는 연언(conjunctive) 가설공간('+p.n+'특징)의 크기(∅ 포함)를 구하라.'; },
+    solve:function(p){ var h=Math.pow(3,p.n)+1;
+      return { ans:h, unit:'개', steps:[
+        '특징당 3택 → 3^'+p.n+' = '+Math.pow(3,p.n)+', 공가설 ∅ 추가',
+        '= '+h+' (전체 함수보다 극적으로 작다 — 편향의 대가로 일반화 획득)' ] }; },
+    hints:['3^n + 1.'] },
+  { id:'u1-l2-03', level:2, type:'num', tags:['샘플 복잡도 감각'], src:'창작 문제(검산됨)',
+    params:{ n:{choices:[10,20]} },
+    statement:function(p){ return '특징 '+p.n+'개 데이터에서 가능한 입력 전부를 한 번씩 보려면 몇 샘플이 필요한가? 초당 1000개면 몇 초?'; },
+    solve:function(p){ var N=Math.pow(2,p.n);
+      return { ans:{N:N, t:N/1000}, unit:{N:'개', t:'초'}, steps:[
+        '2^'+p.n+' = '+SVH.fmt(N),
+        '≈ '+SVH.fmt(N/1000)+'초 — "다 보고 배우기"는 불가능, 일반화가 필수인 이유' ] }; },
+    hints:['지수의 위력.'] },
+  { id:'u1-l2-04', level:2, type:'num', tags:['Find-S 손계산'], src:'교재 표준',
+    params:{ pos:{choices:[2,3]} },
+    statement:function(p){ return 'Find-S: 초기 S=⟨∅⟩에서 양성 예제를 차례로 흡수한다. 특징 4개, 양성 예제끼리 첫 두 특징만 일치하고 나머지가 다르면, '+p.pos+'개 양성 처리 후 S의 "?" 개수는?'; },
+    solve:function(p){ var q=p.pos>=2?2:0;
+      return { ans:q, unit:'개', steps:[
+        '첫 양성 → S=그 예제 그대로(? 없음)',
+        '둘째부터: 불일치 특징을 ?로 일반화 → 뒤 2개 특징이 ? = '+q+'개',
+        '(Find-S는 최특수 경계만 추적 — 음성 예제를 안 쓰는 한계까지)' ] }; },
+    hints:['불일치→?.'] },
+  { id:'u1-l2-05', level:2, type:'num', tags:['데이터 분할'], src:'창작 문제(검산됨)',
+    params:{ N:{choices:[1000,5000]}, tr:{choices:[60,80]} },
+    statement:function(p){ return 'N='+p.N+' 데이터를 train '+p.tr+'% / 나머지 반반 val·test로 나누면 각각 몇 개인가?'; },
+    solve:function(p){
+      var t=p.N*p.tr/100, r=(p.N-t)/2;
+      return { ans:{train:t, val:r, test:r}, unit:{train:'개', val:'개', test:'개'}, steps:[
+        'train = '+t+', val = test = '+r,
+        '(test는 마지막 한 번만 — U3 평가 규율의 기초)' ] }; },
+    hints:['비율 계산.'] },
+  { id:'u1-l2-06', level:2, type:'num', tags:['다수결 기준선'], src:'창작 문제(검산됨)',
+    params:{ pos:{choices:[70,90,95]} },
+    statement:function(p){ return '양성이 '+p.pos+'%인 데이터에서 "무조건 양성" 분류기의 정확도는? 이것이 왜 위험한 기준선인가?'; },
+    solve:function(p){ return { ans:p.pos, unit:'%', steps:[
+        '정확도 = '+p.pos+'% (아무것도 안 배워도!)',
+        '불균형 데이터에서 정확도만 보면 속는다 — U3 정밀도/재현율의 동기' ] }; },
+    hints:['다수 클래스 비율.'] },
+  { id:'u1-l2-07', level:2, type:'num', tags:['특징 조합'], src:'창작 문제(검산됨)',
+    params:{ a:{choices:[3,4]}, b:{choices:[2,5]}, c:{choices:[2,3]} },
+    statement:function(p){ return '범주 특징 3개(값 '+p.a+'·'+p.b+'·'+p.c+'개)로 만들 수 있는 서로 다른 입력 조합 수와, 원-핫 인코딩 시 총 차원을 구하라.'; },
+    solve:function(p){
+      return { ans:{comb:p.a*p.b*p.c, dim:p.a+p.b+p.c}, unit:{comb:'개', dim:'차원'}, steps:[
+        '조합 = 곱 = '+(p.a*p.b*p.c),
+        '원-핫 = 합 = '+(p.a+p.b+p.c)+' 차원 (입력 표현 설계의 산수)' ] }; },
+    hints:['곱 vs 합.'] },
+  { id:'u1-l2-08', level:2, type:'num', tags:['버전공간 축소'], src:'교재 표준',
+    params:{ H:{choices:[64,256]}, k:{choices:[2,3]} },
+    statement:function(p){ return '가설 '+p.H+'개 중 각 예제가 평균 절반을 탈락시키면, '+p.k+'개 예제 후 남는 가설 수는?'; },
+    solve:function(p){ var n=p.H/Math.pow(2,p.k);
+      return { ans:n, unit:'개', steps:[
+        p.H+'×(1/2)^'+p.k+' = '+SVH.fmt(n),
+        '(정보 1비트 = 절반 탈락 — U4 엔트로피의 예고)' ] }; },
+    hints:['반감 반복.'] },
+  { id:'u1-l2-09', level:2, type:'num', tags:['레이블 비용'], src:'창작 문제(검산됨)',
+    params:{ N:{choices:[10000,50000]}, c:{choices:[50,200],unit:'원'}, err:{choices:[2,5]} },
+    statement:function(p){ return '레이블 1건 '+p.c+'원, '+p.N+'건 구축 비용과, 라벨러 오류율 '+p.err+'%일 때 오염 레이블 수를 구하라.'; },
+    solve:function(p){
+      return { ans:{cost:p.N*p.c/10000, bad:p.N*p.err/100}, unit:{cost:'만원', bad:'건'}, steps:[
+        '비용 = '+SVH.fmt(p.N*p.c/10000)+'만원',
+        '오염 ≈ '+p.N*p.err/100+'건 — 데이터 품질이 모델 상한을 정한다' ] }; },
+    hints:['곱셈 두 번.'] },
+  { id:'u1-l2-10', level:2, type:'num', tags:['일반화 격차'], src:'창작 문제(검산됨)',
+    params:{ tr:{choices:[95,99]}, te:{choices:[70,85]} },
+    statement:function(p){ return '훈련 정확도 '+p.tr+'%, 시험 '+p.te+'%: (a) 일반화 격차(%p) (b) 진단(과적합=1/과소=0)을 답하라.'; },
+    solve:function(p){ return { ans:{gap:p.tr-p.te, diag:1}, unit:{gap:'%p', diag:''}, steps:[
+        '격차 = '+(p.tr-p.te)+'%p',
+        '훈련 높고 격차 큼 → 과적합(1). 둘 다 낮으면 과소적합' ] }; },
+    hints:['두 수의 차와 절대 수준.'] },
+  { id:'u1-l2-11', level:2, type:'num', tags:['혼동행렬 예고'], src:'창작 문제(검산됨)',
+    params:{ TP:{choices:[40,60]}, FP:{choices:[10,20]}, FN:{choices:[10,15]}, TN:{choices:[30,50]} },
+    statement:function(p){ return 'TP='+p.TP+', FP='+p.FP+', FN='+p.FN+', TN='+p.TN+'일 때 정확도(%)를 구하라.'; },
+    solve:function(p){ var acc=(p.TP+p.TN)/(p.TP+p.FP+p.FN+p.TN)*100;
+      return { ans:acc, unit:'%', steps:[
+        '맞힌 것 = 대각 TP+TN = '+(p.TP+p.TN)+', 전체 = '+(p.TP+p.FP+p.FN+p.TN),
+        'acc = '+SVH.fmt(acc)+'% (U3에서 4형제 완성)' ] }; },
+    hints:['대각 합/전체.'] },
+  { id:'u1-l2-12', level:2, type:'num', tags:['학습곡선 읽기'], src:'창작 문제(검산됨)',
+    params:{ e1:{choices:[30,40]}, e2:{choices:[15,20]}, k:{choices:[4]} },
+    statement:function(p){ return '데이터 N에서 시험 오류 '+p.e1+'%, 4N에서 '+p.e2+'%. 오류가 데이터 배수의 로그에 선형이라 가정하면 16N에서 예상 오류(%)는?'; },
+    solve:function(p){ var e=p.e2-(p.e1-p.e2);
+      return { ans:e, unit:'%', steps:[
+        'log₄ 스케일 등차: '+p.e1+'→'+p.e2+'→'+e,
+        '(외삽은 가정 명시가 생명 — 데이터 추가의 한계효용 감각)' ] }; },
+    hints:['등차 외삽.'] },
+
+  /* ---------- L3 (14) ---------- */
+  { id:'u1-l3-01', level:3, type:'num', tags:['버전공간 S·G 손계산'], src:'교재 표준',
+    params:{ f:{choices:[3,4]} },
+    statement:function(p){ return '특징 '+p.f+'개(불리언) 연언 공간. 양성 (1,1,…,1)과 음성 (0,1,…,1)을 본 후: (a) S 경계의 가설 수 (b) 그 S가 확정하는(?가 아닌) 특징 수는?'; },
+    solve:function(p){
+      return { ans:{S:1, fixed:p.f}, unit:{S:'개', fixed:'개'}, steps:[
+        '양성 1개 → S = 그 예제 자체(모든 특징 확정)',
+        '음성은 S를 못 움직인다(이미 배제) → S 그대로 1개, 확정 '+p.f+'개',
+        '(음성은 G를 조인다 — S·G의 역할 분담)' ] }; },
+    hints:['양성→S, 음성→G.'] },
+  { id:'u1-l3-02', level:3, type:'num', tags:['G 경계 분기'], src:'교재 표준',
+    params:{ f:{choices:[3,4]} },
+    statement:function(p){ return '초기 G=⟨?,…,?⟩('+p.f+'특징)에서 음성 예제 (0,0,…,0)을 보면 G는 몇 개의 최일반 가설로 분기하는가? (각 특징을 1로 고정하는 방식)'; },
+    solve:function(p){ return { ans:p.f, unit:'개', steps:[
+        '음성을 배제하는 최소 특수화 = 특징 하나를 반대값(1)으로 고정',
+        '→ '+p.f+'개 가설로 분기 (G는 "덤불"처럼 자란다)' ] }; },
+    hints:['특징 수만큼.'] },
+  { id:'u1-l3-03', level:3, type:'num', tags:['불일치 판정'], src:'창작 문제(검산됨)',
+    params:{ n:{choices:[4,5]} },
+    statement:function(p){ return '가설 h=⟨1,?,0,…⟩(첫째=1, 셋째=0, 나머지 ?)이 있다. 입력 '+p.n+'개 특징 전부 1인 예제를 h는 양성으로 분류하는가(1/0)? 레이블이 양성이면 h는 일치하는가(1/0)?'; },
+    solve:function(p){ return { ans:{pred:0, cons:0}, unit:{pred:'', cons:''}, steps:[
+        '셋째 특징: h는 0 요구, 예제는 1 → 음성 예측(0)',
+        '실제 양성 → 불일치(0) → h는 버전공간에서 탈락',
+        '(가설-예제 대조의 기계적 절차)' ] }; },
+    hints:['조건 하나라도 어긋나면 음성.'] },
+  { id:'u1-l3-04', level:3, type:'num', tags:['귀납 편향 강도'], src:'교재 표준',
+    params:{ n:{choices:[3,4]} },
+    statement:function(p){ return '특징 '+p.n+'개에서 (a) 전체 개념 수 (b) 연언 개념 수(∅ 포함)를 구하고, 연언 편향이 배제하는 개념의 비율(%)을 구하라.'; },
+    solve:function(p){
+      var all=Math.pow(2,Math.pow(2,p.n)), conj=Math.pow(3,p.n)+1;
+      return { ans:{all:all, conj:conj, cut:(1-conj/all)*100}, unit:{all:'', conj:'', cut:'%'}, steps:[
+        '전체 = '+SVH.fmt(all)+', 연언 = '+conj,
+        '배제율 = '+SVH.fmt((1-conj/all)*100)+'% — 거의 다 버린다(그래서 배울 수 있다)' ] }; },
+    hints:['두 공간 크기 비교.'] },
+  { id:'u1-l3-05', level:3, type:'num', tags:['XOR의 교훈'], src:'교재 표준',
+    params:{ dummy:{choices:[1]} },
+    statement:function(p){ return 'XOR(두 특징이 다르면 양성)을 연언 가설로 표현할 수 있는가(0)? 2차원에서 선형 분리 가능한가(0)? 표현하려면 무엇이 필요한가 — 특징 x₁x₂(곱)를 추가하면 선형 분리 가능한가(1)?'; },
+    solve:function(p){ return { ans:{conj:0, lin:0, feat:1}, unit:{conj:'', lin:'', feat:''}, steps:[
+        '연언 불가(0): "다르면"은 AND로 못 쓴다',
+        '선형 불가(0): 유명한 XOR 문제',
+        '특징 추가(x₁x₂)로 가능(1) — 표현력은 가설공간 또는 특징에서 온다(커널·신경망의 복선)' ] }; },
+    hints:['1969 퍼셉트론 논쟁.'] },
+  { id:'u1-l3-06', level:3, type:'num', tags:['k-CNF 크기 비교'], src:'창작 문제(검산됨)',
+    params:{ n:{choices:[4,5]} },
+    statement:function(p){ return '특징 '+p.n+'개에서 리터럴(x 또는 ¬x) 개수와, 크기 2 연언(서로 다른 두 리터럴의 AND, 순서 무시) 개수를 구하라.'; },
+    solve:function(p){
+      var L=2*p.n;
+      var c2=L*(L-2)/2; // 같은 변수 쌍(x∧¬x) 제외: 2n리터럴 중 2개 조합 - n(모순쌍)
+      var c2v=L*(L-1)/2-p.n;
+      return { ans:{L:L, c2:c2v}, unit:{L:'개', c2:'개'}, steps:[
+        '리터럴 = 2n = '+L,
+        '쌍 C('+L+',2)−모순쌍 '+p.n+' = '+c2v+' (가설공간 설계 = 조합론)' ] }; },
+    hints:['조합에서 모순 제외.'] },
+  { id:'u1-l3-07', level:3, type:'num', tags:['과제 정형화'], src:'기출 유형',
+    params:{ px:{choices:[28,32]} },
+    statement:function(p){ return '손글씨 숫자 인식('+p.px+'×'+p.px+' 흑백): (a) 입력 차원 (b) 출력 클래스 수 (c) 선형 분류기(클래스별 가중치+편향)의 파라미터 수를 구하라.'; },
+    solve:function(p){
+      var d=p.px*p.px;
+      return { ans:{d:d, c:10, w:(d+1)*10}, unit:{d:'차원', c:'개', w:'개'}, steps:[
+        '입력 = '+d+'차원, 클래스 10',
+        '파라미터 = (d+1)×10 = '+(d+1)*10+' (정형화 → 모델 크기 산수)' ] }; },
+    hints:['(입력+1)×클래스.'] },
+  { id:'u1-l3-08', level:3, type:'num', tags:['암기 학습의 한계'], src:'창작 문제(검산됨)',
+    params:{ n:{choices:[20,30]}, N:{choices:[1000,10000]} },
+    statement:function(p){ return '순수 암기(룩업) 학습기가 '+p.n+'특징 불리언 입력에서 N='+p.N+' 훈련샘플을 외웠다. 무작위 새 입력이 "본 적 있는" 확률(%)을 구하라.'; },
+    solve:function(p){ var pr=p.N/Math.pow(2,p.n)*100;
+      return { ans:pr, unit:'%', steps:[
+        'P = N/2^'+p.n+' = '+SVH.fmt(pr)+'%',
+        '≈ 0 — 암기는 일반화가 아니다(편향의 필요성, 수치 증명)' ] }; },
+    hints:['커버리지 비율.'] },
+  { id:'u1-l3-09', level:3, type:'num', tags:['후보 제거 종합'], src:'교재 표준',
+    params:{ f:{choices:[3]} },
+    statement:function(p){ return '특징 3개 연언 공간, 예제: +(1,1,1), −(0,0,0), +(1,1,0). 최종 (a) S (b) G의 ? 위치를 추론해 S의 확정 특징 수와 G 가설 수를 구하라.'; },
+    solve:function(p){ return { ans:{Sfix:2, G:2}, unit:{Sfix:'개', G:'개'}, steps:[
+        '+(1,1,1) → S=⟨1,1,1⟩. +(1,1,0) → 셋째 불일치 → S=⟨1,1,?⟩ (확정 2)',
+        '−(0,0,0) → G 분기 {⟨1,?,?⟩,⟨?,1,?⟩,⟨?,?,1⟩}, S와 모순인 ⟨?,?,1⟩ 탈락 → G 2개',
+        '(S↑·G↓가 만나면 수렴 — 후보 제거의 전체 그림)' ] }; },
+    hints:['양성은 S를, 음성은 G를.'] },
+  { id:'u1-l3-10', level:3, type:'num', tags:['능동 질의'], src:'교재 표준',
+    params:{ H:{choices:[16,64]} },
+    statement:function(p){ return '버전공간에 가설 '+p.H+'개. 매 질의가 정확히 절반을 자르는 최적 질의만 한다면 수렴(1개)까지 필요한 질의 수는?'; },
+    solve:function(p){ var q=Math.log2(p.H);
+      return { ans:q, unit:'회', steps:[
+        'log₂'+p.H+' = '+q+'회',
+        '(최적 질의 = 1비트 정보 — 능동학습·스무고개·이진탐색이 같은 수학)' ] }; },
+    hints:['log₂.'] },
+  { id:'u1-l3-11', level:3, type:'num', tags:['기준선 비교'], src:'기출 유형',
+    params:{ maj:{choices:[80,90]}, model:{choices:[85,92]} },
+    statement:function(p){ return '다수결 기준선 '+p.maj+'%, 내 모델 '+p.model+'%. (a) 오류 감소율(%) = (기준오류−모델오류)/기준오류 (b) 모델이 유의미한가(감소율>0 → 1).'; },
+    solve:function(p){
+      var red=((100-p.maj)-(100-p.model))/(100-p.maj)*100;
+      return { ans:{red:red, ok:red>0?1:0}, unit:{red:'%', ok:''}, steps:[
+        '오류: '+(100-p.maj)+'% → '+(100-p.model)+'%',
+        '감소율 = '+SVH.fmt(red)+'% '+(red>0?'(유의미 1)':'(무의미 0)'),
+        '(정확도 차가 아니라 "오류 감소율"로 말하는 습관)' ] }; },
+    hints:['오류 기준으로 환산.'] },
+  { id:'u1-l3-12', level:3, type:'num', tags:['노이즈와 일치'], src:'교재 표준',
+    params:{ N:{choices:[100,200]}, e:{choices:[5,10]} },
+    statement:function(p){ return '레이블 노이즈 '+p.e+'%인 N='+p.N+' 데이터에 "완벽 일치"하는 가설을 찾았다. 이 가설이 잡음까지 외웠을 최소 예제 수와, 참 개념의 훈련 일치율 기대(%)를 구하라.'; },
+    solve:function(p){
+      return { ans:{bad:p.N*p.e/100, acc:100-p.e}, unit:{bad:'개', acc:'%'}, steps:[
+        '오염 '+p.N*p.e/100+'개를 "맞히려면" 외워야 한다',
+        '참 개념은 '+(100-p.e)+'%만 일치 — 완벽 일치를 요구하면 오히려 틀린 가설을 고른다(과적합의 논리적 기원)' ] }; },
+    hints:['완벽 = 의심.'] },
+  { id:'u1-l3-13', level:3, type:'num', tags:['훈련 크기 설계'], src:'창작 문제(검산됨)',
+    params:{ H:{choices:[1000000]}, eps:{choices:[5,10]}, del:{choices:[5]} },
+    statement:function(p){ return 'PAC 상한 m ≥ (1/ε)(ln|H|+ln(1/δ))로, |H|=10⁶, ε='+p.eps+'%, δ='+p.del+'%일 때 필요한 샘플 수를 구하라.'; },
+    solve:function(p){
+      var m=(Math.log(p.H)+Math.log(100/p.del))/(p.eps/100);
+      return { ans:m, unit:'개', steps:[
+        'm ≥ (1/'+(p.eps/100)+')(ln10⁶+ln'+(100/p.del)+') = '+SVH.fmt(m),
+        '(가설공간 log에만 의존 — 크기보다 "구조"가 중요하다는 이론의 첫 맛)' ] }; },
+    hints:['ln 두 개 더해 나누기.'] },
+  { id:'u1-l3-14', level:3, type:'num', tags:['비용 민감 판단'], src:'기출 유형',
+    params:{ cFN:{choices:[100,500]}, cFP:{choices:[1,10]} },
+    statement:function(p){ return '암 진단: FN 비용 '+p.cFN+', FP 비용 '+p.cFP+'. 환자가 암일 확률 p일 때 "양성 판정"이 유리한 최소 p(%)를 구하라. (기대비용 비교)'; },
+    solve:function(p){
+      var th=p.cFP/(p.cFP+p.cFN)*100;
+      return { ans:th, unit:'%', steps:[
+        '양성 판정 기대비용 (1−p)·c_FP vs 음성 p·c_FN',
+        '경계 p* = c_FP/(c_FP+c_FN) = '+SVH.fmt(th)+'%',
+        '(비대칭 비용 → 문턱을 낮춘다 — U3 ROC·U6 베이즈 결정의 다리)' ] }; },
+    hints:['기대비용 등식.'] },
+
+  /* ---------- L4 (8) ---------- */
+  { id:'u1-l4-01', level:4, type:'mc', tags:['개념 종합'], src:'기출 유형',
+    statement:'옳은 것을 모두 고르면?<br>㉠ 편향 없는 학습기는 일반화할 수 없다<br>㉡ 버전공간은 S·G 두 경계로 완전히 표현된다(연언 공간)<br>㉢ 노이즈가 있으면 훈련 완벽 일치는 오히려 해로울 수 있다<br>㉣ 강화학습은 지연 보상으로 배운다',
+    choices:['전부','㉠㉡㉢','㉡㉢㉣','㉠㉣'],
+    answer:0, expl:'전부 참 — U1의 4대 명제.' },
+  { id:'u1-l4-02', level:4, type:'num', tags:['후보제거 풀트레이스'], src:'기출 유형',
+    params:{ dummy:{choices:[1,2]} },
+    statement:function(p){ return '특징 3개(하늘·바람·물, 각 2값) 연언 공간. 예제: +(맑,강,따), +(맑,강,차), −(흐,강,따). 최종 S와 G를 추론해 (a) S의 ? 개수 (b) |G| (c) 버전공간이 (맑,약,따)를 만장일치 분류할 수 있는가(불가=0)를 답하라.'; },
+    solve:function(p){ return { ans:{Sq:1, G:1, un:0}, unit:{Sq:'개', G:'개', un:''}, steps:[
+        '+2개: S=⟨맑,강,?⟩ (? 1개)',
+        '−(흐,강,따): G 후보 {⟨맑,?,?⟩,⟨?,약?,…⟩…} 중 S 포용하는 ⟨맑,?,?⟩만 생존 → |G|=1',
+        '(맑,약,따): S는 음성(바람 불일치), G는 양성 → 불일치(0) — 버전공간이 "모른다"고 답하는 영역',
+        '(S≠G 사이 = 아직 배울 게 남은 곳)' ] }; },
+    hints:['예제 순서대로 경계 갱신.'] },
+  { id:'u1-l4-03', level:4, type:'derive', tags:['유도'], src:'교재 표준',
+    statement:'"무편향 학습 불가능" 논증을 완성하라: 가설공간이 모든 함수를 포함하면 미관측 입력의 예측이 결정 불가능함을 보여라.',
+    steps:[
+      '훈련 집합 D와 일치하는 가설 전체 = 버전공간 VS [왜] 일치가 유일한 제약',
+      '미관측 입력 x*: VS 안에는 x*를 +로 찍는 가설과 −로 찍는 가설이 "정확히 짝"으로 존재(전체 함수 공간이므로 x* 값만 다른 쌍이 항상 있다)',
+      '만장일치 투표 = 항상 동수 → 예측 불가',
+      '따라서 일반화하려면 VS를 기울이는 사전 선호(편향)가 필수',
+      '극한 체크: 편향 최강(가설 1개)=학습 불필요/불가, 최약(전체)=일반화 불가 — 스펙트럼의 양끝. 실전은 그 사이 어딘가'
+    ],
+    hints:['x* 값만 다른 가설 쌍의 존재.','투표 동수 논리.'],
+    expl:'"왜 모델은 가정을 갖는가"의 근본 답 — 서술형 1순위.' },
+  { id:'u1-l4-04', level:4, type:'num', tags:['PAC 응용 설계'], src:'기출 유형',
+    params:{ n:{choices:[10,20]}, eps:{choices:[5]}, del:{choices:[1,5]} },
+    statement:function(p){ return '연언 가설공간(특징 '+p.n+'개, |H|=3^n+1)에서 ε='+p.eps+'%, δ='+p.del+'% PAC 보장에 필요한 샘플 m을 구하라.'; },
+    solve:function(p){
+      var H=Math.pow(3,p.n)+1;
+      var m=(Math.log(H)+Math.log(100/p.del))/(p.eps/100);
+      return { ans:m, unit:'개', steps:[
+        'ln|H| = ln(3^'+p.n+'+1) ≈ '+SVH.fmt(p.n*Math.log(3)),
+        'm ≥ '+SVH.fmt(m)+' — 특징 수에 "선형"(지수 아님!)',
+        '(편향 덕분에 현실적 샘플로 학습 가능 — U1 서사의 정량 결론)' ] }; },
+    hints:['ln 3^n = n·ln3.'] },
+  { id:'u1-l4-05', level:4, type:'num', tags:['오컴 정량'], src:'기출 유형',
+    params:{ b:{choices:[10,20]}, N:{choices:[100]} },
+    statement:function(p){ return '설명 길이 '+p.b+'비트짜리 가설이 N='+p.N+' 샘플에 전부 일치했다. 무작위 가설이 우연히 전부 맞힐 확률 상한 2^'+p.b+'·2^{−'+p.N+'}을 구하라(log₂ 값으로).'; },
+    solve:function(p){
+      var lg=p.b-p.N;
+      return { ans:lg, unit:'(log₂ 확률)', steps:[
+        'P ≤ |H_b|·2^{−N} = 2^{'+p.b+'−'+p.N+'} → log₂P = '+lg,
+        '짧은 가설의 일치는 우연이기 어렵다 — 오컴 면도날의 정량 버전',
+        '(U5 가지치기의 이론적 뒷배)' ] }; },
+    hints:['비트 산수.'] },
+  { id:'u1-l4-06', level:4, type:'num', tags:['데이터 vs 모델 진단'], src:'기출 유형',
+    params:{ trA:{choices:[65,70]}, teA:{choices:[63,68]}, trB:{choices:[99]}, teB:{choices:[75,80]} },
+    statement:function(p){ return '모델 A: 훈련 '+p.trA+'/시험 '+p.teA+'%. 모델 B: 훈련 '+p.trB+'/시험 '+p.teB+'%. 각각의 처방(더 큰 모델=1/규제·데이터=2)을 답하고, 시험 성능이 더 높은 모델을 고르라(A=1/B=2).'; },
+    solve:function(p){
+      var best=p.teA>p.teB?1:2;
+      return { ans:{A:1, B:2, best:best}, unit:{A:'', B:'', best:''}, steps:[
+        'A: 둘 다 낮고 격차 작음 → 과소적합 → 표현력 확대(1)',
+        'B: 훈련 높고 격차 큼 → 과적합 → 규제·데이터(2)',
+        '선택은 시험 성능: '+(best===1?'A':'B')+' — 진단과 선택은 다른 질문' ] }; },
+    hints:['격차·수준 2축 진단.'] },
+  { id:'u1-l4-07', level:4, type:'num', tags:['특징 설계 실험'], src:'기출 유형',
+    params:{ acc0:{choices:[75,80]}, accF:{choices:[88,92]}, cost:{choices:[2,5]} },
+    statement:function(p){ return '특징 엔지니어링으로 정확도 '+p.acc0+'→'+p.accF+'%, 추론 비용 '+p.cost+'배. (a) 오류 감소율(%) (b) "오류 1%p 감소당 비용 배수"를 구하라.'; },
+    solve:function(p){
+      var red=((100-p.acc0)-(100-p.accF))/(100-p.acc0)*100;
+      var per=(p.cost-1)/(p.accF-p.acc0);
+      return { ans:{red:red, per:per}, unit:{red:'%', per:'배/%p'}, steps:[
+        '오류 '+(100-p.acc0)+'→'+(100-p.accF)+'%: 감소율 '+SVH.fmt(red)+'%',
+        '비용 효율 = '+SVH.fmt(per)+' 배/%p (개선을 비용으로 나눠 말하기 — 실무 보고 문법)' ] }; },
+    hints:['개선/비용.'] },
+  { id:'u1-l4-08', level:4, type:'num', tags:['이론 종합'], src:'기출 유형',
+    params:{ n:{choices:[8,12]}, m:{choices:[500,1000]} },
+    statement:function(p){ return '특징 '+p.n+'개: (a) 연언 공간 ln|H| (b) m='+p.m+'으로 달성 가능한 ε (δ=5%) (c) 전체 함수 공간이면 같은 m으로 ε 보장이 가능한가(불가=0)?'; },
+    solve:function(p){
+      var lnH=p.n*Math.log(3);
+      var eps=(lnH+Math.log(20))/p.m*100;
+      return { ans:{lnH:lnH, eps:eps, full:0}, unit:{lnH:'', eps:'%', full:''}, steps:[
+        'ln|H| ≈ '+SVH.fmt(lnH),
+        'ε = (ln|H|+ln20)/m = '+SVH.fmt(eps)+'%',
+        '전체 공간: ln|H|=2^'+p.n+'·ln2 = '+SVH.fmt(Math.pow(2,p.n)*Math.log(2))+' → ε>100%, 보장 불가(0)',
+        '(편향의 가치를 한 문제로 총정리)' ] }; },
+    hints:['두 공간 대조.'] }
+  ]
+});
+
+</script>
+<script>
+/* U2 회귀·선형모델 — 최소제곱, 잔차, R², 경사하강, 규제 맛보기 */
+SV_BANK.push({
+  id: 'u2', no: 2, title: '회귀·선형모델', titleEn: 'Regression & Linear Models',
+  scope: '단순 선형회귀(최소제곱 폐형식) · 잔차와 MSE · R² · 경사하강(학습률) · 다항 특징 · 규제(릿지) 직관',
+  problems: [
+
+  /* ---------- L1 (6) ---------- */
+  { id:'u2-l1-01', level:1, type:'mc', tags:['목적함수'], src:'교재 표준',
+    statement:'최소제곱 회귀가 최소화하는 것은?',
+    choices:['잔차 제곱합 \\(\\sum(y_i-\\hat y_i)^2\\)','잔차 절댓값 합','잔차 합','최대 잔차'],
+    answer:0, expl:'제곱합 = 미분 가능·폐형식 존재·가우스 노이즈 MLE. 절댓값(L1)은 이상치에 강건한 대안.' },
+  { id:'u2-l1-02', level:1, type:'tf', tags:['폐형식'], src:'교재 표준',
+    statement:'단순 선형회귀 \\(\\hat y=wx+b\\)의 최적해는 \\(w=S_{xy}/S_{xx}\\), \\(b=\\bar y-w\\bar x\\)로 닫힌 형태다.',
+    answer:true, expl:'S_xy=Σ(x−x̄)(y−ȳ), S_xx=Σ(x−x̄)². 회귀선은 항상 (x̄, ȳ)를 지난다.' },
+  { id:'u2-l1-03', level:1, type:'mc', tags:['R²'], src:'교재 표준',
+    statement:'결정계수 R²의 해석으로 옳은 것은?',
+    choices:['모델이 설명하는 분산 비율 1−SSE/SST','상관계수 그 자체','기울기 크기','항상 0~1은 아니어도 훈련 최소제곱에선 0~1'],
+    answer:0, expl:'R²=1−SSE/SST. 단순회귀에선 상관계수의 제곱과 일치. (보기 ④도 사실이지만 "해석"은 ①)' },
+  { id:'u2-l1-04', level:1, type:'mc', tags:['경사하강'], src:'교재 표준',
+    statement:'경사하강 \\(w\\leftarrow w-\\eta\\nabla J\\)에서 학습률 η가 너무 크면?',
+    choices:['발산(진동 증폭)할 수 있다','항상 더 빨리 수렴','전역 최소 보장','아무 영향 없다'],
+    answer:0, expl:'2차 손실에선 η>2/λ_max에서 발산. 너무 작으면 느림 — η는 첫 번째 하이퍼파라미터.' },
+  { id:'u2-l1-05', level:1, type:'tf', tags:['볼록성'], src:'교재 표준',
+    statement:'선형회귀의 제곱 손실은 볼록해서 경사하강이 (적절한 η로) 전역 최소에 수렴한다.',
+    answer:true, expl:'그릇 모양 하나 — 국소 최소 걱정 없음. 신경망(비볼록)과의 대비 포인트.' },
+  { id:'u2-l1-06', level:1, type:'mc', tags:['다항 회귀'], src:'교재 표준',
+    statement:'다항 회귀 \\(y=w_0+w_1x+w_2x^2\\)는?',
+    choices:['특징을 (x, x²)로 늘린 "선형" 모델이다(파라미터에 선형)','비선형 모델이라 폐형식 없음','볼록이 아니다','경사하강 불가'],
+    answer:0, expl:'"선형"은 파라미터 기준. 특징 확장이 표현력을 만든다(XOR 교훈의 회귀판).' },
+
+  /* ---------- L2 (12) ---------- */
+  { id:'u2-l2-01', level:2, type:'num', tags:['평균·중심화'], src:'창작 문제(검산됨)',
+    params:{ a:{choices:[1,2]}, b:{choices:[3,5]} },
+    statement:function(p){ return '데이터 x=[1,2,3,4], y=['+p.a+','+(p.a+p.b)+','+(p.a+2*p.b)+','+(p.a+3*p.b)+'] (완전 선형). (a) x̄·ȳ (b) 기울기 w를 구하라.'; },
+    solve:function(p){
+      var ybar=p.a+1.5*p.b;
+      return { ans:{xbar:2.5, ybar:ybar, w:p.b}, unit:{xbar:'', ybar:'', w:''}, steps:[
+        'x̄=2.5, ȳ='+SVH.fmt(ybar),
+        '완전 선형 → w = 인접 차 = '+p.b+' (공식으로도 동일)' ] }; },
+    hints:['등차 구조 활용.'] },
+  { id:'u2-l2-02', level:2, type:'num', tags:['최소제곱 손계산'], src:'교재 표준',
+    params:{ y4:{choices:[5,7,9]} },
+    statement:function(p){ return 'x=[0,1,2,3], y=[1,2,4,'+p.y4+']의 최소제곱 (a) w (b) b를 구하라.'; },
+    solve:function(p){
+      var xs=[0,1,2,3], ys=[1,2,4,p.y4];
+      var xb=1.5, yb=(1+2+4+p.y4)/4;
+      var sxy=0,sxx=0;
+      for(var i=0;i<4;i++){ sxy+=(xs[i]-xb)*(ys[i]-yb); sxx+=(xs[i]-xb)*(xs[i]-xb); }
+      var w=sxy/sxx, b=yb-w*xb;
+      return { ans:{w:w, b:b}, unit:{w:'', b:''}, steps:[
+        'x̄=1.5, ȳ='+SVH.fmt(yb)+', S_xy='+SVH.fmt(sxy)+', S_xx='+SVH.fmt(sxx),
+        'w = '+SVH.fmt(w)+', b = ȳ−wx̄ = '+SVH.fmt(b),
+        '(4점 손계산 — 시험 단골 크기)' ] }; },
+    hints:['중심화 곱합/제곱합.'] },
+  { id:'u2-l2-03', level:2, type:'num', tags:['잔차·MSE'], src:'창작 문제(검산됨)',
+    params:{ e1:{choices:[1,2]}, e2:{choices:[-1,-2]}, e3:{choices:[0,1]}, e4:{choices:[2,3]} },
+    statement:function(p){ return '잔차가 ['+p.e1+','+p.e2+','+p.e3+','+p.e4+']일 때 (a) SSE (b) MSE (c) RMSE를 구하라.'; },
+    solve:function(p){
+      var sse=p.e1*p.e1+p.e2*p.e2+p.e3*p.e3+p.e4*p.e4;
+      return { ans:{SSE:sse, MSE:sse/4, RMSE:Math.sqrt(sse/4)}, unit:{SSE:'', MSE:'', RMSE:''}, steps:[
+        'SSE = '+sse+', MSE = '+SVH.fmt(sse/4)+', RMSE = '+SVH.fmt(Math.sqrt(sse/4)),
+        '(RMSE는 y와 같은 단위 — 보고용으로 애용)' ] }; },
+    hints:['제곱→평균→루트.'] },
+  { id:'u2-l2-04', level:2, type:'num', tags:['R² 계산'], src:'창작 문제(검산됨)',
+    params:{ SSE:{choices:[10,20]}, SST:{choices:[100,200]} },
+    statement:function(p){ return 'SSE='+p.SSE+', SST='+p.SST+'일 때 R²와, "평균만 예측하는 모델"의 R²를 구하라.'; },
+    solve:function(p){ var r2=1-p.SSE/p.SST;
+      return { ans:{R2:r2, base:0}, unit:{R2:'', base:''}, steps:[
+        'R² = 1−'+p.SSE+'/'+p.SST+' = '+SVH.fmt(r2),
+        '평균 모델: SSE=SST → R²=0 (기준선의 정의)' ] }; },
+    hints:['1−비율.'] },
+  { id:'u2-l2-05', level:2, type:'num', tags:['경사 1스텝'], src:'창작 문제(검산됨)',
+    params:{ w0:{choices:[0,1]}, eta:{choices:[0.1,0.2]} },
+    statement:function(p){ return 'J(w)=(w−3)², w₀='+p.w0+', η='+p.eta+'로 경사하강 2스텝 후 w를 구하라.'; },
+    solve:function(p){
+      var w=p.w0;
+      for(var i=0;i<2;i++) w=w-p.eta*2*(w-3);
+      return { ans:w, unit:'', steps:[
+        '∇J=2(w−3). 스텝마다 w←w−'+p.eta+'·2(w−3)',
+        '2스텝 후 w = '+SVH.fmt(w)+' (3으로 수축 — 비율 (1−2η)² 확인)' ] }; },
+    hints:['반복 대입.'] },
+  { id:'u2-l2-06', level:2, type:'num', tags:['학습률 한계'], src:'교재 표준',
+    params:{ a:{choices:[1,2,4]} },
+    statement:function(p){ return 'J(w)='+p.a+'w²의 경사하강이 수렴하는 학습률 조건 η<1/'+p.a+'... 정확히는 |1−2ηa|<1에서 η_max를 구하라.'; },
+    solve:function(p){ var em=1/p.a;
+      return { ans:em, unit:'', steps:[
+        'w←(1−2η'+p.a+')w → 수렴 조건 |1−2η'+p.a+'|<1',
+        'η < 1/'+p.a+' = '+SVH.fmt(em)+' (곡률이 클수록 조심 — η=1/2a가 한 방 수렴)' ] }; },
+    hints:['수축 인자 절댓값.'] },
+  { id:'u2-l2-07', level:2, type:'num', tags:['표준화'], src:'창작 문제(검산됨)',
+    params:{ mu:{choices:[50,100]}, sd:{choices:[10,20]}, x:{choices:[70,130]} },
+    statement:function(p){ return '평균 '+p.mu+', 표준편차 '+p.sd+'인 특징에서 x='+p.x+'의 z-점수를 구하라. 왜 경사하강 전에 표준화하는가?'; },
+    solve:function(p){ var z=(p.x-p.mu)/p.sd;
+      return { ans:z, unit:'', steps:[
+        'z = (x−µ)/σ = '+SVH.fmt(z),
+        '스케일 차이 → 손실 등고선 길쭉 → 지그재그 — 표준화가 등고선을 둥글게(수렴 가속)' ] }; },
+    hints:['(x−µ)/σ.'] },
+  { id:'u2-l2-08', level:2, type:'num', tags:['예측·외삽'], src:'창작 문제(검산됨)',
+    params:{ w:{choices:[2,3]}, b:{choices:[1,5]}, x:{choices:[10,20]} },
+    statement:function(p){ return '학습된 ŷ='+p.w+'x+'+p.b+'로 x='+p.x+'를 예측하라. 훈련 x 범위가 [0,5]였다면 이 예측을 신뢰할 수 있는가(외삽 주의=0)?'; },
+    solve:function(p){ return { ans:{y:p.w*p.x+p.b, trust:0}, unit:{y:'', trust:''}, steps:[
+        'ŷ = '+(p.w*p.x+p.b),
+        '범위 밖 외삽(0) — 선형 가정이 밖에서도 성립한다는 보장은 데이터에 없다' ] }; },
+    hints:['대입+범위 확인.'] },
+  { id:'u2-l2-09', level:2, type:'num', tags:['이상치 민감도'], src:'창작 문제(검산됨)',
+    params:{ e:{choices:[10,20]} },
+    statement:function(p){ return '잔차 [1,1,1,'+p.e+']에서 (a) MSE (b) MAE를 구하고, 이상치의 기여율(%)을 MSE 기준으로 구하라.'; },
+    solve:function(p){
+      var mse=(3+p.e*p.e)/4, mae=(3+p.e)/4;
+      return { ans:{MSE:mse, MAE:mae, share:p.e*p.e/(3+p.e*p.e)*100}, unit:{MSE:'', MAE:'', share:'%'}, steps:[
+        'MSE = '+SVH.fmt(mse)+', MAE = '+SVH.fmt(mae),
+        '이상치 기여 = '+SVH.fmt(p.e*p.e/(3+p.e*p.e)*100)+'% — 제곱 손실이 이상치에 끌려가는 이유' ] }; },
+    hints:['제곱 vs 절댓값.'] },
+  { id:'u2-l2-10', level:2, type:'num', tags:['파라미터 수'], src:'창작 문제(검산됨)',
+    params:{ d:{choices:[10,50]}, deg:{choices:[2,3]} },
+    statement:function(p){ return '특징 '+p.d+'개 선형회귀의 파라미터 수(절편 포함)와, 단일 변수 '+p.deg+'차 다항 회귀의 파라미터 수를 구하라.'; },
+    solve:function(p){ return { ans:{lin:p.d+1, poly:p.deg+1}, unit:{lin:'개', poly:'개'}, steps:[
+        '선형: d+1 = '+(p.d+1),
+        '다항: 차수+1 = '+(p.deg+1)+' (모델 크기 세기 습관)' ] }; },
+    hints:['+1 절편.'] },
+  { id:'u2-l2-11', level:2, type:'num', tags:['상관→R²'], src:'교재 표준',
+    params:{ r:{choices:[0.6,0.8,0.9]} },
+    statement:function(p){ return '단순회귀에서 상관계수 r='+p.r+'일 때 R²와 "설명 못 하는 분산" 비율(%)을 구하라.'; },
+    solve:function(p){ var r2=p.r*p.r;
+      return { ans:{R2:r2, un:(1-r2)*100}, unit:{R2:'', un:'%'}, steps:[
+        'R² = r² = '+SVH.fmt(r2),
+        '미설명 = '+SVH.fmt((1-r2)*100)+'% (r=0.9도 19%는 남는다)' ] }; },
+    hints:['제곱.'] },
+  { id:'u2-l2-12', level:2, type:'num', tags:['원점 회귀'], src:'교재 표준',
+    params:{ s1:{choices:[10,20]}, s2:{choices:[4,5]} },
+    statement:function(p){ return '절편 없는 모델 ŷ=wx의 최적 w=Σxy/Σx². Σxy='+p.s1+', Σx²='+p.s2+'일 때 w를 구하라.'; },
+    solve:function(p){ return { ans:p.s1/p.s2, unit:'', steps:[
+        'w = '+p.s1+'/'+p.s2+' = '+SVH.fmt(p.s1/p.s2),
+        '(물리 법칙형(원점 통과) 회귀 — 중심화 없는 버전)' ] }; },
+    hints:['한 줄 공식.'] },
+
+  /* ---------- L3 (14) ---------- */
+  { id:'u2-l3-01', level:3, type:'num', tags:['최소제곱 유도값'], src:'교재 표준',
+    params:{ y3:{choices:[5,6]} },
+    statement:function(p){ return 'x=[1,2,3], y=[2,4,'+p.y3+']: (a) w·b (b) 각 예측치 (c) SSE를 구하라.'; },
+    solve:function(p){
+      var xb=2, yb=(6+p.y3)/3;
+      var sxy=(1-2)*(2-yb)+(3-2)*(p.y3-yb);
+      var w=sxy/2, b=yb-w*xb;
+      var sse=0, ys=[2,4,p.y3];
+      for(var i=0;i<3;i++){ var e=ys[i]-(w*(i+1)+b); sse+=e*e; }
+      return { ans:{w:w, b:b, SSE:sse}, unit:{w:'',b:'',SSE:''}, steps:[
+        'S_xy='+SVH.fmt(sxy)+', S_xx=2 → w='+SVH.fmt(w)+', b='+SVH.fmt(b),
+        '예측 후 SSE = '+SVH.fmt(sse)+' (잔차 합=0 검산 포함)' ] }; },
+    hints:['3점이면 손으로 2분.'] },
+  { id:'u2-l3-02', level:3, type:'num', tags:['잔차 성질 검산'], src:'교재 표준',
+    params:{ y4:{choices:[6,8]} },
+    statement:function(p){ return 'x=[0,1,2,3], y=[1,3,4,'+p.y4+']의 최소제곱 적합 후 (a) 잔차 합 (b) Σxᵢeᵢ를 구해 두 직교 조건을 확인하라.'; },
+    solve:function(p){ return { ans:{se:0, sxe:0}, unit:{se:'', sxe:''}, steps:[
+        '정규방정식의 의미: ∂J/∂b=0 ⇒ Σe=0, ∂J/∂w=0 ⇒ Σxe=0',
+        '수치로도 0 (부동소수 오차 내) — 잔차는 특징과 직교',
+        '(적합이 맞았는지 검산하는 두 줄)' ] }; },
+    hints:['정규방정식 자체가 답.'] },
+  { id:'u2-l3-03', level:3, type:'num', tags:['경사하강 궤적'], src:'창작 문제(검산됨)',
+    params:{ eta:{choices:[0.1,0.4]}, n:{choices:[3,5]} },
+    statement:function(p){ return 'J=w², w₀=1, η='+p.eta+': '+p.n+'스텝 후 w와 수축비 (1−2η)^n을 구하라.'; },
+    solve:function(p){
+      var f=Math.pow(1-2*p.eta,p.n);
+      return { ans:{w:f, factor:f}, unit:{w:'', factor:''}, steps:[
+        'w_n = (1−2η)ⁿw₀ = '+SVH.fmt(f),
+        '(η=0.4면 부호 진동하며 수렴 — 감쇠 진동, 제어의 ζ와 같은 그림)' ] }; },
+    hints:['등비수열.'] },
+  { id:'u2-l3-04', level:3, type:'num', tags:['릿지 수축'], src:'교재 표준',
+    params:{ lam:{choices:[1,4]}, sxx:{choices:[4,8]} },
+    statement:function(p){ return '릿지 회귀(단순, 중심화): w_ridge = S_xy/(S_xx+λ). S_xy=8, S_xx='+p.sxx+', λ='+p.lam+'일 때 w와 OLS 대비 수축률(%)을 구하라.'; },
+    solve:function(p){
+      var wr=8/(p.sxx+p.lam), wo=8/p.sxx;
+      return { ans:{w:wr, shrink:(1-wr/wo)*100}, unit:{w:'', shrink:'%'}, steps:[
+        'w_ridge = 8/'+(p.sxx+p.lam)+' = '+SVH.fmt(wr)+' (OLS '+SVH.fmt(wo)+')',
+        '수축 '+SVH.fmt((1-wr/wo)*100)+'% — λ가 계수를 0쪽으로 당긴다(과적합 제동)' ] }; },
+    hints:['분모에 λ.'] },
+  { id:'u2-l3-05', level:3, type:'num', tags:['편향-분산 수치'], src:'교재 표준',
+    params:{ bias:{choices:[2,3]}, varr:{choices:[1,4]}, noise:{choices:[1,2]} },
+    statement:function(p){ return '기대 시험 MSE = 편향²+분산+잡음. 편향='+p.bias+', 분산='+p.varr+', 잡음분산='+p.noise+'일 때 (a) 총 MSE (b) 모델을 아무리 좋게 해도 못 내려가는 하한을 구하라.'; },
+    solve:function(p){
+      return { ans:{mse:p.bias*p.bias+p.varr+p.noise, floor:p.noise}, unit:{mse:'', floor:''}, steps:[
+        'MSE = '+p.bias+'²+'+p.varr+'+'+p.noise+' = '+(p.bias*p.bias+p.varr+p.noise),
+        '하한 = 잡음 '+p.noise+' (베이즈 오류 — 완벽한 모델의 한계)' ] }; },
+    hints:['세 항 분해.'] },
+  { id:'u2-l3-06', level:3, type:'num', tags:['차수 선택'], src:'기출 유형',
+    params:{ tr1:{choices:[8,10]}, te1:{choices:[9,11]}, tr9:{choices:[0.5,1]}, te9:{choices:[15,25]} },
+    statement:function(p){ return '1차: 훈련 MSE '+p.tr1+'/검증 '+p.te1+'. 9차: 훈련 '+p.tr9+'/검증 '+p.te9+'. (a) 어느 쪽이 과적합인가(9차=9) (b) 선택할 모델(1차=1) (c) 9차의 격차 배율(검증/훈련)을 구하라.'; },
+    solve:function(p){
+      return { ans:{over:9, pick:1, ratio:p.te9/p.tr9}, unit:{over:'차', pick:'차', ratio:'배'}, steps:[
+        '9차: 훈련↓검증↑ → 과적합',
+        '선택은 "검증" 기준 → 1차',
+        '격차 '+SVH.fmt(p.te9/p.tr9)+'배 (훈련 오류는 거짓말한다)' ] }; },
+    hints:['검증이 심판.'] },
+  { id:'u2-l3-07', level:3, type:'num', tags:['가중치 해석'], src:'기출 유형',
+    params:{ w:{choices:[0.5,2]}, sd:{choices:[10,20]} },
+    statement:function(p){ return '표준화된 특징의 계수 w='+p.w+' (원 단위 σ='+p.sd+'). (a) 원 단위 1 증가당 ŷ 변화 (b) 두 특징(계수 0.5 vs 2, 둘 다 표준화)의 중요도 비를 구하라.'; },
+    solve:function(p){
+      return { ans:{per:p.w/p.sd, ratio:4}, unit:{per:'/단위', ratio:'배'}, steps:[
+        '원 단위 효과 = w/σ = '+SVH.fmt(p.w/p.sd),
+        '표준화 계수끼리는 직접 비교 가능: 2/0.5 = 4배',
+        '(표준화가 "계수=중요도" 해석을 허락한다)' ] }; },
+    hints:['σ로 되돌리기.'] },
+  { id:'u2-l3-08', level:3, type:'num', tags:['배치 vs SGD'], src:'교재 표준',
+    params:{ N:{choices:[10000,100000]}, B:{choices:[32,100]} },
+    statement:function(p){ return 'N='+p.N+', 배치 '+p.B+'인 미니배치 SGD: (a) 1에폭당 갱신 횟수 (b) 풀배치 대비 1갱신 계산량 비율(%)을 구하라.'; },
+    solve:function(p){
+      return { ans:{steps:p.N/p.B, cost:p.B/p.N*100}, unit:{steps:'회', cost:'%'}, steps:[
+        '갱신 = N/B = '+p.N/p.B+'회/에폭',
+        '1갱신 비용 = B/N = '+SVH.fmt(p.B/p.N*100)+'% — 잡음 낀 방향을 자주 밟는 전략' ] }; },
+    hints:['나누기 두 번.'] },
+  { id:'u2-l3-09', level:3, type:'num', tags:['더미 변수'], src:'기출 유형',
+    params:{ b:{choices:[100,150]}, w:{choices:[20,30]} },
+    statement:function(p){ return '집값 = '+p.b+' + '+p.w+'·(강남 여부 0/1) + 0.5·면적. (a) 같은 면적에서 강남 프리미엄 (b) 이 인코딩에서 기준(reference) 범주는?(강남 아님=0으로 답)'; },
+    solve:function(p){ return { ans:{prem:p.w, ref:0}, unit:{prem:'', ref:''}, steps:[
+        '프리미엄 = 더미 계수 = '+p.w,
+        '기준 = 0으로 코딩된 범주(비강남) — 계수는 "기준 대비 차이"다' ] }; },
+    hints:['더미 계수 해석.'] },
+  { id:'u2-l3-10', level:3, type:'num', tags:['다중공선성 감각'], src:'교재 표준',
+    params:{ r:{choices:[0.95,0.99]} },
+    statement:function(p){ return '두 특징의 상관 r='+p.r+'. 분산팽창계수 VIF=1/(1−r²)를 구하고, 계수 해석이 위험한 수준(VIF>10)인지(1/0) 답하라.'; },
+    solve:function(p){ var vif=1/(1-p.r*p.r);
+      return { ans:{VIF:vif, risky:vif>10?1:0}, unit:{VIF:'', risky:''}, steps:[
+        'VIF = 1/(1−'+p.r+'²) = '+SVH.fmt(vif),
+        (vif>10?'위험(1)':'허용(0)')+' — 예측은 되어도 "어느 특징 덕"인지는 흔들린다' ] }; },
+    hints:['1/(1−r²).'] },
+  { id:'u2-l3-11', level:3, type:'num', tags:['로그 변환'], src:'기출 유형',
+    params:{ w:{choices:[0.05,0.1]} },
+    statement:function(p){ return 'ln(y) = b + '+p.w+'·x 모델에서 x가 1 증가하면 y는 약 몇 % 증가하는가(정확값 (e^w−1)×100)?'; },
+    solve:function(p){ var pct=(Math.exp(p.w)-1)*100;
+      return { ans:pct, unit:'%', steps:[
+        '정확: (e^'+p.w+'−1)×100 = '+SVH.fmt(pct)+'%',
+        '(작은 w에선 ≈100w% — 로그 모델의 계수는 "퍼센트 효과")' ] }; },
+    hints:['지수 되돌리기.'] },
+  { id:'u2-l3-12', level:3, type:'num', tags:['학습곡선 진단'], src:'기출 유형',
+    params:{ trBig:{choices:[5,8]}, teBig:{choices:[6,9]}, gap:{choices:[1,2]} },
+    statement:function(p){ return '데이터를 늘려도 훈련·검증 오류가 '+p.trBig+'·'+p.teBig+'% 근처로 수렴해 붙었다(격차 ≈'+p.gap+'%p). 처방은? (더 많은 데이터=1/더 큰 모델·특징=2) 그리고 현재 병목 오류(%)를 답하라.'; },
+    solve:function(p){ return { ans:{rx:2, bott:p.trBig}, unit:{rx:'', bott:'%'}, steps:[
+        '수렴+격차 작음 = 편향(과소적합) 지배 → 표현력 확대(2)',
+        '병목 = 훈련 오류 '+p.trBig+'% (데이터를 더 부어도 이 아래로 안 내려간다)' ] }; },
+    hints:['곡선 수렴 = 데이터 무익.'] },
+  { id:'u2-l3-13', level:3, type:'num', tags:['정규방정식 2×2'], src:'교재 표준',
+    params:{ sx:{choices:[6,10]}, sxx:{choices:[14,30]}, sy:{choices:[9,12]}, sxy:{choices:[20,32]}, n:{choices:[3,4]} },
+    constraint:function(p){ return (p.n*p.sxx-p.sx*p.sx)>0; },
+    statement:function(p){ return '정규방정식 [[n,Σx],[Σx,Σx²]][b,w]ᵀ=[Σy,Σxy]ᵀ (n='+p.n+', Σx='+p.sx+', Σx²='+p.sxx+', Σy='+p.sy+', Σxy='+p.sxy+')를 풀어 w·b를 구하라.'; },
+    solve:function(p){
+      var s=SVH.solve2(p.n,p.sx,p.sy,p.sx,p.sxx,p.sxy);
+      return { ans:{b:s[0], w:s[1]}, unit:{b:'', w:''}, steps:[
+        '크래머: det = '+(p.n*p.sxx-p.sx*p.sx),
+        'b = '+SVH.fmt(s[0])+', w = '+SVH.fmt(s[1]),
+        '(중심화 공식과 동일 결과 — 행렬 관점의 첫 발)' ] }; },
+    hints:['2×2 연립.'] },
+  { id:'u2-l3-14', level:3, type:'num', tags:['조기 종료'], src:'교재 표준',
+    params:{ ep:{choices:[[3,20,12],[5,18,10]]} },
+    statement:function(p){ var e=p.ep; return '검증 오류가 에폭 '+e[0]+'에서 최소('+e[2]+'%)였고 이후 상승해 마지막 에폭 오류는 '+e[1]+'%다. (a) 채택할 체크포인트 에폭 (b) 조기 종료로 아낀 오류(%p)를 구하라.'; },
+    solve:function(p){ var e=p.ep;
+      return { ans:{epoch:e[0], save:e[1]-e[2]}, unit:{epoch:'', save:'%p'}, steps:[
+        '최소 검증 시점 = 에폭 '+e[0],
+        '절약 = '+(e[1]-e[2])+'%p — 조기 종료는 공짜 규제' ] }; },
+    hints:['검증 최소점.'] },
+
+  /* ---------- L4 (8) ---------- */
+  { id:'u2-l4-01', level:4, type:'mc', tags:['개념 종합'], src:'기출 유형',
+    statement:'옳은 것을 모두 고르면?<br>㉠ 최소제곱 잔차는 합이 0이고 특징과 직교한다<br>㉡ 다항 회귀도 파라미터에 대해선 선형이라 폐형식이 있다<br>㉢ 릿지의 λ↑는 편향↑·분산↓ 방향이다<br>㉣ 모델 선택은 훈련 오류가 아니라 검증 오류로 한다',
+    choices:['전부','㉠㉡㉢','㉡㉢㉣','㉠㉣'],
+    answer:0, expl:'전부 참 — 회귀 단원의 4대 기둥.' },
+  { id:'u2-l4-02', level:4, type:'num', tags:['풀 손계산'], src:'기출 유형',
+    params:{ y2:{choices:[3,5]} },
+    statement:function(p){ return 'x=[1,2,3,4], y=[2,'+p.y2+',7,8]: (a) w·b (b) R²를 구하라. (SST부터)'; },
+    solve:function(p){
+      var xs=[1,2,3,4], ys=[2,p.y2,7,8];
+      var xb=2.5, yb=(17+p.y2)/4;
+      var sxy=0,sxx=0,sst=0;
+      for(var i=0;i<4;i++){ sxy+=(xs[i]-xb)*(ys[i]-yb); sxx+=(xs[i]-xb)*(xs[i]-xb); sst+=(ys[i]-yb)*(ys[i]-yb); }
+      var w=sxy/sxx, b=yb-w*xb, sse=0;
+      for(var i=0;i<4;i++){ var e=ys[i]-(w*xs[i]+b); sse+=e*e; }
+      return { ans:{w:w, b:b, R2:1-sse/sst}, unit:{w:'',b:'',R2:''}, steps:[
+        'S_xy='+SVH.fmt(sxy)+', S_xx='+SVH.fmt(sxx)+' → w='+SVH.fmt(w)+', b='+SVH.fmt(b),
+        'SSE='+SVH.fmt(sse)+', SST='+SVH.fmt(sst)+' → R²='+SVH.fmt(1-sse/sst),
+        '(시험 계산형의 표준 분량 — 표를 그려 정리하며 풀 것)' ] }; },
+    hints:['표: x−x̄, y−ȳ, 곱, 제곱.'] },
+  { id:'u2-l4-03', level:4, type:'derive', tags:['유도'], src:'교재 표준',
+    statement:'단순 선형회귀 최소제곱해 \\(w=S_{xy}/S_{xx}\\), \\(b=\\bar y-w\\bar x\\)를 편미분으로 유도하라.',
+    steps:[
+      'J=Σ(yᵢ−wxᵢ−b)² [왜] 볼록 → 1계 조건이 전역 최소',
+      '∂J/∂b=−2Σ(yᵢ−wxᵢ−b)=0 → \\(b=\\bar y-w\\bar x\\) (회귀선은 평균점 통과)',
+      '∂J/∂w=−2Σxᵢ(yᵢ−wxᵢ−b)=0에 b 대입',
+      '중심화 변수로 정리: \\(w=\\dfrac{\\sum(x_i-\\bar x)(y_i-\\bar y)}{\\sum(x_i-\\bar x)^2}=S_{xy}/S_{xx}\\)',
+      '극한 체크: 완전 상관 데이터 ⇒ 잔차 0 ✓ · x 분산 0 ⇒ 정의 불가(수직선) ✓ · 차원 [y]/[x] ✓'
+    ],
+    hints:['b 먼저 소거.','중심화가 식을 반으로 줄인다.'],
+    expl:'중간 서술형으로 그대로 나올 수 있는 크기의 유도.' },
+  { id:'u2-l4-04', level:4, type:'num', tags:['릿지 λ 선택'], src:'기출 유형',
+    params:{ v0:{choices:[12,15]}, v1:{choices:[9,10]}, v2:{choices:[11,13]} },
+    statement:function(p){ return 'λ=0: 검증 MSE '+p.v0+', λ=1: '+p.v1+', λ=10: '+p.v2+'. (a) 선택 λ (b) λ=10이 나빠진 이유(과잉 수축=편향↑)를 답하고, U자 곡선의 최저 근처 λ를 답하라.'; },
+    solve:function(p){ return { ans:{lam:1, why:1}, unit:{lam:'', why:'(편향↑=1)'}, steps:[
+        '검증 최소 = λ=1',
+        'λ 과대 → 수축 과잉 → 과소적합(편향↑, 1)',
+        '(규제 강도도 하이퍼파라미터 — 검증으로 고른다)' ] }; },
+    hints:['U자의 밑.'] },
+  { id:'u2-l4-05', level:4, type:'num', tags:['특징 확장 실험'], src:'기출 유형',
+    params:{ mse1:{choices:[40,60]}, mse2:{choices:[12,18]}, mse9tr:{choices:[1,2]}, mse9te:{choices:[80,120]} },
+    statement:function(p){ return '검증 MSE — 1차: '+p.mse1+', 2차: '+p.mse2+', 9차: 훈련 '+p.mse9tr+'/검증 '+p.mse9te+'. (a) 선택 차수 (b) 2차 선택 시 1차 대비 오류 감소율(%) (c) 9차 진단(과적합=1)을 답하라.'; },
+    solve:function(p){
+      return { ans:{deg:2, red:(1-p.mse2/p.mse1)*100, diag:1}, unit:{deg:'차', red:'%', diag:''}, steps:[
+        '검증 최소 = 2차',
+        '감소율 = '+SVH.fmt((1-p.mse2/p.mse1)*100)+'%',
+        '9차: 훈련≪검증 → 과적합(1) — 표현력과 데이터의 균형점 찾기' ] }; },
+    hints:['검증 열만 본다.'] },
+  { id:'u2-l4-06', level:4, type:'num', tags:['경사하강 진동 해석'], src:'기출 유형',
+    params:{ a:{choices:[1,2]}, eta:{choices:[0.8,0.9]} },
+    statement:function(p){ return 'J='+p.a+'w², η='+p.eta+'/'+p.a+' (즉 수축인자 1−2η·a = '+(1-2*p.eta)+'): w₀=1에서 3스텝 궤적의 부호와 |w₃|를 구하라.'; },
+    solve:function(p){
+      var f=1-2*p.eta;
+      var w3=Math.pow(f,3);
+      return { ans:{sign:w3>0?1:-1, mag:Math.abs(w3)}, unit:{sign:'', mag:''}, steps:[
+        '인자 '+SVH.fmt(f)+' (음수!) → 부호 교대 진동',
+        'w₃ = '+SVH.fmt(w3)+' → 부호 '+(w3>0?'+1':'−1')+', 크기 '+SVH.fmt(Math.abs(w3)),
+        '(|인자|<1이라 진동하며 수렴 — 발산 직전의 그림)' ] }; },
+    hints:['음수 인자 세제곱.'] },
+  { id:'u2-l4-07', level:4, type:'num', tags:['모델 보고서'], src:'기출 유형',
+    params:{ R2:{choices:[0.85,0.92]}, rmse:{choices:[5,8]}, n:{choices:[50,200]} },
+    statement:function(p){ return 'R²='+p.R2+', RMSE='+p.rmse+'(만원), n='+p.n+'. (a) 설명 분산(%) (b) 예측 ±2·RMSE 구간 폭 (c) 이 보고에 반드시 추가해야 할 것(검증/시험 성능인지 훈련인지 명시=1)을 답하라.'; },
+    solve:function(p){ return { ans:{ev:p.R2*100, band:4*p.rmse, add:1}, unit:{ev:'%', band:'만원', add:''}, steps:[
+        '설명 '+SVH.fmt(p.R2*100)+'%',
+        '±2RMSE 폭 = '+4*p.rmse+'만원',
+        '어느 데이터의 지표인지 명시(1) — 훈련 R²는 자랑이 아니다' ] }; },
+    hints:['보고 문법.'] },
+  { id:'u2-l4-08', level:4, type:'num', tags:['이론-실험 연결'], src:'기출 유형',
+    params:{ d:{choices:[5,10]}, N:{choices:[20,50]} },
+    statement:function(p){ return '특징 '+p.d+'개(다항·교차항 포함) 선형 모델, 데이터 N='+p.N+'. (a) 파라미터/데이터 비율 (b) N=d+1이면 훈련 MSE는 얼마가 되나(0) (c) 그때 검증 성능을 신뢰할 수 있나(0)?'; },
+    solve:function(p){
+      return { ans:{ratio:(p.d+1)/p.N, tr:0, trust:0}, unit:{ratio:'', tr:'', trust:''}, steps:[
+        '비율 = '+SVH.fmt((p.d+1)/p.N),
+        'N=파라미터 수 → 완전 보간 → 훈련 MSE 0',
+        '그러나 일반화는 별개(0) — "자유도 ≥ 데이터"의 경고등' ] }; },
+    hints:['보간 조건.'] }
+  ]
+});
+
+</script>
+<script>
+/* U3 평가방법 — 혼동행렬 4형제, 정밀도/재현율/F1, ROC-AUC, 교차검증, 데이터 누수 */
+SV_BANK.push({
+  id: 'u3', no: 3, title: '평가방법', titleEn: 'Evaluation Methods',
+  scope: '혼동행렬 · 정확도/정밀도/재현율/F1 · 특이도·ROC·AUC · k-겹 교차검증 · 홀드아웃 규율 · 데이터 누수',
+  problems: [
+
+  /* ---------- L1 (6) ---------- */
+  { id:'u3-l1-01', level:1, type:'mc', tags:['혼동행렬'], src:'교재 표준',
+    statement:'혼동행렬 용어가 옳게 짝지어진 것은?',
+    choices:['FP=실제 음성을 양성으로(1종 오류), FN=실제 양성을 음성으로(2종 오류)','FP=양성을 음성으로','TP=음성을 음성으로','FN=1종 오류'],
+    answer:0, expl:'행=실제, 열=예측(관례 확인!). FP=거짓 경보, FN=놓침 — 이름을 상황 언어로 번역해 두면 안 헷갈린다.' },
+  { id:'u3-l1-02', level:1, type:'mc', tags:['정밀도·재현율'], src:'교재 표준',
+    statement:'정의가 옳은 것은?',
+    choices:['정밀도=TP/(TP+FP), 재현율=TP/(TP+FN)','정밀도=TP/(TP+FN)','재현율=TN/(TN+FP)','둘은 항상 같다'],
+    answer:0, expl:'정밀도="양성이라 한 것 중 진짜", 재현율="진짜 중 잡아낸 것". 분모의 F가 다르다.' },
+  { id:'u3-l1-03', level:1, type:'tf', tags:['트레이드오프'], src:'교재 표준',
+    statement:'분류 문턱을 낮추면 재현율은 오르고 정밀도는 대체로 내려간다.',
+    answer:true, expl:'더 많이 양성 판정 → 놓침(FN)↓·거짓경보(FP)↑. 문턱 스윕이 곧 ROC/PR 곡선이다.' },
+  { id:'u3-l1-04', level:1, type:'mc', tags:['ROC'], src:'교재 표준',
+    statement:'ROC 곡선의 축과 기준선은?',
+    choices:['x=FPR, y=TPR, 대각선=무작위(AUC 0.5)','x=재현율, y=정밀도','대각선=완벽 분류기','AUC 0=무작위'],
+    answer:0, expl:'완벽=좌상단(AUC 1). AUC는 "무작위 양성·음성 쌍에서 양성에 더 높은 점수를 줄 확률".' },
+  { id:'u3-l1-05', level:1, type:'tf', tags:['교차검증'], src:'교재 표준',
+    statement:'k-겹 교차검증은 데이터를 k등분해 각 겹을 한 번씩 검증에 쓰고 성능을 평균한다 — 홀드아웃보다 분산이 작다.',
+    answer:true, expl:'모든 데이터가 검증에 한 번씩. k=N이면 LOOCV. 시험셋은 그와 별도로 봉인.' },
+  { id:'u3-l1-06', level:1, type:'mc', tags:['누수'], src:'교재 표준',
+    statement:'데이터 누수(leakage)의 예가 아닌 것은?',
+    choices:['훈련 데이터만으로 표준화 파라미터를 만들어 시험에 적용','시험 데이터를 포함해 표준화 후 분할','시험셋으로 하이퍼파라미터 튜닝','미래 정보를 특징에 포함'],
+    answer:0, expl:'①이 올바른 절차다. 전처리·튜닝·특징 모두 "시험 정보가 새는 문"이 될 수 있다.' },
+
+  /* ---------- L2 (12) ---------- */
+  { id:'u3-l2-01', level:2, type:'num', tags:['4지표 계산'], src:'창작 문제(검산됨)',
+    params:{ TP:{choices:[30,40]}, FP:{choices:[10,20]}, FN:{choices:[10,20]}, TN:{choices:[40,50]} },
+    statement:function(p){ return 'TP='+p.TP+', FP='+p.FP+', FN='+p.FN+', TN='+p.TN+': 정확도·정밀도·재현율(%)을 구하라.'; },
+    solve:function(p){
+      var acc=(p.TP+p.TN)/(p.TP+p.FP+p.FN+p.TN)*100;
+      var pr=p.TP/(p.TP+p.FP)*100, rc=p.TP/(p.TP+p.FN)*100;
+      return { ans:{acc:acc, pr:pr, rc:rc}, unit:{acc:'%', pr:'%', rc:'%'}, steps:[
+        'acc = '+SVH.fmt(acc)+'%',
+        'precision = TP/(TP+FP) = '+SVH.fmt(pr)+'%, recall = TP/(TP+FN) = '+SVH.fmt(rc)+'%' ] }; },
+    hints:['분모 구분.'] },
+  { id:'u3-l2-02', level:2, type:'num', tags:['F1'], src:'창작 문제(검산됨)',
+    params:{ pr:{choices:[60,80]}, rc:{choices:[40,90]} },
+    statement:function(p){ return '정밀도 '+p.pr+'%, 재현율 '+p.rc+'%의 F1(%)과 산술평균(%)을 비교하라.'; },
+    solve:function(p){
+      var f1=2*p.pr*p.rc/(p.pr+p.rc);
+      return { ans:{F1:f1, avg:(p.pr+p.rc)/2}, unit:{F1:'%', avg:'%'}, steps:[
+        'F1 = 조화평균 = '+SVH.fmt(f1)+'% ≤ 산술 '+SVH.fmt((p.pr+p.rc)/2)+'%',
+        '(한쪽이 낮으면 F1이 가혹하게 깎는다 — 균형 강제 장치)' ] }; },
+    hints:['2pr·rc/(pr+rc).'] },
+  { id:'u3-l2-03', level:2, type:'num', tags:['특이도·FPR'], src:'창작 문제(검산됨)',
+    params:{ TN:{choices:[80,90]}, FP:{choices:[10,20]} },
+    statement:function(p){ return 'TN='+p.TN+', FP='+p.FP+': 특이도(%)와 FPR(%)을 구하라.'; },
+    solve:function(p){ var sp=p.TN/(p.TN+p.FP)*100;
+      return { ans:{spec:sp, FPR:100-sp}, unit:{spec:'%', FPR:'%'}, steps:[
+        '특이도 = TN/(TN+FP) = '+SVH.fmt(sp)+'%',
+        'FPR = 1−특이도 = '+SVH.fmt(100-sp)+'% (ROC의 x축)' ] }; },
+    hints:['음성 쪽 지표.'] },
+  { id:'u3-l2-04', level:2, type:'num', tags:['불균형 함정'], src:'기출 유형',
+    params:{ P:{choices:[10,50]}, N:{choices:[990,950]} },
+    statement:function(p){ return '양성 '+p.P+'/음성 '+p.N+'인 데이터에서 "전부 음성" 분류기의 (a) 정확도(%) (b) 재현율(%)을 구하라.'; },
+    solve:function(p){
+      return { ans:{acc:p.N/(p.P+p.N)*100, rc:0}, unit:{acc:'%', rc:'%'}, steps:[
+        'acc = '+SVH.fmt(p.N/(p.P+p.N)*100)+'% (높다!)',
+        'recall = 0% — 정확도 단독 보고가 금지되는 이유' ] }; },
+    hints:['모두 음성이면 TP=0.'] },
+  { id:'u3-l2-05', level:2, type:'num', tags:['k-겹 산수'], src:'창작 문제(검산됨)',
+    params:{ N:{choices:[500,1000]}, k:{choices:[5,10]} },
+    statement:function(p){ return 'N='+p.N+', k='+p.k+'겹 CV: (a) 겹당 검증 크기 (b) 총 훈련 횟수 (c) 각 훈련의 데이터 크기를 구하라.'; },
+    solve:function(p){
+      return { ans:{val:p.N/p.k, runs:p.k, tr:p.N*(p.k-1)/p.k}, unit:{val:'개', runs:'회', tr:'개'}, steps:[
+        '검증 '+p.N/p.k+'개 × '+p.k+'회, 훈련 '+p.N*(p.k-1)/p.k+'개',
+        '(k↑ → 훈련 많고 비용↑, LOOCV가 극단)' ] }; },
+    hints:['(k−1)/k.'] },
+  { id:'u3-l2-06', level:2, type:'num', tags:['CV 평균·편차'], src:'창작 문제(검산됨)',
+    params:{ s:{choices:[[80,82,84,86,88],[70,75,80,85,90]]} },
+    statement:function(p){ var s=p.s; return '5겹 정확도 ['+s.join(', ')+']%: 평균과 (모)표준편차를 구하라.'; },
+    solve:function(p){
+      var s=p.s, m=0, v=0;
+      for(var i=0;i<5;i++) m+=s[i]; m/=5;
+      for(var i=0;i<5;i++) v+=(s[i]-m)*(s[i]-m); v/=5;
+      return { ans:{mean:m, sd:Math.sqrt(v)}, unit:{mean:'%', sd:'%p'}, steps:[
+        '평균 '+SVH.fmt(m)+'%, σ = '+SVH.fmt(Math.sqrt(v))+'%p',
+        '(평균±σ로 보고 — 한 숫자보다 정직하다)' ] }; },
+    hints:['평균→편차 제곱.'] },
+  { id:'u3-l2-07', level:2, type:'num', tags:['문턱 이동'], src:'창작 문제(검산됨)',
+    params:{ TP:{choices:[40]}, FN:{choices:[10]}, dTP:{choices:[5,8]}, dFP:{choices:[15,25]} },
+    statement:function(p){ return '문턱을 낮춰 TP '+p.TP+'→'+(p.TP+p.dTP)+', FP 10→'+(10+p.dFP)+' (FN '+p.FN+'→'+(p.FN-p.dTP)+'). 재현율 변화(%p)와 정밀도 변화(%p)를 구하라.'; },
+    solve:function(p){
+      var rc1=p.TP/(p.TP+p.FN)*100, rc2=(p.TP+p.dTP)/(p.TP+p.FN)*100;
+      var pr1=p.TP/(p.TP+10)*100, pr2=(p.TP+p.dTP)/(p.TP+p.dTP+10+p.dFP)*100;
+      return { ans:{dRC:rc2-rc1, dPR:pr2-pr1}, unit:{dRC:'%p', dPR:'%p'}, steps:[
+        '재현율 '+SVH.fmt(rc1)+'→'+SVH.fmt(rc2)+' (+'+SVH.fmt(rc2-rc1)+')',
+        '정밀도 '+SVH.fmt(pr1)+'→'+SVH.fmt(pr2)+' ('+SVH.fmt(pr2-pr1)+') — 트레이드오프의 수치 실물' ] }; },
+    hints:['두 시점 각각 계산.'] },
+  { id:'u3-l2-08', level:2, type:'num', tags:['AUC 손계산'], src:'교재 표준',
+    params:{ pos:{choices:[[0.9,0.7],[0.8,0.6]]}, neg:{choices:[[0.5,0.3],[0.65,0.2]]} },
+    statement:function(p){ return '양성 점수 ['+p.pos.join(', ')+'], 음성 점수 ['+p.neg.join(', ')+']. 모든 (양,음) 쌍 중 양성>음성 비율로 AUC를 구하라.'; },
+    solve:function(p){
+      var w=0, t=0;
+      for(var i=0;i<2;i++) for(var j=0;j<2;j++){ t++; if(p.pos[i]>p.neg[j]) w++; else if(p.pos[i]===p.neg[j]) w+=0.5; }
+      return { ans:w/t, unit:'', steps:[
+        '쌍 4개 비교: 이긴 쌍 '+w+'/4',
+        'AUC = '+SVH.fmt(w/t)+' (AUC의 확률 해석 그대로)' ] }; },
+    hints:['쌍별 승패.'] },
+  { id:'u3-l2-09', level:2, type:'num', tags:['정밀도@k'], src:'창작 문제(검산됨)',
+    params:{ k:{choices:[10,20]}, hit:{choices:[6,8]} },
+    statement:function(p){ return '추천 상위 '+p.k+'개 중 '+p.hit+'개가 적중. (a) Precision@k(%) (b) 전체 양성이 40개면 Recall@k(%)를 구하라.'; },
+    solve:function(p){
+      return { ans:{pk:p.hit/p.k*100, rk:p.hit/40*100}, unit:{pk:'%', rk:'%'}, steps:[
+        'P@k = '+SVH.fmt(p.hit/p.k*100)+'%',
+        'R@k = '+p.hit+'/40 = '+SVH.fmt(p.hit/40*100)+'% (랭킹 평가의 기본형)' ] }; },
+    hints:['분모가 다르다.'] },
+  { id:'u3-l2-10', level:2, type:'num', tags:['오류 막대'], src:'교재 표준',
+    params:{ acc:{choices:[85,90]}, N:{choices:[100,400]} },
+    statement:function(p){ return '시험 정확도 '+p.acc+'% (N='+p.N+'). 표준오차 √(p(1−p)/N)를 %p로 구하고 ±2SE 구간을 답하라.'; },
+    solve:function(p){
+      var se=Math.sqrt(p.acc/100*(1-p.acc/100)/p.N)*100;
+      return { ans:{SE:se, lo:p.acc-2*se, hi:p.acc+2*se}, unit:{SE:'%p', lo:'%', hi:'%'}, steps:[
+        'SE = '+SVH.fmt(se)+'%p → 구간 ['+SVH.fmt(p.acc-2*se)+', '+SVH.fmt(p.acc+2*se)+']%',
+        '(N=100에서 1%p 차이는 소음 — 비교 주장 전 필수 계산)' ] }; },
+    hints:['이항 SE.'] },
+  { id:'u3-l2-11', level:2, type:'num', tags:['다중 클래스 정확도'], src:'창작 문제(검산됨)',
+    params:{ d:{choices:[[50,40,30],[60,30,20]]}, N:{choices:[150,200]} },
+    statement:function(p){ var d=p.d; return '3클래스 혼동행렬 대각합이 ['+d.join('+')+'], 전체 N='+p.N+'. 정확도(%)와 무작위 기준선(1/3)을 비교하라.'; },
+    solve:function(p){ var s=p.d[0]+p.d[1]+p.d[2];
+      return { ans:{acc:s/p.N*100, base:33.3}, unit:{acc:'%', base:'%'}, steps:[
+        'acc = '+s+'/'+p.N+' = '+SVH.fmt(s/p.N*100)+'%',
+        '기준선 33.3% 대비 확인 (다중 클래스는 클래스별 재현율 표도 함께)' ] }; },
+    hints:['대각합/전체.'] },
+  { id:'u3-l2-12', level:2, type:'num', tags:['층화 필요성'], src:'창작 문제(검산됨)',
+    params:{ P:{choices:[20,40]}, N:{choices:[200,400]}, k:{choices:[10]} },
+    statement:function(p){ return '양성 '+p.P+'/전체 '+p.N+'을 '+p.k+'겹으로 무층화 분할하면 겹당 기대 양성 수는? 층화(stratified)가 보장하는 것은?'; },
+    solve:function(p){ return { ans:p.P/p.k, unit:'개', steps:[
+        '기대 '+p.P/p.k+'개 — 운 나쁘면 0개 겹 발생 가능',
+        '층화 = 겹마다 클래스 비율 고정 → 지표 분산 감소' ] }; },
+    hints:['기대값+분산 논리.'] },
+
+  /* ---------- L3 (14) ---------- */
+  { id:'u3-l3-01', level:3, type:'num', tags:['행렬→전지표'], src:'기출 유형',
+    params:{ TP:{choices:[45,60]}, FN:{choices:[15,20]}, FP:{choices:[30,40]}, TN:{choices:[110,180]} },
+    statement:function(p){ return 'TP='+p.TP+', FN='+p.FN+', FP='+p.FP+', TN='+p.TN+': 정확도·정밀도·재현율·특이도·F1(%)을 모두 구하라.'; },
+    solve:function(p){
+      var tot=p.TP+p.FN+p.FP+p.TN;
+      var acc=(p.TP+p.TN)/tot*100, pr=p.TP/(p.TP+p.FP)*100, rc=p.TP/(p.TP+p.FN)*100;
+      var sp=p.TN/(p.TN+p.FP)*100, f1=2*pr*rc/(pr+rc);
+      return { ans:{acc:acc, pr:pr, rc:rc, sp:sp, F1:f1}, unit:{acc:'%',pr:'%',rc:'%',sp:'%',F1:'%'}, steps:[
+        'acc '+SVH.fmt(acc)+' · P '+SVH.fmt(pr)+' · R '+SVH.fmt(rc),
+        '특이도 '+SVH.fmt(sp)+' · F1 '+SVH.fmt(f1)+'%',
+        '(5지표 한 표 — 시험 손계산의 표준형)' ] }; },
+    hints:['표 그려 채우기.'] },
+  { id:'u3-l3-02', level:3, type:'num', tags:['베이즈 정리 유병률'], src:'기출 유형',
+    params:{ prev:{choices:[1,5]}, sens:{choices:[90,99]}, spec:{choices:[90,95]} },
+    statement:function(p){ return '유병률 '+p.prev+'%, 민감도 '+p.sens+'%, 특이도 '+p.spec+'%인 검사에서 양성 판정 시 실제 병일 확률(PPV, %)을 구하라.'; },
+    solve:function(p){
+      var pv=p.prev/100, se=p.sens/100, sp=p.spec/100;
+      var ppv=pv*se/(pv*se+(1-pv)*(1-sp))*100;
+      return { ans:ppv, unit:'%', steps:[
+        'PPV = P(병|+) = prev·sens/[prev·sens+(1−prev)(1−spec)]',
+        '= '+SVH.fmt(ppv)+'% — 직관보다 훨씬 낮다(기저율의 무서움)',
+        '(정밀도=PPV: 평가 지표와 베이즈가 같은 것 — U6 다리)' ] }; },
+    hints:['분모에 거짓 양성 몫.'] },
+  { id:'u3-l3-03', level:3, type:'num', tags:['ROC 점 찍기'], src:'기출 유형',
+    params:{ th:{choices:[0.5,0.7]} },
+    statement:function(p){ return '점수: 양성 [0.9, 0.8, 0.4], 음성 [0.6, 0.3, 0.1]. 문턱 '+p.th+'에서 (TPR, FPR)을 구하라.'; },
+    solve:function(p){
+      var pos=[0.9,0.8,0.4], neg=[0.6,0.3,0.1];
+      var tp=pos.filter(x=>x>=p.th).length, fp=neg.filter(x=>x>=p.th).length;
+      return { ans:{TPR:tp/3*100, FPR:fp/3*100}, unit:{TPR:'%', FPR:'%'}, steps:[
+        '문턱 '+p.th+': TP='+tp+'/3, FP='+fp+'/3',
+        '(TPR, FPR) = ('+SVH.fmt(tp/3*100)+'%, '+SVH.fmt(fp/3*100)+'%) — 문턱 스윕이 곡선을 만든다' ] }; },
+    hints:['점수≥문턱=양성 판정.'] },
+  { id:'u3-l3-04', level:3, type:'num', tags:['AUC 6점 계산'], src:'기출 유형',
+    params:{ n3:{choices:[0.55,0.75]} },
+    statement:function(p){ return '양성 [0.9, 0.7, 0.6], 음성 [0.8, '+p.n3+', 0.2]의 AUC를 쌍 비교(9쌍)로 구하라.'; },
+    solve:function(p){
+      var pos=[0.9,0.7,0.6], neg=[0.8,p.n3,0.2];
+      var w=0;
+      for(var i=0;i<3;i++)for(var j=0;j<3;j++){ if(pos[i]>neg[j]) w++; else if(pos[i]===neg[j]) w+=0.5; }
+      return { ans:w/9, unit:'', steps:[
+        '9쌍 중 승 '+w,
+        'AUC = '+SVH.fmt(w/9)+' (완벽 1·무작위 0.5 사이 어디쯤인지 감각)' ] }; },
+    hints:['3×3 표.'] },
+  { id:'u3-l3-05', level:3, type:'num', tags:['비용 최적 문턱'], src:'기출 유형',
+    params:{ cFN:{choices:[10,50]}, cFP:{choices:[1,2]}, prev:{choices:[10,30]} },
+    statement:function(p){ return 'FN 비용 '+p.cFN+', FP 비용 '+p.cFP+', 유병률 '+p.prev+'%. 양성 판정이 유리해지는 P(병|x)의 문턱(%)을 구하라.'; },
+    solve:function(p){
+      var th=p.cFP/(p.cFP+p.cFN)*100;
+      return { ans:th, unit:'%', steps:[
+        '문턱 = c_FP/(c_FP+c_FN) = '+SVH.fmt(th)+'%',
+        '(비용 비대칭 → 0.5가 아닌 문턱 — U1-l3-14의 재방문, 유병률은 P(병|x) 계산에 이미 반영)' ] }; },
+    hints:['기대비용 등식.'] },
+  { id:'u3-l3-06', level:3, type:'num', tags:['McNemar 감각'], src:'교재 표준',
+    params:{ b:{choices:[15,30]}, c:{choices:[5,10]} },
+    statement:function(p){ return '두 모델 비교: A만 맞힌 사례 b='+p.b+', B만 맞힌 사례 c='+p.c+'. McNemar 통계량 (|b−c|−1)²/(b+c)를 구하고 3.84(5% 기준) 초과 여부(1/0)를 답하라.'; },
+    solve:function(p){
+      var s=Math.pow(Math.abs(p.b-p.c)-1,2)/(p.b+p.c);
+      return { ans:{stat:s, sig:s>3.84?1:0}, unit:{stat:'', sig:''}, steps:[
+        '통계량 = '+SVH.fmt(s),
+        (s>3.84?'유의(1)':'유의하지 않음(0)')+' — 불일치 사례만이 정보다(둘 다 맞은 것은 무정보)' ] }; },
+    hints:['b, c만 쓴다.'] },
+  { id:'u3-l3-07', level:3, type:'num', tags:['거시·미시 평균'], src:'교재 표준',
+    params:{ r1:{choices:[90]}, n1:{choices:[900]}, r2:{choices:[30,50]}, n2:{choices:[100]} },
+    statement:function(p){ return '클래스1(n='+p.n1+') 재현율 '+p.r1+'%, 클래스2(n='+p.n2+') 재현율 '+p.r2+'%. (a) 매크로 평균 (b) 마이크로(=가중) 평균 재현율(%)을 구하라.'; },
+    solve:function(p){
+      var mac=(p.r1+p.r2)/2;
+      var mic=(p.r1*p.n1+p.r2*p.n2)/(p.n1+p.n2);
+      return { ans:{macro:mac, micro:mic}, unit:{macro:'%', micro:'%'}, steps:[
+        '매크로 = 단순 평균 '+SVH.fmt(mac)+'% (소수 클래스에 공평)',
+        '마이크로 = 가중 '+SVH.fmt(mic)+'% (다수 클래스가 지배)',
+        '(어느 평균을 쓰는지 명시 — 불균형 보고의 예의)' ] }; },
+    hints:['두 평균의 철학.'] },
+  { id:'u3-l3-08', level:3, type:'num', tags:['중첩 CV 구조'], src:'교재 표준',
+    params:{ ko:{choices:[5]}, ki:{choices:[3,4]}, m:{choices:[4,6]} },
+    statement:function(p){ return '하이퍼파라미터 후보 '+p.m+'개를 안쪽 '+p.ki+'겹으로 고르고 바깥 '+p.ko+'겹으로 평가하는 중첩 CV의 총 훈련 횟수(탐색 포함, 바깥 재훈련 포함)를 구하라.'; },
+    solve:function(p){
+      var n=p.ko*(p.ki*p.m+1);
+      return { ans:n, unit:'회', steps:[
+        '바깥 겹마다: 안쪽 '+p.ki+'×'+p.m+' + 최종 재훈련 1',
+        '총 '+p.ko+'×('+p.ki*p.m+'+1) = '+n+'회 (정직한 평가의 계산 비용)' ] }; },
+    hints:['곱하고 더하기.'] },
+  { id:'u3-l3-09', level:3, type:'num', tags:['누수 정량'], src:'기출 유형',
+    params:{ cv:{choices:[95,98]}, real:{choices:[75,82]} },
+    statement:function(p){ return '중복 샘플이 겹에 걸쳐 있던 CV 정확도 '+p.cv+'%, 중복 제거 후 '+p.real+'%. (a) 부풀림(%p) (b) 이런 누수를 막는 분할 원칙(그룹 단위 분할=1)을 답하라.'; },
+    solve:function(p){ return { ans:{infl:p.cv-p.real, rule:1}, unit:{infl:'%p', rule:''}, steps:[
+        '부풀림 = '+(p.cv-p.real)+'%p — 같은 환자/유저가 양쪽에 있으면 시험이 아니라 재시험',
+        '그룹(환자·시계열) 단위 분할(1)이 원칙' ] }; },
+    hints:['그룹 누수.'] },
+  { id:'u3-l3-10', level:3, type:'num', tags:['PR 기준선'], src:'교재 표준',
+    params:{ prev:{choices:[5,20]} },
+    statement:function(p){ return '양성 비율 '+p.prev+'%인 데이터에서 (a) PR 곡선의 무작위 기준선(정밀도) (b) ROC 기준선 AUC를 구하라. 불균형에서 어느 곡선이 더 예민한가(PR=1)?'; },
+    solve:function(p){ return { ans:{pr:p.prev, roc:0.5, pick:1}, unit:{pr:'%', roc:'', pick:''}, steps:[
+        'PR 기준선 = 유병률 '+p.prev+'%, ROC 기준선 = 0.5(불균형 무관)',
+        '불균형에선 PR이 차이를 크게 보여준다(1)' ] }; },
+    hints:['기준선의 차이.'] },
+  { id:'u3-l3-11', level:3, type:'num', tags:['필요 시험 크기'], src:'교재 표준',
+    params:{ diff:{choices:[2,5]}, acc:{choices:[85,90]} },
+    statement:function(p){ return '정확도 차 '+p.diff+'%p를 ±2SE로 구분하려면(SE差 근사 √2·√(p(1−p)/N)×2 ≤ diff) 필요한 N을 구하라. (p≈'+p.acc+'%)'; },
+    solve:function(p){
+      var pq=p.acc/100*(1-p.acc/100);
+      var N=8*pq/Math.pow(p.diff/100,2);
+      return { ans:N, unit:'개', steps:[
+        'N ≥ 8p(1−p)/diff² = '+SVH.fmt(N),
+        '(2%p 구분에 수천 개 — "우리 모델이 1% 좋다" 주장의 무게)' ] }; },
+    hints:['SE 조건 역산.'] },
+  { id:'u3-l3-12', level:3, type:'num', tags:['균형 정확도'], src:'교재 표준',
+    params:{ rc:{choices:[80,95]}, sp:{choices:[40,60]} },
+    statement:function(p){ return '재현율 '+p.rc+'%, 특이도 '+p.sp+'%: 균형 정확도((rc+sp)/2)를 구하고, 불균형에서 정확도 대신 쓰는 이유를 답하라.'; },
+    solve:function(p){ return { ans:(p.rc+p.sp)/2, unit:'%', steps:[
+        '균형 정확도 = '+SVH.fmt((p.rc+p.sp)/2)+'%',
+        '(클래스별 성능의 평균 — 다수 클래스 무임승차 차단)' ] }; },
+    hints:['두 클래스 대칭 평균.'] },
+  { id:'u3-l3-13', level:3, type:'num', tags:['조합 탐색 비용'], src:'창작 문제(검산됨)',
+    params:{ a:{choices:[4,5]}, b:{choices:[3,6]}, k:{choices:[5]}, t:{choices:[2,10]} },
+    statement:function(p){ return '그리드 서치: 파라미터 2개(값 '+p.a+'×'+p.b+'개), '+p.k+'겹 CV, 1훈련 '+p.t+'분. 총 소요(시간)를 구하라.'; },
+    solve:function(p){
+      var min=p.a*p.b*p.k*p.t;
+      return { ans:min/60, unit:'시간', steps:[
+        p.a*p.b+'조합 × '+p.k+'겹 × '+p.t+'분 = '+min+'분 = '+SVH.fmt(min/60)+'시간',
+        '(탐색 설계는 예산 산수부터)' ] }; },
+    hints:['전부 곱.'] },
+  { id:'u3-l3-14', level:3, type:'num', tags:['시계열 분할'], src:'교재 표준',
+    params:{ N:{choices:[120,240]}, w:{choices:[60,120]}, h:{choices:[12,24]} },
+    statement:function(p){ return '시계열 N='+p.N+'개월, 훈련창 '+p.w+'·검증창 '+p.h+'개월 롤링(창 이동 = 검증창 크기): 가능한 평가 횟수를 구하고, 무작위 k-겹을 쓰면 안 되는 이유를 답하라.'; },
+    solve:function(p){
+      var n=Math.floor((p.N-p.w)/p.h);
+      return { ans:n, unit:'회', steps:[
+        '('+p.N+'−'+p.w+')/'+p.h+' = '+n+'회',
+        '무작위 분할 = 미래로 과거를 예측하는 누수 — 시간 순서 보존이 원칙' ] }; },
+    hints:['(N−w)/h 내림.'] },
+
+  /* ---------- L4 (8) ---------- */
+  { id:'u3-l4-01', level:4, type:'mc', tags:['개념 종합'], src:'기출 유형',
+    statement:'옳은 것을 모두 고르면?<br>㉠ 불균형 데이터에서 정확도 단독 보고는 오도할 수 있다<br>㉡ AUC는 무작위 양·음 쌍의 순위 정확도로 해석된다<br>㉢ 시험셋은 모델·하이퍼파라미터 선택에 쓰면 안 된다<br>㉣ 전처리 통계는 훈련 데이터에서만 추정한다',
+    choices:['전부','㉠㉡㉢','㉡㉢㉣','㉠㉣'],
+    answer:0, expl:'전부 참 — 평가 규율의 헌법 4조.' },
+  { id:'u3-l4-02', level:4, type:'num', tags:['종합 손계산'], src:'기출 유형',
+    params:{ N:{choices:[200]}, prev:{choices:[20,30]}, rc:{choices:[80,90]}, sp:{choices:[85,90]} },
+    statement:function(p){ return 'N='+p.N+', 유병률 '+p.prev+'%, 재현율 '+p.rc+'%, 특이도 '+p.sp+'%에서 혼동행렬 4칸을 복원하고 정밀도·F1(%)을 구하라.'; },
+    solve:function(p){
+      var P=p.N*p.prev/100, Ng=p.N-P;
+      var TP=P*p.rc/100, FN=P-TP, TN=Ng*p.sp/100, FP=Ng-TN;
+      var pr=TP/(TP+FP)*100, f1=2*pr*p.rc/(pr+p.rc);
+      return { ans:{TP:TP, FP:FP, pr:pr, F1:f1}, unit:{TP:'', FP:'', pr:'%', F1:'%'}, steps:[
+        'P='+P+', N='+Ng+' → TP='+SVH.fmt(TP)+', FN='+SVH.fmt(FN)+', TN='+SVH.fmt(TN)+', FP='+SVH.fmt(FP),
+        '정밀도 = '+SVH.fmt(pr)+'%, F1 = '+SVH.fmt(f1)+'%',
+        '(지표→행렬 역산 — 지표 정의를 정말 아는지 시험하는 방식)' ] }; },
+    hints:['비율→개수 순서로.'] },
+  { id:'u3-l4-03', level:4, type:'derive', tags:['유도'], src:'교재 표준',
+    statement:'F1이 정밀도·재현율의 "조화평균"인 이유를 유도하고, 산술평균 대비 성질(한쪽 0이면 0)을 증명하라.',
+    steps:[
+      'F1 정의: \\(F_1=\\dfrac{2PR}{P+R}\\) [왜] TP 관점 재작성: 2TP/(2TP+FP+FN)과 동치',
+      '조화평균 \\(H=2/(1/P+1/R)\\)로 정리하면 동일 — "역수의 평균의 역수"',
+      'R→0이면 F1→0 (산술평균은 P/2로 살아남음) — 한쪽 실패를 숨기지 못한다',
+      'P=R일 때 F1=P=산술평균 — 균형점에서만 일치',
+      '극한 체크: 완벽(1,1)⇒1 ✓ · H≤산술(AM-HM 부등식) ✓'
+    ],
+    hints:['2TP 형태와 조화평균 형태를 오가라.'],
+    expl:'"왜 하필 조화평균?"에 대한 완결 답 — 서술형 후보.' },
+  { id:'u3-l4-04', level:4, type:'num', tags:['ROC 전체 스윕'], src:'기출 유형',
+    params:{ n2:{choices:[0.45,0.65]} },
+    statement:function(p){ return '양성 [0.9, 0.6], 음성 [0.7, '+p.n2+']. 문턱을 점수 사이마다 옮기며 (TPR, FPR) 점들을 나열하고 사다리꼴로 AUC를 구하라.'; },
+    solve:function(p){
+      var pos=[0.9,0.6], neg=[0.7,p.n2];
+      var w=0;
+      for(var i=0;i<2;i++)for(var j=0;j<2;j++){ if(pos[i]>neg[j]) w++; else if(pos[i]===neg[j]) w+=0.5; }
+      return { ans:w/4, unit:'', steps:[
+        '점: (0,0)→문턱 내리며 → (1,1)',
+        'AUC(쌍 비교와 동일) = '+SVH.fmt(w/4),
+        '(점 나열과 쌍 비교가 같은 답 — 두 방법 교차 검산)' ] }; },
+    hints:['쌍 비교가 빠른 검산.'] },
+  { id:'u3-l4-05', level:4, type:'num', tags:['임상 시나리오'], src:'기출 유형',
+    params:{ prev:{choices:[0.5,2]}, sens:{choices:[95]}, spec:{choices:[95,99]}, N:{choices:[100000]} },
+    statement:function(p){ return '인구 '+p.N+'명 선별검사(유병률 '+p.prev+'%, 민감도 '+p.sens+'%, 특이도 '+p.spec+'%): (a) 양성 판정자 수 (b) 그중 실제 환자 비율(PPV, %) (c) 놓친 환자 수를 구하라.'; },
+    solve:function(p){
+      var P=p.N*p.prev/100, Ng=p.N-P;
+      var TP=P*p.sens/100, FP=Ng*(1-p.spec/100);
+      return { ans:{pos:TP+FP, PPV:TP/(TP+FP)*100, miss:P-TP}, unit:{pos:'명', PPV:'%', miss:'명'}, steps:[
+        '양성 = TP '+SVH.fmt(TP)+' + FP '+SVH.fmt(FP)+' = '+SVH.fmt(TP+FP)+'명',
+        'PPV = '+SVH.fmt(TP/(TP+FP)*100)+'% — 대부분 허탕',
+        '놓침 = '+SVH.fmt(P-TP)+'명 (선별검사 정책 논쟁의 산수)' ] }; },
+    hints:['나무 그림으로 4칸.'] },
+  { id:'u3-l4-06', level:4, type:'num', tags:['모델 비교 보고'], src:'기출 유형',
+    params:{ a:{choices:[86,88]}, b:{choices:[89,90]}, N:{choices:[500,1000]} },
+    statement:function(p){ return 'A '+p.a+'% vs B '+p.b+'% (같은 시험셋 N='+p.N+'). (a) 차이(%p) (b) 차이의 대략적 SE(√(2p̄q̄/N), p̄=평균) (c) 차이>2SE인가(1/0)를 구하라.'; },
+    solve:function(p){
+      var pb=(p.a+p.b)/200, se=Math.sqrt(2*pb*(1-pb)/p.N)*100;
+      var d=p.b-p.a;
+      return { ans:{d:d, SE:se, sig:d>2*se?1:0}, unit:{d:'%p', SE:'%p', sig:''}, steps:[
+        '차 = '+d+'%p, SE ≈ '+SVH.fmt(se)+'%p',
+        (d>2*se?'구분 가능(1)':'소음 범위(0) — 같은 사례 대조(McNemar)가 더 예민'),
+        '(비교 주장에는 항상 오차 막대)' ] }; },
+    hints:['2SE 규칙.'] },
+  { id:'u3-l4-07', level:4, type:'num', tags:['파이프라인 감사'], src:'기출 유형',
+    params:{ s:{choices:[1,2]} },
+    statement:function(p){ return '절차 감사 — ① 전체 데이터로 특징 선택 후 CV ② 겹 안에서 특징 선택 ③ 시험셋으로 λ 튜닝 ④ 튜닝은 검증, 시험은 1회. 올바른 절차 두 개의 번호 합을 구하라.'; },
+    solve:function(p){ return { ans:6, unit:'(②+④)', steps:[
+        '①은 선택 누수(시험 정보가 특징에), ③은 시험 오염',
+        '②·④가 정도 → 합 6',
+        '(누수는 코드가 아니라 "절차"에서 샌다)' ] }; },
+    hints:['모든 학습된 것은 겹 안에서.'] },
+  { id:'u3-l4-08', level:4, type:'num', tags:['운영 문턱 설계'], src:'기출 유형',
+    params:{ rc:{choices:[[95,60],[90,70]]}, vol:{choices:[1000]}, cap:{choices:[100,150]} },
+    statement:function(p){ var r=p.rc; return '문턱 A: 재현율 '+r[0]+'%·정밀도 '+r[1]+'%. 하루 '+p.vol+'건 중 양성 5%, 검토 인력 한도 '+p.cap+'건. A의 일일 양성 판정량(TP+FP)을 구하고 한도 내인지(1/0) 답하라.'; },
+    solve:function(p){
+      var r=p.rc;
+      var TP=p.vol*0.05*r[0]/100;
+      var flag=TP/(r[1]/100);
+      return { ans:{flag:flag, ok:flag<=p.cap?1:0}, unit:{flag:'건', ok:''}, steps:[
+        'TP = '+SVH.fmt(TP)+' → 판정량 = TP/정밀도 = '+SVH.fmt(flag)+'건',
+        (flag<=p.cap?'한도 내(1)':'초과(0) — 문턱을 올려야')+' (지표를 운영 제약으로 번역하는 문제)' ] }; },
+    hints:['정밀도=TP/판정량 역산.'] }
+  ]
+});
+
+</script>
+<script>
+/* U4 결정트리 I — 엔트로피, 정보이득, ID3 분할 선택, 이득비 */
+SV_BANK.push({
+  id: 'u4', no: 4, title: '결정트리 I (엔트로피·정보이득)', titleEn: 'Decision Trees I',
+  scope: '엔트로피 H(p) · 조건부 엔트로피 · 정보이득 · ID3 분할 선택 · 다지 분할 편향과 이득비(gain ratio)',
+  problems: [
+
+  /* ---------- L1 (6) ---------- */
+  { id:'u4-l1-01', level:1, type:'mc', tags:['엔트로피'], src:'교재 표준',
+    statement:'이진 엔트로피 \\(H(p)=-p\\log_2p-(1-p)\\log_2(1-p)\\)의 성질로 옳은 것은?',
+    choices:['p=0.5에서 최대 1비트, p=0·1에서 0','p=1에서 최대','단위는 항상 nat','p에 선형'],
+    answer:0, expl:'불확실성의 척도 — 반반이 제일 모른다. log₂면 비트.' },
+  { id:'u4-l1-02', level:1, type:'mc', tags:['정보이득'], src:'교재 표준',
+    statement:'정보이득 IG(S, A)의 정의는?',
+    choices:['H(S) − Σ(|Sᵥ|/|S|)H(Sᵥ) — 분할로 줄어든 엔트로피','분할 후 엔트로피 합','H(S) 그 자체','자식 수'],
+    answer:0, expl:'부모 엔트로피 − 자식들의 가중 평균 엔트로피. ID3는 IG 최대 특징을 고른다.' },
+  { id:'u4-l1-03', level:1, type:'tf', tags:['탐욕성'], src:'교재 표준',
+    statement:'ID3/C4.5는 탐욕(greedy) 알고리즘이라 전역 최적 트리를 보장하지 않는다.',
+    answer:true, expl:'매 노드 지역 최선 분할. 최적 트리 탐색은 NP-hard — 탐욕이 실용 타협.' },
+  { id:'u4-l1-04', level:1, type:'mc', tags:['다지 편향'], src:'교재 표준',
+    statement:'값이 아주 많은 특징(예: 학번)이 IG에서 유리해지는 문제의 처방은?',
+    choices:['이득비 = IG / 분할정보(SplitInfo)로 정규화','IG를 제곱','그 특징을 항상 먼저 사용','트리를 깊게'],
+    answer:0, expl:'학번은 완벽 분할(IG 최대)이지만 일반화 0. SplitInfo=분할 자체의 엔트로피로 벌점.' },
+  { id:'u4-l1-05', level:1, type:'tf', tags:['표현력'], src:'교재 표준',
+    statement:'결정트리는 충분히 깊으면 임의의 불리언 함수를 표현할 수 있다(XOR 포함).',
+    answer:true, expl:'경로=규칙(연언), 트리=규칙들의 선언 — 선형 모델이 못 하는 XOR도 2층이면 된다.' },
+  { id:'u4-l1-06', level:1, type:'mc', tags:['잎 판정'], src:'교재 표준',
+    statement:'재귀 분할이 멈추는 표준 조건이 아닌 것은?',
+    choices:['IG가 최대일 때','노드가 순수(한 클래스)','특징 소진','샘플 수가 최소 기준 미만'],
+    answer:0, expl:'IG 최대는 "계속 나누는" 조건이다. 나머지 셋(+깊이 제한)이 정지 조건.' },
+
+  /* ---------- L2 (12) ---------- */
+  { id:'u4-l2-01', level:2, type:'num', tags:['엔트로피 계산'], src:'창작 문제(검산됨)',
+    params:{ p:{choices:[9,6,12]}, n:{choices:[5,6,4]} },
+    statement:function(p){ return '양성 '+p.p+'/음성 '+p.n+'인 집합의 엔트로피(비트)를 구하라.'; },
+    solve:function(p){
+      var t=p.p+p.n, a=p.p/t, b=p.n/t;
+      var H=(a>0?-a*Math.log2(a):0)+(b>0?-b*Math.log2(b):0);
+      return { ans:H, unit:'비트', steps:[
+        'p₊='+SVH.fmt(a)+', p₋='+SVH.fmt(b),
+        'H = −'+SVH.fmt(a)+'log₂'+SVH.fmt(a)+'−'+SVH.fmt(b)+'log₂'+SVH.fmt(b)+' = '+SVH.fmt(H) ] }; },
+    hints:['log₂=ln/ln2.'] },
+  { id:'u4-l2-02', level:2, type:'num', tags:['극단값'], src:'창작 문제(검산됨)',
+    params:{ n:{choices:[8,16]} },
+    statement:function(p){ return '(a) 전부 양성 '+p.n+'개 (b) 반반 '+p.n/2+':'+p.n/2+' (c) '+p.n+'-클래스 균등 분포의 엔트로피를 각각 구하라.'; },
+    solve:function(p){
+      return { ans:{a:0, b:1, c:Math.log2(p.n)}, unit:{a:'비트', b:'비트', c:'비트'}, steps:[
+        '순수 = 0, 이진 반반 = 1',
+        'k균등 = log₂k = '+SVH.fmt(Math.log2(p.n))+' (엔트로피의 눈금 3점)' ] }; },
+    hints:['정의의 세 랜드마크.'] },
+  { id:'u4-l2-03', level:2, type:'num', tags:['IG 손계산'], src:'교재 표준',
+    params:{ split:{choices:[[6,2,3,3],[8,0,4,2]]} },
+    statement:function(p){ var s=p.split; return '부모 [9+,5−]를 특징 A로 나눔: 가지1 ['+s[0]+'+,'+s[1]+'−], 가지2 ['+s[2]+'+,'+s[3]+'−]... 합이 안 맞으면 나머지는 가지3 [+'+(9-s[0]-s[2])+',−'+(5-s[1]-s[3])+']. IG(비트)를 구하라.'; },
+    solve:function(p){
+      function H(a,b){ var t=a+b; if(t===0) return 0; var x=a/t, y=b/t;
+        return (x>0?-x*Math.log2(x):0)+(y>0?-y*Math.log2(y):0); }
+      var s=p.split;
+      var g3p=9-s[0]-s[2], g3n=5-s[1]-s[3];
+      var Hp=H(9,5);
+      var t1=s[0]+s[1], t2=s[2]+s[3], t3=g3p+g3n;
+      var Hc=(t1*H(s[0],s[1])+t2*H(s[2],s[3])+t3*H(g3p,g3n))/14;
+      return { ans:Hp-Hc, unit:'비트', steps:[
+        'H(부모) = H(9,5) = '+SVH.fmt(Hp),
+        '가중 자식 = '+SVH.fmt(Hc),
+        'IG = '+SVH.fmt(Hp-Hc)+' (미첼 교과서의 그 14샘플 스타일)' ] }; },
+    hints:['가중치 = 가지 크기/전체.'] },
+  { id:'u4-l2-04', level:2, type:'num', tags:['두 특징 비교'], src:'기출 유형',
+    params:{ A:{choices:[[3,0,1,4],[4,0,0,4]]}, B:{choices:[[2,2,2,2],[3,1,1,3]]} },
+    statement:function(p){ return '부모 [4+,4−]. 특징 A: ['+p.A[0]+'+,'+p.A[1]+'−]/['+p.A[2]+'+,'+p.A[3]+'−], 특징 B: ['+p.B[0]+'+,'+p.B[1]+'−]/['+p.B[2]+'+,'+p.B[3]+'−]. 각 IG를 구하고 ID3의 선택(A=1/B=2)을 답하라.'; },
+    solve:function(p){
+      function H(a,b){ var t=a+b; if(!t) return 0; var x=a/t,y=b/t;
+        return (x>0?-x*Math.log2(x):0)+(y>0?-y*Math.log2(y):0); }
+      function IG(s){ return 1-((s[0]+s[1])*H(s[0],s[1])+(s[2]+s[3])*H(s[2],s[3]))/8; }
+      var ia=IG(p.A), ib=IG(p.B);
+      return { ans:{IGA:ia, IGB:ib, pick:ia>=ib?1:2}, unit:{IGA:'비트', IGB:'비트', pick:''}, steps:[
+        'IG(A) = '+SVH.fmt(ia)+', IG(B) = '+SVH.fmt(ib),
+        '선택 = '+(ia>=ib?'A(1)':'B(2)')+' (더 순수하게 가르는 쪽)' ] }; },
+    hints:['부모 H=1(반반).'] },
+  { id:'u4-l2-05', level:2, type:'num', tags:['SplitInfo'], src:'교재 표준',
+    params:{ k:{choices:[2,4,8]}, },
+    statement:function(p){ return 'N개를 '+p.k+'개 가지로 균등 분할할 때 SplitInfo(비트)와, 같은 IG라면 가지 수가 많을수록 이득비가 어떻게 되는지(감소=−1)를 답하라.'; },
+    solve:function(p){ return { ans:{SI:Math.log2(p.k), dir:-1}, unit:{SI:'비트', dir:''}, steps:[
+        'SplitInfo = log₂'+p.k+' = '+SVH.fmt(Math.log2(p.k)),
+        '이득비 = IG/SI → 가지 많을수록 감소(−1) — 다지 편향 벌점' ] }; },
+    hints:['균등이면 log₂k.'] },
+  { id:'u4-l2-06', level:2, type:'num', tags:['연속 특징 분할'], src:'교재 표준',
+    params:{ vals:{choices:[[1,3,5,7],[2,4,6,8]]} },
+    statement:function(p){ var v=p.vals; return '연속 특징 값 '+v.join(', ')+' (레이블 −,−,+,+). 후보 문턱(인접 중점) 중 최적 문턱과 그 IG를 구하라.'; },
+    solve:function(p){
+      var v=p.vals, th=(v[1]+v[2])/2;
+      return { ans:{th:th, IG:1}, unit:{th:'', IG:'비트'}, steps:[
+        '후보: 중점 3개. 레이블 경계는 '+v[1]+'과 '+v[2]+' 사이 → 문턱 '+th,
+        '그 분할은 완전 순수 → IG = H(2,2)−0 = 1비트',
+        '(연속 특징 = 정렬 후 경계 중점만 검사)' ] }; },
+    hints:['레이블이 바뀌는 곳.'] },
+  { id:'u4-l2-07', level:2, type:'num', tags:['불확실성 감소율'], src:'창작 문제(검산됨)',
+    params:{ H0:{choices:[1,0.97]}, H1:{choices:[0.4,0.6]} },
+    statement:function(p){ return '분할 전 H='+p.H0+', 후 가중 H='+p.H1+'비트. IG와 감소율(%)을 구하라.'; },
+    solve:function(p){ return { ans:{IG:p.H0-p.H1, pct:(p.H0-p.H1)/p.H0*100}, unit:{IG:'비트', pct:'%'}, steps:[
+        'IG = '+SVH.fmt(p.H0-p.H1),
+        '감소율 '+SVH.fmt((p.H0-p.H1)/p.H0*100)+'%' ] }; },
+    hints:['차와 비율.'] },
+  { id:'u4-l2-08', level:2, type:'num', tags:['트리 크기'], src:'창작 문제(검산됨)',
+    params:{ d:{choices:[3,5]} },
+    statement:function(p){ return '깊이 '+p.d+'의 완전 이진 트리: (a) 잎 수 (b) 내부 노드 수를 구하라.'; },
+    solve:function(p){ return { ans:{leaf:Math.pow(2,p.d), inner:Math.pow(2,p.d)-1}, unit:{leaf:'개', inner:'개'}, steps:[
+        '잎 2^'+p.d+' = '+Math.pow(2,p.d)+', 내부 2^'+p.d+'−1',
+        '(깊이 1 증가 = 용량 2배 — 과적합 다이얼)' ] }; },
+    hints:['2^d.'] },
+  { id:'u4-l2-09', level:2, type:'num', tags:['3클래스 엔트로피'], src:'창작 문제(검산됨)',
+    params:{ c:{choices:[[4,2,2],[6,1,1]]} },
+    statement:function(p){ var c=p.c; return '클래스 분포 ['+c.join(', ')+']의 엔트로피(비트)를 구하라.'; },
+    solve:function(p){
+      var c=p.c, t=c[0]+c[1]+c[2], H=0;
+      for(var i=0;i<3;i++){ var x=c[i]/t; if(x>0) H-=x*Math.log2(x); }
+      return { ans:H, unit:'비트', steps:[
+        '비율 ['+SVH.fmt(c[0]/t)+', '+SVH.fmt(c[1]/t)+', '+SVH.fmt(c[2]/t)+']',
+        'H = '+SVH.fmt(H)+' (최대 log₂3=1.585와 비교)' ] }; },
+    hints:['항 3개 합.'] },
+  { id:'u4-l2-10', level:2, type:'num', tags:['규칙 추출'], src:'창작 문제(검산됨)',
+    params:{ leaves:{choices:[4,6]} },
+    statement:function(p){ return '잎이 '+p.leaves+'개인 트리에서 추출되는 if-then 규칙 수와, 각 규칙의 형태(경로의 AND=1)를 답하라.'; },
+    solve:function(p){ return { ans:{rules:p.leaves, form:1}, unit:{rules:'개', form:''}, steps:[
+        '규칙 = 잎 수 = '+p.leaves,
+        '각 규칙 = 뿌리→잎 조건들의 연언(1) — 트리=해석 가능한 모델인 이유' ] }; },
+    hints:['잎=규칙.'] },
+  { id:'u4-l2-11', level:2, type:'num', tags:['완벽 분할 특징'], src:'기출 유형',
+    params:{ N:{choices:[8,14]} },
+    statement:function(p){ return 'ID(고유번호) 특징으로 N='+p.N+' 샘플을 나누면 (a) IG (b) SplitInfo (c) 이득비를 구하라. (부모 H=1 가정)'; },
+    solve:function(p){
+      var SI=Math.log2(p.N);
+      return { ans:{IG:1, SI:SI, GR:1/SI}, unit:{IG:'비트', SI:'비트', GR:''}, steps:[
+        'IG = 1(완전 순수) — 그러나!',
+        'SplitInfo = log₂'+p.N+' = '+SVH.fmt(SI)+' → 이득비 = '+SVH.fmt(1/SI),
+        '(이득비가 학번의 사기극을 적발한다)' ] }; },
+    hints:['벌점의 실연.'] },
+  { id:'u4-l2-12', level:2, type:'num', tags:['가지 순수도'], src:'창작 문제(검산됨)',
+    params:{ a:{choices:[[5,1],[7,1]]} },
+    statement:function(p){ var a=p.a; return '가지 ['+a[0]+'+,'+a[1]+'−]의 (a) 다수결 예측 정확도(%) (b) 엔트로피(비트)를 구하라.'; },
+    solve:function(p){
+      var a=p.a, t=a[0]+a[1];
+      var x=a[0]/t, y=a[1]/t;
+      var H=-x*Math.log2(x)-y*Math.log2(y);
+      return { ans:{acc:x*100, H:H}, unit:{acc:'%', H:'비트'}, steps:[
+        '다수결 = '+SVH.fmt(x*100)+'%',
+        'H = '+SVH.fmt(H)+' (정확도와 엔트로피는 반대로 움직인다)' ] }; },
+    hints:['다수/전체.'] },
+
+  /* ---------- L3 (14) ---------- */
+  { id:'u4-l3-01', level:3, type:'num', tags:['날씨 데이터 1단계'], src:'교재 표준',
+    params:{ variant:{choices:[1,2]} },
+    statement:function(p){ return '미첼 스타일 [9+,5−]: 특징 "바람"으로 약함 [6+,2−]/강함 [3+,3−] 분할. IG(바람)을 구하라.'; },
+    solve:function(p){
+      function H(a,b){ var t=a+b, x=a/t, y=b/t;
+        return (x>0?-x*Math.log2(x):0)+(y>0?-y*Math.log2(y):0); }
+      var Hp=H(9,5);
+      var IG=Hp-(8*H(6,2)+6*H(3,3))/14;
+      return { ans:IG, unit:'비트', steps:[
+        'H(9,5) = '+SVH.fmt(Hp),
+        'IG = '+SVH.fmt(Hp)+' − [8/14·'+SVH.fmt(H(6,2))+' + 6/14·1] = '+SVH.fmt(IG),
+        '(교과서 0.048의 그 계산 — 손으로 재현할 수 있어야 한다)' ] }; },
+    hints:['H(6,2)=0.811.'] },
+  { id:'u4-l3-02', level:3, type:'num', tags:['습도 vs 바람'], src:'교재 표준',
+    params:{ variant:{choices:[1,2]} },
+    statement:function(p){ return '같은 [9+,5−]에서 "습도": 높음 [3+,4−]/보통 [6+,1−]. IG(습도)를 구하고 l3-01의 IG(바람)과 비교해 승자를 답하라(습도=1).'; },
+    solve:function(p){
+      function H(a,b){ var t=a+b, x=a/t, y=b/t;
+        return (x>0?-x*Math.log2(x):0)+(y>0?-y*Math.log2(y):0); }
+      var Hp=H(9,5);
+      var IG=Hp-(7*H(3,4)+7*H(6,1))/14;
+      return { ans:{IG:IG, win:1}, unit:{IG:'비트', win:''}, steps:[
+        'IG(습도) = '+SVH.fmt(Hp)+' − [7/14·'+SVH.fmt(H(3,4))+'+7/14·'+SVH.fmt(H(6,1))+'] = '+SVH.fmt(IG),
+        '> IG(바람) → 습도 승(1) (0.151 vs 0.048 — 교과서 수치)' ] }; },
+    hints:['가중 절반씩.'] },
+  { id:'u4-l3-03', level:3, type:'num', tags:['2단계 재귀'], src:'기출 유형',
+    params:{ variant:{choices:[1,2]} },
+    statement:function(p){ return '뿌리 분할 후 한 가지가 [3+,3−]가 됐다. 그 안에서 특징 C: [3+,0−]/[0+,3−] 분할. (a) 이 노드의 IG (b) 분할 후 이 가지 최종 잎 상태(순수=1)를 답하라.'; },
+    solve:function(p){ return { ans:{IG:1, pure:1}, unit:{IG:'비트', pure:''}, steps:[
+        '노드 H=1(반반) → 완전 분리 → IG = 1',
+        '두 잎 모두 순수(1) → 이 가지 재귀 종료',
+        '(재귀 = 같은 계산을 부분집합에 반복)' ] }; },
+    hints:['부분집합에서 다시 시작.'] },
+  { id:'u4-l3-04', level:3, type:'num', tags:['조건부 엔트로피 표'], src:'기출 유형',
+    params:{ t:{choices:[[4,1,1,4],[3,2,1,4]]} },
+    statement:function(p){ var t=p.t; return '결합 분포(개수): (A=0,y=+)='+t[0]+', (0,−)='+t[1]+', (1,+)='+t[2]+', (1,−)='+t[3]+'. H(y|A)를 구하라.'; },
+    solve:function(p){
+      function H(a,b){ var tt=a+b; if(!tt) return 0; var x=a/tt,y=b/tt;
+        return (x>0?-x*Math.log2(x):0)+(y>0?-y*Math.log2(y):0); }
+      var t=p.t, N=t[0]+t[1]+t[2]+t[3];
+      var Hc=((t[0]+t[1])*H(t[0],t[1])+(t[2]+t[3])*H(t[2],t[3]))/N;
+      return { ans:Hc, unit:'비트', steps:[
+        'A=0 가지 H('+t[0]+','+t[1]+')='+SVH.fmt(H(t[0],t[1]))+', A=1 가지 H('+t[2]+','+t[3]+')='+SVH.fmt(H(t[2],t[3])),
+        'H(y|A) = 가중합 = '+SVH.fmt(Hc)+' (IG = H(y)−이 값)' ] }; },
+    hints:['가지별 H 가중.'] },
+  { id:'u4-l3-05', level:3, type:'num', tags:['상호정보=IG'], src:'교재 표준',
+    params:{ t:{choices:[[4,1,1,4],[5,0,2,3]]} },
+    statement:function(p){ var t=p.t; return '위와 같은 표(개수 '+t.join(',')+')에서 H(y)와 IG=H(y)−H(y|A)를 구하라.'; },
+    solve:function(p){
+      function H(a,b){ var tt=a+b; if(!tt) return 0; var x=a/tt,y=b/tt;
+        return (x>0?-x*Math.log2(x):0)+(y>0?-y*Math.log2(y):0); }
+      var t=p.t, N=t[0]+t[1]+t[2]+t[3];
+      var Hy=H(t[0]+t[2],t[1]+t[3]);
+      var Hc=((t[0]+t[1])*H(t[0],t[1])+(t[2]+t[3])*H(t[2],t[3]))/N;
+      return { ans:{Hy:Hy, IG:Hy-Hc}, unit:{Hy:'비트', IG:'비트'}, steps:[
+        'H(y) = H('+(t[0]+t[2])+','+(t[1]+t[3])+') = '+SVH.fmt(Hy),
+        'IG = '+SVH.fmt(Hy-Hc)+' — 상호정보 I(y;A)와 같은 양(정보이론과의 연결)' ] }; },
+    hints:['주변 분포부터.'] },
+  { id:'u4-l3-06', level:3, type:'num', tags:['연속 특징 전체 스캔'], src:'기출 유형',
+    params:{ lab:{choices:[[0,0,1,0,1,1],[0,1,0,1,1,1]]} },
+    statement:function(p){ var l=p.lab; return '정렬된 값 [10,20,30,40,50,60], 레이블 ['+l.join(',')+'] (1=+). 최적 문턱(중점)과 그 IG를 구하라. (경계 후보만 검사)'; },
+    solve:function(p){
+      function H(a,b){ var t=a+b; if(!t) return 0; var x=a/t,y=b/t;
+        return (x>0?-x*Math.log2(x):0)+(y>0?-y*Math.log2(y):0); }
+      var l=p.lab, vals=[10,20,30,40,50,60];
+      var P=l.reduce((a,b)=>a+b,0), N=6-P;
+      var Hp=H(P,N), best=0, bth=0;
+      for(var i=0;i<5;i++){
+        if(l[i]===l[i+1]) continue;
+        var lp=0,ln=0;
+        for(var j=0;j<=i;j++){ if(l[j])lp++; else ln++; }
+        var ig=Hp-((i+1)*H(lp,ln)+(5-i)*H(P-lp,N-ln))/6;
+        if(ig>best){ best=ig; bth=(vals[i]+vals[i+1])/2; }
+      }
+      return { ans:{th:bth, IG:best}, unit:{th:'', IG:'비트'}, steps:[
+        '레이블 경계마다 IG 계산 → 최적 문턱 '+bth,
+        'IG = '+SVH.fmt(best)+' (경계 아닌 중점은 검사 불필요 — 정리로 보장)' ] }; },
+    hints:['경계만 후보.'] },
+  { id:'u4-l3-07', level:3, type:'num', tags:['이득비 비교'], src:'기출 유형',
+    params:{ igA:{choices:[0.4,0.5]}, kA:{choices:[2]}, igB:{choices:[0.6,0.7]}, kB:{choices:[8,16]} },
+    statement:function(p){ return 'A: IG='+p.igA+'(2지 균등), B: IG='+p.igB+'('+p.kB+'지 균등). 이득비로 승자를 정하라(A=1/B=2).'; },
+    solve:function(p){
+      var grA=p.igA/1, grB=p.igB/Math.log2(p.kB);
+      return { ans:{grA:grA, grB:grB, pick:grA>=grB?1:2}, unit:{grA:'', grB:'', pick:''}, steps:[
+        'GR(A) = '+p.igA+'/1 = '+SVH.fmt(grA)+', GR(B) = '+p.igB+'/'+SVH.fmt(Math.log2(p.kB))+' = '+SVH.fmt(grB),
+        '승자 = '+(grA>=grB?'A(1)':'B(2)')+' — IG로는 B였는데 역전'+(grA>=grB?'!':'?'),
+        '(C4.5가 ID3와 다른 선택을 하는 지점)' ] }; },
+    hints:['SI로 나누고 비교.'] },
+  { id:'u4-l3-08', level:3, type:'num', tags:['불순도 0.5 근사'], src:'창작 문제(검산됨)',
+    params:{ p:{choices:[0.6,0.8,0.9]} },
+    statement:function(p){ return 'p='+p.p+'에서 (a) 엔트로피 (b) 2p(1−p)(지니, U5 예고) (c) 오분류율 min(p,1−p)를 구해 세 불순도를 비교하라.'; },
+    solve:function(p){
+      var H=-p.p*Math.log2(p.p)-(1-p.p)*Math.log2(1-p.p);
+      return { ans:{H:H, gini:2*p.p*(1-p.p), err:Math.min(p.p,1-p.p)}, unit:{H:'',gini:'',err:''}, steps:[
+        'H='+SVH.fmt(H)+', Gini='+SVH.fmt(2*p.p*(1-p.p))+', Err='+SVH.fmt(Math.min(p.p,1-p.p)),
+        '(모두 p=0.5 최대·0/1에서 0 — 곡률만 다르다)' ] }; },
+    hints:['세 공식 대입.'] },
+  { id:'u4-l3-09', level:3, type:'num', tags:['IG=0 함정'], src:'교재 표준',
+    params:{ variant:{choices:[1,2]} },
+    statement:function(p){ return 'XOR 데이터(4점, x₁·x₂ 각각 반반): 단일 특징 x₁의 IG를 구하라. IG=0인데 x₁이 "무용한" 특징인가(아님=0)?'; },
+    solve:function(p){ return { ans:{IG:0, useless:0}, unit:{IG:'비트', useless:''}, steps:[
+        'x₁=0 가지 [1+,1−], x₁=1 가지 [1+,1−] → 자식 H=1 → IG=0',
+        '그러나 x₂와 "함께"면 완전 분리 — 탐욕 IG의 맹점(0)',
+        '(그래도 트리는 일단 나누면 다음 층에서 해결 — 시작 특징만 임의)' ] }; },
+    hints:['상호작용 특징.'] },
+  { id:'u4-l3-10', level:3, type:'num', tags:['가중 IG(비용)'], src:'창작 문제(검산됨)',
+    params:{ ig:{choices:[0.3,0.5]}, cost:{choices:[4,9]} },
+    statement:function(p){ return '측정 비용이 있는 특징 선택: 비용 고려 점수 IG²/cost (Tan 방식 유사)로, IG='+p.ig+'·비용 '+p.cost+'인 특징과 IG=0.2·비용 1인 특징 중 승자를 정하라(비싼 쪽=1/싼 쪽=2).'; },
+    solve:function(p){
+      var s1=p.ig*p.ig/p.cost, s2=0.04;
+      return { ans:{s1:s1, s2:s2, pick:s1>=s2?1:2}, unit:{s1:'', s2:'', pick:''}, steps:[
+        '점수: '+SVH.fmt(s1)+' vs '+SVH.fmt(s2),
+        '승자 '+(s1>=s2?'비싼 특징(1)':'싼 특징(2)')+' (의료 진단 트리의 실제 고려)' ] }; },
+    hints:['IG²/비용.'] },
+  { id:'u4-l3-11', level:3, type:'num', tags:['결측 분수 전파'], src:'교재 표준',
+    params:{ n0:{choices:[6,8]}, n1:{choices:[2,4]} },
+    statement:function(p){ return 'C4.5 결측 처리: 특징 A가 결측인 샘플 1개를 A=0 가지('+p.n0+'개)·A=1 가지('+p.n1+'개)에 비례 분배하면 각 가지로 가는 분수 가중치를 구하라.'; },
+    solve:function(p){
+      var t=p.n0+p.n1;
+      return { ans:{w0:p.n0/t, w1:p.n1/t}, unit:{w0:'', w1:''}, steps:[
+        'w = 가지 비율: '+SVH.fmt(p.n0/t)+' / '+SVH.fmt(p.n1/t),
+        '(샘플이 쪼개져 흐른다 — 결측을 버리지 않는 우아한 처리)' ] }; },
+    hints:['관측된 비율.'] },
+  { id:'u4-l3-12', level:3, type:'num', tags:['트리 깊이와 데이터'], src:'창작 문제(검산됨)',
+    params:{ N:{choices:[1000,10000]}, m:{choices:[5,20]} },
+    statement:function(p){ return '잎당 최소 샘플 '+p.m+'개 제약에서 N='+p.N+'일 때 (a) 최대 잎 수 (b) 최대 깊이(완전 이진 가정, log₂)를 구하라.'; },
+    solve:function(p){
+      var L=Math.floor(p.N/p.m);
+      return { ans:{L:L, d:Math.floor(Math.log2(L))}, unit:{L:'개', d:''}, steps:[
+        '잎 ≤ N/m = '+L,
+        '깊이 ≤ log₂'+L+' ≈ '+Math.floor(Math.log2(L))+' (규제 하이퍼파라미터의 산수)' ] }; },
+    hints:['나눗셈+log.'] },
+  { id:'u4-l3-13', level:3, type:'num', tags:['축평행 한계'], src:'교재 표준',
+    params:{ variant:{choices:[1,2]} },
+    statement:function(p){ return '대각선 경계(y=x)를 축평행 분할로 근사: 계단 '+ (p.variant===1?4:8) +'단이면 분할(내부 노드) 최소 몇 개가 필요한가?'; },
+    solve:function(p){
+      var k=p.variant===1?4:8;
+      return { ans:2*k-1, unit:'개', steps:[
+        '계단 1단마다 x·y 분할 교대 → 약 2k−1 = '+(2*k-1)+'개',
+        '(선형 모델이면 1개 경계 — 모델과 문제의 "결" 맞춤 이야기)' ] }; },
+    hints:['계단 세기.'] },
+  { id:'u4-l3-14', level:3, type:'num', tags:['범주 병합'], src:'교재 표준',
+    params:{ g:{choices:[[5,0],[4,1]]} },
+    statement:function(p){ var g=p.g; return '3값 특징의 두 값이 각각 ['+g[0]+'+,'+g[1]+'−], ['+g[0]+'+,'+g[1]+'−]로 분포가 동일하다. 병합하면 (a) IG 변화(불변=0) (b) SplitInfo 변화(감소=−1) — 이득비에 유리한가(1)?'; },
+    solve:function(p){ return { ans:{dIG:0, dSI:-1, better:1}, unit:{dIG:'', dSI:'', better:''}, steps:[
+        '같은 분포 병합 → 자식 가중 H 불변 → IG 불변(0)',
+        '가지 수↓ → SI 감소(−1) → 이득비 상승(1)',
+        '(CART가 이진 분할을 고집하는 이유의 한 조각)' ] }; },
+    hints:['동일 분포 합치기.'] },
+
+  /* ---------- L4 (8) ---------- */
+  { id:'u4-l4-01', level:4, type:'mc', tags:['개념 종합'], src:'기출 유형',
+    statement:'옳은 것을 모두 고르면?<br>㉠ IG는 상호정보 I(y;A)와 같다<br>㉡ 값이 많은 특징의 IG 편향은 이득비로 완화한다<br>㉢ 연속 특징 최적 문턱은 레이블 경계 중점만 검사하면 된다<br>㉣ IG=0인 특징도 상호작용으로 유용할 수 있다(XOR)',
+    choices:['전부','㉠㉡㉢','㉡㉢㉣','㉠㉣'],
+    answer:0, expl:'전부 참 — U4의 요약 4행시.' },
+  { id:'u4-l4-02', level:4, type:'num', tags:['뿌리 선택 풀계산'], src:'기출 유형',
+    params:{ hum:{choices:[[3,4,6,1]]}, wind:{choices:[[6,2,3,3]]} },
+    statement:function(p){ return '[9+,5−]에서 습도 [3+,4−]/[6+,1−] vs 바람 [6+,2−]/[3+,3−] vs 온도 3지 [2+,2−]/[4+,2−]/[3+,1−]. 세 IG를 모두 구해 뿌리를 정하라(습도=1/바람=2/온도=3).'; },
+    solve:function(p){
+      function H(a,b){ var t=a+b; if(!t) return 0; var x=a/t,y=b/t;
+        return (x>0?-x*Math.log2(x):0)+(y>0?-y*Math.log2(y):0); }
+      var Hp=H(9,5);
+      var igH=Hp-(7*H(3,4)+7*H(6,1))/14;
+      var igW=Hp-(8*H(6,2)+6*H(3,3))/14;
+      var igT=Hp-(4*H(2,2)+6*H(4,2)+4*H(3,1))/14;
+      var best=igH>=igW&&igH>=igT?1:(igW>=igT?2:3);
+      return { ans:{igH:igH, igW:igW, igT:igT, root:best}, unit:{igH:'',igW:'',igT:'',root:''}, steps:[
+        'IG: 습도 '+SVH.fmt(igH)+' · 바람 '+SVH.fmt(igW)+' · 온도 '+SVH.fmt(igT),
+        '뿌리 = '+(best===1?'습도':best===2?'바람':'온도'),
+        '(시험 계산형의 최대어 — 표를 그려 가중 H를 정리하며)' ] }; },
+    hints:['H표 만들고 가중.'] },
+  { id:'u4-l4-03', level:4, type:'derive', tags:['유도'], src:'교재 표준',
+    statement:'이진 엔트로피 H(p)가 p=1/2에서 유일 최대(1비트)임을 미분으로 증명하라.',
+    steps:[
+      'H(p)=−p·log₂p−(1−p)log₂(1−p) [왜] 정의에서 출발',
+      "H'(p)=log₂((1−p)/p) — ln2 소거 확인",
+      "H'=0 ⇔ (1−p)/p=1 ⇔ p=1/2, H''=−1/[p(1−p)ln2]<0 → 오목·유일 최대",
+      'H(1/2)=1비트 · 경계 H(0)=H(1)=0 (0log0≡0 규약)',
+      '극한 체크: 오목성 → 분할의 가중평균 H ≤ 부모 H가 항상 성립(IG≥0의 이유) ✓'
+    ],
+    hints:['미분에서 log비.','오목성이 IG≥0을 준다.'],
+    expl:'IG가 음수가 될 수 없는 이유까지 잇는 것이 만점 답안.' },
+  { id:'u4-l4-04', level:4, type:'num', tags:['통신 해석'], src:'기출 유형',
+    params:{ p:{choices:[0.1,0.25]} },
+    statement:function(p){ return '레이블 분포 p='+p.p+'인 데이터 N=1000개의 레이블 전체를 전송하는 최소 기대 비트(엔트로피 부호화)를 구하라. 균등(0.5)이면 몇 비트인가?'; },
+    solve:function(p){
+      var H=-p.p*Math.log2(p.p)-(1-p.p)*Math.log2(1-p.p);
+      return { ans:{bits:1000*H, uni:1000}, unit:{bits:'비트', uni:'비트'}, steps:[
+        'H = '+SVH.fmt(H)+' 비트/샘플 → '+SVH.fmt(1000*H)+' 비트',
+        '균등이면 1000비트 — 엔트로피=압축 한계(Shannon), IG=질문의 정보량',
+        '(트리 = 스무고개 최적화라는 관점)' ] }; },
+    hints:['N×H.'] },
+  { id:'u4-l4-05', level:4, type:'num', tags:['다지 vs 이진 실험'], src:'기출 유형',
+    params:{ k:{choices:[4,8]} },
+    statement:function(p){ return 'k='+p.k+'값 특징(균등)을 (a) k지 분할 (b) 이진 그룹 분할(반반 병합)로 나눌 때 SplitInfo를 각각 구하고, 같은 IG=0.5라면 이득비 우세 쪽(이진=2)을 답하라.'; },
+    solve:function(p){
+      return { ans:{SIk:Math.log2(p.k), SI2:1, pick:2}, unit:{SIk:'비트', SI2:'비트', pick:''}, steps:[
+        'k지: log₂'+p.k+' = '+SVH.fmt(Math.log2(p.k))+', 이진: 1',
+        '같은 IG → 이득비는 이진 승(2)',
+        '(트리가 뚱뚱해지는 것보다 깊어지는 것을 선호하는 설계 철학)' ] }; },
+    hints:['SI 비교.'] },
+  { id:'u4-l4-06', level:4, type:'num', tags:['희귀 클래스 분할'], src:'기출 유형',
+    params:{ P:{choices:[10,20]}, N:{choices:[90,180]} },
+    statement:function(p){ return '[+'+p.P+', −'+p.N+'] 데이터: (a) H(부모) (b) 어떤 분할이 [+'+p.P+', −0]/[+0, −'+p.N+']을 만들면 IG는? (c) 다수결만으로도 정확도가 이미 높은데 왜 이 분할이 가치 있는가(재현율 개선=1)?'; },
+    solve:function(p){
+      var t=p.P+p.N, x=p.P/t, y=p.N/t;
+      var H=-x*Math.log2(x)-y*Math.log2(y);
+      return { ans:{H:H, IG:H, why:1}, unit:{H:'비트', IG:'비트', why:''}, steps:[
+        'H = '+SVH.fmt(H)+' (불균형이라 작다)',
+        '완전 분리 → IG = H 전부 = '+SVH.fmt(H),
+        '정확도는 이미 '+SVH.fmt(y*100)+'%였지만 재현율 0→100(1) — U3 지표와의 연결' ] }; },
+    hints:['IG 최대=부모 H.'] },
+  { id:'u4-l4-07', level:4, type:'num', tags:['스무고개 설계'], src:'기출 유형',
+    params:{ n:{choices:[64,100]} },
+    statement:function(p){ return p.n+'명 중 1명 맞히기: (a) 이상적 예/아니오 질문 수 (b) "특정인인가?" 식 질문의 기대 IG(첫 질문, 비트)를 구해 반반 질문과 비교하라.'; },
+    solve:function(p){
+      var q=Math.ceil(Math.log2(p.n));
+      var pp=1/p.n;
+      var Hq=-pp*Math.log2(pp)-(1-pp)*Math.log2(1-pp);
+      return { ans:{q:q, IGone:Hq}, unit:{q:'개', IGone:'비트'}, steps:[
+        '최적 = ⌈log₂'+p.n+'⌉ = '+q+'개 (매번 1비트)',
+        '"특정인?" IG = H(1/'+p.n+') = '+SVH.fmt(Hq)+' 비트 ≪ 1',
+        '(균형 분할=최대 정보 — ID3의 직관을 게임으로)' ] }; },
+    hints:['반반의 힘.'] },
+  { id:'u4-l4-08', level:4, type:'num', tags:['기출 리허설 풀코스'], src:'기출 유형',
+    params:{ d:{choices:[[3,1,2,4],[4,0,1,5]]} },
+    statement:function(p){ var d=p.d; return '10샘플 [+'+(d[0]+d[2])+', −'+(d[1]+d[3])+']: 특징 A로 ['+d[0]+'+,'+d[1]+'−]/['+d[2]+'+,'+d[3]+'−]. (a) H(부모) (b) H(y|A) (c) IG (d) SplitInfo (e) 이득비를 구하라.'; },
+    solve:function(p){
+      function H(a,b){ var t=a+b; if(!t) return 0; var x=a/t,y=b/t;
+        return (x>0?-x*Math.log2(x):0)+(y>0?-y*Math.log2(y):0); }
+      var d=p.d, N=10;
+      var Hp=H(d[0]+d[2],d[1]+d[3]);
+      var n1=d[0]+d[1], n2=d[2]+d[3];
+      var Hc=(n1*H(d[0],d[1])+n2*H(d[2],d[3]))/N;
+      var SI=H(n1,n2);
+      return { ans:{Hp:Hp, Hc:Hc, IG:Hp-Hc, SI:SI, GR:(Hp-Hc)/SI}, unit:{Hp:'',Hc:'',IG:'',SI:'',GR:''}, steps:[
+        'H(부모)='+SVH.fmt(Hp)+', H(y|A)='+SVH.fmt(Hc),
+        'IG='+SVH.fmt(Hp-Hc)+', SI=H('+n1+','+n2+')='+SVH.fmt(SI),
+        'GR = '+SVH.fmt((Hp-Hc)/SI)+' — 5량 한 세트, 시험 그대로' ] }; },
+    hints:['다섯 값 순서대로.'] }
+  ]
+});
+
+</script>
+<script>
+/* U5 결정트리 II — 지니, CART, 과적합·가지치기, 검증 기반 축소 */
+SV_BANK.push({
+  id: 'u5', no: 5, title: '결정트리 II (지니·가지치기)', titleEn: 'Decision Trees II',
+  scope: '지니 불순도 · CART 이진 분할 · 과적합과 정지 규칙 · 축소(사후) 가지치기 · 비용-복잡도 α · 회귀 트리 맛보기',
+  problems: [
+
+  /* ---------- L1 (6) ---------- */
+  { id:'u5-l1-01', level:1, type:'mc', tags:['지니'], src:'교재 표준',
+    statement:'지니 불순도 \\(G=1-\\sum p_k^2\\)에 대한 설명으로 옳은 것은?',
+    choices:['이진 반반에서 최대 0.5, 순수에서 0 — 엔트로피와 개형이 비슷하다','최대 1','로그가 필요하다','p에 선형'],
+    answer:0, expl:'"무작위 두 샘플이 다른 클래스일 확률". 로그가 없어 빠르다 — CART의 선택.' },
+  { id:'u5-l1-02', level:1, type:'tf', tags:['CART'], src:'교재 표준',
+    statement:'CART는 모든 분할을 이진으로 하며 분류엔 지니, 회귀엔 분산(MSE) 감소를 쓴다.',
+    answer:true, expl:'다지 분할 대신 범주 그룹핑 이진 — U4-l3-14의 철학을 구현한 알고리즘.' },
+  { id:'u5-l1-03', level:1, type:'mc', tags:['과적합 신호'], src:'교재 표준',
+    statement:'트리를 끝까지(순수 잎까지) 키우면 흔히 생기는 일은?',
+    choices:['훈련 100%·시험 하락 — 잡음까지 암기','훈련·시험 모두 최고','항상 최적','표현력 부족'],
+    answer:0, expl:'잎당 샘플 1개 수준까지 쪼개면 잡음 학습. 그래서 정지 규칙 또는 사후 가지치기.' },
+  { id:'u5-l1-04', level:1, type:'mc', tags:['사전 vs 사후'], src:'교재 표준',
+    statement:'사전 정지(pre-pruning)와 사후 가지치기(post-pruning)의 비교로 옳은 것은?',
+    choices:['사전은 빠르지만 근시안(수평선 효과), 사후는 다 키운 뒤 검증으로 잘라 안전','사후가 항상 빠르다','사전이 항상 정확','둘은 동일'],
+    answer:0, expl:'IG가 0이어도(XOR) 다음 층에 보물이 있을 수 있다 — 사전 정지의 맹점.' },
+  { id:'u5-l1-05', level:1, type:'tf', tags:['축소 가지치기'], src:'교재 표준',
+    statement:'축소-오류 가지치기(reduced-error pruning)는 검증 성능이 나빠지지 않는 한 부트리를 잎으로 바꾸는 것을 반복한다.',
+    answer:true, expl:'검증셋이 심판. 다수결 레이블로 치환 — 단순하고 강력한 표준.' },
+  { id:'u5-l1-06', level:1, type:'mc', tags:['비용-복잡도'], src:'교재 표준',
+    statement:'비용-복잡도 가지치기의 목적함수는?',
+    choices:['오류 + α×잎 수 — α가 클수록 작은 트리','오류 − α×잎 수','잎 수만','깊이만'],
+    answer:0, expl:'α는 복잡도 벌점 다이얼(릿지 λ의 트리판). CV로 α 선택.' },
+
+  /* ---------- L2 (12) ---------- */
+  { id:'u5-l2-01', level:2, type:'num', tags:['지니 계산'], src:'창작 문제(검산됨)',
+    params:{ a:{choices:[6,8]}, b:{choices:[2,4]} },
+    statement:function(p){ return '['+p.a+'+, '+p.b+'−]의 지니 불순도를 구하라.'; },
+    solve:function(p){
+      var t=p.a+p.b, x=p.a/t;
+      var G=1-x*x-(1-x)*(1-x);
+      return { ans:G, unit:'', steps:[
+        'G = 1−('+SVH.fmt(x)+')²−('+SVH.fmt(1-x)+')² = '+SVH.fmt(G),
+        '(=2p(1−p) 이진 특례)' ] }; },
+    hints:['제곱합 빼기.'] },
+  { id:'u5-l2-02', level:2, type:'num', tags:['지니 이득'], src:'교재 표준',
+    params:{ s:{choices:[[4,0,2,4],[5,1,1,3]]} },
+    statement:function(p){ var s=p.s; return '부모 [6+,4−] → ['+s[0]+'+,'+s[1]+'−]/['+s[2]+'+,'+s[3]+'−]. 지니 이득(부모G−가중자식G)을 구하라.'; },
+    solve:function(p){
+      function G(a,b){ var t=a+b; if(!t) return 0; var x=a/t; return 2*x*(1-x); }
+      var s=p.s, Gp=G(6,4);
+      var Gc=((s[0]+s[1])*G(s[0],s[1])+(s[2]+s[3])*G(s[2],s[3]))/10;
+      return { ans:Gp-Gc, unit:'', steps:[
+        'G(부모)='+SVH.fmt(Gp)+', 가중 자식='+SVH.fmt(Gc),
+        '이득 = '+SVH.fmt(Gp-Gc)+' (IG와 같은 틀, 불순도만 교체)' ] }; },
+    hints:['가중 평균 구조 동일.'] },
+  { id:'u5-l2-03', level:2, type:'num', tags:['3클래스 지니'], src:'창작 문제(검산됨)',
+    params:{ c:{choices:[[3,3,4],[5,3,2]]} },
+    statement:function(p){ var c=p.c; return '분포 ['+c.join(',')+']의 지니와 최대 가능 지니(3클래스)를 구하라.'; },
+    solve:function(p){
+      var c=p.c, t=c[0]+c[1]+c[2], G=1;
+      for(var i=0;i<3;i++) G-=Math.pow(c[i]/t,2);
+      return { ans:{G:G, max:2/3}, unit:{G:'', max:''}, steps:[
+        'G = 1−Σp² = '+SVH.fmt(G),
+        '최대 = 1−3(1/3)² = 2/3 (k클래스 최대 1−1/k)' ] }; },
+    hints:['1−1/k.'] },
+  { id:'u5-l2-04', level:2, type:'num', tags:['검증 가지치기 판정'], src:'교재 표준',
+    params:{ before:{choices:[85,88]}, after:{choices:[86,90]} },
+    statement:function(p){ return '부트리를 잎으로 치환 시 검증 정확도 '+p.before+'→'+p.after+'%. 가지치기 하는가(1/0)?'; },
+    solve:function(p){ return { ans:p.after>=p.before?1:0, unit:'', steps:[
+        '검증이 '+(p.after>=p.before?'유지/개선':'하락'),
+        '→ '+(p.after>=p.before?'친다(1) — 단순한 쪽 우선(오컴)':'유지(0)') ] }; },
+    hints:['검증 기준.'] },
+  { id:'u5-l2-05', level:2, type:'num', tags:['α 목적함수'], src:'교재 표준',
+    params:{ e1:{choices:[10,12]}, L1:{choices:[8,10]}, e2:{choices:[14,15]}, L2:{choices:[3,4]}, al:{choices:[1,2]} },
+    statement:function(p){ return '큰 트리(오류 '+p.e1+', 잎 '+p.L1+') vs 작은 트리(오류 '+p.e2+', 잎 '+p.L2+'), α='+p.al+'. 비용-복잡도 점수로 승자를 정하라(큰=1/작은=2).'; },
+    solve:function(p){
+      var c1=p.e1+p.al*p.L1, c2=p.e2+p.al*p.L2;
+      return { ans:{c1:c1, c2:c2, pick:c1<=c2?1:2}, unit:{c1:'', c2:'', pick:''}, steps:[
+        '점수: '+c1+' vs '+c2,
+        '승자 = '+(c1<=c2?'큰 트리(1)':'작은 트리(2)')+' — α가 저울추' ] }; },
+    hints:['오류+α·잎.'] },
+  { id:'u5-l2-06', level:2, type:'num', tags:['임계 α'], src:'교재 표준',
+    params:{ de:{choices:[3,5]}, dL:{choices:[4,6]} },
+    statement:function(p){ return '부트리를 치면 오류 +'+p.de+', 잎 −'+p.dL+'. 가지치기가 이득이 되는 α의 최소값을 구하라.'; },
+    solve:function(p){ var a=p.de/p.dL;
+      return { ans:a, unit:'', steps:[
+        '조건: '+p.de+' ≤ α×'+p.dL+' → α ≥ '+SVH.fmt(a),
+        '(부트리마다 임계 α — 약한 고리부터 잘리는 경로의 원리)' ] }; },
+    hints:['Δ오류/Δ잎.'] },
+  { id:'u5-l2-07', level:2, type:'num', tags:['회귀 트리 잎'], src:'교재 표준',
+    params:{ ys:{choices:[[2,4,6],[3,5,10]]} },
+    statement:function(p){ var y=p.ys; return '회귀 트리 잎에 y=['+y.join(',')+']. (a) 잎의 예측값 (b) 잎 SSE를 구하라.'; },
+    solve:function(p){
+      var y=p.ys, m=(y[0]+y[1]+y[2])/3, sse=0;
+      for(var i=0;i<3;i++) sse+=(y[i]-m)*(y[i]-m);
+      return { ans:{pred:m, SSE:sse}, unit:{pred:'', SSE:''}, steps:[
+        '예측 = 평균 '+SVH.fmt(m)+' (제곱손실 최소화)',
+        'SSE = '+SVH.fmt(sse) ] }; },
+    hints:['평균이 최적.'] },
+  { id:'u5-l2-08', level:2, type:'num', tags:['분산 감소'], src:'교재 표준',
+    params:{ v:{choices:[[10,2,4],[8,1,3]]} },
+    statement:function(p){ var v=p.v; return '부모 분산 '+v[0]+', 자식(반반) 분산 '+v[1]+'·'+v[2]+'. 분산 감소량을 구하라.'; },
+    solve:function(p){ var v=p.v, red=v[0]-(v[1]+v[2])/2;
+      return { ans:red, unit:'', steps:[
+        '감소 = '+v[0]+'−('+v[1]+'+'+v[2]+')/2 = '+SVH.fmt(red),
+        '(회귀 트리의 "IG" — 같은 틀, 불순도=분산)' ] }; },
+    hints:['가중 평균 빼기.'] },
+  { id:'u5-l2-09', level:2, type:'num', tags:['깊이 규제 효과'], src:'창작 문제(검산됨)',
+    params:{ d:{choices:[[3,80,78],[10,99,74]]} },
+    statement:function(p){ var d=p.d; return '깊이 '+d[0]+' 트리: 훈련 '+d[1]+'%/검증 '+d[2]+'%. 격차(%p)와 진단(과적합=1/적정=0, 격차>10 기준)을 답하라.'; },
+    solve:function(p){ var d=p.d, g=d[1]-d[2];
+      return { ans:{gap:g, diag:g>10?1:0}, unit:{gap:'%p', diag:''}, steps:[
+        '격차 = '+g+'%p → '+(g>10?'과적합(1)':'적정(0)'),
+        '(깊이 = 트리의 제1 규제 다이얼)' ] }; },
+    hints:['격차 기준.'] },
+  { id:'u5-l2-10', level:2, type:'num', tags:['지니 vs 엔트로피 속도'], src:'창작 문제(검산됨)',
+    params:{ n:{choices:[1000000,10000000]} },
+    statement:function(p){ return '분할 후보 '+SVH.si(p.n,'회')+' 평가에서 지니(곱셈 2회)가 엔트로피(log 2회, log≈곱셈 5배 비용) 대비 절약하는 상대 비용 비율을 구하라. (지니/엔트로피)'; },
+    solve:function(p){ return { ans:0.2, unit:'', steps:[
+        '비용비 ≈ 2/(2×5) = 0.2',
+        '(결과는 대개 비슷, 속도는 지니 — CART의 실용주의)' ] }; },
+    hints:['연산 비용 모델.'] },
+  { id:'u5-l2-11', level:2, type:'num', tags:['최소 분할 샘플'], src:'창작 문제(검산됨)',
+    params:{ n:{choices:[5,20]}, N:{choices:[40,100]} },
+    statement:function(p){ return 'min_samples_split='+p.n+'일 때, 샘플 '+p.N+'개 노드는 분할 가능한가(1/0)? '+(p.n-1)+'개면?'; },
+    solve:function(p){ return { ans:{a:p.N>=p.n?1:0, b:0}, unit:{a:'', b:''}, steps:[
+        p.N+'≥'+p.n+' → 가능(1) / '+(p.n-1)+'개 → 불가(0)',
+        '(하이퍼파라미터의 동작 방식을 정확히)' ] }; },
+    hints:['부등호 하나.'] },
+  { id:'u5-l2-12', level:2, type:'num', tags:['다수결 잎 오류'], src:'창작 문제(검산됨)',
+    params:{ a:{choices:[[7,3],[9,1]]} },
+    statement:function(p){ var a=p.a; return '잎 ['+a[0]+'+,'+a[1]+'−]를 잎으로 확정하면 훈련 오류 수와 오류율(%)은?'; },
+    solve:function(p){ var a=p.a;
+      return { ans:{err:a[1], rate:a[1]/(a[0]+a[1])*100}, unit:{err:'개', rate:'%'}, steps:[
+        '다수결 + → 오류 = 소수 '+a[1]+'개 ('+SVH.fmt(a[1]/(a[0]+a[1])*100)+'%)',
+        '(가지치기 판단의 원료)' ] }; },
+    hints:['소수 클래스 수.'] },
+
+  /* ---------- L3 (14) ---------- */
+  { id:'u5-l3-01', level:3, type:'num', tags:['지니 분할 선택'], src:'기출 유형',
+    params:{ A:{choices:[[5,1,1,5],[6,0,2,4]]}, B:{choices:[[4,2,2,4],[3,3,3,3]]} },
+    statement:function(p){ return '부모 [6+,6−]. A: ['+p.A.join(',')+'], B: ['+p.B.join(',')+'] (각 [+,−,+,−] 두 가지). 지니 이득으로 승자(A=1/B=2)를 정하라.'; },
+    solve:function(p){
+      function G(a,b){ var t=a+b; if(!t) return 0; var x=a/t; return 2*x*(1-x); }
+      function gain(s){ return G(6,6)-((s[0]+s[1])*G(s[0],s[1])+(s[2]+s[3])*G(s[2],s[3]))/12; }
+      var ga=gain(p.A), gb=gain(p.B);
+      return { ans:{gA:ga, gB:gb, pick:ga>=gb?1:2}, unit:{gA:'', gB:'', pick:''}, steps:[
+        '이득: A '+SVH.fmt(ga)+' vs B '+SVH.fmt(gb),
+        '승자 '+(ga>=gb?'A(1)':'B(2)') ] }; },
+    hints:['G(6,6)=0.5.'] },
+  { id:'u5-l3-02', level:3, type:'num', tags:['가지치기 시뮬'], src:'기출 유형',
+    params:{ node:{choices:[[20,5,90,88],[30,8,85,86]]} },
+    statement:function(p){ var n=p.node; return '부트리(훈련 정확 '+n[0]+'/'+(n[0]+n[1])+' 노드 샘플)와 잎 치환. 검증: 유지 '+n[2]+'% vs 치환 '+n[3]+'%. (a) 훈련 기준 결정(유지=0) (b) 검증 기준 결정(치환=1이면 1) — 어느 기준을 따르나(검증=2)?'; },
+    solve:function(p){ var n=p.node;
+      return { ans:{tr:0, val:n[3]>=n[2]?1:0, rule:2}, unit:{tr:'', val:'', rule:''}, steps:[
+        '훈련은 항상 "유지"가 유리(0) — 그래서 못 믿는다',
+        '검증: '+(n[3]>=n[2]?'치환(1)':'유지(0)'),
+        '따르는 것은 검증(2) — 가지치기의 헌법' ] }; },
+    hints:['누가 심판인가.'] },
+  { id:'u5-l3-03', level:3, type:'num', tags:['연속 지니 스캔'], src:'기출 유형',
+    params:{ lab:{choices:[[1,1,0,0],[1,0,1,0]]} },
+    statement:function(p){ var l=p.lab; return '값 [1,2,3,4], 레이블 ['+l.join(',')+']: 각 중점 문턱의 지니 이득을 구해 최적 문턱을 정하라.'; },
+    solve:function(p){
+      function G(a,b){ var t=a+b; if(!t) return 0; var x=a/t; return 2*x*(1-x); }
+      var l=p.lab, P=l.reduce((a,b)=>a+b,0);
+      var Gp=G(P,4-P), best=-1, bth=0;
+      for(var i=0;i<3;i++){
+        var lp=0; for(var j=0;j<=i;j++) lp+=l[j];
+        var g=Gp-((i+1)*G(lp,i+1-lp)+(3-i)*G(P-lp,3-i-(P-lp)))/4;
+        if(g>best){ best=g; bth=(i+1)+0.5; }
+      }
+      return { ans:{th:bth, gain:best}, unit:{th:'', gain:''}, steps:[
+        '문턱 1.5/2.5/3.5 스캔',
+        '최적 '+bth+', 이득 '+SVH.fmt(best)+' ('+(best===Gp?'완전 분리':'부분 분리')+')' ] }; },
+    hints:['세 후보 전수.'] },
+  { id:'u5-l3-04', level:3, type:'num', tags:['α 경로'], src:'교재 표준',
+    params:{ t:{choices:[[0,10,2,6,5,3],[1,12,3,7,6,4]]} },
+    statement:function(p){ var t=p.t; return '트리 크기별 (오류, 잎): 큰('+t[0]+','+t[1]+'), 중('+t[2]+','+t[3]+'), 작('+t[4]+','+t[5]+'). α=0.5와 α=2에서 각각 최적 트리(큰=1/중=2/작=3)를 정하라.'; },
+    solve:function(p){
+      var t=p.t;
+      function best(al){
+        var c=[t[0]+al*t[1], t[2]+al*t[3], t[4]+al*t[5]];
+        var m=Math.min(c[0],c[1],c[2]);
+        return c[0]===m?1:(c[1]===m?2:3);
+      }
+      return { ans:{a05:best(0.5), a2:best(2)}, unit:{a05:'', a2:''}, steps:[
+        'α=0.5: 점수 비교 → '+best(0.5),
+        'α=2: → '+best(2)+' (α↑ = 작은 트리로 이동 — 경로의 그림)' ] }; },
+    hints:['각 α에서 3점 비교.'] },
+  { id:'u5-l3-05', level:3, type:'num', tags:['수평선 효과'], src:'교재 표준',
+    params:{ variant:{choices:[1,2]} },
+    statement:function(p){ return 'XOR 데이터에서 사전 정지 "IG<0.01이면 중단"을 적용하면 뿌리에서 멈춘다. (a) 그 트리의 정확도(%) (b) 사후 가지치기라면 깊이 2 트리를 발견하는가(1)?'; },
+    solve:function(p){ return { ans:{acc:50, post:1}, unit:{acc:'%', post:''}, steps:[
+        '뿌리 IG=0 → 중단 → 다수결 50%',
+        '사후: 일단 키우면 2층에서 100% → 발견(1)',
+        '(수평선 효과의 교과서 사례)' ] }; },
+    hints:['U4-l3-09 후속.'] },
+  { id:'u5-l3-06', level:3, type:'num', tags:['회귀 분할 계산'], src:'기출 유형',
+    params:{ ys:{choices:[[1,2,7,8],[2,3,8,9]]} },
+    statement:function(p){ var y=p.ys; return 'x=[1,2,3,4], y=['+y.join(',')+']: 문턱 2.5 분할의 (a) 좌우 잎 예측 (b) SSE 감소량을 구하라.'; },
+    solve:function(p){
+      var y=p.ys;
+      var m=(y[0]+y[1]+y[2]+y[3])/4, sse0=0;
+      for(var i=0;i<4;i++) sse0+=(y[i]-m)*(y[i]-m);
+      var mL=(y[0]+y[1])/2, mR=(y[2]+y[3])/2;
+      var sse1=Math.pow(y[0]-mL,2)+Math.pow(y[1]-mL,2)+Math.pow(y[2]-mR,2)+Math.pow(y[3]-mR,2);
+      return { ans:{mL:mL, mR:mR, red:sse0-sse1}, unit:{mL:'', mR:'', red:''}, steps:[
+        '잎 예측: 좌 '+SVH.fmt(mL)+', 우 '+SVH.fmt(mR),
+        'SSE '+SVH.fmt(sse0)+'→'+SVH.fmt(sse1)+', 감소 '+SVH.fmt(sse0-sse1),
+        '(계단 함수 근사 — 회귀 트리의 그림)' ] }; },
+    hints:['평균 2개, SSE 2번.'] },
+  { id:'u5-l3-07', level:3, type:'num', tags:['불안정성'], src:'교재 표준',
+    params:{ variant:{choices:[1,2]} },
+    statement:function(p){ return '데이터 1개 변경으로 뿌리 특징이 바뀌어 트리 전체가 달라졌다. 이 성질(고분산=1)과, 이를 이용/완화하는 대표 기법(배깅=랜덤포레스트, 기말)의 원리(평균으로 분산↓=1)를 답하라.'; },
+    solve:function(p){ return { ans:{var_:1, fix:1}, unit:{var_:'', fix:''}, steps:[
+        '트리 = 고분산 학습기(1) — 탐욕 분기의 나비효과',
+        '배깅: 부트스트랩 트리 평균 → 분산↓(1) (기말 앙상블 예고)' ] }; },
+    hints:['분산 큰 모델의 처방.'] },
+  { id:'u5-l3-08', level:3, type:'num', tags:['클래스 가중 지니'], src:'기출 유형',
+    params:{ w:{choices:[5,10]} },
+    statement:function(p){ return '양성 가중치 '+p.w+'배(비용 반영): [2+, 8−] 노드의 가중 다수결 판정(+=1/−=0)을 구하라. (가중 후 2×'+p.w+' vs 8)'; },
+    solve:function(p){ return { ans:2*p.w>8?1:0, unit:'', steps:[
+        '가중 표: +'+2*p.w+' vs −8',
+        '판정 '+(2*p.w>8?'+ (1)':'− (0)')+' — 비용이 잎 레이블을 바꾼다(U3 문턱 이동의 트리판)' ] }; },
+    hints:['가중 후 다수결.'] },
+  { id:'u5-l3-09', level:3, type:'num', tags:['오류 상한 가지치기(비관적)'], src:'교재 표준',
+    params:{ e:{choices:[2,3]}, n:{choices:[20,40]} },
+    statement:function(p){ return 'C4.5 비관적 추정 맛보기: 잎 오류 '+p.e+'/'+p.n+'에 연속성 보정 +0.5를 더한 추정 오류율(%)을 구하라.'; },
+    solve:function(p){ return { ans:(p.e+0.5)/p.n*100, unit:'%', steps:[
+        '(e+0.5)/n = '+SVH.fmt((p.e+0.5)/p.n*100)+'%',
+        '(훈련 오류를 그대로 안 믿고 위로 보정 — 검증셋 없이 가지치는 아이디어)' ] }; },
+    hints:['+0.5 보정.'] },
+  { id:'u5-l3-10', level:3, type:'num', tags:['특징 중요도'], src:'교재 표준',
+    params:{ g1:{choices:[0.2,0.3]}, n1:{choices:[100]}, g2:{choices:[0.1,0.15]}, n2:{choices:[40,60]} },
+    statement:function(p){ return '특징 A가 두 노드에서 사용됨: (지니 이득, 노드 샘플) = ('+p.g1+', '+p.n1+'), ('+p.g2+', '+p.n2+'). 샘플 가중 중요도(전체 N=100 기준 합)를 구하라.'; },
+    solve:function(p){
+      var imp=p.g1*p.n1/100+p.g2*p.n2/100;
+      return { ans:imp, unit:'', steps:[
+        '중요도 = Σ(이득×노드비율) = '+SVH.fmt(imp),
+        '(sklearn feature_importances_의 정체)' ] }; },
+    hints:['가중합.'] },
+  { id:'u5-l3-11', level:3, type:'num', tags:['잎 수 vs 성능 곡선'], src:'기출 유형',
+    params:{ tbl:{choices:[[2,70,4,80,8,84,16,82],[2,65,4,78,8,83,16,80]]} },
+    statement:function(p){ var t=p.tbl; return '잎 수별 검증 정확도: '+t[0]+'잎 '+t[1]+'%, '+t[2]+'잎 '+t[3]+'%, '+t[4]+'잎 '+t[5]+'%, '+t[6]+'잎 '+t[7]+'%. 최적 잎 수와, 16잎의 진단(과적합=1)을 답하라.'; },
+    solve:function(p){ var t=p.tbl;
+      var accs=[t[1],t[3],t[5],t[7]], leaves=[t[0],t[2],t[4],t[6]];
+      var bi=accs.indexOf(Math.max(...accs));
+      return { ans:{best:leaves[bi], diag:1}, unit:{best:'잎', diag:''}, steps:[
+        '검증 최고 = '+leaves[bi]+'잎',
+        '16잎에서 하락 → 과적합 시작(1) — 검증 곡선의 꼭대기 찾기' ] }; },
+    hints:['최고점 인덱스.'] },
+  { id:'u5-l3-12', level:3, type:'num', tags:['서브트리 치환 계산'], src:'기출 유형',
+    params:{ l1:{choices:[[8,1],[6,1]]}, l2:{choices:[[1,5],[2,6]]} },
+    statement:function(p){ return '부트리: 잎A ['+p.l1.join('+,')+'−], 잎B ['+p.l2.join('+,')+'−]. (a) 부트리 훈련 오류 (b) 잎으로 합칠 때(다수결) 오류 (c) 오류 증가분을 구하라.'; },
+    solve:function(p){
+      var e1=Math.min(p.l1[0],p.l1[1])+Math.min(p.l2[0],p.l2[1]);
+      var P=p.l1[0]+p.l2[0], N=p.l1[1]+p.l2[1];
+      var e2=Math.min(P,N);
+      return { ans:{sub:e1, leaf:e2, inc:e2-e1}, unit:{sub:'개', leaf:'개', inc:'개'}, steps:[
+        '부트리 오류 = '+e1+', 합친 잎 ['+P+'+,'+N+'−] 오류 = '+e2,
+        '증가 '+(e2-e1)+'개 — 이 값과 α·Δ잎을 저울질(비용-복잡도)' ] }; },
+    hints:['소수 합 vs 합의 소수.'] },
+  { id:'u5-l3-13', level:3, type:'num', tags:['결정 경계 개수'], src:'창작 문제(검산됨)',
+    params:{ L:{choices:[4,8]} },
+    statement:function(p){ return '2차원 입력에서 잎 '+p.L+'개짜리 CART 트리가 만드는 (a) 사각형 영역 수 (b) 내부 분할 수를 구하라.'; },
+    solve:function(p){ return { ans:{reg:p.L, cuts:p.L-1}, unit:{reg:'개', cuts:'개'}, steps:[
+        '영역 = 잎 = '+p.L+', 분할 = 잎−1 = '+(p.L-1),
+        '(공간을 직사각형 타일로 — 트리의 기하학)' ] }; },
+    hints:['이진 트리 항등식.'] },
+  { id:'u5-l3-14', level:3, type:'num', tags:['데이터 크기와 깊이'], src:'기출 유형',
+    params:{ N:{choices:[100,1000]}, err:{choices:[[15,10,9,12],[20,12,10,14]]} },
+    statement:function(p){ var e=p.err; return 'N='+p.N+'에서 깊이 2/4/6/8의 검증 오류 ['+e.join(', ')+']%. (a) 최적 깊이 (b) N을 10배로 늘리면 최적 깊이는 어느 쪽으로 움직이나(깊어짐=1)?'; },
+    solve:function(p){ var e=p.err, d=[2,4,6,8];
+      var bi=e.indexOf(Math.min(...e));
+      return { ans:{depth:d[bi], move:1}, unit:{depth:'', move:''}, steps:[
+        '최적 = 깊이 '+d[bi],
+        '데이터↑ → 분산 부담↓ → 더 깊게 허용(1) — 용량은 데이터와 함께 큰다' ] }; },
+    hints:['최소 오류 + 스케일 직관.'] },
+
+  /* ---------- L4 (8) ---------- */
+  { id:'u5-l4-01', level:4, type:'mc', tags:['개념 종합'], src:'기출 유형',
+    statement:'옳은 것을 모두 고르면?<br>㉠ 지니와 엔트로피는 대개 비슷한 분할을 고른다<br>㉡ 사후 가지치기는 수평선 효과를 피할 수 있다<br>㉢ 비용-복잡도의 α는 CV로 고른다<br>㉣ 회귀 트리 잎의 최적 상수 예측은 평균이다',
+    choices:['전부','㉠㉡㉢','㉡㉢㉣','㉠㉣'],
+    answer:0, expl:'전부 참.' },
+  { id:'u5-l4-02', level:4, type:'num', tags:['지니 풀계산'], src:'기출 유형',
+    params:{ s:{choices:[[7,1,2,5],[6,2,1,6]]} },
+    statement:function(p){ var s=p.s; return '부모 ['+(s[0]+s[2])+'+,'+(s[1]+s[3])+'−] → A: ['+s[0]+'+,'+s[1]+'−]/['+s[2]+'+,'+s[3]+'−]. (a) 부모 지니 (b) 가중 자식 지니 (c) 이득 (d) 대응 IG(엔트로피)도 구해 두 기준 비교.'; },
+    solve:function(p){
+      function G(a,b){ var t=a+b; if(!t) return 0; var x=a/t; return 2*x*(1-x); }
+      function H(a,b){ var t=a+b; if(!t) return 0; var x=a/t,y=b/t;
+        return (x>0?-x*Math.log2(x):0)+(y>0?-y*Math.log2(y):0); }
+      var s=p.s, P=s[0]+s[2], N=s[1]+s[3], T=P+N;
+      var Gp=G(P,N), Gc=((s[0]+s[1])*G(s[0],s[1])+(s[2]+s[3])*G(s[2],s[3]))/T;
+      var IG=H(P,N)-((s[0]+s[1])*H(s[0],s[1])+(s[2]+s[3])*H(s[2],s[3]))/T;
+      return { ans:{Gp:Gp, Gc:Gc, gain:Gp-Gc, IG:IG}, unit:{Gp:'',Gc:'',gain:'',IG:'비트'}, steps:[
+        'G(부모)='+SVH.fmt(Gp)+', 가중='+SVH.fmt(Gc)+', 이득='+SVH.fmt(Gp-Gc),
+        'IG='+SVH.fmt(IG)+' — 순위는 대개 일치(수치는 다름)' ] }; },
+    hints:['두 불순도 병렬 계산.'] },
+  { id:'u5-l4-03', level:4, type:'derive', tags:['유도'], src:'교재 표준',
+    statement:'지니 \\(G=1-\\sum p_k^2\\)가 "무작위 두 샘플이 다른 클래스일 확률"임을 유도하고, 이진에서 2p(1−p)임을 확인하라.',
+    steps:[
+      '복원 추출 두 샘플이 같은 클래스일 확률 = Σp_k² [왜] 클래스 k 둘 다일 확률 p_k²의 합',
+      '다를 확률 = 1−Σp_k² = G — 정의의 확률적 정체',
+      '이진: 1−p²−(1−p)² = 2p(1−p) ✓',
+      '회귀 유추: "두 샘플 차이의 기대"가 분산 — 지니↔분산의 평행 구조',
+      '극한 체크: 순수 ⇒ 0 ✓ · k균등 ⇒ 1−1/k ✓'
+    ],
+    hints:['같을 확률부터.'],
+    expl:'공식 암기를 확률 이야기로 바꿔 주는 유도 — 서술형 대비.' },
+  { id:'u5-l4-04', level:4, type:'num', tags:['REP 풀시뮬'], src:'기출 유형',
+    params:{ t:{choices:[[88,90,86],[85,87,84]]} },
+    statement:function(p){ var t=p.t; return '검증 정확도: 전체 트리 '+t[0]+'%, 부트리1 치환 시 '+t[1]+'%, 이후 부트리2 추가 치환 시 '+t[2]+'%. 축소-오류 가지치기의 최종 상태(치환 수)를 구하라.'; },
+    solve:function(p){ var t=p.t;
+      var n=t[1]>=t[0]?(t[2]>=t[1]?2:1):0;
+      return { ans:n, unit:'회 치환', steps:[
+        '1차: '+t[0]+'→'+t[1]+' '+(t[1]>=t[0]?'채택':'기각'),
+        '2차: '+t[1]+'→'+t[2]+' '+(t[2]>=t[1]?'채택':'기각'),
+        '최종 치환 '+n+'회 — 나빠지기 직전까지 자른다' ] }; },
+    hints:['탐욕 반복.'] },
+  { id:'u5-l4-05', level:4, type:'num', tags:['α 선택 CV'], src:'기출 유형',
+    params:{ cv:{choices:[[82,86,88,85],[80,85,87,84]]} },
+    statement:function(p){ var c=p.cv; return 'α∈{0, 0.5, 1, 2}의 CV 정확도 ['+c.join(', ')+']%. (a) 선택 α (b) α=0(무가지치기)의 문제 진단(과적합=1)을 답하라.'; },
+    solve:function(p){ var c=p.cv, al=[0,0.5,1,2];
+      var bi=c.indexOf(Math.max(...c));
+      return { ans:{alpha:al[bi], diag:1}, unit:{alpha:'', diag:''}, steps:[
+        '최고 CV = α='+al[bi],
+        'α=0이 최고가 아님 → 무규제는 과적합(1) — 릿지 λ 선택과 같은 그림' ] }; },
+    hints:['CV 최댓값.'] },
+  { id:'u5-l4-06', level:4, type:'num', tags:['비대칭 비용 트리'], src:'기출 유형',
+    params:{ cFN:{choices:[10,20]}, leaf:{choices:[[3,7],[4,6]]} },
+    statement:function(p){ var l=p.leaf; return 'FN 비용 '+p.cFN+'·FP 비용 1. 잎 ['+l[0]+'+,'+l[1]+'−]의 (a) − 판정 기대비용 (b) + 판정 기대비용 (c) 최적 판정(+=1/−=0)을 구하라.'; },
+    solve:function(p){ var l=p.leaf;
+      var cn=l[0]*p.cFN, cp=l[1]*1;
+      return { ans:{cn:cn, cp:cp, pick:cp<=cn?1:0}, unit:{cn:'', cp:'', pick:''}, steps:[
+        '− 판정: FN '+l[0]+'건×'+p.cFN+' = '+cn,
+        '+ 판정: FP '+l[1]+'건×1 = '+cp,
+        '판정 '+(cp<=cn?'+(1)':'−(0)')+' — 다수결('+(l[0]>l[1]?'+':'−')+')과 달라질 수 있다!' ] }; },
+    hints:['비용 가중 다수결.'] },
+  { id:'u5-l4-07', level:4, type:'num', tags:['트리 vs 선형 선택'], src:'기출 유형',
+    params:{ sc:{choices:[[85,84,3],[88,80,5]]} },
+    statement:function(p){ var s=p.sc; return '트리 CV '+s[0]+'% vs 로지스틱 CV '+s[1]+'% (SE '+s[2]+'%p... 아니 1%p 가정). "1-SE 규칙"(최고 성능 −1SE 내에서 가장 단순한 모델)으로 선택하라(트리=1/선형=2, 선형이 더 단순 가정).'; },
+    solve:function(p){ var s=p.sc;
+      var pick=(s[0]-s[1])<=1?2:1;
+      return { ans:pick, unit:'', steps:[
+        '차 '+(s[0]-s[1])+'%p vs 1SE=1%p',
+        (pick===2?'범위 내 → 단순한 선형(2)':'범위 밖 → 트리(1)'),
+        '(1-SE 규칙 — 동률이면 단순한 쪽, 오컴의 운영화)' ] }; },
+    hints:['차이 vs SE.'] },
+  { id:'u5-l4-08', level:4, type:'num', tags:['중간 리허설'], src:'기출 유형',
+    params:{ s:{choices:[[5,3,4,0],[6,2,3,1]]} },
+    statement:function(p){ var s=p.s; return '12샘플 [+'+(s[0]+s[2])+',−'+(s[1]+s[3])+'] → 분할 ['+s[0]+'+,'+s[1]+'−]/['+s[2]+'+,'+s[3]+'−]. (a) 지니 이득 (b) IG (c) 분할 후 각 잎의 다수결 훈련 정확도(%)를 구하라.'; },
+    solve:function(p){
+      function G(a,b){ var t=a+b; if(!t) return 0; var x=a/t; return 2*x*(1-x); }
+      function H(a,b){ var t=a+b; if(!t) return 0; var x=a/t,y=b/t;
+        return (x>0?-x*Math.log2(x):0)+(y>0?-y*Math.log2(y):0); }
+      var s=p.s, P=s[0]+s[2], N=s[1]+s[3], T=P+N;
+      var gg=G(P,N)-((s[0]+s[1])*G(s[0],s[1])+(s[2]+s[3])*G(s[2],s[3]))/T;
+      var ig=H(P,N)-((s[0]+s[1])*H(s[0],s[1])+(s[2]+s[3])*H(s[2],s[3]))/T;
+      var acc=(Math.max(s[0],s[1])+Math.max(s[2],s[3]))/T*100;
+      return { ans:{gini:gg, IG:ig, acc:acc}, unit:{gini:'', IG:'비트', acc:'%'}, steps:[
+        '지니 이득 '+SVH.fmt(gg)+' · IG '+SVH.fmt(ig),
+        '분할 후 정확도 = '+SVH.fmt(acc)+'%',
+        '(세 관점(지니·정보·정확도)을 한 분할에 — 시험 종합형)' ] }; },
+    hints:['세 기준 병렬.'] }
+  ]
+});
+
+</script>
+<script>
+/* U6 베이즈 기초·나이브 베이즈 — 베이즈 정리, MAP/ML, NB 표 계산, 라플라스 평활 */
+SV_BANK.push({
+  id: 'u6', no: 6, title: '베이즈·나이브 베이즈', titleEn: 'Bayesian Learning & Naive Bayes',
+  scope: '베이즈 정리 · 사전/우도/사후 · MAP vs ML · 나이브 베이즈 표 계산 · 라플라스 평활 · 로그 확률 · 조건부 독립 가정',
+  problems: [
+
+  /* ---------- L1 (6) ---------- */
+  { id:'u6-l1-01', level:1, type:'mc', tags:['베이즈 정리'], src:'교재 표준',
+    statement:'베이즈 정리 \\(P(h|D)=\\dfrac{P(D|h)P(h)}{P(D)}\\)에서 각 항의 이름은?',
+    choices:['사후=우도×사전/증거','사전=P(h|D)','우도=P(h)','증거=P(D|h)'],
+    answer:0, expl:'P(h)=사전, P(D|h)=우도, P(h|D)=사후, P(D)=증거(정규화). 넷의 이름이 언어의 절반.' },
+  { id:'u6-l1-02', level:1, type:'mc', tags:['MAP vs ML'], src:'교재 표준',
+    statement:'MAP과 ML 가설의 관계로 옳은 것은?',
+    choices:['MAP=argmax P(D|h)P(h), 사전이 균등하면 ML과 일치','ML이 항상 MAP','MAP=argmax P(D|h)','둘은 무관'],
+    answer:0, expl:'ML은 우도만, MAP은 사전까지. 균등 사전 = 사전이 승부에 무영향.' },
+  { id:'u6-l1-03', level:1, type:'tf', tags:['나이브 가정'], src:'교재 표준',
+    statement:'나이브 베이즈는 "클래스가 주어지면 특징들이 조건부 독립"이라 가정하여 \\(P(x_1..x_n|c)=\\prod P(x_i|c)\\)로 분해한다.',
+    answer:true, expl:'거짓이기 쉬운 가정인데도 분류가 잘 되는 경우가 많다 — 순위만 맞으면 되니까.' },
+  { id:'u6-l1-04', level:1, type:'mc', tags:['평활'], src:'교재 표준',
+    statement:'라플라스 평활 \\(P(x|c)=\\dfrac{n_{x,c}+1}{n_c+|V|}\\)이 해결하는 문제는?',
+    choices:['훈련에 없던 값의 확률 0 → 곱 전체 0이 되는 붕괴','과적합 일반','계산 속도','결측치'],
+    answer:0, expl:'미등장=불가능이 아니다. +1(또는 +α)로 0을 없앤다.' },
+  { id:'u6-l1-05', level:1, type:'tf', tags:['로그 확률'], src:'교재 표준',
+    statement:'확률 곱은 언더플로를 피해 로그 합으로 계산하며, argmax는 로그를 취해도 불변이다.',
+    answer:true, expl:'0.01¹⁰⁰ 같은 수는 로그로만 안전. 단조 변환 = 순위 보존.' },
+  { id:'u6-l1-06', level:1, type:'mc', tags:['생성 vs 판별'], src:'교재 표준',
+    statement:'나이브 베이즈의 분류는?',
+    choices:['생성 모델 — P(x|c)P(c)를 모델링해 사후 비교','판별 모델 — 경계 직접 학습','비확률적','군집'],
+    answer:0, expl:'로지스틱(판별)과의 대비 축. 데이터 적을 때 생성 모델이 유리한 경향.' },
+
+  /* ---------- L2 (12) ---------- */
+  { id:'u6-l2-01', level:2, type:'num', tags:['베이즈 기본'], src:'창작 문제(검산됨)',
+    params:{ prior:{choices:[10,30]}, like:{choices:[80,90]}, alt:{choices:[20,30]} },
+    statement:function(p){ return 'P(h)='+p.prior+'%, P(D|h)='+p.like+'%, P(D|¬h)='+p.alt+'%. P(h|D)(%)를 구하라.'; },
+    solve:function(p){
+      var a=p.prior/100*p.like/100, b=(1-p.prior/100)*p.alt/100;
+      return { ans:a/(a+b)*100, unit:'%', steps:[
+        '분자 = '+SVH.fmt(a)+', 증거 = '+SVH.fmt(a+b),
+        '사후 = '+SVH.fmt(a/(a+b)*100)+'%' ] }; },
+    hints:['두 경로 합이 분모.'] },
+  { id:'u6-l2-02', level:2, type:'num', tags:['사전 vs 우도'], src:'창작 문제(검산됨)',
+    params:{ pr:{choices:[1,5]}, lr:{choices:[10,20]} },
+    statement:function(p){ return '사전 오즈 '+p.pr+':100, 우도비 '+p.lr+'. 사후 오즈와 사후 확률(%)을 구하라.'; },
+    solve:function(p){
+      var odds=p.pr/100*p.lr;
+      return { ans:{odds:odds, prob:odds/(1+odds)*100}, unit:{odds:'', prob:'%'}, steps:[
+        '사후 오즈 = 사전 오즈×LR = '+SVH.fmt(odds),
+        '확률 = odds/(1+odds) = '+SVH.fmt(odds/(1+odds)*100)+'% (오즈 곱셈이 베이즈의 지름길)' ] }; },
+    hints:['오즈로 곱하기.'] },
+  { id:'u6-l2-03', level:2, type:'num', tags:['NB 사전'], src:'창작 문제(검산됨)',
+    params:{ s:{choices:[[9,5],[10,4]]} },
+    statement:function(p){ var s=p.s; return '훈련: 클래스+ '+s[0]+'개, − '+s[1]+'개. 사전 P(+)·P(−)(%)를 구하라.'; },
+    solve:function(p){ var s=p.s, t=s[0]+s[1];
+      return { ans:{pp:s[0]/t*100, pn:s[1]/t*100}, unit:{pp:'%', pn:'%'}, steps:[
+        'P(+) = '+s[0]+'/'+t+' = '+SVH.fmt(s[0]/t*100)+'%',
+        'P(−) = '+SVH.fmt(s[1]/t*100)+'%' ] }; },
+    hints:['빈도.'] },
+  { id:'u6-l2-04', level:2, type:'num', tags:['조건부 표'], src:'창작 문제(검산됨)',
+    params:{ nx:{choices:[3,6]}, nc:{choices:[9,10]} },
+    statement:function(p){ return '클래스 + 샘플 '+p.nc+'개 중 특징 x=1이 '+p.nx+'개. (a) P(x=1|+) (b) 라플라스(+1, |V|=2) 버전을 구하라.'; },
+    solve:function(p){
+      return { ans:{ml:p.nx/p.nc, lap:(p.nx+1)/(p.nc+2)}, unit:{ml:'', lap:''}, steps:[
+        'ML: '+p.nx+'/'+p.nc+' = '+SVH.fmt(p.nx/p.nc),
+        '라플라스: ('+p.nx+'+1)/('+p.nc+'+2) = '+SVH.fmt((p.nx+1)/(p.nc+2)) ] }; },
+    hints:['+1, +|V|.'] },
+  { id:'u6-l2-05', level:2, type:'num', tags:['0 확률 붕괴'], src:'창작 문제(검산됨)',
+    params:{ n:{choices:[5,8]} },
+    statement:function(p){ return '특징 '+p.n+'개 NB에서 한 특징의 P(xᵢ|c)=0이면 그 클래스 점수는? 라플라스 없이 이 클래스가 이길 수 있는가(0)?'; },
+    solve:function(p){ return { ans:{score:0, win:0}, unit:{score:'', win:''}, steps:[
+        '곱에 0 하나 → 전체 0',
+        '절대 못 이김(0) — 한 번도 못 본 단어가 클래스를 사형시킨다(평활의 이유)' ] }; },
+    hints:['곱의 성질.'] },
+  { id:'u6-l2-06', level:2, type:'num', tags:['로그 변환'], src:'창작 문제(검산됨)',
+    params:{ p1:{choices:[0.01,0.1]}, n:{choices:[50,100]} },
+    statement:function(p){ return '확률 '+p.p1+'을 '+p.n+'번 곱한 값의 log₁₀와, 이 수를 부동소수(최소 ~10⁻³⁰⁸)로 직접 계산 가능한가(0/1)를 답하라.'; },
+    solve:function(p){
+      var lg=p.n*Math.log10(p.p1);
+      return { ans:{lg:lg, ok:lg>-308?1:0}, unit:{lg:'', ok:''}, steps:[
+        'log₁₀ = '+p.n+'×'+SVH.fmt(Math.log10(p.p1))+' = '+SVH.fmt(lg),
+        (lg>-308?'가능(1)이지만 위험':'언더플로(0)')+' — 로그 합이 정석인 이유' ] }; },
+    hints:['n·log p.'] },
+  { id:'u6-l2-07', level:2, type:'num', tags:['2특징 NB'], src:'교재 표준',
+    params:{ t:{choices:[[0.6,0.7,0.3,0.2],[0.5,0.8,0.4,0.3]]} },
+    statement:function(p){ var t=p.t; return 'P(+)=0.5. P(x₁=1|+)='+t[0]+', P(x₂=1|+)='+t[1]+', P(x₁=1|−)='+t[2]+', P(x₂=1|−)='+t[3]+'. 입력 (1,1)의 판정(+=1/−=0)과 사후 P(+|x)(%)를 구하라.'; },
+    solve:function(p){
+      var t=p.t;
+      var sp=0.5*t[0]*t[1], sn=0.5*t[2]*t[3];
+      return { ans:{pick:sp>=sn?1:0, post:sp/(sp+sn)*100}, unit:{pick:'', post:'%'}, steps:[
+        '점수: + '+SVH.fmt(sp)+' vs − '+SVH.fmt(sn),
+        '판정 '+(sp>=sn?'+(1)':'−(0)')+', 사후 '+SVH.fmt(sp/(sp+sn)*100)+'%' ] }; },
+    hints:['곱 두 개 비교.'] },
+  { id:'u6-l2-08', level:2, type:'num', tags:['검사 재검'], src:'교재 표준',
+    params:{ prev:{choices:[1,10]}, sens:{choices:[90,95]}, spec:{choices:[90,95]} },
+    statement:function(p){ return '유병률 '+p.prev+'%, 민감도 '+p.sens+'%·특이도 '+p.spec+'% 검사에서 양성 2회 연속(독립 가정)일 때 사후(%)를 구하라.'; },
+    solve:function(p){
+      var pv=p.prev/100, se=p.sens/100, fp=1-p.spec/100;
+      var a=pv*se*se, b=(1-pv)*fp*fp;
+      return { ans:a/(a+b)*100, unit:'%', steps:[
+        '우도비 제곱: LR² = ('+SVH.fmt(se/fp)+')²',
+        '사후 = '+SVH.fmt(a/(a+b)*100)+'% (반복 검사의 힘 — NB의 곱 구조 그대로)' ] }; },
+    hints:['우도 제곱.'] },
+  { id:'u6-l2-09', level:2, type:'num', tags:['가우시안 NB 한 항'], src:'교재 표준',
+    params:{ mu:{choices:[170,175]}, sd:{choices:[5,10]}, x:{choices:[180]} },
+    statement:function(p){ return '가우시안 NB: 클래스 내 µ='+p.mu+', σ='+p.sd+'에서 x='+p.x+'의 밀도 \\(\\frac{1}{\\sqrt{2\\pi}\\sigma}e^{-(x-\\mu)^2/2\\sigma^2}\\)를 구하라.'; },
+    solve:function(p){
+      var d=1/(Math.sqrt(2*Math.PI)*p.sd)*Math.exp(-Math.pow(p.x-p.mu,2)/(2*p.sd*p.sd));
+      return { ans:d, unit:'', steps:[
+        'z = ('+p.x+'−'+p.mu+')/'+p.sd+' = '+SVH.fmt((p.x-p.mu)/p.sd),
+        '밀도 = '+SVH.fmt(d)+' (연속 특징은 밀도로 — 확률 아님 주의)' ] }; },
+    hints:['정규 밀도 대입.'] },
+  { id:'u6-l2-10', level:2, type:'num', tags:['파라미터 수'], src:'교재 표준',
+    params:{ n:{choices:[10,20]}, C:{choices:[2,4]} },
+    statement:function(p){ return '이진 특징 '+p.n+'개·클래스 '+p.C+'개: (a) NB 파라미터 수(클래스별 특징확률+사전) (b) 완전 결합분포 파라미터 수를 구하라.'; },
+    solve:function(p){
+      var nb=p.C*p.n+(p.C-1);
+      var full=p.C*(Math.pow(2,p.n)-1)+(p.C-1);
+      return { ans:{nb:nb, full:full}, unit:{nb:'개', full:'개'}, steps:[
+        'NB = C·n+(C−1) = '+nb,
+        '완전 = C(2ⁿ−1)+(C−1) = '+SVH.fmt(full)+' — 독립 가정의 절약이 곧 학습 가능성' ] }; },
+    hints:['선형 vs 지수.'] },
+  { id:'u6-l2-11', level:2, type:'num', tags:['오즈-로그오즈'], src:'창작 문제(검산됨)',
+    params:{ pr:{choices:[75,90]} },
+    statement:function(p){ return '사후 확률 '+p.pr+'%의 (a) 오즈 (b) 로그오즈(자연로그)를 구하라.'; },
+    solve:function(p){ var o=p.pr/(100-p.pr);
+      return { ans:{odds:o, logit:Math.log(o)}, unit:{odds:'', logit:''}, steps:[
+        '오즈 = '+SVH.fmt(o)+', logit = '+SVH.fmt(Math.log(o)),
+        '(NB의 로그오즈는 특징별 기여의 "합" — 선형 모델과의 연결)' ] }; },
+    hints:['p/(1−p).'] },
+  { id:'u6-l2-12', level:2, type:'num', tags:['사전의 힘'], src:'창작 문제(검산됨)',
+    params:{ like:{choices:[3,5]} },
+    statement:function(p){ return '우도비 '+p.like+'(h 우세)여도 사전이 1:99면 사후 오즈와 h의 사후 확률(%)은?'; },
+    solve:function(p){ var o=p.like/99;
+      return { ans:{odds:o, prob:o/(1+o)*100}, unit:{odds:'', prob:'%'}, steps:[
+        '오즈 = '+p.like+'/99 = '+SVH.fmt(o),
+        '확률 '+SVH.fmt(o/(1+o)*100)+'% — 증거가 사전을 못 이기는 구간(기저율)' ] }; },
+    hints:['오즈 곱.'] },
+
+  /* ---------- L3 (14) ---------- */
+  { id:'u6-l3-01', level:3, type:'num', tags:['NB 풀테이블'], src:'기출 유형',
+    params:{ v:{choices:[1,2]} },
+    statement:function(p){ return '스팸 필터: P(스팸)=0.4. 스팸에서 P(무료)=0.6, P(링크)=0.5. 정상에서 P(무료)=0.1, P(링크)=0.2. "무료+링크" 메일의 (a) 스팸 점수 (b) 정상 점수 (c) 사후 P(스팸)(%)을 구하라.'; },
+    solve:function(p){
+      var s=0.4*0.6*0.5, h=0.6*0.1*0.2;
+      return { ans:{s:s, h:h, post:s/(s+h)*100}, unit:{s:'', h:'', post:'%'}, steps:[
+        '스팸: 0.4×0.6×0.5 = '+SVH.fmt(s),
+        '정상: 0.6×0.1×0.2 = '+SVH.fmt(h),
+        '사후 = '+SVH.fmt(s/(s+h)*100)+'% — NB 표 계산의 원형' ] }; },
+    hints:['사전×우도들.'] },
+  { id:'u6-l3-02', level:3, type:'num', tags:['미등장 단어+평활'], src:'기출 유형',
+    params:{ nc:{choices:[8,10]}, V:{choices:[4,6]} },
+    statement:function(p){ return '스팸 '+p.nc+'통에서 한 번도 안 나온 단어 w: (a) ML 추정 P(w|스팸) (b) 라플라스(|V|='+p.V+') 추정을 구하라.'; },
+    solve:function(p){
+      return { ans:{ml:0, lap:1/(p.nc+p.V)}, unit:{ml:'', lap:''}, steps:[
+        'ML = 0/'+p.nc+' = 0 (붕괴 위험)',
+        '라플라스 = 1/('+p.nc+'+'+p.V+') = '+SVH.fmt(1/(p.nc+p.V)) ] }; },
+    hints:['분자 0+1.'] },
+  { id:'u6-l3-03', level:3, type:'num', tags:['로그 합 판정'], src:'기출 유형',
+    params:{ t:{choices:[[-1,-2,-3,-0.5,-3,-2.5],[-0.7,-1.5,-2,-1,-2.2,-1.8]]} },
+    statement:function(p){ var t=p.t; return '로그(ln) 점수 — 클래스A: 사전 '+t[0]+', 특징 '+t[1]+'·'+t[2]+' / 클래스B: '+t[3]+', '+t[4]+'·'+t[5]+'. 합산해 판정(A=1/B=2)하고 점수차를 구하라.'; },
+    solve:function(p){ var t=p.t;
+      var a=t[0]+t[1]+t[2], b=t[3]+t[4]+t[5];
+      return { ans:{A:a, B:b, pick:a>=b?1:2}, unit:{A:'', B:'', pick:''}, steps:[
+        'A = '+SVH.fmt(a)+', B = '+SVH.fmt(b),
+        '판정 '+(a>=b?'A(1)':'B(2)')+', 차 '+SVH.fmt(Math.abs(a-b))+' (곱→합의 실전)' ] }; },
+    hints:['그냥 더한다.'] },
+  { id:'u6-l3-04', level:3, type:'num', tags:['우도비 문턱'], src:'기출 유형',
+    params:{ prior:{choices:[5,20]} },
+    statement:function(p){ return '사전 P(+)='+p.prior+'%. 판정이 +가 되기 위한 최소 우도비 LR = P(x|+)/P(x|−)를 구하라. (0.5 문턱)'; },
+    solve:function(p){
+      var lr=(100-p.prior)/p.prior;
+      return { ans:lr, unit:'', steps:[
+        '조건: 사전오즈×LR ≥ 1 → LR ≥ '+SVH.fmt(lr),
+        '(희귀 클래스일수록 증거가 세야 한다 — 정량화)' ] }; },
+    hints:['오즈 역수.'] },
+  { id:'u6-l3-05', level:3, type:'num', tags:['MAP vs ML 갈림'], src:'교재 표준',
+    params:{ l1:{choices:[0.8,0.9]}, l2:{choices:[0.6,0.7]}, p1:{choices:[20,30]} },
+    statement:function(p){ return '가설 h₁: 우도 '+p.l1+'·사전 '+p.p1+'%. h₂: 우도 '+p.l2+'·사전 '+(100-p.p1)+'%. (a) ML 선택(h₁=1) (b) MAP 선택을 구하라.'; },
+    solve:function(p){
+      var m1=p.l1*p.p1, m2=p.l2*(100-p.p1);
+      return { ans:{ML:1, MAP:m1>=m2?1:2}, unit:{ML:'', MAP:''}, steps:[
+        'ML: 우도만 → h₁(1)',
+        'MAP: '+SVH.fmt(m1)+' vs '+SVH.fmt(m2)+' → h'+(m1>=m2?'₁(1)':'₂(2)'),
+        '(사전이 판정을 뒤집는 순간)' ] }; },
+    hints:['곱해서 비교.'] },
+  { id:'u6-l3-06', level:3, type:'num', tags:['가우시안 NB 판정'], src:'기출 유형',
+    params:{ m1:{choices:[170]}, m2:{choices:[160]}, sd:{choices:[5,8]}, x:{choices:[166,168]} },
+    statement:function(p){ return '키 특징: 남 µ='+p.m1+'·여 µ='+p.m2+'(σ 공통 '+p.sd+', 사전 반반). x='+p.x+'의 판정(남=1/여=2)과 결정 경계를 구하라.'; },
+    solve:function(p){
+      var mid=(p.m1+p.m2)/2;
+      return { ans:{pick:p.x>=mid?1:2, bd:mid}, unit:{pick:'', bd:''}, steps:[
+        '등분산·등사전 → 경계 = 평균의 중점 '+mid,
+        'x='+p.x+' '+(p.x>=mid?'≥':'<')+' '+mid+' → '+(p.x>=mid?'남(1)':'여(2)'),
+        '(가우시안 NB = 가까운 평균 분류의 확률적 정체)' ] }; },
+    hints:['중점 경계.'] },
+  { id:'u6-l3-07', level:3, type:'num', tags:['다클래스 NB'], src:'기출 유형',
+    params:{ t:{choices:[[0.5,0.4,0.3,0.3,0.5,0.2,0.2,0.6,0.9],[0.4,0.5,0.2,0.4,0.4,0.3,0.2,0.7,0.8]]} },
+    statement:function(p){ var t=p.t; return '3클래스(사전 '+t[0]+'/'+t[1]+'/'+(1-t[0]-t[1]).toFixed(1)+'), 특징 우도 A:'+t[2]+'·'+t[3]+', B:'+t[4]+'·'+t[5]+', C:'+t[6]+'·'+t[7]+'. 점수 셋을 구해 승자를 정하라(A=1/B=2/C=3).'; },
+    solve:function(p){ var t=p.t;
+      var pc=1-t[0]-t[1];
+      var a=t[0]*t[2]*t[3], b=t[1]*t[4]*t[5], c=pc*t[6]*t[7];
+      var m=Math.max(a,b,c);
+      return { ans:{a:a, b:b, c:c, pick:a===m?1:(b===m?2:3)}, unit:{a:'',b:'',c:'',pick:''}, steps:[
+        '점수: A '+SVH.fmt(a)+' · B '+SVH.fmt(b)+' · C '+SVH.fmt(c),
+        '승자 = '+(a===m?'A':(b===m?'B':'C')) ] }; },
+    hints:['셋 다 곱.'] },
+  { id:'u6-l3-08', level:3, type:'num', tags:['독립 가정 위반'], src:'교재 표준',
+    params:{ dup:{choices:[2,3]} },
+    statement:function(p){ return '완전 중복 특징(같은 값 복사) '+p.dup+'개를 NB에 넣으면 그 특징의 로그우도 기여가 몇 배로 과대계상되는가? 판정 확신에는 어떤 영향(과신=1)?'; },
+    solve:function(p){ return { ans:{times:p.dup, eff:1}, unit:{times:'배', eff:''}, steps:[
+        '같은 항이 '+p.dup+'번 곱해짐 = '+p.dup+'배 과대',
+        '사후가 극단으로 쏠림 — 과신(1). 순위는 유지될 수 있으나 확률은 못 믿는다',
+        '(NB 확률 보정(calibration)이 필요한 이유)' ] }; },
+    hints:['곱의 중복.'] },
+  { id:'u6-l3-09', level:3, type:'num', tags:['순차 갱신'], src:'교재 표준',
+    params:{ prior:{choices:[50]}, lr:{choices:[2,3]}, n:{choices:[3,4]} },
+    statement:function(p){ return '사전 50%에서 우도비 '+p.lr+'짜리 독립 증거를 '+p.n+'개 받으면 사후(%)는?'; },
+    solve:function(p){
+      var o=Math.pow(p.lr,p.n);
+      return { ans:o/(1+o)*100, unit:'%', steps:[
+        '오즈 = 1×'+p.lr+'^'+p.n+' = '+SVH.fmt(o),
+        '사후 = '+SVH.fmt(o/(1+o)*100)+'% (증거는 오즈에 "곱"으로 쌓인다)' ] }; },
+    hints:['LR^n.'] },
+  { id:'u6-l3-10', level:3, type:'num', tags:['평활 강도 α'], src:'교재 표준',
+    params:{ nx:{choices:[0,2]}, nc:{choices:[10]}, al:{choices:[1,10]} },
+    statement:function(p){ return 'n_x='+p.nx+', n_c='+p.nc+', |V|=2에서 α='+p.al+' 평활 추정 (n_x+α)/(n_c+α|V|)을 구하고 α→∞ 극한을 답하라.'; },
+    solve:function(p){
+      var e=(p.nx+p.al)/(p.nc+p.al*2);
+      return { ans:{est:e, lim:0.5}, unit:{est:'', lim:''}, steps:[
+        '추정 = '+SVH.fmt(e),
+        'α→∞ ⇒ 1/|V| = 0.5 (데이터 무시, 균등으로) — α는 사전의 세기' ] }; },
+    hints:['극한 확인.'] },
+  { id:'u6-l3-11', level:3, type:'num', tags:['결정 경계 로그오즈'], src:'교재 표준',
+    params:{ w:{choices:[[1.2,-0.8],[0.9,-1.1]]} },
+    statement:function(p){ var w=p.w; return 'NB의 로그오즈가 log-odds = 0.5 + '+w[0]+'x₁ + '+w[1]+'x₂ 형태로 정리됐다. 입력 (1,1)의 (a) 로그오즈 (b) 판정(+=1) (c) 사후(%)를 구하라.'; },
+    solve:function(p){ var w=p.w;
+      var lo=0.5+w[0]+w[1];
+      var pr=1/(1+Math.exp(-lo))*100;
+      return { ans:{lo:lo, pick:lo>=0?1:0, post:pr}, unit:{lo:'', pick:'', post:'%'}, steps:[
+        '로그오즈 = '+SVH.fmt(lo)+' → '+(lo>=0?'+(1)':'−(0)'),
+        '사후 = σ(로그오즈) = '+SVH.fmt(pr)+'% (NB=선형 판별의 한 형태)' ] }; },
+    hints:['시그모이드.'] },
+  { id:'u6-l3-12', level:3, type:'num', tags:['문서 NB(빈도)'], src:'기출 유형',
+    params:{ f:{choices:[[3,1],[2,2]]} },
+    statement:function(p){ var f=p.f; return '다항 NB: 단어 w가 문서에 '+f[0]+'회. log P(w|스팸)=−1, log P(w|정상)=−2 (ln). 이 단어가 주는 로그점수 차(스팸−정상)를 구하라.'; },
+    solve:function(p){ var f=p.f;
+      return { ans:f[0]*1, unit:'', steps:[
+        '빈도×로그우도차 = '+f[0]+'×(−1−(−2)) = '+f[0],
+        '(다항 NB: 반복 등장은 그만큼 곱해진다 — 베르누이 NB와의 차이)' ] }; },
+    hints:['횟수 가중.'] },
+  { id:'u6-l3-13', level:3, type:'num', tags:['혼동행렬→우도'], src:'기출 유형',
+    params:{ sens:{choices:[80,90]}, spec:{choices:[70,95]} },
+    statement:function(p){ return '검사기의 민감도 '+p.sens+'%·특이도 '+p.spec+'%를 NB 우도로 번역: (a) LR+ = sens/(1−spec) (b) LR− = (1−sens)/spec을 구하라.'; },
+    solve:function(p){
+      return { ans:{LRp:p.sens/(100-p.spec), LRn:(100-p.sens)/p.spec}, unit:{LRp:'', LRn:''}, steps:[
+        'LR+ = '+SVH.fmt(p.sens/(100-p.spec))+' (양성 결과의 증거력)',
+        'LR− = '+SVH.fmt((100-p.sens)/p.spec)+' (음성 결과의 증거력)',
+        '(U3 지표 ↔ U6 베이즈의 사전 연결)' ] }; },
+    hints:['정의 대입.'] },
+  { id:'u6-l3-14', level:3, type:'num', tags:['공동 스팸 판정'], src:'기출 유형',
+    params:{ v:{choices:[1,2]} },
+    statement:function(p){ return '단어 3개 등장, 로그우도차(스팸−정상) [+1.5, −0.5, +0.8], 사전 로그오즈 −1 (스팸이 적음). (a) 총 로그오즈 (b) 판정(스팸=1) (c) 없던 사전(0)이면 판정이 달라지는가(동일=0/달라짐=1)?'; },
+    solve:function(p){
+      var lo=-1+1.5-0.5+0.8;
+      var lo0=1.5-0.5+0.8;
+      return { ans:{lo:lo, pick:lo>=0?1:0, change:(lo>=0)===(lo0>=0)?0:1}, unit:{lo:'', pick:'', change:''}, steps:[
+        '합 = −1+1.5−0.5+0.8 = '+SVH.fmt(lo)+' → '+(lo>=0?'스팸(1)':'정상(0)'),
+        '사전 제거 시 '+SVH.fmt(lo0)+' → '+((lo>=0)===(lo0>=0)?'판정 동일(0)':'판정 역전(1)'),
+        '(사전 한 항이 저울 전체를 기울일 수 있다)' ] }; },
+    hints:['합산 두 번.'] },
+
+  /* ---------- L4 (8) ---------- */
+  { id:'u6-l4-01', level:4, type:'mc', tags:['개념 종합'], src:'기출 유형',
+    statement:'옳은 것을 모두 고르면?<br>㉠ 균등 사전에서 MAP=ML<br>㉡ 라플라스 평활은 "가짜 관측"을 더한 MAP 추정으로 해석된다<br>㉢ NB의 조건부 독립이 깨져도 순위(argmax)는 맞을 수 있다<br>㉣ 로그 변환은 argmax를 보존한다',
+    choices:['전부','㉠㉡㉢','㉡㉢㉣','㉠㉣'],
+    answer:0, expl:'전부 참 — ㉡(디리클레 사전)은 심화지만 해석은 그대로 시험감.' },
+  { id:'u6-l4-02', level:4, type:'num', tags:['NB 풀문제(평활 포함)'], src:'기출 유형',
+    params:{ v:{choices:[1,2]} },
+    statement:function(p){ return '훈련: 스팸 3통(무료 2, 링크 3), 정상 5통(무료 1, 링크 1). |V|=2, 라플라스 +1(문서 기준 베르누이). 새 메일 "무료=1, 링크=1": (a) P(무료|스팸)·P(링크|스팸) (b) 스팸·정상 점수 (c) 판정을 구하라.'; },
+    solve:function(p){
+      var pfs=(2+1)/(3+2), pls=(3+1)/(3+2);
+      var pfh=(1+1)/(5+2), plh=(1+1)/(5+2);
+      var ps=3/8*pfs*pls, ph=5/8*pfh*plh;
+      return { ans:{pfs:pfs, s:ps, h:ph, pick:ps>=ph?1:0}, unit:{pfs:'', s:'', h:'', pick:''}, steps:[
+        '스팸: P(무료)=(2+1)/(3+2)='+SVH.fmt(pfs)+', P(링크)='+SVH.fmt(pls),
+        '점수: 스팸 '+SVH.fmt(ps)+' vs 정상 '+SVH.fmt(ph),
+        '판정 '+(ps>=ph?'스팸(1)':'정상(0)')+' — 표→평활→곱→비교 완주' ] }; },
+    hints:['(개수+1)/(문서+2).'] },
+  { id:'u6-l4-03', level:4, type:'derive', tags:['유도'], src:'교재 표준',
+    statement:'베이즈 정리를 결합확률 두 표현에서 유도하고, "증거 P(D)는 argmax에 불필요"함을 보여라.',
+    steps:[
+      '결합: \\(P(h,D)=P(D|h)P(h)=P(h|D)P(D)\\) [왜] 곱 규칙의 두 순서',
+      '나누기: \\(P(h|D)=P(D|h)P(h)/P(D)\\)',
+      'P(D)=Σ_h P(D|h)P(h) — 모든 가설 공통 상수',
+      '따라서 argmax_h는 분자만 비교 — NB가 정규화 없이 점수 비교로 끝나는 이유',
+      '극한 체크: 사전 균등 ⇒ 우도 비교(ML) ✓ · 확률 자체가 필요하면 그때만 정규화'
+    ],
+    hints:['곱 규칙 대칭.'],
+    expl:'모든 베이즈 계산 문제의 헌법 유도.' },
+  { id:'u6-l4-04', level:4, type:'num', tags:['3중 검사 시나리오'], src:'기출 유형',
+    params:{ prev:{choices:[0.1,1]}, lr:{choices:[10,20]} },
+    statement:function(p){ return '유병률 '+p.prev+'%에서 LR+='+p.lr+'인 독립 검사를 연속 양성으로 몇 번 받아야 사후가 50%를 넘는가?'; },
+    solve:function(p){
+      var o0=p.prev/(100-p.prev);
+      var n=Math.ceil(Math.log(1/o0)/Math.log(p.lr));
+      return { ans:n, unit:'회', steps:[
+        '조건: o₀·LRⁿ ≥ 1 → n ≥ ln(1/o₀)/ln(LR)',
+        '= '+n+'회 (희귀병 확진에 검사를 겹치는 수학)' ] }; },
+    hints:['로그로 풀기.'] },
+  { id:'u6-l4-05', level:4, type:'num', tags:['NB vs 결정트리 선택'], src:'기출 유형',
+    params:{ N:{choices:[50,100]}, d:{choices:[1000,5000]} },
+    statement:function(p){ return '문서 분류: N='+p.N+', 특징(단어) '+p.d+'개. (a) NB 파라미터 수(2클래스) (b) 샘플/파라미터 비 (c) 이 조건에서 NB가 트리보다 유리한 이유(파라미터당 데이터 공유=1)를 답하라.'; },
+    solve:function(p){
+      var np=2*p.d+1;
+      return { ans:{np:np, ratio:p.N/np, why:1}, unit:{np:'개', ratio:'', why:''}, steps:[
+        '파라미터 '+np+'개, 비율 '+SVH.fmt(p.N/np),
+        '각 파라미터가 "한 특징 통계"라 적은 데이터로도 안정(1) — 고차원·소표본의 표준 선택',
+        '(생성 모델의 데이터 효율 논거)' ] }; },
+    hints:['카운트 통계의 안정성.'] },
+  { id:'u6-l4-06', level:4, type:'num', tags:['오분류 비용 결합'], src:'기출 유형',
+    params:{ post:{choices:[20,40]}, cFN:{choices:[10,5]} },
+    statement:function(p){ return 'NB 사후 P(+|x)='+p.post+'%. FN 비용 '+p.cFN+'·FP 비용 1일 때 (a) 비용 문턱(%) (b) 판정(+=1)을 구하라.'; },
+    solve:function(p){
+      var th=1/(1+p.cFN)*100;
+      return { ans:{th:th, pick:p.post>=th?1:0}, unit:{th:'%', pick:''}, steps:[
+        '문턱 = c_FP/(c_FP+c_FN) = '+SVH.fmt(th)+'%',
+        p.post+'% '+(p.post>=th?'≥':'<')+' 문턱 → '+(p.post>=th?'+(1)':'−(0)'),
+        '(U1·U3·U6 세 단원의 문턱 공식이 하나로 만난다)' ] }; },
+    hints:['사후 vs 비용 문턱.'] },
+  { id:'u6-l4-07', level:4, type:'num', tags:['보정 진단'], src:'기출 유형',
+    params:{ conf:{choices:[90,99]}, acc:{choices:[70,80]} },
+    statement:function(p){ return 'NB가 "확신 '+p.conf+'%"라 한 사례들의 실제 정확도가 '+p.acc+'%다. (a) 보정 오차(%p) (b) 원인 후보(독립 가정 위반=1) (c) 순위 기반 결정(argmax)은 여전히 쓸 만한가(1)?'; },
+    solve:function(p){ return { ans:{gap:p.conf-p.acc, cause:1, ok:1}, unit:{gap:'%p', cause:'', ok:''}, steps:[
+        '과신 '+(p.conf-p.acc)+'%p',
+        '중복 정보의 이중 곱(1) — l3-08의 실측판',
+        '순위는 대체로 유지(1): "분류는 되지만 확률은 보정하라"' ] }; },
+    hints:['확신 vs 실측.'] },
+  { id:'u6-l4-08', level:4, type:'num', tags:['중간 종합 리허설'], src:'기출 유형',
+    params:{ v:{choices:[1,2]} },
+    statement:function(p){ return '리허설: 사전 P(+)=0.25. 특징 우도 P(x₁=1|+)=0.8/P(x₁=1|−)=0.2, P(x₂=0|+)=0.3/P(x₂=0|−)=0.6. 입력 (x₁=1, x₂=0): (a) 두 점수 (b) 사후 P(+)(%) (c) 0.5 문턱 판정을 구하라.'; },
+    solve:function(p){
+      var sp=0.25*0.8*0.3, sn=0.75*0.2*0.6;
+      return { ans:{sp:sp, sn:sn, post:sp/(sp+sn)*100, pick:sp>=sn?1:0}, unit:{sp:'',sn:'',post:'%',pick:''}, steps:[
+        '+: 0.25×0.8×0.3 = '+SVH.fmt(sp)+' / −: 0.75×0.2×0.6 = '+SVH.fmt(sn),
+        '사후 = '+SVH.fmt(sp/(sp+sn)*100)+'%',
+        '판정 '+(sp>=sn?'+(1)':'−(0)')+' (x₂=0 조건의 우도를 쓰는 것이 함정 포인트)' ] }; },
+    hints:['관측값에 맞는 우도 행.'] }
+  ]
+});
+
+</script>
+
+<script src="../../shared/progress.js"></script>
+<script>
+window.SV_CONTENT = {"u1": {"concept": "\n<p class=\"easy\"><b>⚡ 한 줄</b> — 학습 = ⟨과제 T, 성능 P, 경험 E⟩. 그리고 이 과목의 가장 깊은 문장: <b>편향(가정) 없이는 일반화도 없다.</b></p>\n<h4>1. 학습의 정형화</h4>\n<p>지도(레이블 쌍)·비지도(구조)·강화(지연 보상). 분류=이산 출력, 회귀=연속 출력. 문제를 받으면 입력 표현·출력 공간·성능 지표부터 명시하는 것이 문법.</p><div class=\"jsbox\"><span class=\"jt\">정석 1.1</span>가설공간 크기 감각: 불리언 n특징의 전체 개념 수 = 2^(2ⁿ)(이중 지수 — 탐색 불가), 연언(AND) 개념 = 3ⁿ+1(다항 — 학습 가능). 편향 = 공간을 줄여 데이터가 말할 수 있게 하는 것.</div><h4>2. 개념학습과 버전공간</h4>\n<p>버전공간 = 데이터와 일치하는 가설 전부. S(최특수)·G(최일반) 경계로 표현: <b>양성 예제는 S를 일반화</b>, <b>음성 예제는 G를 특수화</b>. S=G로 만나면 수렴, 그 사이는 \"모른다\"의 영역.</p>\n<h4>3. 과적합의 씨앗</h4>\n<p>노이즈 있는 데이터에 완벽 일치 = 잡음 암기. 훈련↔시험 격차가 진단 지표 — 이 서사가 U3(평가)·U5(가지치기)로 이어진다.</p><div class=\"jsbox\"><span class=\"jt\">정석 1.2</span>무편향 학습 불가능 논증(시험 서술형): 전체 함수 공간에선 미관측 입력에 대해 +로 찍는 가설과 −로 찍는 가설이 항상 짝으로 남는다 → 투표 동수 → 예측 불가. 그래서 모든 학습기는 가정을 갖는다.</div>", "derive": [{"title": "연언 가설공간 크기 3ⁿ+1", "steps": ["특징마다 {0, 1, ?} 3택 [왜] ?=무관 조건", "곱의 법칙: 3ⁿ", "아무것도 안 받는 ∅ 추가 → 3ⁿ+1", "전체 2^(2ⁿ)과 비교: n=4에서 82 vs 65536 — 거의 다 버렸다", "극한 체크: n=0 ⇒ 2개(항상참/∅) ✓"]}, {"title": "후보 제거 알고리즘의 불변식", "steps": ["불변식: S ≤ 진짜 개념 ≤ G (일반성 순서)", "양성 x: S가 x를 포함 못 하면 최소 일반화, G에서 x 배제하는 가설 삭제", "음성 x: G가 x를 배제 못 하면 최소 특수화(분기), S에서 x 포함 가설 삭제", "수렴: S=G=단일 가설. 중간 상태는 다수결/기권으로 예측", "극한 체크: 노이즈 1개면 버전공간 붕괴(∅) 가능 — 알고리즘의 취약점까지"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 1-1</span>특징 3개 연언 공간에서 +(1,1,1), −(0,0,0), +(1,1,0)을 처리하라.</div><div class=\"xsol\"><b>풀이</b><ol><li>+(1,1,1): S=⟨1,1,1⟩.</li><li>+(1,1,0): 셋째 충돌 → S=⟨1,1,?⟩.</li><li>−(0,0,0): G 분기 {⟨1,?,?⟩,⟨?,1,?⟩,⟨?,?,1⟩}, S와 모순인 ⟨?,?,1⟩ 탈락 → |G|=2.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u1-l3-09 · u1-l4-02 · u1-l3-01</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 1-2</span>PAC: |H|=10⁶, ε=5%, δ=5%에 필요한 샘플 수는?</div><div class=\"xsol\"><b>풀이</b><ol><li>m ≥ (1/ε)(ln|H|+ln(1/δ)).</li><li>= 20×(13.8+3.0) ≈ <b>336개</b>.</li><li>가설공간 로그에만 의존 — 편향의 보상.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u1-l3-13 · u1-l4-04 · u1-l4-08</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 1-3</span>훈련 99%/시험 60% 모델과 훈련 65%/시험 63% 모델의 진단과 처방은?</div><div class=\"xsol\"><b>풀이</b><ol><li>전자: 격차 39%p → 과적합 → 규제·데이터·단순화.</li><li>후자: 둘 다 낮음 → 과소적합 → 표현력·특징.</li><li>선택은 언제나 시험(검증) 성능으로.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u1-l4-06 · u1-l2-10 · u2-l3-12</div></div>"}, "u2": {"concept": "\n<p class=\"easy\"><b>⚡ 한 줄</b> — 최소제곱은 \"잔차 제곱합을 최소화\"하는 볼록 문제. 폐형식 \\(w=S_{xy}/S_{xx}\\)과 경사하강 두 길이 있고, R²·격차·검증이 품질의 언어다.</p>\n<h4>1. 최소제곱</h4>\n<p>\\(w=\\dfrac{\\sum(x-\\bar x)(y-\\bar y)}{\\sum(x-\\bar x)^2},\\ b=\\bar y-w\\bar x\\) — 회귀선은 (x̄,ȳ) 통과. 잔차 성질: Σe=0, Σxe=0(직교). R²=1−SSE/SST=설명 분산 비율.</p><div class=\"jsbox\"><span class=\"jt\">정석 2.1</span>손계산 표 만들기: 열 = x−x̄ | y−ȳ | 곱 | 제곱. 4~5점 문제는 이 표 하나로 w·b·R²까지 3분. 검산은 잔차 합=0.</div><h4>2. 경사하강</h4>\n<p>\\(w\\leftarrow w-\\eta\\nabla J\\): η 과대→발산(2차 손실에서 |1−2ηa|≥1), 과소→느림. 특징 표준화가 등고선을 둥글게 해 수렴을 돕는다. 배치/미니배치/SGD는 \"얼마나 자주, 얼마나 정확한 방향\"의 트레이드오프.</p>\n<h4>3. 표현력과 규제</h4>\n<p>다항 특징 = 파라미터 선형이라 여전히 \"선형 모델\". 차수↑ → 훈련↓·검증 U자. 릿지 w=S_xy/(S_xx+λ): λ가 계수를 수축(편향↑분산↓). 선택 기준은 항상 검증.</p><div class=\"jsbox\"><span class=\"jt\">정석 2.2</span>기대 시험오류 = 편향² + 분산 + 잡음. 잡음은 바닥(베이즈 오류) — 어떤 모델도 뚫을 수 없다. 진단 언어: 격차 크면 분산(과적합), 둘 다 높으면 편향(과소적합).</div>", "derive": [{"title": "최소제곱 폐형식", "steps": ["J=Σ(yᵢ−wxᵢ−b)² — 볼록이므로 1계 조건이 전역 최소", "∂J/∂b=0 → b=ȳ−wx̄ (평균점 통과)", "∂J/∂w=0에 대입, 중심화 정리", "\\(w=S_{xy}/S_{xx}\\)", "극한 체크: 완전 선형 데이터 ⇒ 잔차 0 ✓ · S_xx=0 ⇒ 정의 불가 ✓"]}, {"title": "경사하강 수렴 조건 (제어 이론과 같은 그림)", "steps": ["J=aw²: 갱신 w←(1−2ηa)w — 등비수열", "수렴 ⇔ |1−2ηa|<1 ⇔ 0<η<1/a", "η=1/2a면 한 방, 1/2a<η<1/a면 진동 수렴", "다차원: a → 최대 곡률(고유값) — 스케일 차이가 크면 지그재그(표준화의 이유)", "극한 체크: η→0 ⇒ 무한히 느림 ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 2-1</span>x=[0,1,2,3], y=[1,2,4,5]의 최소제곱 직선은?</div><div class=\"xsol\"><b>풀이</b><ol><li>x̄=1.5, ȳ=3. S_xy=7, S_xx=5.</li><li>w=1.4, b=3−2.1=<b>0.9</b>.</li><li>검산: 잔차 [0.1,−0.3,0.3,−0.1] 합=0 ✓.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u2-l2-02 · u2-l3-01 · u2-l4-02</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 2-2</span>SSE=10, SST=100이면 R²는? 평균 예측 모델은?</div><div class=\"xsol\"><b>풀이</b><ol><li>R²=1−0.1=<b>0.9</b>.</li><li>평균 모델: SSE=SST → R²=0(기준선).</li><li>R²<0도 가능(시험셋에서 평균보다 나쁘면).</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u2-l2-04 · u2-l2-11 · u2-l4-07</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 2-3</span>J=(w−3)², w₀=0, η=0.2로 2스텝 진행하라.</div><div class=\"xsol\"><b>풀이</b><ol><li>∇=2(w−3). w₁=0+0.2·6=1.2.</li><li>w₂=1.2+0.2·3.6=<b>1.92</b>.</li><li>수축비 (1−0.4)=0.6씩 3으로 접근.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u2-l2-05 · u2-l3-03 · u2-l4-06</div></div>"}, "u3": {"concept": "\n<p class=\"easy\"><b>⚡ 한 줄</b> — 평가의 헌법: 시험셋은 봉인하고, 튜닝은 검증으로, 전처리 통계는 훈련에서만. 지표는 혼동행렬 4칸에서 전부 나온다.</p>\n<h4>1. 혼동행렬 4형제</h4>\n<p>정확도=(TP+TN)/전체 · 정밀도=TP/(TP+FP)(\"양성 판정 중 진짜\") · 재현율=TP/(TP+FN)(\"진짜 중 잡음\") · 특이도=TN/(TN+FP). F1=조화평균(한쪽 낮으면 가혹). 불균형에선 정확도 단독 금지 — \"전부 음성\"이 95%짜리 사기를 친다.</p><div class=\"jsbox\"><span class=\"jt\">정석 3.1</span>문턱을 낮추면 재현율↑·정밀도↓ — 이 스윕이 ROC(x=FPR, y=TPR)와 PR 곡선. AUC = 무작위 (양,음) 쌍에서 양성 점수가 더 높을 확률(0.5=무작위). 불균형에선 PR 곡선이 더 예민하다.</div><h4>2. 교차검증</h4>\n<p>k-겹: 모든 데이터가 검증 1회씩, 평균±표준편차로 보고. 층화=클래스 비율 유지. 시계열=시간 순서 보존(롤링). 하이퍼파라미터까지 정직하려면 중첩 CV.</p>\n<h4>3. 누수(leakage)</h4>\n<p>시험 정보가 새는 모든 문: 전체 데이터 표준화, 시험셋 튜닝, 그룹(같은 환자) 분산, 미래 특징. 성능이 \"너무 좋으면\" 먼저 의심.</p><div class=\"jsbox\"><span class=\"jt\">정석 3.2</span>비용 비대칭의 문턱 공식: 양성 판정 기준 P(+|x) ≥ c_FP/(c_FP+c_FN). 암 진단(FN 비쌈)은 문턱을 낮춘다 — U1 기대비용·U6 베이즈 결정과 같은 식.</div>", "derive": [{"title": "PPV(베이즈)와 기저율", "steps": ["P(병|+) = P(+|병)P(병)/P(+) [왜] 베이즈 정리 그대로", "P(+) = prev·sens + (1−prev)(1−spec) — 두 경로의 합", "유병률 1%·민감도 90%·특이도 90% ⇒ PPV ≈ 8.3%", "양성 대부분이 거짓 — 검사 좋아도 기저율이 지배", "극한 체크: spec→100% ⇒ PPV→100% ✓ (거짓 양성 소멸)"]}, {"title": "AUC = 순위 확률", "steps": ["정의: 무작위 양성 x⁺, 음성 x⁻에 대해 P(s(x⁺)>s(x⁻))", "문턱 t를 훑으면 (FPR(t), TPR(t)) 곡선 아래 면적과 일치(적분 치환)", "동점은 ½ — 쌍 비교 손계산 규칙", "성질: 단조 점수 변환에 불변(문턱 무관 지표)", "극한 체크: 완전 분리 ⇒ 1 ✓ · 뒤집힌 분류기 ⇒ 0 ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 3-1</span>TP=45, FN=15, FP=30, TN=110의 5지표를 구하라.</div><div class=\"xsol\"><b>풀이</b><ol><li>acc=77.5%, P=60%, R=75%.</li><li>특이도=78.6%, F1=<b>66.7%</b>.</li><li>표 하나에 5줄 — 시험 손계산 표준.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u3-l3-01 · u3-l2-01 · u3-l4-02</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 3-2</span>유병률 1%, 민감도 99%, 특이도 95%. 양성일 때 실제 병일 확률은?</div><div class=\"xsol\"><b>풀이</b><ol><li>분자 0.01×0.99=0.0099.</li><li>분모 +0.99×0.05=0.0495 → 합 0.0594.</li><li>PPV=<b>16.7%</b> — 직관(99%?)을 부수는 기저율.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u3-l3-02 · u3-l4-05 · u6-l2-01</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 3-3</span>양성 점수 [0.9,0.7], 음성 [0.8,0.4]의 AUC는?</div><div class=\"xsol\"><b>풀이</b><ol><li>쌍 4개: 0.9>0.8 ✓, 0.9>0.4 ✓, 0.7<0.8 ✗, 0.7>0.4 ✓.</li><li>AUC=3/4=<b>0.75</b>.</li><li>쌍 비교가 가장 빠른 손계산법.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u3-l2-08 · u3-l3-04 · u3-l4-04</div></div>"}, "u4": {"concept": "\n<p class=\"easy\"><b>⚡ 한 줄</b> — 트리는 \"가장 정보가 되는 질문\"을 반복해서 묻는다. 엔트로피 H = 불확실성, 정보이득 IG = 질문이 줄인 불확실성. 손계산이 시험의 몸통이다.</p>\n<h4>1. 엔트로피</h4>\n<p>\\(H=-\\sum p_k\\log_2p_k\\): 순수 0, 이진 반반 1비트, k균등 log₂k. 오목함수라 분할의 가중평균 H는 부모 이하 — IG≥0의 근거.</p><div class=\"jsbox\"><span class=\"jt\">정석 4.1</span>IG 손계산 4단계: ① H(부모) ② 가지별 H ③ 가중평균(가지 크기/전체) ④ 빼기. 자주 쓰는 값: H(1,1)=1, H(3,1)=0.811, H(6,2)=0.811, H(3,4)=0.985, H(6,1)=0.592 — 몇 개는 외워두면 빠르다.</div><h4>2. ID3와 그 한계</h4>\n<p>매 노드 IG 최대 특징 선택(탐욕 — 전역 최적 아님). 연속 특징은 정렬 후 <b>레이블 경계 중점만</b> 문턱 후보. 값 많은 특징(학번)의 IG 편향 → <b>이득비 = IG/SplitInfo</b>로 벌점(C4.5).</p>\n<h4>3. 표현력</h4>\n<p>경로=규칙(AND), 트리=규칙의 OR — XOR도 2층이면 표현. 단 IG=0이어도 상호작용으로 유용할 수 있다(탐욕의 맹점이자 사후 가지치기의 근거).</p>", "derive": [{"title": "IG ≥ 0 (오목성 논증)", "steps": ["H는 오목: H''<0 (이진에서 −1/[p(1−p)ln2])", "젠센 부등식: H(가중평균 분포) ≥ 가중평균 H(분포)", "부모 분포 = 자식 분포들의 가중평균 → H(부모) ≥ ΣwᵢH(자식ᵢ)", "따라서 IG = 차이 ≥ 0 — 질문은 최소한 해롭지 않다(훈련 기준)", "극한 체크: 자식 분포가 부모와 같으면 등호(IG=0) ✓"]}, {"title": "연속 특징: 경계 중점만 보면 되는 이유", "steps": ["문턱을 같은 레이블 구간 안에서 움직여도 분할 결과(집합)는 불변", "분할이 바뀌는 곳 = 인접 샘플의 레이블이 다른 경계뿐", "따라서 후보 = 경계 중점들만 — O(n) 후보로 충분", "정렬 1회 + 누적 카운트로 전체 스캔 O(n log n)", "극한 체크: 레이블이 정렬돼 있으면 후보 1개 ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 4-1</span>[9+,5−]를 바람(약[6+,2−]/강[3+,3−])으로 나눈 IG는?</div><div class=\"xsol\"><b>풀이</b><ol><li>H(9,5)=0.940.</li><li>가중: (8/14)(0.811)+(6/14)(1)=0.892.</li><li>IG=<b>0.048</b> — 미첼 교과서 수치 재현.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u4-l3-01 · u4-l2-03 · u4-l4-02</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 4-2</span>같은 부모를 습도(높[3+,4−]/보통[6+,1−])로 나누면?</div><div class=\"xsol\"><b>풀이</b><ol><li>H(3,4)=0.985, H(6,1)=0.592.</li><li>가중 (7/14)(0.985+0.592)=0.789.</li><li>IG=<b>0.151</b> > 0.048 → 습도 승 — ID3의 첫 분기.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u4-l3-02 · u4-l2-04 · u4-l4-08</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 4-3</span>학번 특징(14명 전부 다른 값)의 IG·SplitInfo·이득비는?</div><div class=\"xsol\"><b>풀이</b><ol><li>완전 분할 → IG=H(부모)=0.940(최대!).</li><li>SplitInfo=log₂14=3.81.</li><li>이득비=<b>0.247</b> — 벌점이 사기를 적발.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u4-l2-11 · u4-l3-07 · u4-l4-05</div></div>"}, "u5": {"concept": "\n<p class=\"easy\"><b>⚡ 한 줄</b> — 다 키우면 암기, 안 키우면 무지. 지니로 빠르게 나누고(CART), 검증으로 잘라낸다(가지치기) — α는 \"잎 하나의 값어치\".</p>\n<h4>1. 지니 불순도</h4>\n<p>\\(G=1-\\sum p_k^2\\) = \"무작위 두 샘플이 다른 클래스일 확률\". 이진 2p(1−p), 반반 0.5 최대. 로그가 없어 빠르고 엔트로피와 거의 같은 분할을 고른다. 회귀 트리는 분산(SSE) 감소 — 잎 예측=평균.</p><div class=\"jsbox\"><span class=\"jt\">정석 5.1</span>사전 정지의 함정 = 수평선 효과: XOR처럼 IG=0인 첫 수 너머에 보물이 있을 수 있다. 그래서 정석은 \"다 키우고 사후 가지치기\" — 검증 성능이 안 나빠지는 한 부트리를 잎(다수결)으로 치환.</div><h4>2. 가지치기 도구 둘</h4>\n<ul>\n<li><b>축소-오류(REP)</b>: 검증셋 기준 탐욕 치환 반복.</li>\n<li><b>비용-복잡도</b>: 오류+α×잎수 최소화. 부트리별 임계 α=Δ오류/Δ잎 — α를 CV로 고른다(릿지 λ와 동형).</li>\n</ul>\n<h4>3. 트리의 성격</h4>\n<p>고분산(데이터 조금 바뀌면 트리가 확 바뀜) — 기말 랜덤포레스트(배깅 평균)의 동기. 축평행 경계라 대각선엔 계단 근사. 특징 중요도 = Σ(이득×노드 비율).</p><div class=\"jsbox\"><span class=\"jt\">정석 5.2</span>비대칭 비용은 잎 판정도 바꾼다: 잎 [3+,7−]도 FN 비용 10배면 + 판정이 최적(3×10 vs 7×1). U3 문턱 공식의 트리 버전 — 다수결은 등비용의 특례일 뿐.</div>", "derive": [{"title": "잎 예측=평균 (회귀 트리)", "steps": ["잎 손실 J(c)=Σ(yᵢ−c)² [왜] 상수 예측의 SSE", "dJ/dc=−2Σ(yᵢ−c)=0 → c=ȳ", "볼록이므로 유일 최소 — 잎의 최적 상수는 평균", "L1 손실이면 중앙값 — 손실이 예측을 정한다", "극한 체크: 잎에 1개면 그 값 그대로(보간) ✓"]}, {"title": "임계 α의 존재 (약한 고리 자르기)", "steps": ["부트리 T vs 잎 치환: 비용 차 = Δ오류 − α·Δ잎", "α < Δ오류/Δ잎이면 유지, 크면 치환 — 경계가 임계 α", "부트리마다 임계 α가 달라 α를 올리면 약한 것부터 순서대로 잘린다", "그 경로(트리 열)에서 CV 최적을 고르는 것이 비용-복잡도 가지치기", "극한 체크: α=0 ⇒ 전체 트리, α→∞ ⇒ 뿌리 하나 ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 5-1</span>부모 [6+,4−] → [4+,0−]/[2+,4−]의 지니 이득은?</div><div class=\"xsol\"><b>풀이</b><ol><li>G(부모)=0.48.</li><li>자식: 0과 G(2,4)=0.444 → 가중 (4/10)0+(6/10)0.444=0.267.</li><li>이득=<b>0.213</b>.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u5-l2-02 · u5-l3-01 · u5-l4-02</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 5-2</span>치환 시 오류 +3, 잎 −4. α=0.5와 α=1에서 각각 결정은?</div><div class=\"xsol\"><b>풀이</b><ol><li>임계 α=3/4=0.75.</li><li>α=0.5<0.75 → 유지, α=1>0.75 → 치환.</li><li>α가 잎의 임대료라는 감각.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u5-l2-06 · u5-l2-05 · u5-l3-04</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 5-3</span>검증 정확도: 전체 88% → 치환1 90% → 치환2 86%. REP의 최종 상태는?</div><div class=\"xsol\"><b>풀이</b><ol><li>1차 88→90 채택.</li><li>2차 90→86 기각.</li><li>최종 = <b>치환 1회</b> — 나빠지기 직전까지.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u5-l4-04 · u5-l2-04 · u5-l3-02</div></div>"}, "u6": {"concept": "\n<p class=\"easy\"><b>⚡ 한 줄</b> — 사후 ∝ 우도 × 사전. 나이브 베이즈는 \"클래스가 주어지면 특징 독립\"이라는 대담한 가정으로 우도를 곱셈으로 쪼갠다 — 표 하나로 분류기가 완성된다.</p>\n<h4>1. 베이즈 정리</h4>\n<p>\\(P(h|D)=P(D|h)P(h)/P(D)\\). MAP=argmax 우도×사전(균등 사전이면 ML과 동일). 증거 P(D)는 공통 분모라 argmax엔 불필요. 오즈로 쓰면: 사후오즈 = 사전오즈 × 우도비(LR) — 증거가 \"곱\"으로 쌓인다.</p><div class=\"jsbox\"><span class=\"jt\">정석 6.1</span>NB 계산 리듬: ① 사전(클래스 빈도) ② 관측값에 맞는 조건부 확률 행 뽑기 ③ 클래스별 곱 ④ 비교(정규화는 사후 확률 필요할 때만). 실전은 로그 합 — 언더플로 방지·argmax 불변.</div><h4>2. 추정과 평활</h4>\n<p>P(x|c)=빈도. 미등장 값의 0은 곱 전체를 죽인다 → 라플라스 \\((n_x+1)/(n_c+|V|)\\) (α 평활 일반화: α→∞면 균등). 연속 특징은 가우시안 밀도. 파라미터 수 C·n+(C−1) — 완전 결합 C(2ⁿ−1)의 지수를 선형으로.</p>\n<h4>3. 가정의 성격</h4>\n<p>독립 가정이 깨져도(중복 특징) <b>순위는 곧잘 맞지만 확률은 과신</b>된다 — 분류는 쓰되 확률은 보정. 비용 결합: P(+|x) ≥ c_FP/(c_FP+c_FN)이면 양성(U3 문턱의 재등장).</p>", "derive": [{"title": "베이즈 정리와 argmax 단순화", "steps": ["곱 규칙 대칭: P(h,D)=P(D|h)P(h)=P(h|D)P(D)", "나누면 정리 완성. P(D)=Σ_h P(D|h)P(h)는 h 무관 상수", "argmax_h P(h|D) = argmax_h P(D|h)P(h) — 정규화 생략 가능", "로그: argmax Σlog — 곱이 합으로(수치 안정)", "극한 체크: 사전 균등 ⇒ ML ✓"]}, {"title": "라플라스 평활 = 가짜 관측", "steps": ["ML 추정 n_x/n_c는 n_x=0에서 확률 0 단언 — 과감한 결론", "각 값에 가짜 관측 1개씩 더한 척: (n_x+1)/(n_c+|V|)", "베이즈 해석: 균등 디리클레 사전의 MAP — 평활은 '사전'이다", "α 일반화: α↑ = 사전 강화, α→∞ ⇒ 1/|V|", "극한 체크: n_c→∞ ⇒ ML로 수렴(데이터가 사전을 이긴다) ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 6-1</span>P(스팸)=0.4. 스팸: P(무료)=0.6·P(링크)=0.5 / 정상: 0.1·0.2. \"무료+링크\" 메일은?</div><div class=\"xsol\"><b>풀이</b><ol><li>스팸 0.4×0.6×0.5=0.12.</li><li>정상 0.6×0.1×0.2=0.012.</li><li>사후 = 0.12/0.132 = <b>90.9%</b> 스팸.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u6-l3-01 · u6-l2-07 · u6-l4-08</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 6-2</span>스팸 3통(무료 2회 등장), |V|=2 라플라스로 P(무료|스팸)은?</div><div class=\"xsol\"><b>풀이</b><ol><li>(2+1)/(3+2)=<b>0.6</b>.</li><li>미등장 단어도 1/5 — 0의 사형 선고 방지.</li><li>ML(2/3)보다 완만 — 소표본 보험.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u6-l2-04 · u6-l3-02 · u6-l4-02</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 6-3</span>사전 오즈 1:99, 우도비 20짜리 검사 양성 2회(독립). 사후는?</div><div class=\"xsol\"><b>풀이</b><ol><li>오즈 = (1/99)×20² = 4.04.</li><li>확률 = 4.04/5.04 = <b>80%</b>.</li><li>한 번(16.8%)으론 부족, 반복이 힘 — 오즈 곱셈의 미학.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u6-l2-08 · u6-l3-09 · u6-l4-04</div></div>"}};
+window.SV_BUILD = {"date": "2026-09-03", "units": 6, "problems": 240, "gate": "PASS 2026-09-03 (N=50/문제)"};
+</script>
+<script>
+(function(){
+'use strict';
+var APP='course-ml', VP=Vault.progress(APP), VD=Vault.drill(APP), VM=Vault.meta(APP);
+var UNITS=SV_BANK, BYID={}, ALL=[];
+UNITS.forEach(function(u){ u.problems.forEach(function(p){ p._unit=u; BYID[p.id]=p; ALL.push(p); }); });
+var LAYERS=['concept','derive','worked'], LAYER_KO={concept:'개념',derive:'수식·유도',worked:'풀이된 예제'};
+var $=function(s,el){ return (el||document).querySelector(s); };
+var esc=function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); };
+function typeset(el){
+  if(window.MathJax&&window.__mjready){ MathJax.typesetPromise([el]).catch(function(){}); }
+  else { (window.__mjq=window.__mjq||[]).push(el); }
+}
+
+/* ---------- 파라미터 추출/리롤 (러너와 동일 규칙) ---------- */
+function draw(spec){ 
+  if(spec.choices) return spec.choices[Math.floor(Math.random()*spec.choices.length)];
+  var steps=Math.round((spec.max-spec.min)/spec.step);
+  return spec.min+spec.step*Math.floor(Math.random()*(steps+1));
+}
+function sample(prob){
+  for(var t=0;t<500;t++){
+    var p={}; for(var k in prob.params) p[k]=draw(prob.params[k]);
+    if(!prob.constraint||prob.constraint(p)) return p;
+  }
+  return null;
+}
+var CUR={}; // 문제별 현재 파라미터
+function statementOf(prob){
+  if(!prob.params) return (typeof prob.statement==='function')?prob.statement({}):prob.statement;
+  if(!CUR[prob.id]) CUR[prob.id]=sample(prob);
+  return prob.statement(CUR[prob.id]);
+}
+function ansText(r){
+  if(r==null) return '';
+  var a=r.ans, u=r.unit;
+  if(typeof a==='number') return SVH.fmt(a)+' '+(u||'');
+  var parts=[]; for(var k in a){ parts.push(k+' = '+SVH.fmt(a[k])+' '+((u&&u[k])||'')); }
+  return parts.join(' · ');
+}
+
+/* ---------- 진도 ---------- */
+function readItems(){ var ids=[]; UNITS.forEach(function(u){ LAYERS.forEach(function(l){ ids.push(u.id+'-'+l); }); }); return ids; }
+function refreshProg(){
+  var ids=readItems(), n=0; ids.forEach(function(id){ if(VP.get(id)) n++; });
+  $('#pbar').style.width=Math.round(n/ids.length*100)+'%';
+  $('#ptxt').textContent='읽음 '+n+' / '+ids.length+' · 문제 '+VD.counts().total+'/'+ALL.length;
+  document.querySelectorAll('.readbtn[data-read]').forEach(function(b){
+    var on=VP.get(b.getAttribute('data-read'));
+    b.setAttribute('aria-pressed',on?'true':'false');
+    b.textContent=on?'✓ 읽음':'읽음으로 표시';
+  });
+  var wc=wrongList().length, badge=$('#nav-wrong .nv'); if(badge) badge.textContent=wc||'';
+}
+function wrongList(){
+  var all=VD.all(), ids=[];
+  for(var k in all){ if((all[k]==='wrong'||all[k]==='partial')&&BYID[k]) ids.push(k); }
+  return ids;
+}
+
+/* ---------- 문제 카드 ---------- */
+function grade(prob, status, card){
+  VD.set(prob.id, status);
+  card.querySelectorAll('.pbtn.sel').forEach(function(b){ b.classList.remove('sel'); });
+  var btn=card.querySelector('.pbtn.grade-'+status[0]); if(btn) btn.classList.add('sel');
+  var dot=card.querySelector('.sdot'); if(dot){ dot.className='sdot '+status; }
+  refreshProg();
+  if(EXAM.running) examAnswered(prob.id, status);
+}
+function renderProblem(prob){
+  var card=document.createElement('article'); card.className='pcard'; card.setAttribute('data-pid',prob.id);
+  var st=VD.get(prob.id);
+  var srcb=prob.src?'<span class="srcb">'+esc(prob.src)+'</span>':'';
+  card.innerHTML='<div class="pc-head"><span class="lv lv'+prob.level+'">L'+prob.level+'</span>'+
+    '<span class="tagc">'+esc(prob.id)+' · '+esc((prob.tags||[]).join('·'))+'</span>'+srcb+
+    '<span class="sdot'+(st?' '+st:'')+'"></span></div>'+
+    '<div class="pc-st"></div><div class="pc-body"></div><div class="pc-btns"></div>';
+  var stEl=$('.pc-st',card), body=$('.pc-body',card), btns=$('.pc-btns',card);
+  stEl.innerHTML=statementOf(prob);
+
+  function addBtn(label, cls, fn){
+    var b=document.createElement('button'); b.type='button'; b.className='pbtn'+(cls?' '+cls:''); b.textContent=label;
+    b.addEventListener('click',fn); btns.appendChild(b); return b;
+  }
+  function gradeBtns(){
+    addBtn('맞음 ✓','grade-c',function(){ grade(prob,'correct',card); });
+    addBtn('부분 △','grade-p',function(){ grade(prob,'partial',card); });
+    addBtn('틀림 ✗','grade-w',function(){ grade(prob,'wrong',card); });
+    if(st){ var b=card.querySelector('.pbtn.grade-'+st[0]); if(b) b.classList.add('sel'); }
+  }
+
+  if(prob.type==='mc'||prob.type==='tf'){
+    var choices = prob.type==='tf' ? ['참 (O)','거짓 (X)'] : prob.choices;
+    var correctIdx = prob.type==='tf' ? (prob.answer?0:1) : prob.answer;
+    var wrap=document.createElement('div'); wrap.className='choices';
+    choices.forEach(function(c,i){
+      var b=document.createElement('button'); b.type='button'; b.className='choice'; b.innerHTML=c;
+      b.addEventListener('click',function(){
+        if(card.__done) return; card.__done=true;
+        wrap.children[correctIdx].classList.add('right');
+        if(i!==correctIdx) b.classList.add('wrongpick');
+        var ex=document.createElement('div'); ex.className='expl'; ex.innerHTML='<b>해설</b> — '+prob.expl;
+        body.appendChild(ex); typeset(ex);
+        grade(prob, i===correctIdx?'correct':'wrong', card);
+      });
+      wrap.appendChild(b);
+    });
+    body.appendChild(wrap);
+  } else {
+    var hintIdx=0, hb=null;
+    if(prob.hints&&prob.hints.length){
+      addBtn('💡 힌트','',function(){
+        if(hintIdx>=prob.hints.length) return;
+        if(!hb){ hb=document.createElement('div'); hb.className='hintbox'; body.appendChild(hb); }
+        var d=document.createElement('div'); d.innerHTML='힌트 '+(hintIdx+1)+'. '+prob.hints[hintIdx];
+        hb.appendChild(d); typeset(d); hintIdx++;
+        this.textContent = hintIdx>=prob.hints.length ? '힌트 끝' : '💡 힌트 '+(hintIdx+1);
+      });
+    }
+    var solBtn=addBtn('풀이 보기','',function(){
+      if(card.__sol){ card.__sol.hidden=!card.__sol.hidden; this.textContent=card.__sol.hidden?'풀이 보기':'풀이 닫기'; return; }
+      var box=document.createElement('div'); box.className='solbox';
+      var steps, aline='';
+      if(prob.type==='derive'){ steps=prob.steps; }
+      else{
+        var r=prob.solve(prob.params?CUR[prob.id]:{});
+        steps=r.steps; aline='<div class="ansline">답: '+esc(ansText(r))+'</div>';
+      }
+      box.innerHTML='<ol>'+steps.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ol>'+aline+
+        (prob.expl?'<div class="expl">'+prob.expl+'</div>':'');
+      body.appendChild(box); typeset(box);
+      card.__sol=box; this.textContent='풀이 닫기';
+      if(!card.__graded){ card.__graded=true; gradeBtns(); }
+    });
+    if(prob.params){
+      addBtn('🎲 새 숫자로','',function(){
+        CUR[prob.id]=sample(prob);
+        stEl.innerHTML=statementOf(prob); typeset(stEl);
+        if(card.__sol){ card.__sol.remove(); card.__sol=null; solBtn.textContent='풀이 보기'; }
+        if(hb){ hb.remove(); hb=null; hintIdx=0; }
+      });
+    }
+    if(st&&!card.__graded){ card.__graded=true; gradeBtns(); }
+  }
+  return card;
+}
+
+/* ---------- 뷰 ---------- */
+var view=$('#view');
+function setView(html){ view.innerHTML=html; }
+function renderHome(){
+  var dc=VD.counts();
+  var rate=dc.total?Math.round(dc.correct/dc.total*100):null;
+  setView('<div class="eyebrow">COSE362 Machine Learning · 중간범위 (8주 중간)</div>'+
+    '<h1>기계학습 문제은행</h1>'+
+    '<p class="lede">개념 → 유도 → 예제 → 4단계 문제(L1~L4). 전 문제가 검산 게이트(sympy 독립 재계산 대조)를 통과했고, 계산형 문제는 <b>🎲 새 숫자로</b>를 눌러 무한 반복할 수 있다.</p>'+
+    '<p class="note-line">현황 — 풀어본 문제 '+dc.total+' / '+ALL.length+(rate!==null?(' · 정답률 '+rate+'%'):'')+
+    ' · <a href="#wrong">오답노트 '+wrongList().length+'문제</a> · 빌드 '+SV_BUILD.date+' (게이트 '+SV_BUILD.gate+')</p>'+
+    '<div class="ucards" id="ucards"></div>'+
+    '<h3>모드</h3><div class="ucards">'+
+    '<a class="ucard" href="#exam"><span class="uc-no">MOCK EXAM</span><span class="uc-ti">📝 모의고사</span><span class="uc-scope">범위·난이도·문항수를 골라 랜덤 출제 — 매번 새 수치, 종료 리포트 제공.</span></a>'+
+    '<a class="ucard" href="#wrong"><span class="uc-no">RETRY QUEUE</span><span class="uc-ti">🔁 오답노트</span><span class="uc-scope">틀림·부분 문제만 모아 재도전. 맞음으로 바꾸면 큐에서 빠진다.</span></a></div>');
+  var uc=$('#ucards');
+  UNITS.forEach(function(u){
+    var solved=0, ok=0;
+    u.problems.forEach(function(p){ var s=VD.get(p.id); if(s){solved++; if(s==='correct')ok++;} });
+    var reads=LAYERS.filter(function(l){return VP.get(u.id+'-'+l);}).length;
+    var a=document.createElement('a'); a.className='ucard'; a.href='#'+u.id;
+    a.innerHTML='<span class="uc-no">UNIT '+u.no+'</span><span class="uc-ti">'+esc(u.title)+'</span>'+
+      '<span class="uc-scope">'+esc(u.scope)+'</span>'+
+      '<span class="uc-stat">읽음 '+reads+'/3 · 문제 '+solved+'/'+u.problems.length+(solved?' · 정답 '+ok:'')+'</span>';
+    uc.appendChild(a);
+  });
+  typeset(view);
+}
+function renderUnit(u){
+  var c=SV_CONTENT[u.id]||{};
+  setView('<div class="eyebrow">UNIT '+u.no+' / '+UNITS.length+'</div><h1>'+esc(u.title)+'</h1>'+
+    '<p class="lede">'+esc(u.scope)+'</p><div id="layers"></div>'+
+    '<h3>문제 세트 <span class="src">L1 개념확인 → L4 시험급 · '+u.problems.length+'문제</span></h3>'+
+    '<div class="filters" id="filters"></div><div id="plist"></div>');
+  var layers=$('#layers');
+  LAYERS.forEach(function(l){
+    var d=document.createElement('details'); d.className='layer'; if(l==='concept') d.open=true;
+    var inner='';
+    if(l==='derive'){
+      (c.derive||[]).forEach(function(dv){
+        inner+='<details class="dstep"><summary>'+esc(dv.title)+'</summary><ol>'+
+          dv.steps.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ol></details>';
+      });
+    } else inner=c[l]||'';
+    d.innerHTML='<summary><span class="lb">'+(l.toUpperCase())+'</span>'+LAYER_KO[l]+'<span class="arrow">›</span></summary>'+
+      '<div class="body">'+inner+'<div class="readrow"><button type="button" class="readbtn" data-read="'+u.id+'-'+l+'"></button></div></div>';
+    layers.appendChild(d);
+  });
+  layers.addEventListener('click',function(e){
+    var b=e.target.closest('.readbtn'); if(!b) return;
+    VP.toggle(b.getAttribute('data-read')); refreshProg();
+  });
+  var lv=0, fl=$('#filters'), pl=$('#plist');
+  function renderList(){
+    pl.innerHTML='';
+    u.problems.filter(function(p){ return !lv||p.level===lv; }).forEach(function(p){ pl.appendChild(renderProblem(p)); });
+    typeset(pl);
+  }
+  [['전체',0],['L1 개념',1],['L2 기본',2],['L3 응용',3],['L4 시험급',4]].forEach(function(f){
+    var b=document.createElement('button'); b.type='button'; b.className='fchip'+(f[1]===0?' on':''); b.textContent=f[0];
+    b.addEventListener('click',function(){ lv=f[1]; fl.querySelectorAll('.fchip').forEach(function(x){x.classList.remove('on');}); b.classList.add('on'); renderList(); });
+    fl.appendChild(b);
+  });
+  renderList(); typeset(layers);
+}
+function renderWrong(){
+  var ids=wrongList();
+  setView('<div class="eyebrow">RETRY QUEUE</div><h1>오답노트</h1>'+
+    '<p class="lede">틀림·부분 표시 문제 '+ids.length+'개. 다시 풀어 <b>맞음</b>으로 바꾸면 큐에서 빠진다. 계산형은 자동으로 새 수치다.</p><div id="plist"></div>');
+  var pl=$('#plist');
+  if(!ids.length){ pl.innerHTML='<div class="empty">비어 있음 — 문제를 풀고 자가채점하면 틀림/부분이 여기 모인다.</div>'; return; }
+  ids.forEach(function(id){ var p=BYID[id]; if(p&&p.params) CUR[id]=sample(p); pl.appendChild(renderProblem(BYID[id])); });
+  typeset(pl);
+}
+/* ---------- 모의고사 ---------- */
+var EXAM={running:false};
+function renderExam(){
+  if(EXAM.running){ renderExamRun(); return; }
+  var uchecks=UNITS.map(function(u){ return '<label class="ck"><input type="checkbox" class="exu" value="'+u.id+'" checked> U'+u.no+' '+esc(u.title)+'</label>'; }).join('');
+  setView('<div class="eyebrow">MOCK EXAM</div><h1>모의고사</h1>'+
+    '<p class="lede">범위와 난이도를 고르면 랜덤 출제. 채점은 문제마다(객관식 자동 · 계산형 자가채점), 종료하면 리포트.</p>'+
+    '<div class="exam-setup">'+
+    '<div class="grp"><h4>범위</h4>'+uchecks+'</div>'+
+    '<div class="grp"><h4>난이도</h4>'+[1,2,3,4].map(function(l){return '<label class="ck"><input type="checkbox" class="exl" value="'+l+'" '+(l>1?'checked':'')+'> L'+l+'</label>';}).join('')+'</div>'+
+    '<div class="grp"><h4>문항 수</h4><select id="exn"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></div>'+
+    '<button class="bigbtn" id="exgo">모의고사 시작 →</button></div>');
+  $('#exgo').addEventListener('click',function(){
+    var us={}, ls={};
+    document.querySelectorAll('.exu:checked').forEach(function(c){us[c.value]=1;});
+    document.querySelectorAll('.exl:checked').forEach(function(c){ls[+c.value]=1;});
+    var pool=ALL.filter(function(p){ return us[p._unit.id]&&ls[p.level]; });
+    var n=Math.min(+$('#exn').value, pool.length);
+    if(!n){ alert('선택한 범위에 문제가 없습니다'); return; }
+    for(var i=pool.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=pool[i]; pool[i]=pool[j]; pool[j]=t; }
+    EXAM={running:true, list:pool.slice(0,n), idx:0, res:{}};
+    EXAM.list.forEach(function(p){ if(p.params) CUR[p.id]=sample(p); });
+    renderExamRun();
+  });
+}
+function examAnswered(pid, status){ if(EXAM.running&&EXAM.res) EXAM.res[pid]=status; }
+function renderExamRun(){
+  var i=EXAM.idx, p=EXAM.list[i];
+  setView('<div class="eyebrow">MOCK EXAM · '+(i+1)+' / '+EXAM.list.length+'</div>'+
+    '<div class="exam-top"><span>'+(i+1)+'/'+EXAM.list.length+'</span><div class="bar"><i style="width:'+Math.round(i/EXAM.list.length*100)+'%"></i></div>'+
+    '<button class="pbtn" id="exquit">종료</button></div><div id="pslot"></div>'+
+    '<div class="pc-btns" style="margin-top:14px"><button class="bigbtn" id="exnext">'+(i+1<EXAM.list.length?'다음 문제 →':'리포트 보기 →')+'</button></div>');
+  $('#pslot').appendChild(renderProblem(p)); typeset($('#pslot'));
+  $('#exnext').addEventListener('click',function(){
+    if(EXAM.idx+1<EXAM.list.length){ EXAM.idx++; renderExamRun(); } else renderExamReport();
+  });
+  $('#exquit').addEventListener('click',renderExamReport);
+}
+function renderExamReport(){
+  var res=EXAM.res, list=EXAM.list; EXAM.running=false;
+  var c=0,pt=0,w=0,na=0;
+  var perUnit={};
+  list.forEach(function(p){
+    var s=res[p.id];
+    var u=perUnit[p._unit.id]=perUnit[p._unit.id]||{t:0,c:0,title:p._unit.title,no:p._unit.no};
+    u.t++;
+    if(s==='correct'){c++;u.c++;} else if(s==='partial'){pt++;} else if(s==='wrong'){w++;} else na++;
+  });
+  var score=Math.round((c+0.5*pt)/list.length*100);
+  var rows=Object.keys(perUnit).sort().map(function(k){var u=perUnit[k];return '<tr><td>U'+u.no+' '+esc(u.title)+'</td><td>'+u.c+' / '+u.t+'</td></tr>';}).join('');
+  setView('<div class="eyebrow">MOCK EXAM · REPORT</div><h1>결과 리포트</h1>'+
+    '<div class="report"><div class="score">'+score+'점</div>'+
+    '<p>맞음 '+c+' · 부분 '+pt+' · 틀림 '+w+(na?' · 무응답 '+na:'')+' (총 '+list.length+'문제)</p>'+
+    '<table><thead><tr><th>단원</th><th>정답</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<div class="pc-btns"><a class="pbtn" href="#wrong">🔁 오답노트로</a><a class="pbtn" href="#exam" onclick="">다시 설정</a><a class="pbtn" href="#home">홈</a></div></div>');
+}
+
+/* ---------- 내비 · 라우팅 ---------- */
+function buildNav(){
+  var nav=$('#sidenav'), sheet=$('#tb-sheet');
+  var html='<div class="ng">학습</div><a href="#home" data-v="home">홈 · 현황</a>';
+  UNITS.forEach(function(u){ html+='<a href="#'+u.id+'" data-v="'+u.id+'">U'+u.no+' '+esc(u.title)+'</a>'; });
+  html+='<div class="ng">훈련</div><a href="#wrong" data-v="wrong" id="nav-wrong">오답노트<span class="nv"></span></a><a href="#exam" data-v="exam">모의고사</a>';
+  nav.innerHTML=html;
+  sheet.innerHTML=UNITS.map(function(u){ return '<a href="#'+u.id+'">U'+u.no+' '+esc(u.title)+'</a>'; }).join('');
+}
+function route(){
+  var h=(location.hash||'#home').slice(1);
+  var valid={home:1,wrong:1,exam:1}; UNITS.forEach(function(u){valid[u.id]=1;});
+  if(!valid[h]) h='home';
+  if(h!=='exam') EXAM.running=false;
+  document.querySelectorAll('.side nav a').forEach(function(a){ a.classList.toggle('on',a.getAttribute('data-v')===h); });
+  document.querySelectorAll('.tabbar [data-tv]').forEach(function(a){ a.classList.toggle('on',a.getAttribute('data-tv')===h); });
+  var sh=$('#tb-sheet'); if(sh) sh.hidden=true;
+  VM.touch(location.hash||'#home');
+  if(h==='home') renderHome();
+  else if(h==='wrong') renderWrong();
+  else if(h==='exam') renderExam();
+  else renderUnit(UNITS.filter(function(u){return u.id===h;})[0]);
+  window.scrollTo(0,0);
+  refreshProg();
+}
+var tbMore=$('#tb-more'), tbSheet=$('#tb-sheet');
+if(tbMore){ tbMore.addEventListener('click',function(e){ e.stopPropagation(); tbSheet.hidden=!tbSheet.hidden; });
+  document.addEventListener('click',function(e){ if(!tbSheet.hidden&&!tbSheet.contains(e.target)) tbSheet.hidden=true; }); }
+window.addEventListener('hashchange',route);
+buildNav(); route();
+})();
+</script>
+</body>
+</html>

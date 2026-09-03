@@ -35,6 +35,28 @@
       "items": 21,
       "exams": [],
       "added": "2026-09-03"
+    },
+    {
+      "id": "course-control",
+      "title": "자동제어 문제은행",
+      "titleEn": "MECH387 Automatic Control Drill",
+      "icon": "🎛️",
+      "path": "apps/course-control/",
+      "desc": "중간범위 7단원 · 280문제(전 문제 독립검산) — 라플라스→전달함수→블록선도→시간응답→Routh, 정석식 개념+필수예제",
+      "pipeline": "문풀기반",
+      "category": "course",
+      "items": 21,
+      "exams": [
+        {
+          "label": "중간",
+          "date": "2026-10-22"
+        },
+        {
+          "label": "기말",
+          "date": "2026-12-17"
+        }
+      ],
+      "added": "2026-09-03"
     }
   ]
 }

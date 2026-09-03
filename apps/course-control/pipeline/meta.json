@@ -1,0 +1,10 @@
+{
+  "id": "course-control",
+  "title": "자동제어 문제은행",
+  "brand": "<b>자동제어</b> 문제은행",
+  "sub": "Nise 8판 · 중간범위",
+  "eyebrow": "MECH387 Automatic Control · 중간범위 (중간 10/22 19시)",
+  "readme_intro": "자동제어(MECH387, Nise 8판) **중간범위** 문제풀이 앱 — 모델링→라플라스→전달함수→블록선도→상태공간(얕게)→시간응답→Routh 안정성.",
+  "extract": "Lec0 Syllabus·Lec1 비전 판독 → 주차표·평가·범위 분석(`pipeline/sources/강의자료분석.md`, 원문 미전재) + Nise 8판 골격",
+  "status": "## 상태\n\n- 중간범위 U1~U7. 기말범위(정상상태 오차·근궤적·보드·나이퀴스트·보상기)는 C2에서.\n- HW 20%가 랜덤 2문제 채점 → L2~L3(HW급)을 성실히 도는 것이 점수 직결."
+}

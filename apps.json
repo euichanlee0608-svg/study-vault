@@ -59,28 +59,6 @@
       "added": "2026-09-03"
     },
     {
-      "id": "course-phys152",
-      "title": "일반물리Ⅱ 문제은행",
-      "titleEn": "PHYS152 General Physics II Drill",
-      "icon": "🧲",
-      "path": "apps/course-phys152/",
-      "desc": "중간범위 7단원 · 280문제(전 문제 독립검산) — 쿨롱→가우스→전위→축전기→DC→자기력→전류의 자기장, HW-F 규정 대비 Halliday HW급 중심",
-      "pipeline": "문풀기반",
-      "category": "course",
-      "items": 21,
-      "exams": [
-        {
-          "label": "중간",
-          "date": "2026-10-26"
-        },
-        {
-          "label": "기말",
-          "date": "2026-12-14"
-        }
-      ],
-      "added": "2026-09-03"
-    },
-    {
       "id": "course-ml",
       "title": "기계학습 문제은행",
       "titleEn": "COSE362 Machine Learning Drill",
@@ -91,6 +69,28 @@
       "category": "course",
       "items": 18,
       "exams": [],
+      "added": "2026-09-03"
+    },
+    {
+      "id": "course-prob",
+      "title": "확률및랜덤과정 문제은행",
+      "titleEn": "COSE382 Probability & Random Processes Drill",
+      "icon": "🎲",
+      "path": "apps/course-prob/",
+      "desc": "중간범위 6단원 · 240문제(전 문제 독립검산) — 확률 리뷰→지수분포→포아송(뜻·중첩·분해)→재생보상→마르코프 연쇄, 객관식+단답형 대비",
+      "pipeline": "문풀기반",
+      "category": "course",
+      "items": 18,
+      "exams": [
+        {
+          "name": "중간고사",
+          "date": "2026-10-21"
+        },
+        {
+          "name": "기말고사",
+          "date": "2026-12-09"
+        }
+      ],
       "added": "2026-09-03"
     }
   ]

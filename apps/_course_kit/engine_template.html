@@ -122,6 +122,20 @@ details.dstep li{margin-bottom:7px;font-size:13.5px}
 .exbox .xsol{border-top:1px dashed var(--line2);margin-top:8px;padding-top:8px;font-size:13.5px}
 .exbox .xsol ol{margin:4px 0 0;padding-left:20px}
 .exbox .xrel{font-size:12px;color:var(--ink3);margin-top:8px;font-family:"IBM Plex Mono",monospace}
+.bigpic{border:1.5px solid var(--acc);border-left:5px solid var(--acc);border-radius:10px;background:linear-gradient(180deg,var(--acc-bg),var(--surf));padding:14px 18px;margin:0 0 16px;font-size:14.5px;line-height:1.8}
+.bigpic .bt{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;color:var(--acc);font-weight:700;margin-bottom:5px}
+.mapline{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(--surf);border:1px dashed var(--line2);border-radius:8px;padding:9px 12px;margin:10px 0;overflow-x:auto}
+.en{color:var(--ink3);font-weight:400;font-size:.88em}
+.tagx,.tagm,.tagc{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:700;letter-spacing:.06em;border-radius:5px;padding:2px 7px;margin-left:7px;vertical-align:2px;white-space:nowrap}
+.tagx{background:#c0392b;color:#fff}
+.tagm{background:var(--acc);color:#fff}
+.tagc{background:var(--line2);color:var(--ink2)}
+.whyq{border-left:3px solid var(--ink3);padding:3px 0 3px 12px;margin:13px 0;color:var(--ink2);font-size:14px}
+.intuit{background:var(--acc-bg);border-radius:8px;padding:9px 13px;margin:10px 0;font-size:13.5px}
+.exambox{border:1px solid var(--line2);border-left:3px solid #c0392b;border-radius:8px;background:var(--surf);padding:10px 14px;margin:12px 0;font-size:13px}
+.exambox .xt{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;color:#c0392b;font-weight:700;display:block;margin-bottom:3px}
+.layer .body h4{margin:24px 0 8px;font-size:16.5px}
+.layer .body h4:first-child{margin-top:4px}
 .readrow{margin:8px 0 2px;text-align:right}
 .readbtn{font:inherit;font-size:12.5px;min-height:40px;padding:7px 15px;border-radius:99px;border:1px solid var(--line2);background:var(--surf);color:var(--ink2);cursor:pointer}
 .readbtn[aria-pressed="true"]{background:var(--ok-bg);color:var(--ok);border-color:var(--ok)}
@@ -383,6 +397,7 @@ function renderHome(){
     '<p class="lede">개념 → 유도 → 예제 → 4단계 문제(L1~L4). 전 문제가 검산 게이트(sympy 독립 재계산 대조)를 통과했고, 계산형 문제는 <b>🎲 새 숫자로</b>를 눌러 무한 반복할 수 있다.</p>'+
     '<p class="note-line">현황 — 풀어본 문제 '+dc.total+' / '+ALL.length+(rate!==null?(' · 정답률 '+rate+'%'):'')+
     ' · <a href="#wrong">오답노트 '+wrongList().length+'문제</a> · 빌드 '+SV_BUILD.date+' (게이트 '+SV_BUILD.gate+')</p>'+
+    (SV_CONTENT.course?'<details class="layer" open><summary><span class="lb">MAP</span>과목 큰그림 — 한눈에<span class="arrow">›</span></summary><div class="body">'+SV_CONTENT.course.bigpicture+'</div></details>':'')+
     '<div class="ucards" id="ucards"></div>'+
     '<h3>모드</h3><div class="ucards">'+
     '<a class="ucard" href="#exam"><span class="uc-no">MOCK EXAM</span><span class="uc-ti">📝 모의고사</span><span class="uc-scope">범위·난이도·문항수를 골라 랜덤 출제 — 매번 새 수치, 종료 리포트 제공.</span></a>'+

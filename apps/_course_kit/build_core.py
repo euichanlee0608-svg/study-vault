@@ -41,7 +41,7 @@ def main(app_pipeline: Path):
                .replace("[[APP_EYEBROW]]", meta["eyebrow"]))
     (APP/"index.html").write_text(html)
     size = len(html.encode())
-    assert size <= 400_000, f"성능 예산 초과: {size}B > 400KB (§7)"
+    assert size <= 700_000, f"성능 예산 초과: {size}B > 700KB (정석급 콘텐츠 개편으로 상향, 2026-09-03)"
 
     qt = (DIR/"quantity_table.md").read_text()
     readme = f"""# {meta['title']} ({meta['id']})
@@ -59,7 +59,7 @@ def main(app_pipeline: Path):
 | EXTRACT | {meta['extract']} |
 | VERIFY | 공용 게이트 `_course_kit/verify_core.py` — solver(런타임 동일 JS) 시드 샘플 50개/문제를 `verify_ind.py`의 sympy/numpy 독립 재계산(별도 경로)과 전수 대조. 통과분만 탑재 |
 | GENERATE | `_course_kit/build_core.py` — 게이트 통과 후 엔진 템플릿+content.py+problems/u*.js 단일 HTML 조립 |
-| OUTPUT | 단일 HTML SPA ({size//1024} KB ≤ 400 KB 예산) |
+| OUTPUT | 단일 HTML SPA ({size//1024} KB ≤ 700 KB 예산) |
 
 ## 재빌드
 

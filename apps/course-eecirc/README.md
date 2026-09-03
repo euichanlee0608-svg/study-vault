@@ -13,7 +13,7 @@
 | EXTRACT | 기출 스캔 3부 비전 판독 → 유형·배점·스타일 분석만 기록(`pipeline/sources/기출분석.md`, 원문 미전재) + Rizzoni 범위 골격 |
 | VERIFY | 공용 게이트 `_course_kit/verify_core.py` — solver(런타임 동일 JS) 시드 샘플 50개/문제를 `verify_ind.py`의 sympy/numpy 독립 재계산(별도 경로)과 전수 대조. 통과분만 탑재 |
 | GENERATE | `_course_kit/build_core.py` — 게이트 통과 후 엔진 템플릿+content.py+problems/u*.js 단일 HTML 조립 |
-| OUTPUT | 단일 HTML SPA (312 KB ≤ 400 KB 예산) |
+| OUTPUT | 단일 HTML SPA (333 KB ≤ 700 KB 예산) |
 
 ## 재빌드
 

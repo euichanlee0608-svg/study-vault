@@ -213,6 +213,26 @@ a.tl-en:hover{color:var(--acc);text-decoration:underline}
 .ck-en{line-height:1.45}
 .ck-ko{font-size:11.5px;color:var(--ink3);line-height:1.45}
 .todo li{margin-bottom:9px}
+
+/* ---- 논문 심층분석 (deep) ---- */
+.figblk{border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:10px;background:var(--surf);padding:14px 18px;margin:14px 0}
+.figblk h4{margin:0 0 3px;font-size:15.5px}
+.figblk .frole{font-size:12px;color:var(--acc);font-family:"IBM Plex Mono",monospace;letter-spacing:.05em;margin:0 0 9px}
+.figblk ul{margin:6px 0;padding-left:19px}
+.figblk li{margin:4px 0}
+.fcrit{border-top:1px dashed var(--line2);margin-top:10px;padding-top:8px;font-size:13px;color:var(--ink2)}
+.fcrit b{color:var(--warn)}
+.aicard{border:1.5px solid var(--storage);border-radius:10px;background:var(--storage-bg);padding:13px 16px;margin:14px 0}
+.aicard h4{margin:0 0 8px;font-size:15px}
+.aicard .airow{margin:5px 0;font-size:13.5px;line-height:1.65}
+.aicard .aik{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;color:var(--storage);display:block;font-weight:600;margin-bottom:1px}
+.aicard .aiev{border-top:1px dashed var(--storage);margin-top:9px;padding-top:8px;font-size:13px}
+.aicard .aiev b{color:var(--storage)}
+.knum{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.knum span{background:var(--surf2);border:1px solid var(--line);border-radius:8px;padding:6px 11px;font-size:12.5px;font-family:"IBM Plex Mono",monospace}
+.dmap{border:1px dashed var(--line2);border-radius:10px;background:var(--surf2);padding:11px 15px;margin:12px 0;font-size:13.5px;line-height:1.8}
+.dnote{font-size:12.5px;color:var(--ink3);background:var(--surf2);border-radius:6px;padding:8px 12px;margin:10px 0}
+
 /* ---- 모바일 (§7): 사이드바 → 하단 고정 탭바 ---- */
 .tabbar{display:none}
 #tb-sheet{display:none}
@@ -257,6 +277,7 @@ a.tl-en:hover{color:var(--acc);text-decoration:underline}
 <div class="ng">학습</div>
 <a href="#concepts" data-v="concepts">기초 개념 12강</a>
 <a href="#papers" data-v="papers">논문 노트 22편</a>
+<a href="#deep" data-v="deep">논문 심층분석 2편</a>
 <a href="#wip" data-v="wip">진행중 연구 7건</a>
 <a href="#myresearch" data-v="myresearch">내 연구와 연결</a>
 <div class="ng">참고</div>
@@ -264,7 +285,7 @@ a.tl-en:hover{color:var(--acc);text-decoration:underline}
 <a href="#checklist" data-v="checklist">체크리스트</a>
 </nav>
 <div class="hub-link" style="font-size:12px"><a href="../../">← Study Vault 허브</a></div>
-<div class="foot-side">근거: 보유 논문 원문 + 공식 메타데이터<br>2026-09-02 빌드</div>
+<div class="foot-side">근거: 보유 논문 원문 + 공식 메타데이터<br>2026-09-07 빌드</div>
 </aside><main class="main"><section class="view" id="v-home"><div class="eyebrow">Materials Innovation Lab · 온보딩</div><h1>랩의 언어를 하루 만에</h1><p class="sub-en">MIL Onboarding Notes — Materials Innovation Lab, Korea University</p>
 <p class="lede-big">내일부터 출근하는 <b>Materials Innovation Lab(첨단재료혁신 연구실, 고려대 기계공학부)</b>을
 한 앱에서 통째로 파악하기 위한 학습 노트입니다. 기초 개념 12강 → 논문 노트 22편 → 내 연구 연결 순서로 읽으면,
@@ -862,7 +883,335 @@ a.tl-en:hover{color:var(--acc);text-decoration:underline}
 <li>안전·장비 교육 일정 문의 (레이저(라만)·고전류 전원 취급은 랩 지침 우선 — 이 앱은 일반론만 다룸)</li>
 <li>공저자 이름-소속 매칭 암기 — 최원준(고려대), Xinqi Chen·Shekhawat·Hu·Dravid(NUANCE)</li>
 </ul>
-</section></main></div>
+</section><section class="view" id="v-deep" hidden><h1>논문 심층분석 2편</h1><p class="sub-en">Deep Dive — #30 EATS &amp; #32 MSPC, Figure-by-Figure + AI Opportunity Map</p>
+<p class="lede-big">교수님 최신 대표작 두 편 — <b>#30 EATS</b>(내 레포의 모체)와 <b>#32 MSPC</b>(랩의 과학적 간판)를
+<b>원문 전문+전체 피규어 단위</b>로 해부한 정독 노트입니다. 각 편은 ① 논리 골격 → ② 피규어별 패널 판독 →
+③ 핵심 수치 총정리 → ④ 방법론 해부 → ⑤ 강점·한계·열린 질문 → ⑥ <b>AI·순차최적화 침투 지점(근거 포함)</b> 순서로 갑니다.</p>
+<div class="dnote">근거 등급: 두 편 모두 <span class="badge s-pdf">원문 대조</span> — 2026-09-07에 원문 PDF 전문과 모든 그림을
+직접 판독해 작성. 단, ⑥절의 기법 제안·평가는 <b>원문에 없는 이 노트의 분석</b>이며 문장마다 근거(원문의 수치·구조)를 병기했습니다.</div>
+<div class="plist">
+<a class="pcard b-film" href="#deep-30" data-rid="d-30">
+<div class="pc-top"><span class="pc-no">#30 심층</span><span class="star">★</span><span class="pc-meta">Adv. Mater. 2026 · 공동1저자 서병석</span><span class="dot" aria-hidden="true"></span></div>
+<div class="pc-ti">EATS — 전기보조 열스탬핑 나노필름</div>
+<div class="pc-ko">그림 7장 전부 패널 단위 해부 + 공정 최적화의 AI 침투 지점 6곳</div>
+<div class="pc-one">내 레포(Nanofilm with AL)가 서 있는 바로 그 논문 — 전력×시간 반응면의 원본 데이터가 여기 있다.</div></a>
+<a class="pcard b-film" href="#deep-32" data-rid="d-32">
+<div class="pc-top"><span class="pc-no">#32 심층</span><span class="star">★</span><span class="pc-meta">Sci. Adv. 2026 · 공동1저자 서병석·노도원</span><span class="dot" aria-hidden="true"></span></div>
+<div class="pc-ti">MSPC — 타임스탬핑 촉각센서</div>
+<div class="pc-ko">그림 6장 전부 패널 단위 해부 + 재료탐색·디코딩의 AI 침투 지점 6곳</div>
+<div class="pc-one">측정→이론→지표→검증→응용 5막 구성의 교본 — 논문 쓰는 법을 배우려면 이 편을 베껴 그려라.</div></a>
+</div>
+<h3>이 탭을 읽는 법</h3>
+<ul>
+<li><b>그림이 곧 논문이다.</b> 각 figblk(그림 블록)는 "이 그림이 논증에서 하는 일 → 패널별 판독 → 함정·비판"의 3층. 원문 PDF를 옆에 띄우고 패널을 하나씩 짚으며 읽으면 정독 효과가 최대.</li>
+<li><b>수치는 무기다.</b> 미팅에서 "G/D 1.24" "854%@129mm" 같은 수치를 입에 붙이면 원문을 읽었다는 가장 강한 신호가 된다. 핵심 수치 카드를 암기 대상으로.</li>
+<li><b>⑥절은 내 기여 후보 목록이다.</b> 각 카드의 "근거"가 미팅 발언의 뼈대 — "Figure 4B가 격자 탐색인데, 실험당 비용을 생각하면 BO로 절반 이하로 줄일 수 있습니다"처럼 그림 번호로 말하라.</li>
+</ul>
+</section><section class="view" id="v-deep-30" hidden><div class="crumb"><a href="#deep">논문 심층분석</a> / #30 EATS</div>
+<div class="meta-top"><span class="badge s-pdf">원문 대조</span><span class="pc-meta">Advanced Materials 2026, 38:e16478 · DOI 10.1002/adma.202516478 · Open Access</span></div>
+<h1 class="pt-en">Electrically Assisted Thermal Stamping of Tunable Carbon-Based Nanofilms for Direct Fabrication of Hydrophobic, Energy Harvesting, and Sensing Devices</h1>
+<p class="pt-ko">소수성·에너지수확·센싱 소자를 직접 제작하는 조절형 탄소 나노필름의 전기보조 열스탬핑(EATS)</p>
+<p class="authors"><b>Byungseok Seo</b>*; Yong Choi*; Gajendra S. Shekhawat; Minjoong Shin; Kunmo Koo; Xiaobing Hu; Jiheon Kim; <b>Wonjoon Choi</b>†; <b>Xinqi Chen</b>†; <b>Vinayak P. Dravid</b>† <span class="g-en">(*공동 1저자 — B.S.와 Y.C. equal contribution / †공동 교신)</span></p>
+<p class="oneliner">탄소종이에 몇 초 줄 가열을 "도장 찍듯" 가하면 — 박리·GO 환원·PTFE 편입이 <b>한 번에</b> 일어나
+rGO↔rGO/PTFE↔PTFE 필름이 전력×시간 두 손잡이로 조절되고, 그 자리에서 소수성 코팅·TENG·습도센서가 된다.</p>
+<p>접수 2025-08-23 → 수정 2025-12-18 → 승인 2026-01-05. 키워드: humidity sensing · hydrophobic coating · lithography-free fabrication · nanofilm · triboelectric nanogenerator.</p>
+
+<h3>0. 큰그림 — 왜 이 논문이 랩의 "모체"인가</h3>
+<p>랩 계보의 도구 진화(연소파→ETW→EATS)에서 EATS는 "번지는 고온"을 <b>공간적으로 가두는 데 성공한 단계</b>다.
+기존 rGO 제조(수 시간 열환원 or 화학환원)·PTFE 가공(소결·진공)은 서로 <b>양립 불가능한 조건</b>을 요구해서
+복합필름은 다단계+후처리가 정석이었다. 이 논문의 한 수는 그 비양립성을 "초 단위 국부 줄 가열"이라는 하나의
+사건으로 <b>동시에</b> 해결한 것: PTFE 분해가스가 층간 압력을 만들어 박리를 밀고(기계), CF₂ 라디칼이 산소 작용기를
+걷어 rGO를 만들며(화학), 남은 PTFE가 필름에 박힌다(조성). 그리고 <b>내 레포가 이 논문의 Figure 4B(G/D 반응면)를
+Active Learning으로 다시 그리는 프로젝트</b>다 — 이 그림들의 축·수치·잡음 구조를 아는 것이 곧 내 연구의 도메인 지식이다.</p>
+
+<div class="dmap"><b>논리 골격과 그림 배치</b> — 이 논문은 4악장:<br>
+① <b>예고</b>(Fig 1): 세 응용을 표지처럼 먼저 보여줌 → ② <b>메커니즘</b>(Fig 2): 왜 되는가 — 화학(반응식)+열역학(에너지 창)+실측(온도·IR)
+→ ③ <b>생성물 검증</b>(Fig 3 SEM/EDS → Fig 4 Raman → Fig 5 XPS): 무엇이 만들어졌고 어떻게 조절되나
+→ ④ <b>손잡이와 응용</b>(Fig 6 두께·패턴 → Fig 7 소자 3종). 읽을 땐 ②를 정독하고 ③은 "조절성 지도(4B·5D·6D)" 중심으로.</div>
+
+<h3>1. 피규어 정독 — 7장 전부</h3>
+
+<div class="figblk"><h4>Figure 1 — 한 장짜리 예고편</h4>
+<p class="frole">역할: 스코프 선언 — "이 공정 하나로 소자 셋이 그 자리에서 나온다"</p>
+<ul>
+<li><b>중앙</b>: 롤 형태 CP(탄소종이)에 스탬프 3개가 찍히는 스케일러블 공정 개념도 — "scalable & patternable"이 시각 언어로 박혀 있다.</li>
+<li><b>A 소수성 코팅</b>: 접촉각 사진 4장 — 석영 44.31° → rGO 55.12° → rGO/PTFE 100.10° → PTFE 109.82°. 친수→소수의 연속 다이얼임을 예고.</li>
+<li><b>B 에너지 하베스터</b>: 145 mm/s 자극에서 rGO·rGO/PTFE·PTFE 소자의 OCV 트레이스 — PTFE가 가장 크고(±0.9 V급) rGO/PTFE가 가장 작다는 <b>비단조 관계</b>가 이미 여기 보인다(7E에서 정량).</li>
+<li><b>C 습도센서</b>: rGO 표면의 물 흡착(물리흡착/화학흡착) 모식 + EATS-P4-5.0 소자의 RH 50→100% 계단 응답(mV 스케일).</li>
+</ul>
+<div class="fcrit"><b>비판적 시선</b>: 예고편이라 조건 표기가 성글다 — 각 패널의 소자가 서로 다른 EATS 조건(P4-5.0/P4-7.0/P7-3.0)이라는 사실은 본문을 읽어야 드러난다. "같은 공정, 다른 레시피"가 이 논문의 진짜 주제라는 걸 여기서 미리 새겨야 뒤가 편하다.</div></div>
+
+<div class="figblk"><h4>Figure 2 — 메커니즘: 화학 + 열역학 + 실측의 3중 증거</h4>
+<p class="frole">역할: "몇 초 줄 가열로 박리·환원·편입이 동시에"의 왜 — 논문의 과학적 심장</p>
+<ul>
+<li><b>A 공정 4단계</b>: (i) 세척한 석영 위에 CP 배치(2×1 cm, Cu 테이프 간격 1.5 cm) → (ii) 프로그래머블 전원으로 EATS(줄 가열) → (iii) 화학 변환 — 층간 팽창(d↑), PTFE 분해, GO/C<sub>x</sub>F<sub>y</sub> 중간체 → (iv) 에탄올 세척 후 기판에 남는 탄소 나노필름. <b>"필름이 CP에서 기판으로 전사되며 합성된다"</b>는 구조를 여기서 잡아야 한다.</li>
+<li><b>B 분자 수준</b>: (i) CP = 흑연 + 균일 매립 PTFE → (ii) 열응력으로 PTFE가 C–C 균일분해: (C₂F₄)ₙ → nCF₂ (식 1), 2CF₂ → C₂F₄ (식 2) — 이 휘발성 가스가 층간을 파고들어 vdW 결합을 흔든다 → (iii) CF₂ 라디칼이 <b>in situ 환원제</b>로 작동해 GO의 산소 작용기를 걷어내고 sp² 골격 복원(rGO).</li>
+<li><b>C 층간 간격의 온도 의존</b>: LJ 퍼텐셜 E<sub>π-π</sub>=4ε[(σ/d)¹²−(σ/d)⁶] + 선형 열팽창 d(T)=d₀{1+α(T−T₀)} 모델 — d₀=0.335 nm가 4998 K에서 0.339 nm로. 층간 결합에너지는 2.28×10⁻²⁰ J → 3.03×10⁻²¹ J로 급락.</li>
+<li><b>D 에너지 교차 = 공정 창</b>: π-π 결합에너지(감소 곡선), σ 결합에너지 E<sub>σ</sub>(T)=E<sub>σ,0</sub>−βT(5.30×10⁻¹⁹ J에서 ~3698 K 부근 0으로), EATS 열에너지 E=k<sub>B</sub>T(증가 직선)의 3선 교차 — <b>~1314 K 위에서 박리가 열역학적으로 유리, ~3325 K까지는 σ 골격 안전</b>. "박리는 되고 격자는 안 부서지는" 온도 창의 존재가 EATS의 성립 근거.</li>
+<li><b>E 실측 온도 프로파일(EATS-P4, 6.8 s)</b>: 0.28 s 만에 533 K(PTFE 분해 개시) 도달 → 6.80 s 피크 721 K → 전원 차단 후 급랭. 즉 실공정은 이론 임계(1314 K)보다 <b>훨씬 낮은 표면온도에서도</b> 국부 과압·계면 효과 덕에 박리가 진행된다(본문 명시 — 아래 비판 참조).</li>
+<li><b>F IR 열화상</b>: 가열(0.8/1.0/2.1 s)과 냉각(7.4→13.6 s) 시퀀스, 최고 720.75 K — CP 전면의 <b>균일 가열</b>이 균일 필름의 전제임을 시각 증명. 비교 조건: P1은 5.80 s에야 673 K(분해온도) 도달·피크 680 K, P7은 0.44 s 만에 분해 개시·피크 846 K. TGA–MS는 ~743 K에서 PTFE 급분해 피크로 교차 검증.</li>
+</ul>
+<div class="fcrit"><b>비판적 시선</b>: ① C·D는 이상화된 LJ+선형 β 모델 — 계수(ε, σ, β)의 출처·불확도가 본문에 얇다. ② <b>묻힌 CP-기판 계면 온도는 직접 측정 불가</b> — 표면 IR+임계 모델+분해 창의 "간접 삼각측량"으로 재구성했다고 논문 스스로 인정. 내 연구에서 물리 사전(prior)을 세울 때 이 간극(표면 721 K vs 이론 임계 1314 K)이 바로 불확실성의 원천이다.</div></div>
+
+<div class="figblk"><h4>Figure 3 — SEM/EDS: 세 얼굴의 형태학</h4>
+<p class="frole">역할: 같은 공정의 세 산출물(rGO / rGO+PTFE / PTFE)이 실재함을 눈으로</p>
+<ul>
+<li><b>A EATS-P4-5.0 (rGO)</b>: 매끈·연속 저조도 표면 — 적당한 열 입력에서 박리 그래핀층의 균일 퇴적.</li>
+<li><b>B EATS-P4-7.0 (rGO/PTFE)</b>: 더 치밀·조밀 — 늘어난 지속시간에 PTFE가 층간 공극을 채워 응집력 강화.</li>
+<li><b>C EATS-P7-3.0 (PTFE)</b>: 특징 없는 매끈함 — 고전력에서 PTFE가 휘발→재퇴적하며 연속 불소고분자 막으로 덮음. 흑연 텍스처 소멸.</li>
+<li><b>D EDS(P4-7.0)</b>: C 75.97 / F 20.32 / O 2.99 wt%(Au 0.38·Pd 0.34는 스퍼터 코팅 잔여). 낮은 O = 환원 성공, 풍부한 F = PTFE 편입. ROI 기반 F/C ≈ 1.63 vs 아래 카본테이프 ≈ 0.0335 — 필름 영역에만 불소가 국재.</li>
+</ul>
+<div class="fcrit"><b>비판적 시선</b>: 형태학은 정성적이고, F/C는 "맵 평균 강도의 상대비"라 화학량론이 아니라고 논문이 명시(<i>relative comparison</i>). 세 조건 사이의 연속 전이(예: P4-6.0은 어떤 모습?)는 SEM으로는 안 보여준다 — 그 연속성은 Fig 4B·5D 지도가 담당.</div></div>
+
+<div class="figblk"><h4>Figure 4 — Raman: 내 연구가 사는 그림 ★</h4>
+<p class="frole">역할: sp²/sp³·결함의 정량 지문 + 공정 조절성의 2D 지도 + 공간 균일성 검증</p>
+<ul>
+<li><b>A(i) 4종 스펙트럼</b>: 프리스틴 CP(날카로운 G ~1580, 2D ~2695 cm⁻¹ — 고품질 흑연) → P4-3.0(D ~1367 강해짐, <b>G/D 0.94</b> — 부분 산화 GO, 2600–3000 cm⁻¹에 2D+D′ 복합밴드 출현) → P4-5.0(<b>G/D 1.24</b> — CF₂ 환원으로 rGO 복원) → P4-7.0(rGO + PTFE 피크 731·1215·1300·1380 cm⁻¹). <b>이 랩은 D/G가 아니라 G/D를 쓴다</b> — 방향 주의(높을수록 좋음).</li>
+<li><b>A(ii-iii) Voigt 디컨볼루션</b>: P4-3.0은 2D 2695/D+D′ 2914, P4-5.0은 2705/2929 cm⁻¹ — 업시프트+상대강도 변화로 "산화→환원" 전이를 밴드 수준에서 재확인.</li>
+<li><b>B G/D 등고 지도(전력 70–140 W/cm² × 시간 1–7 s)</b>: ★내 레포의 타깃 반응면 원본. ×표=<b>필름 미형성 조건</b>(저전력·단시간 모서리), G/D>1.2 영역=고품질 rGO 창. 색 스케일 0–1.4. 저전력·장시간과 중전력·중시간에 능선이 있고 고전력에선 PTFE화로 G/D가 무의미해지는 — 단조롭지 않은 지형.</li>
+<li><b>C 라만 매핑(P4-5.0, ~30×24 µm)</b>: (i) 필름/박리(delaminated) 경계의 광학상과 A–D 지점 → (ii) G·D·2D+D′ 강도맵+G/D 맵 — 경계에서 모든 밴드가 뚝 끊김 = 필름 커버리지의 공간 충실도 → (iii) A–D 대표 스펙트럼.</li>
+</ul>
+<div class="fcrit"><b>비판적 시선</b>: ① B 지도의 격자 해상도(10전력×여러 시간)와 지점당 반복수·오차막대가 그림엔 없다 — <b>반응면의 잡음 구조가 미공개</b>라는 뜻이고, 이게 내 GPR 노이즈 모델링에서 가장 먼저 물어야 할 질문. ② G/D 단일 스칼라는 라만 정보(피크폭·위치·2D 형상)를 버린다 — 다출력 학습의 여지(아래 ⑥). ③ ×(미형성)의 경계가 계단형으로 그려져 있는데 실제 경계의 확률적 성격(재현 시 흔들림)은 미보고.</div></div>
+
+<div class="figblk"><h4>Figure 5 — XPS: 결합 상태의 회계장부</h4>
+<p class="frole">역할: C 1s 분해로 산화→환원→불소화 전이를 화학결합 수준에서 정량</p>
+<ul>
+<li><b>A C 1s 4종</b>: (i) CP — C=C 284.6 + CF₂ 292.0 eV(매립 PTFE) 공존. (ii) GO(P4-3.0) — C–OX ~286.5, C=O ~287.8, O–C=O ~288.5 eV 산소 작용기 + π-π* 셰이크업 ~291.0 eV 출현. (iii) rGO(P4-5.0) — 산소계 급감, π-π*도 약화 = 환원. (iv) rGO/PTFE(P4-7.0) — 강한 sp²(C=C)와 sp³(C–C, C–F ~291.0, CF₂ 292.0, CF₃ ~294.0 eV) 동시 = 하이브리드.</li>
+<li><b>B·C 서베이·원소 분율</b>: F는 CP와 P4-7.0에서 크고 중간 조건(P4-3.0·5.0)에선 최소 — "분해·탈출 후 장시간에서만 재편입"의 시간 창. O는 P4-3.0→7.0로 단조 감소(약 2.7 at% 차 — 기판 SiO₂ 기여 감안하면 더 작음).</li>
+<li><b>D sp² C=C 분율 등고 지도(전력×시간)</b>: 최대 ~80% — Fig 4B와 <b>독립적 측정으로 같은 모양의 조절성 지도</b>를 그려 교차 검증. F/C 지도는 S10.</li>
+<li><b>깊이 프로파일(S11 참조)</b>: 에칭할수록 F 1s 감소·C 유지 — <b>PTFE는 표면 쪽에 국재</b>(불소 상부층/rGO 하부층 수직 구조). 소수성(표면 성질)이 PTFE 함량으로 조절되는 이유의 구조적 근거.</li>
+</ul>
+<div class="fcrit"><b>비판적 시선</b>: XPS 디컨볼루션은 성분 개수·구속의 선택에 민감한데(7~9개 성분) 피팅 불확도는 미보고. sp² 분율 지도(D)와 G/D 지도(4B)의 정량적 상관(산점도)이 있으면 두 지표의 등가성이 검증됐을 텐데 — 정성 비교에 그친다.</div></div>
+
+<div class="figblk"><h4>Figure 6 — 두께·패턴: 손잡이의 공학화</h4>
+<p class="frole">역할: "전력×시간 = 두께 다이얼" + "스탬프 모양 = 리소그래피-프리 패턴"의 실증</p>
+<ul>
+<li><b>A–C 두께 측정</b>: 필름/박리 경계를 프로파일로미터로 — P4-3.0 <b>~1.21 nm</b>(사실상 few-layer!) vs P9-3.0 <b>~412 nm</b>. 340배 스팬.</li>
+<li><b>D 두께 3D 지도</b>: 2.0 → 318.4 nm(3.0 s 고정, P4→P9) — 전력에 대해 <b>지수적</b> 증가(S14), 고전력에서 조도·산포도 함께 증가.</li>
+<li><b>E·F AFM(P4-5.0, 7×7 µm)</b>: 라인 프로파일 A 3.97 nm / B 4.98 nm 계단 — few-layer rGO 도메인. 단, 이산 도메인+국부 요철 = <b>불완전 피복</b>도 정직하게 보여줌(>40 nm 두꺼운 막은 연속). 개선책으로 CP 플레이크 텍스처 템플릿화·EATS 다중 사이클을 본문에서 제안.</li>
+<li><b>G "N" 패턴</b>: CP를 N자로 오려 EATS(P8-3.0) → 필름이 스탬프 모양대로만 전사 — 마스크·리소 없는 <b>직접 패터닝</b>.</li>
+<li><b>H XPS C–F 매핑</b>: (i) 패턴 영역만 C–F 강함(2 mm 격자, A–G 라인) (ii) 지점별 C 1s — 공간 선택성의 화학적 확증.</li>
+</ul>
+<div class="fcrit"><b>비판적 시선</b>: 두께 지도(D)는 평균값 지도 — 고전력에서 "산포 증가"를 말로만 언급하고 분산 지도는 없다. 최적화 관점에선 <b>평균과 분산을 동시에</b> 다뤄야 하는 문제(이분산 GPR·강건 최적화)임을 시사. 패턴 해상도의 한계(최소 선폭·엣지 번짐)는 미정량 — 후속 연구 거리.</div></div>
+
+<div class="figblk"><h4>Figure 7 — 응용 3종: 조성 다이얼의 회수</h4>
+<p class="frole">역할: 조절성(레시피 3종)이 서로 다른 소자 성능으로 회수됨을 실증 — 논문의 상업적 결말</p>
+<ul>
+<li><b>A–C 젖음성</b>: 물 접촉각 44.31°(석영)→55.12°(rGO)→100.10°(rGO/PTFE)→109.82°(PTFE); DIM(비극성)로도 55.31°→90.74°. OWRK 해석: 총 표면에너지 58.94→14.13 mN/m, 특히 <b>극성 성분 22.24→1.96 mN/m 급락</b> — 소수성의 물리가 "극성 자리 제거"임을 분해해 보임. cosθ=(σ<sub>s</sub>−σ<sub>sl</sub>)/σ<sub>l</sub>(Young)+OWRK 2액법.</li>
+<li><b>D–G TENG(단일전극, Al 자극 1×1 cm, Cu 전극)</b>: OCV @145 mm/s — rGO 0.68 V, <b>rGO/PTFE 0.28 V(최저!)</b>, PTFE 0.93 V. 속도 80→145 mm/s에서 PTFE 소자 0.85→0.93 V 단조 증가. 내구 10,000 사이클(~5.68 h) 변동 <2.8%. 부하 정합 최대 전력밀도 <b>10.11 mW/cm³ @ 2.5 MΩ</b>. rGO/PTFE가 최저인 이유(본문 가설): 전도성 rGO 도메인이 마찰전하를 스크리닝·소산 + 이질 계면이 견고한 마찰전기 이중층 형성을 방해.</li>
+<li><b>H–K 습도센서(rGO=P4-5.0만 채용)</b>: RH 50→100% 30분 계단에서 OCV 0.71→3.03 mV <b>지수형</b> 상승(J 교정곡선), 순환 시 가역·계단 명확(K). 평균 감도 0.47 mV/%RH, 응답 5.75 s, 상용 센서 대비 오차 <3.56%. 메커니즘: 물 분자가 rGO의 산소 작용기에 화학→물리 흡착하며 쌍극자층 형성→표면 전위 비대칭→OCV. <b>P4-7.0은 불규칙 응답, P7-3.0(PTFE)은 무반응</b> — 산소 자리(감지)와 전도성(신호 전달)의 균형이 rGO에서만 성립.</li>
+</ul>
+<div class="fcrit"><b>비판적 시선</b>: ① 습도는 50–100%만 — 저습(0–50%) 성능·온도 교차감도 미검. ② TENG rGO/PTFE 저성능 설명은 그럴듯하나 직접 증거(표면전위 매핑 등)는 없음 — 가설 단계. ③ 세 소자가 <b>서로 다른 레시피의 최적</b>이라는 사실 자체가 "용도별 역설계 문제"의 존재 증명이다(⑥-2).</div></div>
+
+<h3>2. 핵심 수치 총정리 (암기 카드)</h3>
+<div class="knum">
+<span>공정 창: 70–140 W/cm² × 1–7 s (P1–P10)</span><span>표기: EATS-P4-5.0 = 80 W/cm²·5.0 s</span>
+<span>온도: 0.28 s→533 K(PTFE 분해 개시) · 피크 721 K(P4-6.8s)</span><span>이론 창: ~1314 K(박리 유리)–~3325 K(σ 한계)</span>
+<span>G/D: CP기준 GO 0.94 → rGO 1.24 (>1.2 = 고품질)</span><span>sp² C=C 최대 ~80%</span>
+<span>두께: 1.21 nm(P4-3.0) → ~412 nm(P9-3.0), 지수 증가</span><span>AFM 계단 3.97/4.98 nm</span>
+<span>EDS: C 75.97/F 20.32/O 2.99 wt%, F/C 1.63</span><span>접촉각 44.31→55.12→100.10→109.82°</span>
+<span>표면에너지 58.94→14.13 mN/m (극성 22.24→1.96)</span><span>TENG 0.68/0.28/0.93 V · 10.11 mW/cm³ @2.5 MΩ · <2.8%/10k</span>
+<span>습도 0.71→3.03 mV(RH 50→100%) · 0.47 mV/%RH · 5.75 s · <3.56%</span><span>CP: Toray 060, PTFE 5 wt%, 190 µm, 공극률 78%</span>
+</div>
+
+<h3>3. 방법론 해부 (재현 관점)</h3>
+<ul>
+<li><b>공정</b>: CP(Toray 060, 5 wt% PTFE, 190 µm, 5.8 mΩ·cm, 21–23 W/m·K) 2×1 cm를 아세톤·DI 세척한 석영 위에 → Cu 테이프 1.5 cm 간격 → Chroma 62060D-100 전원으로 P1–P10×1–7 s → 1분 냉각 → 에탄올 린스. IR은 FLIR A6255SC, PTFE 분해 검증은 TGA-MS(NETZSCH TG209 F1 + Agilent 8890/5977B).</li>
+<li><b>특성분석</b>: Raman Horiba LabRAM / XPS Thermo NEXSA G2 / SEM Hitachi SU8030·8700+Oxford Ultim Max EDS(ImageJ 강도 정규화) / 두께 Veeco Dektak 150(면도날 스크래치 계단) / AFM Bruker FastScan.</li>
+<li><b>전사</b>: PMMA(10 wt% 톨루엔) 스핀코팅(500→5000 rpm)→100 °C 10분→열박리 테이프→타깃 기판 120 °C 15분→아세톤 20분 — Si·폴리이미드 등으로 이식 가능(S24–25).</li>
+<li><b>안전 ⚠</b>: PTFE 열분해는 HF 등 불소 가스 가능 — 배기 후드 필수·PPE·잔여물 밀봉 폐기. 랩 합류 시 이 절이 곧 안전교육 항목.</li>
+<li><b>재현성</b>: 동일 CP로 6사이클 반복 — G/D 유지되나 CF<sub>x</sub> 신호 점감(공급원 고갈). "CP는 소모품 카트리지"라는 그림.</li>
+</ul>
+
+<h3>4. 다각도 분석 — 강점 · 한계 · 열린 질문</h3>
+<ul>
+<li><b>강점</b>: ① 상압·초 단위 <b>단일 스텝</b>으로 세 재료계를 연속 조절 — 비교표(S16·Table S1)로 기존 다단 공정과 차별화. ② 메커니즘을 화학(반응식)+열역학(에너지 창)+실측(IR·TGA-MS) 3중으로 방어. ③ 조절성 주장을 <b>지도 세 장</b>(G/D·sp²·두께)으로 정량화. ④ 응용까지 완결(성능·내구·정확도 수치 제시). ⑤ 안전·재현성 절까지 갖춘 성실한 방법론.</li>
+<li><b>한계</b>: ① 계면 온도 직접 측정 부재(간접 재구성) — 공정 모델의 최대 불확도. ② 반응면의 <b>반복·오차 정보 미공개</b> — 지도가 몇 회 실험 평균인지 불명. ③ few-layer 영역 불완전 피복(개선책은 제안 수준). ④ 고전력 두께 산포 증가 — 평균만 지도화. ⑤ 습도 저RH 미검·TENG 계면 가설 미검증. ⑥ 단일 CP 재사용 시 공급원 고갈 — 대면적·연속 생산 시나리오는 아직 개념도.</li>
+<li><b>열린 질문</b>: 다른 층상 재료(MoS₂·WS₂·BN — 본문이 직접 지목)로의 일반화 조건은? 전력-시간 외 제3 손잡이(분위기·기판 열전도)는? 패턴 최소 선폭은?</li>
+</ul>
+
+<h3>5. AI · 순차최적화 침투 지점 6곳 <span class="src">— 이 절은 원문에 없는 본 노트의 분석·제안</span></h3>
+
+<div class="aicard"><h4>① 공정 반응면 탐색: 격자 → 베이지안 최적화(BO) ★내 레포 그 자체</h4>
+<div class="airow"><span class="aik">문제 정형화</span>입력 x=(전력밀도 70–140 W/cm², 시간 1–7 s) → 출력 y=G/D(또는 sp² 분율). 목표 max G/D. 제약: 필름 형성 여부(Fig 4B의 ×) = 이진 타당성.</div>
+<div class="airow"><span class="aik">적합 기법</span>GPR 서러게이트 + EI/UCB 획득함수, 타당성은 별도 분류 GP(constrained BO). 실패 관측도 정보로 쓰는 hinted-BO.</div>
+<div class="airow"><span class="aik">기대 효과</span>격자 전수(10 전력×다수 시간 = 수십 조건×특성분석)를 유사 품질 지도 기준 절반 이하 실험으로 — 라만 1회는 싸도 EATS+세척+맵핑 루프는 회당 수십 분이라 실험 수 자체가 병목.</div>
+<div class="aiev"><b>근거</b>: 원문이 정확히 <b>전수 격자</b>로 4B·5D·6D를 그렸고, ×(미형성) 영역이 존재해 제약 최적화 문제임이 자명하다. 지형이 능선형(비단조)이라 1D 스윕 두 번으로는 못 잡는 구조 — GPR의 적격지. 내 레포(Nanofilm with AL)의 더미 파이프라인(전력 150–200 W×dwell 3–7 s→G/D)이 이 문제의 축소판이며, seqopt의 verify_nano 커널 규약을 그대로 물릴 수 있다.</div></div>
+
+<div class="aicard"><h4>② 다목적·역설계: "용도별 레시피"의 자동화</h4>
+<div class="airow"><span class="aik">문제 정형화</span>같은 x 공간에서 y=(G/D, 두께, F/C, 접촉각) 벡터. 소자 사양(예: 접촉각≥100°이면서 두께≤50 nm)을 만족하는 x 역산.</div>
+<div class="airow"><span class="aik">적합 기법</span>다출력 GP(또는 목적별 독립 GP)+파레토 프런트 탐색(EHVI), 역설계는 사후 GP에서 사양 만족 확률 최대화.</div>
+<div class="aiev"><b>근거</b>: 원문 스스로 세 응용의 최적이 <b>서로 다른 조건</b>(소수성=P7-3.0, TENG=P7-3.0, 습도=P4-5.0, 복합내구=P4-7.0)임을 보였다 — "무엇에 쓸 건가"에 따라 답이 달라지는 다목적 구조가 이미 데이터로 존재. Fig 7C의 표면에너지 분해(극성/분산)는 목적함수 설계에 그대로 쓸 물리 좌표를 준다.</div></div>
+
+<div class="aicard"><h4>③ 물리정보 GPR: 온도 이력 사전을 커널에 심기</h4>
+<div class="airow"><span class="aik">문제 정형화</span>P×t가 아니라 물리 융합 변수(누적 에너지 E∝P·t, 피크온도 추정 T̂(P,t), 533 K 도달시간)를 특징으로 한 회귀.</div>
+<div class="airow"><span class="aik">적합 기법</span>평균함수에 임계 거동(533 K 미달→미형성, 과도→PTFE화)을 넣은 물리정보 GP; 또는 Fig 2E형 온도 모델을 1차 시뮬레이터로 한 다중충실도 BO(시뮬 싸게+실험 비싸게).</div>
+<div class="aiev"><b>근거</b>: 원문에 이미 물리 모델의 뼈대(식 3–6, 임계 1314 K, 분해 533·743 K, P별 도달시간 0.28/0.44/5.80 s)가 있다 — 이 구조를 무시한 순수 블랙박스 GP는 정보 손실. ×경계가 "533 K 도달 실패"와 정합한다는 가설은 물리 특징 하나로 타당성 예측이 크게 좋아질 것임을 시사. 이것이 내 연구(물리정보 GPR)의 논문 내 착지점.</div></div>
+
+<div class="aicard"><h4>④ 라만 맵핑의 능동 샘플링: 균일성 QC 가속</h4>
+<div class="airow"><span class="aik">문제 정형화</span>공간 (x,y)→G/D 장(場). 전수 스캔 대신 최소 점으로 "균일/불균일 판정+경계 위치" 복원.</div>
+<div class="airow"><span class="aik">적합 기법</span>공간 GP+분산 최대점 순차 측정(uncertainty sampling), 경계 검출이면 straddle 획득함수.</div>
+<div class="aiev"><b>근거</b>: Fig 4C가 보여주듯 맵핑이 품질 게이트인데, µm 격자 전수 스캔은 점당 노출×격자수로 시간이 선형 증가. 원문 맵의 구조(필름 내부는 완만, 경계에서 급변)는 GP가 가장 잘 압축하는 신호 형태 — 같은 장비·같은 시료로 소프트웨어만 얹는 <b>최저 위험 침투 지점</b>이라 첫 기여로 최적.</div></div>
+
+<div class="aicard"><h4>⑤ 스펙트럼 자동 분해의 베이지안화: 잡음 모델 공급</h4>
+<div class="airow"><span class="aik">문제 정형화</span>라만 Voigt 디컨볼루션·XPS 성분 피팅을 사후분포로 — G/D에 <b>오차막대</b>를 달기.</div>
+<div class="airow"><span class="aik">적합 기법</span>베이지안 피크 피팅(MCMC/변분) 또는 부트스트랩; 그 불확도를 ①의 GP 관측 노이즈 σₙ(x)로 전파(이분산 GP).</div>
+<div class="aiev"><b>근거</b>: 원문 지도들엔 오차 정보가 없다(한계 ②) — 최적화가 "능선 위 두 점 중 어디가 진짜 높나"를 판단하려면 관측 잡음이 필수. G/D는 두 피크 강도비라 피팅 상관이 커서, 단순 반복 표준편차보다 피팅 사후분포가 정직한 잡음 추정을 준다.</div></div>
+
+<div class="aicard"><h4>⑥ 시간가변 전력 궤적의 최적 제어 (中期 과제)</h4>
+<div class="airow"><span class="aik">문제 정형화</span>상수 (P,t)를 넘어 궤적 u(t) 설계 — 예: 급가열(박리)→저전력 유지(환원)→제어 급랭(준안정 포획). 목적: G/D·균일성·산포 동시 개선.</div>
+<div class="airow"><span class="aik">적합 기법</span>온도 모델 기반 MPC 또는 저차원 파라미터화(계단 2–3개) 후 BO — 완전 RL은 실험 예산상 비현실, 파라미터화 BO가 현실 해.</div>
+<div class="aiev"><b>근거</b>: 원문 메커니즘이 시간 구조를 갖는다 — 분해 개시(0.28 s)→박리→환원→PTFE 재편입(장시간)이 <b>순차 사건</b>이므로, 각 국면에 다른 전력이 최적일 개연성. Fig 2E의 "전원 차단 후 급랭"이 이미 궤적 효과(준안정 포획)의 존재 증거. 다만 전원 프로그래밍·IR 동기화가 필요해 장비 협업 후 착수할 중기 지점.</div></div>
+
+<p class="note-line">우선순위 제안: <b>④(QC 가속, 무위험) → ①(레포 본론) → ⑤(①의 잡음 공급) → ② → ③ → ⑥</b>. 미팅 멘트 예시 — "Figure 4B를 그리는 데 실험이 몇 회 들었는지, 지점당 반복이 몇 번이었는지 여쭤보고 싶습니다. 그 비용 구조에 따라 BO로 지도를 절반 실험으로 재구성하는 것을 첫 프로젝트로 제안드립니다."</p>
+<div class="readrow"><button class="readbtn" data-read="d-30" aria-pressed="false">읽음으로 표시</button></div><div class="pn"><a href="#deep">← 심층분석 목록</a><a href="#deep-32">#32 MSPC 심층 →</a></div></section><section class="view" id="v-deep-32" hidden><div class="crumb"><a href="#deep">논문 심층분석</a> / #32 MSPC</div>
+<div class="meta-top"><span class="badge s-pdf">원문 대조</span><span class="pc-meta">Science Advances 12 (17), eaec9793 · 2026-04-22 · DOI 10.1126/sciadv.aec9793 · CC BY</span></div>
+<h1 class="pt-en">A time-stamping tactile sensor enabled by pseudoconductive interface design at dielectric heterojunctions</h1>
+<p class="pt-ko">유전체 이종접합의 유사전도 계면 설계로 구현한 타임스탬핑 촉각센서</p>
+<p class="authors"><b>Byungseok Seo</b>*; <b>Dowon Noh</b>*; Yong Choi; Yongfa Cheng; Yeonbin Seong; <b>Xinqi Chen</b>†; <b>Wonjoon Choi</b>† <span class="g-en">(*공동 1저자 / †공동 교신 — 접수 2025-10-10 · 승인 2026-03-23 · ADD·NRF·KEIT 지원)</span></p>
+<p class="oneliner">절연체 두 장의 계면에 기계 자극으로 <b>일시적 전도 통로(MSPC)</b>를 열고 — 어떤 짝이 열리는지를 밴드 물리로 전수 해석해
+지표(MFI)로 만들고 — 그 통로가 <b>스스로 닫히는 속도를 시계</b> 삼아, 전원·메모리·활성소자 없이 "어디를·언제 눌렀는지"를 파형에 새긴다.</p>
+
+<h3>0. 큰그림 — #27의 발견을 과학으로 완성한 편</h3>
+<p>#27(Adv. Mater. 표지)이 "유전체끼리 붙였는데 신호가 간다"는 <b>현상의 발견</b>이었다면, 이 논문은 세 가지를 얹어 과학으로 만든다:
+① <b>왜</b> 되는가 — 11종 유전체의 밴드를 UPS/REELS로 전수 실측하고, 페르미 이동+준페르미 형성+전기장 밴드 기울임의 3단 메커니즘 확립.
+② <b>어떤 짝</b>이 되는가 — 72개 이종접합을 점수화하는 MFI 지표 고안, 재료 선택을 시행착오에서 계산으로.
+③ <b>무엇에 쓰나</b> — 채널의 시간 감쇠를 시계로 쓰는 타임스탬핑 촉각센서(오차 최저 0.18 min).
+"수동 부품"이던 유전체 계면을 <b>설계 가능한 능동 요소</b>로 재정의한 것이 학술적 한 방이고,
+전극·바이어스·메모리 없는 시공간 인코딩이 공학적 한 방이다.</p>
+
+<div class="dmap"><b>논리 골격과 그림 배치 — 5막 구성의 교본</b>:<br>
+Fig 2 <b>측정</b>(재료 데이터베이스) → Fig 3 <b>이론</b>(밴드 재구조화 케이스 분석) → Fig 4 <b>지표</b>(MFI로 압축) →
+Fig 5 <b>검증</b>(신호 전송 실측·지표-성능 상관) → Fig 6 <b>응용</b>(3×3 센서 데모). 내 논문을 쓸 때 이 목차를 그대로 벤치마킹하라 —
+"측정→이론→지표→검증→응용"은 재료 논문의 왕도 서사다.</div>
+
+<h3>1. 피규어 정독 — 6장 전부</h3>
+
+<div class="figblk"><h4>Figure 1 — 개념 선언</h4>
+<p class="frole">역할: MSPC 채널(A)과 그것으로 만든 센서(B)의 한 장 요약</p>
+<ul>
+<li><b>A</b>: base/counter 유전체 적층 — 기계 자극이 계면에 전하를 주입해 <b>방향성 있는</b> 유사전도 경로가 열리고(에너지 밴드 재구조화 인셋), 시간이 지나면 스스로 닫힘(time-dependent decay). "일시적·가역적"이 핵심 형용사.</li>
+<li><b>B</b>: 3×3 격자 위 터치 → 전압 응답 비율로 시공간 지도(voltage ratios → spatiotemporal mapping). 외부 메모리·바이어스 없음이 화살표로 강조된다.</li>
+</ul>
+<div class="fcrit"><b>비판적 시선</b>: "pseudo(유사)"의 정확한 의미 — 재료가 도체가 되는 게 아니라 계면 준위를 매개로 한 일시 통로 — 는 그림만으론 안 보인다. 개념 11(밴드 정렬)을 먼저 읽고 오면 A의 인셋이 읽힌다.</div></div>
+
+<div class="figblk"><h4>Figure 2 — 재료 데이터베이스: 11종 유전체의 밴드 실측</h4>
+<p class="frole">역할: 이후 모든 이론·지표의 입력 데이터를 직접 측정으로 확보 — 논문의 신뢰 기반</p>
+<ul>
+<li><b>A 측정 원리</b>: UPS(He I 21.22 eV)로 페르미 준위·VBM — SE 컷오프에서 일함수 φ=hν−|BE<sub>max</sub>−E<sub>F</sub>|(식 1), Au·SiN<sub>x</sub> 표준으로 캘리브레이션. REELS(저에너지 전자빔의 에너지 손실)로 밴드갭 — SiN<sub>x</sub> 기준 정렬 후 손실 문턱 피팅.</li>
+<li><b>B 개별 밴드 도표</b>: 유리·PDMS(E<sub>F</sub> −5.42)·PET(<b>−6.60, 최심</b>)·PMMA(−6.14)·PVA(<b>−5.30, 최천</b>)·PEDOT:PSS(−6.04)·UMA(−5.56)·PTFE(−5.47)·PVDF(−5.34) + 자극체 니트릴(−5.39)·Al(−5.51). E<sub>vac</sub>·E<sub>C</sub>·E<sub>F</sub>·E<sub>V</sub> 4단 막대.</li>
+<li><b>C 정렬 정의</b>: 접합 시 ΔE=|E<sub>F,b</sub>−E<sub>F,c</sub>|(식 2) — 페르미 차가 곧 "정렬 여력".</li>
+<li><b>D 조합별 정렬 범위</b>: 유리 0–0.27 / PDMS 0.05–1.18 / <b>PET 0(모든 짝에서 정렬 실패 — E<sub>F</sub>가 너무 깊어 전자를 받기만 함)</b> / PMMA 0.19–0.46 / <b>PVA 0.04–1.30(최대 폭 — E<sub>F</sub>가 높아 만능 공여자)</b> / PEDOT:PSS 0.10–0.56 / UMA 0.48–1.04 / PTFE 0.09–1.13 / PVDF 0.08–1.26 eV.</li>
+</ul>
+<div class="fcrit"><b>비판적 시선</b>: UPS/REELS는 표면 수 nm 탐침 — <b>묻힌 계면을 직접 본 게 아니라</b> "각 재료의 표면 밴드로 계면을 외삽"한 것(논문도 probing depth 한계 인정). 고분자 표면은 대전·오염·수분에 민감해 E<sub>F</sub> 절대값엔 ±0.1 eV급 계통 불확도가 있을 수 있는데 오차막대 논의는 얇다 — MFI의 입력 불확도로 전파되는 지점(⑥-1).</div></div>
+
+<div class="figblk"><h4>Figure 3 — 이론: 밴드 재구조화의 경우의 수 전개</h4>
+<p class="frole">역할: "기계 자극 → 채널"의 인과 사슬을 케이스별로 — 이 논문의 지적 척추</p>
+<ul>
+<li><b>A–D pristine 4배치</b>: CBM·VBM의 상하 관계로 나눈 4가지 초기 배치(E<sub>C,b</sub><E<sub>C,c</sub> & E<sub>V,b</sub><E<sub>V,c</sub> 등) — 출발선 분류.</li>
+<li><b>E 페르미 이동 메커니즘</b>: 자극체(E<sub>F,o</sub>)와 counter(E<sub>F,c</sub>)의 차 ΔE만큼 전하가 이동 → counter의 E<sub>F</sub>′이 오르내림 → base와 재정렬. 기호 규약: E(초기)→E′(대전 직후)→E″(정렬 완료). 자극체가 φ 손잡이라는 것(니트릴 −5.39 vs Al −5.51)이 여기서 정식화된다.</li>
+<li><b>F–I(페르미 상승)·J–M(하강)</b>: 8케이스를 <b>Assured MSPC(빨강)/Potential MSPC(파랑)</b>으로 채색 — 확실히 열리는 조합과 조건부 조합의 분류학.</li>
+<li><b>N 준페르미</b>: 대전 후 계면은 완전 평형이 아니라 부분 평형 — 전자·정공의 준페르미 준위가 갈라지며 계면에 캐리어가 <b>머무를 수 있는</b> 상태 형성.</li>
+<li><b>O 밴드 기울임</b>: 자극이 만든 전기장으로 θ∝σ/ε(식 3) — 유전율 낮은 쪽이 더 크게 기울어 캐리어를 접합으로 민다.</li>
+<li><b>P 최종 조건식</b>: 채널 형성 조건 — |E<sub>C,b</sub>″|<|E<sub>C,c</sub>″|, |E<sub>V,b</sub>″|<|E<sub>V,c</sub>″|, φ<sub>b</sub>>φ<sub>c</sub>′(식 4) 또는 전부 반대(식 5). 방향까지 정해지는 <b>부등식 설계 규칙</b>.</li>
+<li><b>Q 9×9 히트맵</b>: 니트릴 5분 대전(2.5 Hz) 후 base×counter 밴드 정렬량 0–1.30 eV — PET 행·열이 파랗게(정렬 실패) 죽어 있는 것이 Fig 2D와 정합.</li>
+</ul>
+<div class="fcrit"><b>비판적 시선</b>: 이 그림은 <b>측정 기반 사고실험</b>이다 — 실제 계면의 준위·트랩 분광(예: DLTS·KPFM 단면)이 아니라 표면 실측값의 조합 논리. 그래서 Fig 5의 실측 검증이 논문의 사활이 된다. 또 식 3의 σ(표면 전하밀도)는 자극 조건 의존인데 그 정량 지도는 없다.</div></div>
+
+<div class="figblk"><h4>Figure 4 — MFI: 72개 조합을 하나의 점수로</h4>
+<p class="frole">역할: 케이스 분류(Fig 3)를 연속 점수로 압축 — 재료 선택의 계산화</p>
+<ul>
+<li><b>지표 정의</b>: MFC=|ΔCBM|×|ΔVBM|×min[E<sub>C,c</sub>″−E<sub>F,b</sub>″, E<sub>C,b</sub>″−E<sub>F,b</sub>″]×P<sub>BT</sub>(식 6). P<sub>BT</sub>(밴드 기울임 성향)=2/1/0 — 조건 충족도에 따른 이산 가중(식 7). MFI=MFC/MFC<sub>max</sub> 정규화(식 8). 페르미가 CBM 위로 오르는(φ″<χ″) 조합은 트랩 대신 탈출이라 <b>음수 MFI로 배제</b>.</li>
+<li><b>A 72조합 막대(pristine vs 니트릴 5분 대전)</b>: 대전이 순위를 뒤흔든다 — glass/PTFE가 0.48→<b>1.00</b>(니트릴, +208%)·0.96(Al, +200%)으로 1위 등극. UMA/PTFE·PTFE/PDMS·PDMS/PTFE도 최대 +228%.</li>
+<li><b>순서의 방향성</b>: <b>PTFE/glass(역순)는 P<sub>BT</sub>=0으로 실패</b> — 같은 두 재료도 어느 쪽이 base냐에 따라 열리고 안 열린다. glass/PVDF·PVDF/glass·PTFE/UMA·glass/PVA·PVA/glass도 조건 미충족.</li>
+<li><b>B ΔMFI 막대</b>: 변화량 문턱 0.085 초과 조합(화살표) — glass/PMMA·glass/PDMS·glass/UMA·glass/PTFE·PDMS/PMMA·PDMS/PTFE·UMA/PMMA·UMA/PTFE·PTFE/PVDF·PVDF/PVA·PVDF/PTFE — 가 "단순 기계 자극으로 채널을 열 수 있는 후보군"으로 선별된다.</li>
+</ul>
+<div class="fcrit"><b>비판적 시선</b>: MFC는 <b>곱형 휴리스틱</b> — 왜 곱인지, 왜 min인지, 항간 가중은 왜 동일한지의 이론적 정당화는 없다(작동하는 특징 공학). P<sub>BT</sub>의 2/1/0 이산화와 문턱 0.085도 경험적. 결정적으로 Fig 5F가 보여주듯 <b>pristine 상태에선 MFI-성능 상관이 없다</b> — 지표는 "충전 후"라는 조건부에서만 유효. 이 솔직한 한계 공개가 오히려 ⑥-1(학습형 지표)의 문을 연다.</div></div>
+
+<div class="figblk"><h4>Figure 5 — 검증: 신호 전송 실측과 지표-성능 상관</h4>
+<p class="frole">역할: MFI가 실제 성능(전송 유지력)을 예측함을 소자 12종으로 입증 — 논문의 사활처</p>
+<ul>
+<li><b>A 실험 구성</b>: base 유전체 한쪽 끝 아래 Al 전극(수신) + 10 MΩ — 자극 위치 SP를 0→129 mm로 멀리하며 정규화 전압 V(SP)(식 9) 측정. 채널이 없으면 유전체 감쇠로 전압이 급락하는 구조.</li>
+<li><b>B–D 3소자 프로파일</b>: glass/UMA·glass/PDMS·PDMS/PMMA — pristine(회색)은 SP 증가에 급감, <b>니트릴 5분 대전 후(빨강)는 유지</b>. 정량: <b>glass/UMA +854% @SP 90 mm</b>, glass/PDMS +813% @111 mm, PDMS/PMMA +164% @9 mm.</li>
+<li><b>E VDI 정의</b>: 피크 프로파일의 적분 VDI=∫₀¹²⁹V<sub>peak,norm</sub> dSP(식 10) — "거리 전체에서 얼마나 버티나"의 한 수치. 대전 후 VDI 증가율 ΔVDI(식 11): +110/131/90%.</li>
+<li><b>F pristine: MFI vs VDI 산점 — 무상관!</b> 밴드 구조가 좋아도 캐리어 공급이 없으면 채널이 안 열린다는 <b>필요조건-충분조건 분리</b>의 실측.</li>
+<li><b>G 대전 후: MFI vs VDI×ΔVDI — 강한 선형 상관.</b> 최고 성능 트리오: glass/UMA 7972(MFI 0.30) > glass/PDMS 7659(0.23) > PDMS/PMMA 4283(0.09). 예측(밴드)과 성능(전송)이 잇닿는 순간.</li>
+</ul>
+<div class="fcrit"><b>비판적 시선</b>: 실측 검증은 <b>72조합 중 소자 12종</b>(그래프의 1–12) — 상관의 표본이 작고, VDI×ΔVDI라는 합성 지표 선택 자체가 사후적일 수 있다(왜 곱인가?). 온도·습도·압력 불감 주장(note S1·S25–27)은 범위 내 확인이지 보증이 아니다. 그래도 "지표 무상관→조건부 상관"을 숨기지 않고 그린 것은 드물게 정직한 데이터 제시다.</div></div>
+
+<div class="figblk"><h4>Figure 6 — 응용: 시계가 내장된 3×3 촉각센서</h4>
+<p class="frole">역할: 감쇠 동역학을 시계로 쓰는 타임스탬핑의 개념 실증(PoC)</p>
+<ul>
+<li><b>A 구조</b>: 유리 기판 → 하부 Cu 전극(41 mm 간격) → 교차점 절연(셀룰로스 테이프) → 직교 상부 전극 → base 유리 캡슐화 → counter PDMS 경화 — 셀 A–I 9개, 각 셀이 유전체 이종접합.</li>
+<li><b>B 회로</b>: V₁–V₈ 8채널, 채널당 10 MΩ. 전극 간격 41 mm의 근거: 신호 소실 36.8%(1/e) 기준 최대 간격이 glass/UMA 101.0 / glass/PDMS 83.2 / <b>PDMS/PMMA 41.8 mm</b> — 세 조합 모두 안전하려면 41 mm(최악 조합 기준 설계).</li>
+<li><b>C–E 시계 교정</b>: MSPC 활성 셀의 전압을 0–16분 추적 — SP=0(터치 직결 전극)은 ~1.43으로 불변, pristine 41 mm도 불변(≈0.0960), <b>MSPC 활성 41 mm만 1.00→0.160으로 감쇠</b>. Boltzmann 피팅(식 12): A₁=1.33, A₂=0.141, t₀=2.99 min, dt=3.09 min. 전압비(E)로 정규화하면 0.700→0.110 — 이 곡선이 <b>시계의 눈금판</b>.</li>
+<li><b>F–J 시나리오 1</b>: 셀 A 활성 → 2분 뒤 셀 G 터치. 판독: G 인접 전극(V₁·V₂·V₇·V₈)≈1.00(직결), V₃·V₆≈0.103/0.0985(pristine 41 mm 경로), V₄≈0.0186(85 mm — <b>0.0960²의 곱셈 감쇠</b>), V₅=0.0559(MSPC 경로 경유라 유독 높음!). V₅/V₆=0.568을 눈금판에 대면 <b>경과 2.18분</b> — 실제 2분, 오차 0.18 min(9.00%). 비대칭 지표 M(식 13)으로 공간 확정: 터치 셀 G M=0.001(대칭), MSPC 셀 A M=0.04259(비대칭).</li>
+<li><b>K–O 시나리오 2</b>: D 활성 → 10분 뒤 E 터치. V₁/V₂≈0.180 → <b>9.82분 추정</b>(실제 10분, 오차 1.80%). M: E=0.00843(터치) vs D=0.81957(MSPC 잔향). 추가 시나리오(노트 S4): E→H 1.80%, B→E 11.00%.</li>
+<li><b>운영 스펙</b>: 응답 <0.705 s·회복 <0.015 s(S35), 1000사이클 내구(S32), 압력 크기에 시간 지표 불감(S33) — "언제"가 "얼마나 세게"와 분리된다는 설계 강점.</li>
+</ul>
+<div class="fcrit"><b>비판적 시선</b>: ① <b>단일 터치 전제</b> — 다중 동시 터치는 명시적 미해결(note S3, 아키텍처가 single-touch 최적화라고 자인). ② 시계 창은 t₀≈3분 스케일 — 16분 이후는 눈금이 뭉개진다(용도 따라 재료로 시정수를 다시 설계해야). ③ 시간 오차가 0.18–11%로 산포 — 경로 조합(곱셈 구조)이 복잡한 케이스(B→E)에서 나빠짐. ④ 감쇠 곡선은 소자·환경별 재교정이 필요할 것(개체차 논의 없음).</div></div>
+
+<h3>2. 핵심 수치 총정리 (암기 카드)</h3>
+<div class="knum">
+<span>유전체 11종 + 자극체 니트릴(−5.39)·Al(−5.51 eV)</span><span>E<sub>F</sub> 극단: PVA −5.30(만능 공여) · PET −6.60(전멸)</span>
+<span>페르미 이동 최대 1.30 eV</span><span>MFI: glass/PTFE 0.48→1.00(+208%) · 최대 +228%</span>
+<span>후보 선별 문턱 ΔMFI>0.085 · 방향성: PTFE/glass는 P<sub>BT</sub>=0</span><span>전송: +854%@90mm(glass/UMA) · +813%@111mm · +164%@9mm</span>
+<span>VDI 증가 +110/131/90% · 최고 VDI×ΔVDI 7972(MFI 0.30)</span><span>대전 프로토콜: 니트릴/Al · 2.5 Hz · 5 min</span>
+<span>시계: Boltzmann A₁1.33/A₂0.141/t₀2.99min/dt3.09min</span><span>전압비 눈금: 0.700→0.110(16 min) · pristine 0.0960</span>
+<span>시간 오차 0.18 min(9.00%)·1.80%·11.00%</span><span>전극 간격 41 mm(=최악 조합 41.8 mm 기준) · 10 MΩ·8ch</span>
+<span>응답 <0.705 s · 회복 <0.015 s · 1000사이클</span><span>M 지표: 터치 0.001~0.008 vs MSPC 0.04~0.82</span>
+</div>
+
+<h3>3. 방법론 해부 (재현 관점)</h3>
+<ul>
+<li><b>재료 제법(전부 1 mm 두께로 통일)</b>: PDMS SYLGARD 184 10:1, 5 mm/s 나이프코팅, 80 °C 4 h / PVA(89k–98k) DMSO 10% w/v 80 °C 용해→24 h 40 °C 건조 / PMMA(~350k) 톨루엔 10% / PVDF(~534k) DMF 15% 80 °C 2 h / PEDOT:PSS 0.8 wt% 수용액 80 °C 6 h / UMA(Clear Resin v4) 405 nm UV 10 min 경화. 유리·PET·PTFE는 기성 시트 재단. 조합 소자는 "counter 위 직접 경화" 또는 "프리스탠딩 라미네이션".</li>
+<li><b>대전·자극</b>: XYZ 리니어 액추에이터(최대 200 mm/s·3000 mm/s²·정밀 50 µm). 전송시험 자극봉 니트릴 10 mm 봉, 대전은 150×40 mm Al/니트릴 플레이트 2.5 Hz 5분, 센서 자극 47×47 mm 니트릴 플레이트.</li>
+<li><b>계측</b>: 10 MΩ 외부저항, 오실로스코프(DPO2004B·DHO5108)+DMM(34401A)+DAQ(USB-6351, 1.25 MS/s, <50 µV) — <b>패러데이 케이지 내 측정</b>(전자기 간섭 차단). 밴드: UPS NEXSA G2 / REELS ESCALAB 250Xi(SiN<sub>x</sub> 캘리브레이션).</li>
+<li><b>센서 조립</b>: 유리 기판 세척 → Cu 테이프 하부 전극(41 mm 격자) → 교차점 셀룰로스 절연 → 직교 상부 전극 → base 유리 캡슐화 → PDMS counter 경화.</li>
+</ul>
+
+<h3>4. 다각도 분석 — 강점 · 한계 · 열린 질문</h3>
+<ul>
+<li><b>강점</b>: ① <b>완결 서사</b> — 측정(2)→이론(3)→지표(4)→검증(5)→응용(6)의 교과서 구조. ② 방향성 설계 규칙(base/counter 순서, P<sub>BT</sub>)이라는 반직관 발견. ③ 지표의 한계(pristine 무상관)를 숨기지 않고 조건부 유효성으로 정제. ④ 시간 정보를 재료 물성(감쇠)에 내장 — 회로 복잡도를 물리로 치환한 발상. ⑤ 무전원·무메모리·전극 최소 — 랩의 "전극 최소화" 계보(#18·#28)와 일관.</li>
+<li><b>한계</b>: ① MFI는 휴리스틱 곱(가중·문턱 경험적), 실측 검증 12/72. ② 표면 실측→계면 외삽(묻힌 계면 직접 증거 부재). ③ 단일 터치·16분 창·개체별 재교정 문제. ④ 감쇠의 미시 기원(어떤 트랩? 어떤 탈출 경로?)은 밴드 그림 수준 — 분광학적 실체 규명은 남음. ⑤ 반복 대전 피로(1000사이클 너머)·장기 안정성 미보고.</li>
+<li><b>열린 질문</b>: 시정수 t₀를 재료·두께로 설계할 수 있나(시계 눈금 엔지니어링)? 습도·온도가 감쇠율에 주는 2차 효과는? MSPC 채널의 공간 프로파일(KPFM으로 볼 수 있나)?</li>
+</ul>
+
+<h3>5. AI · 순차최적화 침투 지점 6곳 <span class="src">— 이 절은 원문에 없는 본 노트의 분석·제안</span></h3>
+
+<div class="aicard"><h4>① MFI를 학습형 지표로: 휴리스틱 곱 → GP 회귀</h4>
+<div class="airow"><span class="aik">문제 정형화</span>입력 x=(ΔCBM, ΔVBM, φ−χ 마진, ε비, P<sub>BT</sub>, 자극체 φ) → 출력 y=VDI×ΔVDI(실측 성능). MFI를 특징 중 하나로 포함.</div>
+<div class="airow"><span class="aik">적합 기법</span>GPR(소표본 강점+불확도) 또는 심볼릭 회귀(해석 가능한 새 지표 형태 발견). 밴드 입력의 ±0.1 eV 불확도를 입력 노이즈로 전파.</div>
+<div class="aiev"><b>근거</b>: 원문 스스로 ① pristine 무상관/충전 후 상관(Fig 5F–G)으로 <b>지표의 조건부 한계</b>를 보였고 ② 실측은 12소자뿐 — 데이터가 작아 NN은 과하고 GP가 정확히 적격. MFC의 곱·min·이산 가중은 전부 학습 가능한 구조라, 같은 데이터로도 순위 예측이 개선될 여지가 명확하다. 산출물(개선 지표+불확도)은 후속 재료 스크리닝의 획득함수 재료가 된다.</div></div>
+
+<div class="aicard"><h4>② 조합 공간의 능동학습: 다음에 만들 소자 고르기</h4>
+<div class="airow"><span class="aik">문제 정형화</span>72조합(확장 시 N(N−1) — 유전체 20종이면 380조합) 중 실측 소자를 어느 순서로 제작할지. 목표: 최소 소자 수로 성능 상위 조합 확정.</div>
+<div class="airow"><span class="aik">적합 기법</span>①의 GP 위에서 EI/top-k 식별(best-arm identification). 밴드 측정만 된 조합은 저비용 특징, 소자 실측은 고비용 라벨 — 능동 라벨링 구도.</div>
+<div class="aiev"><b>근거</b>: 소자 1종 = 용액 제조·경화(4–24 h)·적층·대전·SP 스캔의 다일 작업 — 원문이 72 중 12만 실측한 것 자체가 예산 제약의 증거. 후보 유전체를 문헌 밴드값으로 넓히면 조합 폭발이 즉시 오므로, "밴드 DB(싼 특징)→GP→선택적 제작"은 이 연구 라인의 자연스러운 다음 단계다. 세팅이 내 레포의 Active Learning 루프와 동형이라 코드 이식이 쉽다.</div></div>
+
+<div class="aicard"><h4>③ 대전 프로토콜 BO: 고정된 2.5 Hz×5 min을 열기</h4>
+<div class="airow"><span class="aik">문제 정형화</span>입력 x=(주파수, 시간, 접촉력/속도, 자극체 재질) → 출력 y=ΔVDI(또는 활성화 후 t₀). 4차원 연속+범주 혼합 공간.</div>
+<div class="airow"><span class="aik">적합 기법</span>혼합변수 BO(범주=자극체). 시간이 길수록 좋기만 한지(포화·피로)부터 저차원 스크리닝 후 본탐색.</div>
+<div class="aiev"><b>근거</b>: 원문은 대전을 <b>2.5 Hz·5분·니트릴/Al로 고정</b>하고 재료 조합만 훑었다 — 프로토콜 공간은 통째로 미탐색. 그런데 자극체만 바꿔도 MFI 향상이 208↔200%로 달라진다는 실측이 이미 있고, 저자들이 "자극 재료가 MFI를 조절하는 <b>추가 제어 변수</b>"라고 명시(Fig 4 논의) — 최적화 가치가 원문 안에서 공인된 셈.</div></div>
+
+<div class="aicard"><h4>④ 베이지안 시간 복원: 눈금판에 신뢰구간 달기</h4>
+<div class="airow"><span class="aik">문제 정형화</span>관측 전압비 → 경과시간 t̂의 역문제. 현행: Boltzmann 4파라미터 점추정 곡선에 비율 대입.</div>
+<div class="airow"><span class="aik">적합 기법</span>계층 베이즈(셀·소자·환경별 파라미터 부분 풀링) 또는 GP 상태공간 — t̂와 함께 <b>사후 신뢰구간</b> 출력. 온습도를 공변량으로.</div>
+<div class="aiev"><b>근거</b>: 시간 오차가 시나리오별 0.18 min(9%)–1.80%–<b>11.00%</b>로 널뛴다(노트 S4 포함 4시나리오) — 단일 전역 곡선의 한계 신호. 특히 B→E(11%)처럼 경로 조합이 복잡한 케이스가 약점인데, 불확실성 정량화 없이는 응용(보안 인터페이스 등)에서 오판 비용을 관리할 수 없다. 곡선 재교정 비용도 베이즈 사전 공유로 절감된다.</div></div>
+
+<div class="aicard"><h4>⑤ 다중터치 확률 디코딩: 곱셈 감쇠 구조를 그래프 모델로</h4>
+<div class="airow"><span class="aik">문제 정형화</span>V₁–V₈ 관측 → (터치 위치 집합, 각 시각)의 사후분포. 물리 규칙: pristine 경로는 0.0960/41 mm씩 곱셈 감쇠(V₄≈0.0960² 실측), MSPC 경로는 눈금판 비율.</div>
+<div class="airow"><span class="aik">적합 기법</span>생성 모델(경로별 감쇠 곱) 기반 베이지안 역문제 — 후보가 이산적이라 정확 추론 가능. 스케일 업 시 소형 NN 디코더+물리 손실.</div>
+<div class="aiev"><b>근거</b>: 원문이 note S3에서 <b>멀티터치를 명시적 미해결 과제로 남겼다</b> — 저자 공인 공백. 그런데 Fig 6G–I의 판독 규칙(인접 1.00 / 1칸 0.096 / 2칸 0.096² / MSPC 경유 예외)이 이미 <b>깨끗한 곱셈 생성 모델</b>이라 확률화가 저비용. 인용문헌에도 ML 촉각(딥러닝 스파스 어레이 등)이 3편 이상 — 저자들이 이 방향을 모르지 않으니 공동연구 제안 형태가 자연스럽다.</div></div>
+
+<div class="aicard"><h4>⑥ 시계 눈금 역설계: t₀·dt를 사양에 맞추기</h4>
+<div class="airow"><span class="aik">문제 정형화</span>용도별 시간 창(초급 제스처 vs 시간급 보안 로그) ← t₀·dt를 재료쌍·두께·대전량으로 설계. 입력 x=(재료쌍, 두께, 프로토콜) → y=(t₀, dt, 신호크기).</div>
+<div class="airow"><span class="aik">적합 기법</span>다목적 BO(시정수 타깃 적합 + 신호 크기 유지) — ①~③의 서러게이트를 재사용하는 통합 파이프라인.</div>
+<div class="aiev"><b>근거</b>: 현 소자의 창은 t₀≈3 min 하나뿐 — 16분 뒤엔 눈금이 뭉개진다(Fig 6D 포화). 응용 문단이 나열한 시나리오(웨어러블 이벤트 검출·신경모방 단기기억·보안 이중인증)는 각기 다른 시간 스케일을 요구하므로 "감쇠 상수의 라이브러리화"가 상용화의 관문이다. 원문 데이터(재료쌍별 감쇠 차이 존재)가 설계 가능성의 1차 증거.</div></div>
+
+<p class="note-line">우선순위 제안: <b>④(데이터 이미 있음, 통계만 얹음) → ①(12점 GP, 주말 프로젝트 규모) → ⑤(note S3 공백 정조준) → ② → ③ → ⑥</b>.
+미팅 멘트 예시 — "Fig 5F에서 pristine 무상관을 정직하게 보여주신 게 인상적이었습니다. 충전 후 상관(5G)을 GP로 다시 학습하면 12개 실측만으로도 나머지 60개 조합의 순위+불확도를 예측할 수 있는데, 다음 소자 선택에 써볼 수 있을지 궁금합니다."</p>
+<div class="readrow"><button class="readbtn" data-read="d-32" aria-pressed="false">읽음으로 표시</button></div><div class="pn"><a href="#deep-30">← #30 EATS 심층</a><a href="#deep">심층분석 목록 →</a></div></section></main></div>
 <nav class="tabbar" aria-label="하단 탭">
 <a href="../../">🏠<span>허브</span></a>
 <a href="#home" data-tv="home">🧭<span>홈</span></a>
@@ -872,6 +1221,7 @@ a.tl-en:hover{color:var(--acc);text-decoration:underline}
 </nav>
 <div id="tb-sheet" hidden>
 <a href="#map">🗺️ 연구 지도 · 계보</a>
+<a href="#deep">🔬 논문 심층분석 2편</a>
 <a href="#wip">🧪 진행중 연구 7건</a>
 <a href="#myresearch">🔗 내 연구와 연결</a>
 <a href="#glossary">📖 용어사전</a>
@@ -883,7 +1233,7 @@ a.tl-en:hover{color:var(--acc);text-decoration:underline}
 var VIEWS={};
 document.querySelectorAll('.view').forEach(function(v){VIEWS[v.id.slice(2)]=v;});
 var navLinks=[].slice.call(document.querySelectorAll('.side nav a'));
-var TOTAL=41;
+var TOTAL=43;
 var APP='mil-onboarding',VP=Vault.progress(APP),VM=Vault.meta(APP);
 Vault.migrateLegacy('mil_read',APP); /* 구 단일키 1회 이관(기획서 §6.4) */
 function store(){return VP.all();}
@@ -913,7 +1263,7 @@ function route(){
  var h=(location.hash||'#home').slice(1);
  if(!VIEWS[h])h='home';
  for(var k in VIEWS){VIEWS[k].hidden=(k!==h);}
- var top=h.indexOf('concept-')===0?'concepts':(h.indexOf('paper-')===0?'papers':(h.indexOf('wip-')===0?'wip':h));
+ var top=h.indexOf('concept-')===0?'concepts':(h.indexOf('paper-')===0?'papers':(h.indexOf('wip-')===0?'wip':(h.indexOf('deep-')===0?'deep':h)));
  navLinks.forEach(function(a){a.classList.toggle('on',a.getAttribute('data-v')===top);});
  document.querySelectorAll('.tabbar [data-tv]').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-tv')===top);});
  var sh=document.getElementById('tb-sheet');if(sh)sh.hidden=true;

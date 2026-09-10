@@ -312,5 +312,38 @@ window.addEventListener('hashchange', handleImportHash);
 window.addEventListener('pageshow', render);
 })();
 </script>
+<!-- 방문 수집 비콘 — 단일 출처 ~/webstats/beacon.template.js, SITE 한 줄만 다름 -->
+<script>
+(function(){
+  var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycby6J7xGChz7atOL6sVnbiWui8Z1lXVjeF8WUGTj3MXNgEn7EioTz8xZXb522vkAxkgeXA/exec';
+  var SITE = 'studyvault';
+  try {
+    if (location.search.indexOf('owner=1') !== -1) {
+      localStorage.setItem('__is_owner__', '1');            /* 내 방문은 이후 영구 제외 */
+    } else if (localStorage.getItem('__is_owner__') !== '1'
+               && location.protocol !== 'file:'             /* 로컬 헤드리스 테스트 차단 */
+               && location.hostname !== 'localhost'
+               && location.hostname !== '127.0.0.1') {
+      var img = new Image();
+      img.src = WEBAPP_URL
+        + '?t=pv&s=' + encodeURIComponent(SITE)
+        + '&p=' + encodeURIComponent(location.pathname + location.hash)
+        + '&r=' + encodeURIComponent(document.referrer || 'direct')
+        + '&v=' + encodeURIComponent(vid());
+    }
+  } catch (e) {}
+
+  /* 익명 방문자 ID. 사람 단위로 세기 위한 것으로, IP·개인정보는 수집하지 않는다.
+     이게 없으면 '몇 명'이 아니라 '페이지뷰 몇 건'밖에 셀 수 없다. */
+  function vid(){
+    try {
+      var k = '__vid__', v = localStorage.getItem(k);
+      if (!v) { v = Math.random().toString(36).slice(2) + Date.now().toString(36);
+                localStorage.setItem(k, v); }
+      return v;
+    } catch (e) { return ''; }
+  }
+})();
+</script>
 </body>
 </html>

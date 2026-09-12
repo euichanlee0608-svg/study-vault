@@ -171,3 +171,20 @@
     migrateLegacy: migrateLegacy
   };
 })(typeof window !== 'undefined' ? window : this);
+
+/* 메모장 로더 — 이 파일을 부르는 모든 페이지에 공용 메모장(notepad.js)을 붙인다.
+ * 여기에 두는 이유: 생성기 산출물(course-*·mil-onboarding)의 HTML 은 직접 고치지 않는다(CLAUDE.md).
+ * 진도 로직과 독립된 블록이라 위쪽 Vault API 는 건드리지 않는다.
+ */
+(function () {
+  'use strict';
+  if (typeof document === 'undefined') return;
+  var me = document.currentScript;
+  var src = (me && me.src) || '';
+  if (!src) return;
+  var next = src.replace(/progress\.js(\?[^#]*)?(#.*)?$/, 'notepad.js$1$2');
+  if (next === src) return;               // 이름이 안 바뀌면 자기 자신을 다시 부르는 셈 — 중단
+  var s = document.createElement('script');
+  s.src = next;
+  (document.head || document.documentElement).appendChild(s);
+})();

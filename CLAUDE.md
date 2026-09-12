@@ -8,10 +8,13 @@
 - **저작권**: public 레포다. 교수 강의노트·교재·기출 원문 전재 금지 — 재서술·수치 변경 창작만. 기출은 유형 분석에만 사용.
 - 진도 병합은 OR(읽음은 지워지지 않는 방향), drill은 상위 상태 유지. `shared/progress.js` 수정 시
   전용 회귀 테스트 파일 없음(레포·스크래치 모두 부재) — 수동으로 병합 동작 재확인.
-- **공용 메모장은 `shared/notepad.js`** (풀이용 떠 있는 창 — 이동·크기조절·접기, 앱별로 따로 저장).
-  키는 `vault:notepad:<appId>`(본문)·`vault:notepad:win`(창 상태). **페이지 HTML 에 `<script>` 를 넣지
-  않는다** — 생성기 산출물을 직접 못 고치므로 `shared/progress.js` 맨 끝 로더가 자기 옆에서 끌어온다.
-  그래서 `progress.js` 의 파일명·경로를 바꾸면 메모장이 통째로 사라진다(로더가 이름으로 찾는다).
+- **떠 있는 메모장은 `shared/notepad.js`** — 화면을 따라다니는 임시 필기장(이동·크기조절·켜고끄기).
+  **일부러 저장하지 않는다**: 새로고침하면 지워지는 게 사양이라 localStorage 를 쓰지 않는다.
+  저장을 붙이자는 요구가 오면 키는 `vault:notepad:*` 로 — 다만 이 사양은 사용자가 명시적으로 고른 것이다
+  (2026-09-12, 저장·과목별 분리 버전을 만들었다가 "그냥 단순한 거"로 되돌림).
+  **페이지 HTML 에 `<script>` 를 넣지 않는다** — 생성기 산출물을 직접 못 고치므로
+  `shared/progress.js` 맨 끝 로더가 자기 옆에서 끌어온다. 그래서 `progress.js` 의 파일명·경로를 바꾸면
+  메모장이 통째로 사라진다(로더가 이름으로 찾는다).
   둘 중 하나라도 고치면 `tests/test_notepad.py` 를 통과시킨다(`tests/README.md` 에 실행법).
 - 반응형(course-*·mil-onboarding): 데스크톱 ≥960px 사이드바형 / 모바일 <960px 하단 탭바(44px 터치 타깃, safe-area, 본문 16px+). 허브(index.html)·optimal-design은 다른 모바일 레이아웃.
 - 배포: GitHub Pages (main / root). `.nojekyll` 필수.

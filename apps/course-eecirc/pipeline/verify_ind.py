@@ -966,3 +966,31 @@ def _(p):
 def _(p):
     Vfl = p["VT"]*p["RLmin"]/(p["RT"]+p["RLmin"])
     return {"Vnl": float(p["VT"]), "Vfl": Vfl, "reg": (p["VT"]-Vfl)/Vfl*100.0}
+
+# ---- U1 보강 (Orientation-2026, 2026-09-14) — 문항 문장만 보고 별도 에이전트가 작성 ----
+@reg("u1-l2-16")
+def _(p):
+    d, f = p["d"], p["f"]
+    assert d > 0 and f > 0, "치수·주파수는 양수여야 함"
+    c = 3e8
+    lam = c / (f * 1e6)          # f[MHz] -> Hz, lam[m]
+    ratio = (d / 100.0) / lam    # d[cm] -> m
+    return {"lam": lam, "ratio": ratio}
+
+@reg("u1-l3-15")
+def _(p):
+    Im, Rg, Vs = p["Im"], p["Rg"], p["Vs"]
+    assert Im > 0 and Rg > 0 and Vs > 0, "전류·저항·전압은 양수여야 함"
+    dV = Im * Rg  # V = I[A]*R[mOhm]*1e-3[Ohm] = I*R [mV] (센서측 전류 무시, 공유 도선 전압강하)
+    pct = (dV / 1000.0) / Vs * 100.0
+    return {"dV": dV, "pct": pct}
+
+@reg("u1-l3-16")
+def _(p):
+    P, Rw, Rb = p["P"], p["Rw"], p["Rb"]
+    assert P > 0 and Rw >= 0 and Rb >= 0, "정격전력은 양수, 저항은 음수 불가"
+    Rlamp = 12.0**2 / P  # 정격(12V 기준)에서 역산한 고정 저항 모델
+    I = 12.0 / (Rlamp + Rw + Rb)
+    VL = I * Rlamp
+    PL = I * VL
+    return {"I": I, "VL": VL, "PL": PL}

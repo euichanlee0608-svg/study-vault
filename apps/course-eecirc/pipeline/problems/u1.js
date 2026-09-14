@@ -188,6 +188,15 @@ SV_BANK.push({
         '에너지 보존: 회로 전체 흡수 전력 합 = 0 (공급은 음의 흡수).',
         'p₃(공급) = '+p.P1+' + '+p.P2+' = '+SVH.fmt(P)+' W' ] }; },
     hints:['회로 전체에서 전력의 총합은 0이다.','흡수 합 = 공급 합'] },
+  { id:'u1-l2-16', level:2, type:'num', tags:['집중소자 판정'], src:'창작 문제(검산됨)',
+    params:{ f:{choices:[0.001,1,10,100,1000],unit:'MHz'}, d:{choices:[5,10,30],unit:'cm'} },
+    statement:function(p){ return '회로 기판의 최대 치수가 d = '+p.d+' cm이고 신호 주파수가 f = '+p.f+' MHz다. 자유공간 전파속도 \\(c=3\\times10^8\\) m/s로 (a) 파장 λ [m] (b) 비 d/λ (무차원)을 구하라. (경험칙: d/λ < 0.1이면 집중소자 해석 가능)'; },
+    solve:function(p){ var lam=3e8/(p.f*1e6), ratio=(p.d/100)/lam;
+      return { ans:{lam:lam, ratio:ratio}, unit:{lam:'m', ratio:''}, steps:[
+        '\\(\\lambda = c/f\\) = 3×10⁸ / ('+p.f+'×10⁶) = '+SVH.fmt(lam)+' m',
+        'd/λ = '+SVH.fmt(p.d/100)+' m / '+SVH.fmt(lam)+' m = '+SVH.fmt(ratio),
+        ratio<0.1 ? '0.1보다 작다 → 집중소자(KCL·KVL) 해석 가능' : '0.1 이상 → 도선 위치마다 전압이 달라지는 분포정수 영역, 회로이론만으로는 부족' ] }; },
+    hints:['MHz→Hz, cm→m 단위부터 맞춘다.','같은 기판도 주파수가 올라가면 "커진다".'] },
 
   /* ---------- L3 응용·복합 (10) ---------- */
   { id:'u1-l3-01', level:3, type:'num', tags:['미분','전력'], src:'창작 문제(검산됨)',
@@ -368,6 +377,26 @@ SV_BANK.push({
         '구동 시간 = '+SVH.fmt(Wh)+'/'+p.P+' = '+SVH.fmt(h)+' h',
         '(Ah는 전하 용량, Wh가 에너지 — 단위 구분이 채점 포인트)' ] }; },
     hints:['Ah×V=Wh.'] },
+  { id:'u1-l3-15', level:3, type:'num', tags:['그라운드 루프','계측 오차'], src:'창작 문제(검산됨)',
+    params:{ Im:{choices:[1,2,5],unit:'A'}, Rg:{choices:[20,50,100],unit:'mΩ'}, Vs:{choices:[0.5,1,2],unit:'V'} },
+    statement:function(p){ return '센서 출력 '+p.Vs+' V를 측정하는데, 센서의 접지 귀환선과 모터의 귀환선이 저항 \\(R_g='+p.Rg+'\\) mΩ인 도선 한 가닥을 공유한다. 모터 전류 '+p.Im+' A가 이 도선을 흐를 때 측정기에 더해지는 전압 오차 ΔV [mV]와, 센서 출력 대비 오차 비율 [%]을 구하라. (센서 측 전류는 무시)'; },
+    solve:function(p){ var dV=p.Im*p.Rg, pct=dV/(p.Vs*1000)*100;
+      return { ans:{dV:dV, pct:pct}, unit:{dV:'mV', pct:'%'}, steps:[
+        '공유 도선에는 모터 전류가 흐른다 → 도선 양끝 사이 전압강하 \\(\\Delta V = I_m R_g\\) (옴 법칙)',
+        '측정기의 기준(−)이 이 도선의 반대편에 물려 있으므로 강하분이 신호에 그대로 더해진다',
+        'ΔV = '+p.Im+' A × '+p.Rg+' mΩ = '+SVH.fmt(dV)+' mV (A×mΩ = mV)',
+        '비율 = '+SVH.fmt(dV)+' mV / '+SVH.fmt(p.Vs*1000)+' mV = '+SVH.fmt(pct)+' % — 해법: 센서 접지를 따로 빼서 한 점에서 잇기(그라운드 루프·공유 경로 제거)' ] }; },
+    hints:['접지선도 저항이다 — 흐르는 전류가 누구 것인지 보라.','A × mΩ = mV.'] },
+  { id:'u1-l3-16', level:3, type:'num', tags:['차체 귀환','전력'], src:'창작 문제(검산됨)',
+    params:{ P:{choices:[21,55],unit:'W'}, Rw:{choices:[0.1,0.2],unit:'Ω'}, Rb:{choices:[0.05,0.1,0.3],unit:'Ω'} },
+    statement:function(p){ return '12 V 배터리, 정격 '+p.P+' W(12 V 기준) 헤드램프. 공급 전선 저항 '+p.Rw+' Ω, 차체 귀환 경로 저항 '+p.Rb+' Ω. 램프를 정격값에서 구한 고정 저항으로 모델링할 때 (a) 회로 전류 I [A] (b) 램프 양단 전압 \\(V_L\\) [V] (c) 램프 실제 소비 전력 \\(P_L\\) [W]을 구하라.'; },
+    solve:function(p){ var RL=12*12/p.P, I=12/(RL+p.Rw+p.Rb), VL=I*RL, PL=I*I*RL;
+      return { ans:{I:I, VL:VL, PL:PL}, unit:{I:'A', VL:'V', PL:'W'}, steps:[
+        '램프 저항: \\(R_L = V^2/P\\) = 144/'+p.P+' = '+SVH.fmt(RL)+' Ω',
+        '차체 귀환도 직렬 경로의 일부: \\(R_{tot} = R_w + R_L + R_b\\) = '+SVH.fmt(p.Rw+RL+p.Rb)+' Ω → I = 12/R_tot = '+SVH.fmt(I)+' A',
+        '분압: \\(V_L = I R_L\\) = '+SVH.fmt(VL)+' V (배선·차체에서 '+SVH.fmt(12-VL)+' V 손실)',
+        '\\(P_L = I^2 R_L\\) = '+SVH.fmt(PL)+' W — 정격보다 작다. 차체 접점이 부식돼 R_b가 커지면 램프가 어두워지는 이유' ] }; },
+    hints:['차체는 "0 Ω 접지"가 아니라 저항 있는 귀환 도선이다.','전선·램프·차체 직렬 한 루프.'] },
   { id:'u1-l4-06', level:4, type:'num', tags:['종속전원 전력 종합'], src:'기출 유형',
     params:{ Is:{min:2,max:4,step:1,unit:'A'}, R1:{min:2,max:6,step:2,unit:'Ω'}, k:{choices:[0.5,1.5]} },
     statement:function(p){ return '절점 v: 전류원 '+p.Is+' A 유입, R₁='+p.R1+' Ω로 접지, 종속 전류원 '+p.k+'v [A]가 절점에서 접지로. (a) v (b) 각 소자의 전력(공급 +/흡수 −로 부호 명시: 전류원, R₁, 종속 전원)을 구하고 합이 0임을 보여라.'; },

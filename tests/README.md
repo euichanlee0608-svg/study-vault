@@ -17,3 +17,13 @@ python3 -m venv /tmp/cdpvenv && /tmp/cdpvenv/bin/pip -q install websocket-client
 ```
 
 크롬 경로는 스크립트 상단 `CHROME` 상수에 있다(맥 기본 설치 경로).
+
+## test_vault_ops.py — 출제 인수인계 도구 회귀
+
+`apps/_course_kit/vault_ops.py` 또는 `verify_core.coverage_rows` 를 고치면 돌린다. 임시 폴더로 드라이브를
+흉내 내 새 파일·수정·사라짐·skip 판정, 체크포인트(task start/step/done), HANDOFF 손메모 보존, 커버리지 계산을 확인한다.
+드라이브·node·venv 불필요.
+
+```bash
+python3 tests/test_vault_ops.py     # 전부 통과하면 종료코드 0
+```

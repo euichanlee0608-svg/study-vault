@@ -5,6 +5,11 @@
 - **생성기가 있는 앱은 HTML 직접 수정 금지** — 각 앱 README의 재빌드 방법을 따른다.
   - mil-onboarding: 드라이브 `StudyVault_준비/pipeline_mil/` (레포 밖 — 논문 전문 포함이라 공개 레포에 못 넣음). 단, 레포의 `index.html`에는 Vault 이식 패치(`shared/progress.js` 연동·모바일 탭바)가 얹혀 있어 재빌드 시 같은 패치를 다시 적용해야 한다(앱 README 참고).
   - course-*: 앱 폴더 안 `pipeline/` — **`verify_problems.py` 게이트 통과 없이 빌드 금지**, 검산 통과 문제만 탑재.
+- **출제·시험대비 요청이면 먼저 `python3 apps/_course_kit/vault_ops.py status`** → 그 출력과 `docs/HANDOFF.md` 손메모 →
+  `docs/PROBLEM_SPEC.md`. 출제 규칙은 SPEC 이 정본이라 게이트 코드를 다시 읽지 않는다. 드라이브 자료는 대장에
+  🆕·✏️·⏳ 로 뜬 것만 연다. **출제 중엔 한 레벨 묶음(≤10문항)마다 `task step` + 로컬 커밋** — 세션이 토큰 한도로
+  끊겨도 다음 세션이 `▶ 진행 중 작업` 에서 이어간다. 독립 재계산(`verify_ind.py`)은 `solve` 를 안 보여준 별도
+  에이전트가 쓴다(SPEC §5). 도구를 고치면 `python3 tests/test_vault_ops.py`.
 - **저작권**: public 레포다. 교수 강의노트·교재·기출 원문 전재 금지 — 재서술·수치 변경 창작만. 기출은 유형 분석에만 사용.
 - 진도 병합은 OR(읽음은 지워지지 않는 방향), drill은 상위 상태 유지. `shared/progress.js` 수정 시
   전용 회귀 테스트 파일 없음(레포·스크래치 모두 부재) — 수동으로 병합 동작 재확인.

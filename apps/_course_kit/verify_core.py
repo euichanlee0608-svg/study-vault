@@ -16,6 +16,19 @@ def close(a, b):
     if isinstance(a, bool) or isinstance(b, bool): return a == b
     return math.isfinite(a) and math.isfinite(b) and abs(a-b) <= max(ATOL, RTOL*max(abs(a), abs(b)))
 
+def coverage_rows(problems, cov):
+    """coverage.json 키워드마다 (unit 한정) tags 가 match 를 부분일치(공백 무시)하는 문항 수.
+    반환 [(kw, unit, n, min, src)] — 규약 docs/PROBLEM_SPEC.md §6"""
+    norm = lambda s: re.sub(r"\s", "", s)
+    rows = []
+    for k in cov.get("keywords", []):
+        pats = [norm(m) for m in (k.get("match") or [k["kw"]])]
+        n = sum(1 for p in problems
+                if (not k.get("unit") or p["unit"] == k["unit"])
+                and any(m in norm(t) for t in p.get("tags", []) for m in pats))
+        rows.append((k["kw"], k.get("unit", ""), n, k.get("min", 3), k.get("src", "")))
+    return rows
+
 def run(app_dir: Path, IND: dict, N: str = "50"):
     r = subprocess.run(["node", str(KIT/"verify_runner.mjs"), str(app_dir), N],
                        capture_output=True, text=True)
@@ -90,6 +103,14 @@ def run(app_dir: Path, IND: dict, N: str = "50"):
         if short: warns.append(f"U{u['no']}: 하한 미달 {short}")
     total = sum(sum(int(v) for v in u["counts"].values()) for u in data["units"])
     lines.append(f"\n총 {total}문제 · 검산 샘플 N={N}/문제")
+    cov_path = app_dir/"coverage.json"
+    if cov_path.exists():
+        lines += ["", "### 시험범위 커버리지 (coverage.json)", "", "| 키워드 | 단원 | 문항 | 하한 | 근거 자료 |", "|---|---|---|---|---|"]
+        for kw, unit, n, mn, src in coverage_rows(data["problems"], json.loads(cov_path.read_text())):
+            lines.append(f"| {kw} | {unit or '전체'} | {n} {'✅' if n >= mn else '⚠️'} | {mn} | {src} |")
+            if n < mn: warns.append(f"커버리지 미달: {kw}({unit or '전체'}) {n}/{mn}")
+    else:
+        warns.append("coverage.json 없음 — 시험범위 커버리지 미측정 (PROBLEM_SPEC §6)")
     (app_dir/"quantity_table.md").write_text("\n".join(lines), encoding="utf-8")
 
     nnum = sum(1 for p in data["problems"] if p["type"] == "num")

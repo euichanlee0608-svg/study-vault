@@ -1,0 +1,137 @@
+{
+ "files": {
+  "[MECH387] Lec0_Syllabus.pdf": {
+   "course": "course-control",
+   "status": "used",
+   "mtime": 1788356627,
+   "size": 566772,
+   "marked_at": "2026-09-14 18:31",
+   "note": "11p 판독(2026-09-03) → sources/강의자료분석.md, U1~U7 280문항"
+  },
+  "[MECH387] Lec1_Introduction.pdf": {
+   "course": "course-control",
+   "status": "used",
+   "mtime": 1788356627,
+   "size": 760068,
+   "marked_at": "2026-09-14 18:31",
+   "note": "26p 판독(2026-09-03) → sources/강의자료분석.md"
+  },
+  "2026Fall_확률및랜덤과정_WEEK1.pdf": {
+   "course": "course-prob",
+   "status": "used",
+   "mtime": 1788434671,
+   "size": 909975,
+   "marked_at": "2026-09-14 18:31",
+   "note": "9p 판독(2026-09-03) → sources/강의자료분석.md, U1~U6 240문항 · coverage.json 16키워드"
+  },
+  "Screenshot_20260902_224558_LearningX Student.jpg": {
+   "course": "course-ml",
+   "status": "used",
+   "mtime": 1788356849,
+   "size": 498695,
+   "marked_at": "2026-09-14 18:31",
+   "note": "LearningX 강의계획서 판독(2026-09-02) → sources/강의자료분석.md, U1~U6 240문항"
+  },
+  "Screenshot_20260902_224604_LearningX Student.jpg": {
+   "course": "course-ml",
+   "status": "used",
+   "mtime": 1788356848,
+   "size": 352003,
+   "marked_at": "2026-09-14 18:31",
+   "note": "LearningX 강의계획서 판독(2026-09-02)"
+  },
+  "전전개 기출.pdf": {
+   "course": "course-eecirc",
+   "status": "used",
+   "mtime": 1788356627,
+   "size": 1675367,
+   "marked_at": "2026-09-14 18:31",
+   "note": "중간 1세트 유형 분석(2026-09-02) → sources/기출분석.md"
+  },
+  "전전개 기출_1.pdf": {
+   "course": "course-eecirc",
+   "status": "used",
+   "mtime": 1788356627,
+   "size": 1986812,
+   "marked_at": "2026-09-14 18:31",
+   "note": "기말 교정본 유형 분석(2026-09-02)"
+  },
+  "전전개 기말 기출.pdf": {
+   "course": "course-eecirc",
+   "status": "used",
+   "mtime": 1788356627,
+   "size": 519775,
+   "marked_at": "2026-09-14 18:31",
+   "note": "기말 문제지 유형 분석(2026-09-02)"
+  },
+  "Orientation-2026.pdf": {
+   "course": "course-eecirc",
+   "status": "unread",
+   "mtime": 1788356627,
+   "size": 2548690,
+   "marked_at": "2026-09-14 18:31",
+   "note": "전전개 오리엔테이션 27p — 표지만 확인, 범위·평가 미판독"
+  },
+  "CHAPTER 2 basic quantum mechanics-2026.pdf": {
+   "course": "",
+   "status": "skip",
+   "mtime": 1788356627,
+   "size": 1676843,
+   "marked_at": "2026-09-14 18:32",
+   "note": "수강취소 과목(나노공학 추정) 자료 — 아니면 mark 로 과목 지정"
+  }
+ },
+ "task": null,
+ "log": [
+  [
+   "2026-09-14 18:31",
+   "course-control",
+   "used: [MECH387] Lec0_Syllabus.pdf — 11p 판독(2026-09-03) → sources/강의자료분석.md, U1~U7 280문항"
+  ],
+  [
+   "2026-09-14 18:31",
+   "course-control",
+   "used: [MECH387] Lec1_Introduction.pdf — 26p 판독(2026-09-03) → sources/강의자료분석.md"
+  ],
+  [
+   "2026-09-14 18:31",
+   "course-prob",
+   "used: 2026Fall_확률및랜덤과정_WEEK1.pdf — 9p 판독(2026-09-03) → sources/강의자료분석.md, U1~U6 240문항 · coverage.json 16키워드"
+  ],
+  [
+   "2026-09-14 18:31",
+   "course-ml",
+   "used: Screenshot_20260902_224558_LearningX Student.jpg — LearningX 강의계획서 판독(2026-09-02) → sources/강의자료분석.md, U1~U6 240문항"
+  ],
+  [
+   "2026-09-14 18:31",
+   "course-ml",
+   "used: Screenshot_20260902_224604_LearningX Student.jpg — LearningX 강의계획서 판독(2026-09-02)"
+  ],
+  [
+   "2026-09-14 18:31",
+   "course-eecirc",
+   "used: 전전개 기출.pdf — 중간 1세트 유형 분석(2026-09-02) → sources/기출분석.md"
+  ],
+  [
+   "2026-09-14 18:31",
+   "course-eecirc",
+   "used: 전전개 기출_1.pdf — 기말 교정본 유형 분석(2026-09-02)"
+  ],
+  [
+   "2026-09-14 18:31",
+   "course-eecirc",
+   "used: 전전개 기말 기출.pdf — 기말 문제지 유형 분석(2026-09-02)"
+  ],
+  [
+   "2026-09-14 18:31",
+   "course-eecirc",
+   "unread: Orientation-2026.pdf — 전전개 오리엔테이션 27p — 표지만 확인, 범위·평가 미판독"
+  ],
+  [
+   "2026-09-14 18:32",
+   "-",
+   "skip: CHAPTER 2 basic quantum mechanics-2026.pdf — 수강취소 과목(나노공학 추정) 자료 — 아니면 mark 로 과목 지정"
+  ]
+ ]
+}

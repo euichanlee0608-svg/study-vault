@@ -1,0 +1,62 @@
+# 출제 인수인계 (Study Vault 과목앱)
+
+새 세션은 레포 루트에서 **`python3 apps/_course_kit/vault_ops.py status`** 로 아래 자동 섹션을 갱신·출력한다.
+규약은 `docs/PROBLEM_SPEC.md`. 손으로 쓰는 곳은 맨 아래 "메모"뿐이다.
+
+<!-- AUTO:BEGIN -->
+_자동 생성 — `vault_ops.py` 가 명령마다 덮어쓴다. 손으로 고치지 말 것. 갱신 2026-09-14 18:32_
+
+### ▶ 진행 중 작업 (끊긴 세션은 여기서 이어간다)
+- 없음
+
+### 📥 드라이브 자료 대장
+- ⏳ 안 읽음: `Orientation-2026.pdf` → course-eecirc
+
+<details><summary>읽은 자료 8건 · 제외 1건</summary>
+
+- `2026Fall_확률및랜덤과정_WEEK1.pdf` · course-prob · used · 2026-09-14 18:31 — 9p 판독(2026-09-03) → sources/강의자료분석.md, U1~U6 240문항 · coverage.json 16키워드
+- `Screenshot_20260902_224558_LearningX Student.jpg` · course-ml · used · 2026-09-14 18:31 — LearningX 강의계획서 판독(2026-09-02) → sources/강의자료분석.md, U1~U6 240문항
+- `Screenshot_20260902_224604_LearningX Student.jpg` · course-ml · used · 2026-09-14 18:31 — LearningX 강의계획서 판독(2026-09-02)
+- `[MECH387] Lec0_Syllabus.pdf` · course-control · used · 2026-09-14 18:31 — 11p 판독(2026-09-03) → sources/강의자료분석.md, U1~U7 280문항
+- `[MECH387] Lec1_Introduction.pdf` · course-control · used · 2026-09-14 18:31 — 26p 판독(2026-09-03) → sources/강의자료분석.md
+- `전전개 기말 기출.pdf` · course-eecirc · used · 2026-09-14 18:31 — 기말 문제지 유형 분석(2026-09-02)
+- `전전개 기출.pdf` · course-eecirc · used · 2026-09-14 18:31 — 중간 1세트 유형 분석(2026-09-02) → sources/기출분석.md
+- `전전개 기출_1.pdf` · course-eecirc · used · 2026-09-14 18:31 — 기말 교정본 유형 분석(2026-09-02)
+
+</details>
+
+### 📚 과목별 현황 (각 앱 quantity_table.md)
+
+| 과목 | 문제 | 경고(하한·커버리지) | coverage.json |
+|---|---|---|---|
+| course-control | 280 | 0 | ✗ |
+| course-eecirc | 308 | 0 | ✗ |
+| course-ml | 240 | 0 | ✗ |
+| course-prob | 240 | 0 | ✅ |
+
+### 🧾 최근 기록
+- 2026-09-14 18:31 · course-control · used: [MECH387] Lec0_Syllabus.pdf — 11p 판독(2026-09-03) → sources/강의자료분석.md, U1~U7 280문항
+- 2026-09-14 18:31 · course-control · used: [MECH387] Lec1_Introduction.pdf — 26p 판독(2026-09-03) → sources/강의자료분석.md
+- 2026-09-14 18:31 · course-prob · used: 2026Fall_확률및랜덤과정_WEEK1.pdf — 9p 판독(2026-09-03) → sources/강의자료분석.md, U1~U6 240문항 · coverage.json 16키워드
+- 2026-09-14 18:31 · course-ml · used: Screenshot_20260902_224558_LearningX Student.jpg — LearningX 강의계획서 판독(2026-09-02) → sources/강의자료분석.md, U1~U6 240문항
+- 2026-09-14 18:31 · course-ml · used: Screenshot_20260902_224604_LearningX Student.jpg — LearningX 강의계획서 판독(2026-09-02)
+- 2026-09-14 18:31 · course-eecirc · used: 전전개 기출.pdf — 중간 1세트 유형 분석(2026-09-02) → sources/기출분석.md
+- 2026-09-14 18:31 · course-eecirc · used: 전전개 기출_1.pdf — 기말 교정본 유형 분석(2026-09-02)
+- 2026-09-14 18:31 · course-eecirc · used: 전전개 기말 기출.pdf — 기말 문제지 유형 분석(2026-09-02)
+- 2026-09-14 18:31 · course-eecirc · unread: Orientation-2026.pdf — 전전개 오리엔테이션 27p — 표지만 확인, 범위·평가 미판독
+- 2026-09-14 18:32 · - · skip: CHAPTER 2 basic quantum mechanics-2026.pdf — 수강취소 과목(나노공학 추정) 자료 — 아니면 mark 로 과목 지정
+<!-- AUTO:END -->
+
+## 메모 (손으로 쓰는 곳 — 판단·범위·다음 할 일)
+
+### 과목별 출제 범위
+- **course-prob** 확률및랜덤과정 — 중간범위 U1~U6 240문항(WEEK1 개요 기준). 중간 10/21. coverage.json 있음(WEEK1 키워드 16개, 전부 충족).
+  후반기(연속시간 마르코프·출생사망·대기행렬)는 기말용으로 아직 없음.
+- **course-control** 자동제어 — 중간범위 U1~U7 280문항(Lec0·Lec1 기준). 중간 10/22. coverage.json 없음.
+- **course-eecirc** 전전개 — U1~U7 308문항(기출 3부 유형 기준). **Orientation-2026.pdf(27p) 미판독** — 범위·평가 확인 필요. coverage.json 없음.
+- **course-ml** 기계학습 — 중간범위 U1~U6 240문항(강의계획서 스크린샷 기준). 중간 날짜 미공지. coverage.json 없음.
+
+### 다음 할 일
+1. 새 자료가 올라오면 SPEC §1 순서대로: 분석 md → coverage.json → mark → ⚠️ 키워드만 출제.
+2. coverage.json 없는 3과목은 그 과목을 다시 만질 때 기존 `sources/*.md` 키워드로 먼저 작성한다.
+3. 기존 1,068문항은 재계산 분리 규약(SPEC §5) 이전 작성분 — 자료로 오류가 드러난 문항만 재작성.

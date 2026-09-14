@@ -7,16 +7,15 @@
 _자동 생성 — `vault_ops.py` 가 명령마다 덮어쓴다. 손으로 고치지 말 것. 갱신 2026-09-14 21:58_
 
 ### ▶ 진행 중 작업 (끊긴 세션은 여기서 이어간다)
-- **course-eecirc** — Orientation-2026 반영: 강의자료분석.md·coverage.json 신설 → ⚠️ 키워드(집중소자·접지·실습도구·계측) 보강 출제 (시작 2026-09-14 21:53)
-  - 2026-09-14 21:56 배치1 U1 L1 11~17 작성(집중소자·접지3·실습도구2·계측) — 게이트 PASS
-  - 2026-09-14 21:58 배치2 U1 L2-16·L3-15·16 수치문항(집중소자 판정·공유접지 오차·차체귀환) + 재계산은 별도 에이전트(solve 비공개) + 개념 U1 §5 — 게이트 PASS
+- 없음
 
 ### 📥 드라이브 자료 대장
-- ⏳ 안 읽음: `Orientation-2026.pdf` → course-eecirc
+- 변화 없음 — 등록된 자료가 모두 반영됐다
 
-<details><summary>읽은 자료 8건 · 제외 1건</summary>
+<details><summary>읽은 자료 9건 · 제외 1건</summary>
 
 - `2026Fall_확률및랜덤과정_WEEK1.pdf` · course-prob · used · 2026-09-14 18:31 — 9p 판독(2026-09-03) → sources/강의자료분석.md, U1~U6 240문항 · coverage.json 16키워드
+- `Orientation-2026.pdf` · course-eecirc · used · 2026-09-14 21:58 — 27p 텍스트 판독(2026-09-14) → sources/강의자료분석.md·coverage.json 25키워드, U1 +10문항·개념 §5
 - `Screenshot_20260902_224558_LearningX Student.jpg` · course-ml · used · 2026-09-14 18:31 — LearningX 강의계획서 판독(2026-09-02) → sources/강의자료분석.md, U1~U6 240문항
 - `Screenshot_20260902_224604_LearningX Student.jpg` · course-ml · used · 2026-09-14 18:31 — LearningX 강의계획서 판독(2026-09-02)
 - `[MECH387] Lec0_Syllabus.pdf` · course-control · used · 2026-09-14 18:31 — 11p 판독(2026-09-03) → sources/강의자료분석.md, U1~U7 280문항
@@ -47,6 +46,8 @@ _자동 생성 — `vault_ops.py` 가 명령마다 덮어쓴다. 손으로 고�
 - 2026-09-14 18:31 · course-eecirc · used: 전전개 기말 기출.pdf — 기말 문제지 유형 분석(2026-09-02)
 - 2026-09-14 18:31 · course-eecirc · unread: Orientation-2026.pdf — 전전개 오리엔테이션 27p — 표지만 확인, 범위·평가 미판독
 - 2026-09-14 18:32 · - · skip: CHAPTER 2 basic quantum mechanics-2026.pdf — 수강취소 과목(나노공학 추정) 자료 — 아니면 mark 로 과목 지정
+- 2026-09-14 21:58 · course-eecirc · used: Orientation-2026.pdf — 27p 텍스트 판독(2026-09-14) → sources/강의자료분석.md·coverage.json 25키워드, U1 +10문항·개념 §5
+- 2026-09-14 21:58 · course-eecirc · 전전개 Orientation 반영 완료: 308→318문항, coverage 25키워드 전부 충족, 빌드 PASS(N=50)
 <!-- AUTO:END -->
 
 ## 메모 (손으로 쓰는 곳 — 판단·범위·다음 할 일)
@@ -55,7 +56,8 @@ _자동 생성 — `vault_ops.py` 가 명령마다 덮어쓴다. 손으로 고�
 - **course-prob** 확률및랜덤과정 — 중간범위 U1~U6 240문항(WEEK1 개요 기준). 중간 10/21. coverage.json 있음(WEEK1 키워드 16개, 전부 충족).
   후반기(연속시간 마르코프·출생사망·대기행렬)는 기말용으로 아직 없음.
 - **course-control** 자동제어 — 중간범위 U1~U7 280문항(Lec0·Lec1 기준). 중간 10/22. coverage.json 없음.
-- **course-eecirc** 전전개 — U1~U7 308문항(기출 3부 유형 기준). **Orientation-2026.pdf(27p) 미판독** — 범위·평가 확인 필요. coverage.json 없음.
+- **course-eecirc** 전전개 — U1~U7 318문항(기출 3부 유형 + Orientation 주차표). 중간 8주차(날짜 미공지), 평가 중간40·기말40·과제10·퀴즈출석10, 실험 3회.
+  coverage.json 25키워드 전부 충족(2026-09-14). 기말(OP-amp·반도체·신호시스템)은 아직 없음. 강의노트는 Blackboard 게시 예정 → 올라오면 주차별 키워드 추가.
 - **course-ml** 기계학습 — 중간범위 U1~U6 240문항(강의계획서 스크린샷 기준). 중간 날짜 미공지. coverage.json 없음.
 
 ### 다음 할 일

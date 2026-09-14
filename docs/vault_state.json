@@ -66,11 +66,11 @@
   },
   "Orientation-2026.pdf": {
    "course": "course-eecirc",
-   "status": "unread",
+   "status": "used",
    "mtime": 1788356627,
    "size": 2548690,
-   "marked_at": "2026-09-14 18:31",
-   "note": "전전개 오리엔테이션 27p — 표지만 확인, 범위·평가 미판독"
+   "marked_at": "2026-09-14 21:58",
+   "note": "27p 텍스트 판독(2026-09-14) → sources/강의자료분석.md·coverage.json 25키워드, U1 +10문항·개념 §5"
   },
   "CHAPTER 2 basic quantum mechanics-2026.pdf": {
    "course": "",
@@ -81,21 +81,7 @@
    "note": "수강취소 과목(나노공학 추정) 자료 — 아니면 mark 로 과목 지정"
   }
  },
- "task": {
-  "course": "course-eecirc",
-  "goal": "Orientation-2026 반영: 강의자료분석.md·coverage.json 신설 → ⚠️ 키워드(집중소자·접지·실습도구·계측) 보강 출제",
-  "started": "2026-09-14 21:53",
-  "steps": [
-   [
-    "2026-09-14 21:56",
-    "배치1 U1 L1 11~17 작성(집중소자·접지3·실습도구2·계측) — 게이트 PASS"
-   ],
-   [
-    "2026-09-14 21:58",
-    "배치2 U1 L2-16·L3-15·16 수치문항(집중소자 판정·공유접지 오차·차체귀환) + 재계산은 별도 에이전트(solve 비공개) + 개념 U1 §5 — 게이트 PASS"
-   ]
-  ]
- },
+ "task": null,
  "log": [
   [
    "2026-09-14 18:31",
@@ -146,6 +132,16 @@
    "2026-09-14 18:32",
    "-",
    "skip: CHAPTER 2 basic quantum mechanics-2026.pdf — 수강취소 과목(나노공학 추정) 자료 — 아니면 mark 로 과목 지정"
+  ],
+  [
+   "2026-09-14 21:58",
+   "course-eecirc",
+   "used: Orientation-2026.pdf — 27p 텍스트 판독(2026-09-14) → sources/강의자료분석.md·coverage.json 25키워드, U1 +10문항·개념 §5"
+  ],
+  [
+   "2026-09-14 21:58",
+   "course-eecirc",
+   "전전개 Orientation 반영 완료: 308→318문항, coverage 25키워드 전부 충족, 빌드 PASS(N=50)"
   ]
  ]
 }

@@ -5,6 +5,6 @@
   "sub": "Rizzoni · 중간범위",
   "eyebrow": "Introduction to Electrical Engineering · 중간범위",
   "readme_intro": "전자전기공학개론(Rizzoni 7판) **중간범위** 문제풀이 앱 — Course Mastery 아키타입.",
-  "extract": "기출 스캔 3부 비전 판독 → 유형·배점·스타일 분석만 기록(`pipeline/sources/기출분석.md`, 원문 미전재) + Rizzoni 범위 골격",
-  "status": "## 상태\n\n- U1~U7 중간범위 전체 + 정석급 개편(L3·L4 증강) 적용\n- 전전개 중간고사 날짜 공지 시 `apps.json`의 `exams`에 기입 → 허브 D-day 자동 표시"
+  "extract": "기출 스캔 3부 비전 판독 → 유형·배점·스타일 분석(`pipeline/sources/기출분석.md`) + Orientation-2026.pdf 27p → 교재(Rizzoni 7판)·평가·주차표·강조 개념(`pipeline/sources/강의자료분석.md`), 모두 원문 미전재. 시험범위 키워드는 `pipeline/coverage.json`",
+  "status": "## 상태\n\n- U1~U7 중간범위 전체(= 오리엔테이션 주차표 2~7주차) + 정석급 개편(L3·L4 증강) 적용\n- 2026-09-14 Orientation 반영: U1 집중소자·접지·실습도구·계측 10문항 + 개념 §5\n- 중간고사는 8주차(날짜 미공지) — 공지 시 `apps.json`의 `exams`에 기입 → 허브 D-day 자동 표시"
 }

@@ -137,6 +137,10 @@
    [
     "2026-09-14 23:00",
     "인프라: 게이트 개념모드(meta.gate floor·ref필수·blind_errors·SV_STRICT)+러너 blind export/sig+SPEC §10+테스트 4건, 기존 4과목 회귀 PASS. course-bio 골격·coverage 27키워드·content 1~5강. 배치 u1 L1·L4 9문항 게이트 PASS(블라인드 대기)"
+   ],
+   [
+    "2026-09-14 23:04",
+    "배치 u1 L2 8 · u2 L1·L4 9 · u3 L1·L4 9 작성, 게이트 PASS(블라인드 대기)"
    ]
   ]
  },

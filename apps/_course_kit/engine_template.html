@@ -246,6 +246,8 @@ var APP='[[APP_ID]]', VP=Vault.progress(APP), VD=Vault.drill(APP), VM=Vault.meta
 var UNITS=SV_BANK, BYID={}, ALL=[];
 UNITS.forEach(function(u){ u.problems.forEach(function(p){ p._unit=u; BYID[p.id]=p; ALL.push(p); }); });
 var LAYERS=['concept','derive','worked'], LAYER_KO={concept:'개념',derive:'수식·유도',worked:'풀이된 예제'};
+/* 빈 레이어는 숨긴다 — 개념 과목(course-bio)은 derive·worked 가 없다 */
+function hasLayer(c,l){ return l==='concept' || (l==='derive' ? (c.derive||[]).length>0 : !!c[l]); }
 var $=function(s,el){ return (el||document).querySelector(s); };
 var esc=function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); };
 function typeset(el){
@@ -281,7 +283,7 @@ function ansText(r){
 }
 
 /* ---------- 진도 ---------- */
-function readItems(){ var ids=[]; UNITS.forEach(function(u){ LAYERS.forEach(function(l){ ids.push(u.id+'-'+l); }); }); return ids; }
+function readItems(){ var ids=[]; UNITS.forEach(function(u){ LAYERS.filter(function(l){ return hasLayer(SV_CONTENT[u.id]||{},l); }).forEach(function(l){ ids.push(u.id+'-'+l); }); }); return ids; }
 function refreshProg(){
   var ids=readItems(), n=0; ids.forEach(function(id){ if(VP.get(id)) n++; });
   $('#pbar').style.width=Math.round(n/ids.length*100)+'%';
@@ -312,6 +314,7 @@ function renderProblem(prob){
   var card=document.createElement('article'); card.className='pcard'; card.setAttribute('data-pid',prob.id);
   var st=VD.get(prob.id);
   var srcb=prob.src?'<span class="srcb">'+esc(prob.src)+'</span>':'';
+  if(prob.ref) srcb+='<span class="srcb">근거 '+esc(prob.ref)+'</span>';
   card.innerHTML='<div class="pc-head"><span class="lv lv'+prob.level+'">L'+prob.level+'</span>'+
     '<span class="tagc">'+esc(prob.id)+' · '+esc((prob.tags||[]).join('·'))+'</span>'+srcb+
     '<span class="sdot'+(st?' '+st:'')+'"></span></div>'+
@@ -406,11 +409,12 @@ function renderHome(){
   UNITS.forEach(function(u){
     var solved=0, ok=0;
     u.problems.forEach(function(p){ var s=VD.get(p.id); if(s){solved++; if(s==='correct')ok++;} });
-    var reads=LAYERS.filter(function(l){return VP.get(u.id+'-'+l);}).length;
+    var avail=LAYERS.filter(function(l){return hasLayer(SV_CONTENT[u.id]||{},l);});
+    var reads=avail.filter(function(l){return VP.get(u.id+'-'+l);}).length;
     var a=document.createElement('a'); a.className='ucard'; a.href='#'+u.id;
     a.innerHTML='<span class="uc-no">UNIT '+u.no+'</span><span class="uc-ti">'+esc(u.title)+'</span>'+
       '<span class="uc-scope">'+esc(u.scope)+'</span>'+
-      '<span class="uc-stat">읽음 '+reads+'/3 · 문제 '+solved+'/'+u.problems.length+(solved?' · 정답 '+ok:'')+'</span>';
+      '<span class="uc-stat">읽음 '+reads+'/'+avail.length+' · 문제 '+solved+'/'+u.problems.length+(solved?' · 정답 '+ok:'')+'</span>';
     uc.appendChild(a);
   });
   typeset(view);
@@ -422,7 +426,7 @@ function renderUnit(u){
     '<h3>문제 세트 <span class="src">L1 개념확인 → L4 시험급 · '+u.problems.length+'문제</span></h3>'+
     '<div class="filters" id="filters"></div><div id="plist"></div>');
   var layers=$('#layers');
-  LAYERS.forEach(function(l){
+  LAYERS.filter(function(l){ return hasLayer(c,l); }).forEach(function(l){
     var d=document.createElement('details'); d.className='layer'; if(l==='concept') d.open=true;
     var inner='';
     if(l==='derive'){

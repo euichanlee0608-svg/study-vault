@@ -1,0 +1,1170 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>생명과학 문제은행</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'},
+ startup:{typeset:false, pageReady:function(){return MathJax.startup.defaultPageReady().then(function(){
+   (window.__mjq||[]).forEach(function(el){MathJax.typesetPromise([el]).catch(function(){});});
+   window.__mjready=true;});}}};
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+:root{
+  --bg:#FBFAF8; --surf:#FFFFFF; --surf2:#F4F1EC; --side:#F6F3EE;
+  --ink:#1C1A18; --ink2:#57514B; --ink3:#8A8177;
+  --line:#E4DFD7; --line2:#D2CBC1;
+  --acc:#B4491C; --acc-bg:#FBEDE6;
+  --ok:#3E7A46; --ok-bg:#E8F2E9;
+  --warn:#8A6410; --warn-bg:#F8F0DC;
+  --bad:#A33B3B; --bad-bg:#F8E7E7;
+  --info:#5B6B75; --info-bg:#ECEFF1;
+  --code:#F1EDE7;
+  --shadow:0 1px 2px rgba(28,26,24,.05),0 2px 10px rgba(28,26,24,.04);
+}
+@media (prefers-color-scheme:dark){
+ :root:not([data-theme="light"]){
+  --bg:#141210; --surf:#1D1A17; --surf2:#252119; --side:#181512;
+  --ink:#EFEBE4; --ink2:#B3ABA1; --ink3:#847B71;
+  --line:#332E28; --line2:#453E36;
+  --acc:#E4763F; --acc-bg:#332016;
+  --ok:#7FBF88; --ok-bg:#1B2A1D;
+  --warn:#D6A54D; --warn-bg:#302614;
+  --bad:#D98080; --bad-bg:#331B1B;
+  --info:#9FB2BC; --info-bg:#20262A;
+  --code:#26221C;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 2px 12px rgba(0,0,0,.25);
+ }
+}
+:root[data-theme="dark"]{
+  --bg:#141210; --surf:#1D1A17; --surf2:#252119; --side:#181512;
+  --ink:#EFEBE4; --ink2:#B3ABA1; --ink3:#847B71;
+  --line:#332E28; --line2:#453E36;
+  --acc:#E4763F; --acc-bg:#332016;
+  --ok:#7FBF88; --ok-bg:#1B2A1D;
+  --warn:#D6A54D; --warn-bg:#302614;
+  --bad:#D98080; --bad-bg:#331B1B;
+  --info:#9FB2BC; --info-bg:#20262A;
+  --code:#26221C;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 2px 12px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font-family:"IBM Plex Sans KR",system-ui,-apple-system,"Malgun Gothic",sans-serif;
+ line-height:1.68;font-size:15px;-webkit-font-smoothing:antialiased;
+ word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--acc);text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:3px}
+mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%}
+.layout{display:flex;min-height:100vh}
+.side{width:250px;flex:0 0 250px;background:var(--side);border-right:1px solid var(--line);
+ padding:22px 18px;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.brand a{color:var(--ink);text-decoration:none;font-family:Newsreader,Georgia,serif;font-size:19px;letter-spacing:-.01em}
+.brand b{color:var(--acc);font-weight:600}
+.brand span{display:block;font-size:10.5px;color:var(--ink3);font-family:"IBM Plex Mono",monospace;margin-top:2px}
+.prog-bar{height:5px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:4px}
+.prog-bar i{display:block;height:100%;width:0;background:var(--acc);border-radius:99px;transition:width .3s}
+.prog span{font-size:10.5px;color:var(--ink3);font-family:"IBM Plex Mono",monospace}
+.side nav{display:flex;flex-direction:column;gap:2px}
+.ng{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-family:"IBM Plex Mono",monospace;margin:10px 0 4px;padding-left:10px}
+.side nav a{display:block;padding:7px 10px;border-radius:6px;color:var(--ink2);text-decoration:none;font-size:13.5px}
+.side nav a:hover{background:var(--surf2)}
+.side nav a.on{background:var(--acc-bg);color:var(--acc);font-weight:600}
+.side nav a .nv{float:right;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink3)}
+.foot-side{margin-top:auto;font-size:10.5px;color:var(--ink3);line-height:1.5;font-family:"IBM Plex Mono",monospace}
+.foot-side a{color:var(--ink3)}
+.main{flex:1;min-width:0;padding:clamp(22px,4vw,48px) clamp(16px,4.5vw,56px) 120px;display:flex;justify-content:center}
+.view{width:100%;max-width:820px}
+h1{font-family:Newsreader,"Gowun Batang",Georgia,serif;font-weight:600;font-size:clamp(25px,4vw,34px);line-height:1.16;letter-spacing:-.015em;margin:6px 0 12px;text-wrap:balance}
+h3{font-family:Newsreader,Georgia,serif;font-size:20px;font-weight:600;margin:30px 0 10px;letter-spacing:-.01em}
+h4{font-size:15.5px;font-weight:600;margin:22px 0 8px}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 13px;padding-left:22px}
+li{margin-bottom:6px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--acc);font-weight:500}
+.lede{font-size:15.5px;color:var(--ink2)}
+.easy{background:var(--acc-bg);border-radius:8px;padding:13px 16px;margin:0 0 14px}
+.easy b{color:var(--acc)}
+.note-line{font-size:13.5px;color:var(--ink2);background:var(--surf2);border-radius:6px;padding:10px 14px;margin:0 0 12px}
+.src{font-size:12px;color:var(--ink3);font-weight:400}
+/* unit cards on home */
+.ucards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin:16px 0}
+.ucard{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:16px 17px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:7px;color:var(--ink);text-decoration:none}
+.ucard:hover{border-color:var(--acc)}
+.uc-no{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--acc);font-weight:600}
+.uc-ti{font-family:Newsreader,Georgia,serif;font-size:18px;font-weight:600}
+.uc-scope{font-size:12.5px;color:var(--ink2);line-height:1.55}
+.uc-stat{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink3)}
+/* collapsible layers */
+details.layer{border:1px solid var(--line);border-radius:9px;background:var(--surf);margin-bottom:10px;box-shadow:var(--shadow)}
+details.layer>summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:15px;list-style:none;display:flex;align-items:center;gap:8px}
+details.layer>summary::-webkit-details-marker{display:none}
+details.layer>summary .lb{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;padding:2px 8px;border-radius:99px;background:var(--info-bg);color:var(--info)}
+details.layer>summary .arrow{margin-left:auto;color:var(--ink3);transition:transform .2s}
+details.layer[open]>summary .arrow{transform:rotate(90deg)}
+details.layer>.body{padding:4px 18px 14px;border-top:1px solid var(--line)}
+details.dstep{border:1px solid var(--line);border-radius:7px;margin:0 0 8px;background:var(--surf2)}
+details.dstep>summary{cursor:pointer;padding:9px 13px;font-weight:500;font-size:13.5px}
+details.dstep ol{margin:4px 0 10px;padding:0 14px 0 34px}
+details.dstep li{margin-bottom:7px;font-size:13.5px}
+/* 정석식 박스 */
+.jsbox{border:1.5px solid var(--acc);border-radius:9px;background:var(--acc-bg);padding:11px 15px;margin:12px 0;font-size:14px}
+.jsbox .jt{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;color:var(--acc);font-weight:600;display:block;margin-bottom:3px}
+.exbox{border:1px solid var(--line2);border-left:3px solid var(--acc);border-radius:8px;background:var(--surf);padding:12px 15px;margin:12px 0}
+.exbox .xh{font-weight:600;font-size:14px;margin-bottom:6px}
+.exbox .xh .xno{font-family:"IBM Plex Mono",monospace;color:var(--acc);font-size:11.5px;margin-right:6px}
+.exbox .xsol{border-top:1px dashed var(--line2);margin-top:8px;padding-top:8px;font-size:13.5px}
+.exbox .xsol ol{margin:4px 0 0;padding-left:20px}
+.exbox .xrel{font-size:12px;color:var(--ink3);margin-top:8px;font-family:"IBM Plex Mono",monospace}
+.bigpic{border:1.5px solid var(--acc);border-left:5px solid var(--acc);border-radius:10px;background:linear-gradient(180deg,var(--acc-bg),var(--surf));padding:14px 18px;margin:0 0 16px;font-size:14.5px;line-height:1.8}
+.bigpic .bt{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;color:var(--acc);font-weight:700;margin-bottom:5px}
+.mapline{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(--surf);border:1px dashed var(--line2);border-radius:8px;padding:9px 12px;margin:10px 0;overflow-x:auto}
+.en{color:var(--ink3);font-weight:400;font-size:.88em}
+.tagx,.tagm,.tagc{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:700;letter-spacing:.06em;border-radius:5px;padding:2px 7px;margin-left:7px;vertical-align:2px;white-space:nowrap}
+.tagx{background:#c0392b;color:#fff}
+.tagm{background:var(--acc);color:#fff}
+.tagc{background:var(--line2);color:var(--ink2)}
+.whyq{border-left:3px solid var(--ink3);padding:3px 0 3px 12px;margin:13px 0;color:var(--ink2);font-size:14px}
+.intuit{background:var(--acc-bg);border-radius:8px;padding:9px 13px;margin:10px 0;font-size:13.5px}
+.exambox{border:1px solid var(--line2);border-left:3px solid #c0392b;border-radius:8px;background:var(--surf);padding:10px 14px;margin:12px 0;font-size:13px}
+.exambox .xt{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;color:#c0392b;font-weight:700;display:block;margin-bottom:3px}
+.layer .body h4{margin:24px 0 8px;font-size:16.5px}
+.layer .body h4:first-child{margin-top:4px}
+.readrow{margin:8px 0 2px;text-align:right}
+.readbtn{font:inherit;font-size:12.5px;min-height:40px;padding:7px 15px;border-radius:99px;border:1px solid var(--line2);background:var(--surf);color:var(--ink2);cursor:pointer}
+.readbtn[aria-pressed="true"]{background:var(--ok-bg);color:var(--ok);border-color:var(--ok)}
+/* drill */
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.fchip{font:inherit;font-size:12.5px;min-height:36px;padding:5px 14px;border-radius:99px;border:1px solid var(--line2);background:var(--surf);color:var(--ink2);cursor:pointer}
+.fchip.on{background:var(--acc-bg);color:var(--acc);border-color:var(--acc);font-weight:600}
+.pcard{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:15px 17px;margin-bottom:12px;box-shadow:var(--shadow)}
+.pc-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:8px}
+.lv{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:99px}
+.lv1{background:var(--ok-bg);color:var(--ok)} .lv2{background:var(--info-bg);color:var(--info)}
+.lv3{background:var(--warn-bg);color:var(--warn)} .lv4{background:var(--acc-bg);color:var(--acc)}
+.tagc{font-size:11px;color:var(--ink3);font-family:"IBM Plex Mono",monospace}
+.srcb{font-size:10px;color:var(--ink3);border:1px solid var(--line);border-radius:99px;padding:1px 8px}
+.sdot{width:9px;height:9px;border-radius:99px;background:var(--line2);margin-left:auto;flex:0 0 auto}
+.sdot.correct{background:var(--ok)} .sdot.partial{background:var(--warn)} .sdot.wrong{background:var(--bad)}
+.pc-st{font-size:14.5px;margin-bottom:10px}
+.pc-btns{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.pbtn{font:inherit;font-size:12.5px;min-height:40px;padding:7px 14px;border-radius:8px;border:1px solid var(--line2);background:var(--surf2);color:var(--ink2);cursor:pointer}
+.pbtn:hover{border-color:var(--acc);color:var(--acc)}
+.pbtn.grade-c{border-color:var(--ok);color:var(--ok)}
+.pbtn.grade-p{border-color:var(--warn);color:var(--warn)}
+.pbtn.grade-w{border-color:var(--bad);color:var(--bad)}
+.pbtn.grade-c.sel{background:var(--ok-bg)} .pbtn.grade-p.sel{background:var(--warn-bg)} .pbtn.grade-w.sel{background:var(--bad-bg)}
+.hintbox{background:var(--warn-bg);border-radius:7px;padding:9px 13px;font-size:13px;margin:8px 0 0}
+.solbox{background:var(--surf2);border-radius:8px;padding:11px 14px;margin:10px 0 0}
+.solbox ol{margin:0;padding-left:20px}
+.solbox li{font-size:13.5px;margin-bottom:7px}
+.ansline{margin-top:8px;font-weight:600;color:var(--acc);font-size:14px}
+.choices{display:flex;flex-direction:column;gap:7px;margin:4px 0 2px}
+.choice{font:inherit;text-align:left;font-size:13.5px;min-height:44px;padding:9px 13px;border-radius:8px;border:1px solid var(--line2);background:var(--surf);color:var(--ink);cursor:pointer}
+.choice:hover{border-color:var(--acc)}
+.choice.right{border-color:var(--ok);background:var(--ok-bg)}
+.choice.wrongpick{border-color:var(--bad);background:var(--bad-bg)}
+.expl{background:var(--info-bg);border-radius:7px;padding:9px 13px;font-size:13px;margin-top:8px;color:var(--ink2)}
+/* exam */
+.exam-setup .grp{margin-bottom:14px}
+.exam-setup label.ck{display:inline-flex;align-items:center;gap:6px;margin:0 12px 6px 0;font-size:13.5px;min-height:36px}
+.exam-setup input[type=checkbox]{accent-color:var(--acc);width:17px;height:17px}
+.exam-setup select{font:inherit;font-size:14px;padding:8px 12px;border:1px solid var(--line2);border-radius:8px;background:var(--surf);color:var(--ink)}
+.bigbtn{font:inherit;font-size:14.5px;font-weight:600;min-height:46px;padding:10px 22px;border-radius:99px;border:none;background:var(--acc);color:#fff;cursor:pointer}
+.bigbtn:disabled{opacity:.5;cursor:default}
+.exam-top{display:flex;align-items:center;gap:10px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink3);margin-bottom:12px}
+.exam-top .bar{flex:1;height:5px;background:var(--line);border-radius:99px;overflow:hidden}
+.exam-top .bar i{display:block;height:100%;background:var(--acc)}
+.report{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:18px 20px;box-shadow:var(--shadow)}
+.report .score{font-family:Newsreader,Georgia,serif;font-size:34px;font-weight:600;color:var(--acc)}
+table{border-collapse:collapse;width:100%;margin:10px 0 14px;font-size:13px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left}
+th{background:var(--surf2);white-space:nowrap}
+.empty{border:1px dashed var(--line2);border-radius:10px;padding:24px;color:var(--ink3);font-size:13.5px;text-align:center}
+/* mobile */
+.tabbar{display:none}
+#tb-sheet{display:none}
+@media(max-width:960px){
+ body{font-size:16px}
+ input,textarea,select{font-size:16px}
+ .layout{flex-direction:column}
+ .side{width:100%;flex:none;height:auto;position:static;border-right:none;border-bottom:1px solid var(--line);
+  padding:12px 16px;flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap}
+ .side nav,.ng,.foot-side{display:none}
+ .side .prog{flex:1;min-width:110px}
+ .main{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
+ .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;background:var(--side);border-top:1px solid var(--line);
+  padding:4px 4px calc(4px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.06)}
+ .tabbar a,.tabbar button{flex:1;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  font:inherit;font-size:16px;line-height:1;background:none;border:none;border-radius:8px;color:var(--ink2);text-decoration:none;cursor:pointer;padding:5px 2px}
+ .tabbar a span,.tabbar button span{font-size:10.5px;font-family:"IBM Plex Mono",monospace}
+ .tabbar a.on{color:var(--acc);background:var(--acc-bg)}
+ #tb-sheet{position:fixed;right:10px;bottom:calc(64px + env(safe-area-inset-bottom));z-index:51;background:var(--surf);
+  border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:8px;display:flex;flex-direction:column;min-width:190px}
+ #tb-sheet[hidden]{display:none!important}
+ #tb-sheet a{display:flex;align-items:center;padding:11px 14px;min-height:44px;border-radius:8px;color:var(--ink2);text-decoration:none;font-size:14.5px}
+ #tb-sheet a:active{background:var(--surf2)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="side">
+  <div class="brand"><a href="#home"><b>생명과학</b> 문제은행</a><span>LIFE SCIENCES 07분반 · 1~5강 · 2026-09-14</span></div>
+  <div class="prog"><div class="prog-bar"><i id="pbar"></i></div><span id="ptxt"></span></div>
+  <nav id="sidenav"></nav>
+  <div class="foot-side">전 문제 검산 게이트 통과분만 탑재<br><a href="../../">← Study Vault 허브</a></div>
+</aside>
+<main class="main"><div class="view" id="view"></div></main>
+</div>
+<nav class="tabbar" aria-label="하단 탭">
+<a href="../../">🏠<span>허브</span></a>
+<a href="#home" data-tv="home">📚<span>홈</span></a>
+<a href="#wrong" data-tv="wrong">🔁<span>오답</span></a>
+<a href="#exam" data-tv="exam">📝<span>모의고사</span></a>
+<button id="tb-more" type="button">☰<span>단원</span></button>
+</nav>
+<div id="tb-sheet" hidden></div>
+
+<script>window.SV_BANK=[];</script>
+<script>
+/* 문제은행 공용 헬퍼 — 브라우저(런타임)와 node(검산 러너) 양쪽에서 동일 코드 실행 (이중 구현 금지) */
+(function (g) {
+  'use strict';
+  g.SV_BANK = g.SV_BANK || [];
+  var SVH = {
+    /* 유효숫자 정리 (부동소수 노이즈 제거). 표시용 — ans에는 절대 쓰지 말 것 */
+    fmt: function (x, sig) {
+      if (typeof x !== 'number' || !isFinite(x)) return String(x);
+      if (x === 0) return '0';
+      var v = Number(x.toPrecision(sig || 4));
+      return String(v);
+    },
+    /* SI 접두 표기 (표시용) */
+    si: function (x, unit, sig) {
+      if (x === 0) return '0 ' + unit;
+      var a = Math.abs(x);
+      var P = [[1e9,'G'],[1e6,'M'],[1e3,'k'],[1,''],[1e-3,'m'],[1e-6,'µ'],[1e-9,'n'],[1e-12,'p']];
+      for (var i = 0; i < P.length; i++) {
+        if (a >= P[i][0] * 0.9999) return SVH.fmt(x / P[i][0], sig) + ' ' + P[i][1] + unit;
+      }
+      return SVH.fmt(x, sig) + ' ' + unit;
+    },
+    par: function (a, b) { return a * b / (a + b); },        // 병렬 저항
+    par3: function (a, b, c) { return 1 / (1/a + 1/b + 1/c); },
+    deg: function (rad) { return rad * 180 / Math.PI; },
+    rad: function (d) { return d * Math.PI / 180; },
+    /* 복소수 최소 연산 (페이저용) */
+    cx: function (re, im) { return { re: re, im: im }; },
+    cadd: function (a, b) { return { re: a.re + b.re, im: a.im + b.im }; },
+    csub: function (a, b) { return { re: a.re - b.re, im: a.im - b.im }; },
+    cmul: function (a, b) { return { re: a.re * b.re - a.im * b.im, im: a.re * b.im + a.im * b.re }; },
+    cdiv: function (a, b) {
+      var d = b.re * b.re + b.im * b.im;
+      return { re: (a.re * b.re + a.im * b.im) / d, im: (a.im * b.re - a.re * b.im) / d };
+    },
+    cmag: function (a) { return Math.hypot(a.re, a.im); },
+    cang: function (a) { return Math.atan2(a.im, a.re) * 180 / Math.PI; }, // deg
+    cpar: function (a, b) { return SVH.cdiv(SVH.cmul(a, b), SVH.cadd(a, b)); },
+    /* 2x2 / 3x3 실계수 선형계 풀이 (절점/망로 검산·풀이 공용) */
+    solve2: function (a11, a12, b1, a21, a22, b2) {
+      var D = a11 * a22 - a12 * a21;
+      return [ (b1 * a22 - a12 * b2) / D, (a11 * b2 - b1 * a21) / D ];
+    },
+    solve3: function (A, b) { // A: 3x3 배열, b: [3]
+      var d = SVH.det3(A);
+      function rep(A, i, b) {
+        var M = A.map(function (r) { return r.slice(); });
+        for (var r = 0; r < 3; r++) M[r][i] = b[r];
+        return M;
+      }
+      return [SVH.det3(rep(A,0,b))/d, SVH.det3(rep(A,1,b))/d, SVH.det3(rep(A,2,b))/d];
+    },
+    det3: function (A) {
+      return A[0][0]*(A[1][1]*A[2][2]-A[1][2]*A[2][1])
+           - A[0][1]*(A[1][0]*A[2][2]-A[1][2]*A[2][0])
+           + A[0][2]*(A[1][0]*A[2][1]-A[1][1]*A[2][0]);
+    }
+  };
+  g.SVH = SVH;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* U1 원자·분자·물 — 1강. 개념 과목: 전 문항 ref(자료 위치) 필수 + 블라인드 풀이 대조 (PROBLEM_SPEC §10) */
+SV_BANK.push({
+  id: 'u1', no: 1, title: '원자·분자·물', titleEn: 'Atoms, Molecules & Water',
+  scope: '생명체 구성원소 · 원자 구조·동위원소·전자껍질 · 공유/극성/이온/수소결합·반데르발스 · 물의 특성 · pH·완충·해양 산성화',
+  problems: [
+
+  /* ---------- L1 용어·정의 (5) ---------- */
+  { id:'u1-l1-01', level:1, type:'tf', tags:['필수원소'], src:'강의자료 대조', ref:'1강 1-(2)',
+    statement:'생명체를 이루는 원소 중 C, O, H, N 네 가지가 전체의 약 96%를 차지한다.',
+    answer:true, expl:'O(65%)·C(18.5%)·H(9.5%)·N(3.3%)의 합이 약 96%다. 나머지 약 4%를 Ca·P·K·S·Na·Cl·Mg 일곱 원소가 채우고, 미량원소는 극히 적은 비율이다.' },
+  { id:'u1-l1-02', level:1, type:'mc', tags:['동위원소'], src:'강의자료 대조', ref:'1강 2-(4)',
+    statement:'동위원소(isotope)의 정의로 옳은 것은?',
+    choices:['양성자 수는 같고 중성자 수가 다른 원소','중성자 수는 같고 양성자 수가 다른 원소','양성자·중성자 수는 같고 전자 수만 다른 원소','질량수는 같고 원자번호가 다른 원소'],
+    answer:0, expl:'양성자 수(=원자번호)가 같아야 같은 원소다. 중성자 수만 달라 질량수가 다르다. 전자 수만 다른 것은 이온이다.' },
+  { id:'u1-l1-03', level:1, type:'mc', tags:['원자가전자','전자껍질'], src:'강의자료 대조', ref:'1강 2-(5)',
+    statement:'원자의 화학적 반응성을 결정하는 요인은?',
+    choices:['최외각 껍질에 있는 전자(원자가전자)의 수','원자핵 속 중성자의 수','제1껍질에 들어 있는 전자의 수','원자핵의 질량'],
+    answer:0, expl:'화학반응에 직접 참여하는 것은 가장 바깥 껍질의 전자다. 최외각이 최대 개수로 차 있으면 반응성이 낮다(비활성).' },
+  { id:'u1-l1-04', level:1, type:'tf', tags:['수소결합'], src:'강의자료 대조', ref:'1강 3-(3)',
+    statement:'수소결합은 두 원자가 원자가전자 한 쌍을 함께 공유해서 생기는 결합이다.',
+    answer:false, expl:'전자쌍 공유는 공유결합이다. 수소결합은 전기음성도가 큰 원자와 공유결합한 수소가, 이웃한 다른 전기음성도 큰 원자에 끌려 생기는 인력이다.' },
+  { id:'u1-l1-05', level:1, type:'mc', tags:['pH','산염기'], src:'강의자료 대조', ref:'1강 6-(1)',
+    statement:'자료의 정의에 따를 때 중성 용액에 대한 설명으로 옳은 것은?',
+    choices:['\\([\\mathrm{H^+}][\\mathrm{OH^-}]=10^{-14}\\) 이고 pH = 7','\\([\\mathrm{H^+}][\\mathrm{OH^-}]=10^{-7}\\) 이고 pH = 14','\\([\\mathrm{H^+}][\\mathrm{OH^-}]=10^{-14}\\) 이고 pH = 14','\\([\\mathrm{H^+}][\\mathrm{OH^-}]=1\\) 이고 pH = 0'],
+    answer:0, expl:'pH = −log[H⁺]. 중성이면 [H⁺]=[OH⁻] 이고 곱이 10⁻¹⁴ 이므로 [H⁺]=10⁻⁷, pH = 7.' },
+
+  /* ---------- L2 개념 구별·비교 (8) ---------- */
+  { id:'u1-l2-01', level:2, type:'mc', tags:['비극성','공유결합'], src:'강의자료 대조', ref:'1강 3-(1)',
+    statement:'다음 중 비극성 공유결합으로 이루어진 분자는?',
+    choices:['O₂','H₂O','NaCl','HCl'],
+    answer:0, expl:'같은 원자끼리라 전기음성도가 같아 전자가 한쪽으로 치우치지 않는다. H₂O·HCl은 극성 공유결합, NaCl은 이온결합.' },
+  { id:'u1-l2-02', level:2, type:'mc', tags:['이온결합','공유결합'], src:'강의자료 대조', ref:'1강 3-(1)(2)',
+    statement:'공유결합과 이온결합을 가르는 기준으로 자료에 제시된 것은?',
+    choices:['두 원자의 전기음성도 차이 — 차이가 매우 크면 전자를 완전히 빼앗아 이온결합이 된다','두 원자의 질량수 차이','원자핵 속 중성자 수의 차이','분자가 놓인 온도'],
+    answer:0, expl:'전기음성도 차이가 스펙트럼을 만든다: 0이면 비극성 공유, 있으면 극성 공유, 매우 크면 이온결합.' },
+  { id:'u1-l2-03', level:2, type:'tf', tags:['반데르발스','수소결합'], src:'강의자료 대조', ref:'1강 3-(3)(4)',
+    statement:'반데르발스 인력은 비극성 분자에서 순간적으로 생긴 부분 전하 사이의 인력으로, 수소결합과는 생기는 원리가 다르다.',
+    answer:true, expl:'수소결합은 극성 공유결합으로 늘 치우쳐 있는 전하(Hδ+와 전기음성 원자) 사이의 인력이고, 반데르발스는 전자 움직임으로 잠깐 생긴 치우침 사이의 인력이다.' },
+  { id:'u1-l2-04', level:2, type:'mc', tags:['용매','수화층'], src:'강의자료 대조', ref:'1강 5-(4)',
+    statement:'물이 이온화합물을 녹일 때 각 이온 주위에 만들어지는 것은?',
+    choices:['극성 물 분자들이 방향을 맞춰 둘러싼 수화층','인지질 이중층','물과 이온이 공유결합으로 합쳐진 새 분자','반데르발스 인력으로 굳은 결정'],
+    answer:0, expl:'양이온에는 물의 Oδ− 쪽이, 음이온에는 Hδ+ 쪽이 향한다. 이 수화층(hydration layer)이 이온을 서로 떼어 녹아 있게 한다.' },
+  { id:'u1-l2-05', level:2, type:'tf', tags:['결빙'], src:'강의자료 대조', ref:'1강 5-(3)',
+    statement:'물은 고체가 되면 액체일 때보다 밀도가 커져서 얼음이 물 밑으로 가라앉는다.',
+    answer:false, expl:'반대다. 얼 때 수소결합이 벌어진 격자를 만들어 팽창하므로 얼음의 밀도가 더 낮고, 물 위에 떠 아래 물을 단열한다.' },
+  { id:'u1-l2-06', level:2, type:'mc', tags:['산염기'], src:'강의자료 대조', ref:'1강 6-(1)',
+    statement:'자료의 정의에 따를 때 염기에 해당하는 설명은?',
+    choices:['용액의 수소이온 농도를 낮추는 물질 — H⁺를 받아들이거나 OH⁻를 내놓는다','용액의 수소이온 농도를 높이는 물질','pH를 항상 7로 고정하는 물질','물에 녹지 않는 모든 물질'],
+    answer:0, expl:'NH₃는 H⁺를 받아 NH₄⁺가 되고, NaOH는 OH⁻를 내놓아 H⁺와 결합시킨다. 둘 다 [H⁺]를 낮춘다. 둘째 선지는 산, 셋째는 완충용액을 과장한 말이다.' },
+  { id:'u1-l2-07', level:2, type:'tf', tags:['완충','pH'], src:'강의자료 대조', ref:'1강 6-(2)',
+    statement:'완충용액은 산이나 염기가 더해져도 pH 변화를 줄여 주므로, 세포 안 pH를 7 부근으로 유지하는 데 필요하다.',
+    answer:true, expl:'세포 안 단백질은 pH에 민감해 7 부근을 지켜야 한다. 탄산–중탄산 체계처럼 H⁺를 흡수하거나 내놓는 짝이 완충 작용을 한다.' },
+  { id:'u1-l2-08', level:2, type:'mc', tags:['비열','증발냉각'], src:'강의자료 대조', ref:'1강 5-(2)',
+    statement:'물의 온도조절 기능을 설명하는 두 성질을 옳게 짝지은 것은?',
+    choices:['높은 비열 · 증발(기화)할 때 열을 흡수하는 냉각 효과','낮은 비열 · 얼 때 부피가 늘어나는 성질','응집 · 수화층 형성','높은 밀도 · 반데르발스 인력'],
+    answer:0, expl:'비열이 높으면 적은 온도 변화로 많은 열을 흡수·방출하고, 증발할 때는 많은 열을 가져가 식힌다. 둘 다 수소결합을 끊거나 흔드는 데 에너지가 들기 때문이다.' },
+
+  /* ---------- L3 적용 — 상황 → 개념 (7) ---------- */
+  { id:'u1-l3-01', level:3, type:'mc', tags:['동위원소','질량수'], src:'강의자료 대조', ref:'1강 2-(3)(4)',
+    statement:'원자 A는 양성자 6개·중성자 6개, 원자 B는 양성자 6개·중성자 8개로 이루어져 있다. 옳은 것은?',
+    choices:['A와 B는 같은 원소의 동위원소이고, 질량수는 각각 12와 14다','A와 B는 양성자 수가 같아도 서로 다른 원소다','A와 B의 원자번호는 각각 12와 14다','B는 중성 원자일 때 전자가 8개다'],
+    answer:0, expl:'원자번호(양성자 6)가 같으니 같은 원소(탄소)다. 질량수 = 양성자 + 중성자 = 12, 14. 중성 원자의 전자 수는 양성자 수와 같은 6개다.' },
+  { id:'u1-l3-02', level:3, type:'mc', tags:['수소결합','극성'], src:'강의자료 대조', ref:'1강 3-(3)·4',
+    statement:'물 분자들 사이에서 수소결합이 생기는 방식으로 옳은 것은?',
+    choices:['한 물 분자의 부분 양전하(Hδ+)가 이웃 물 분자의 부분 음전하(Oδ−)에 끌린다','한 물 분자 안에서 O와 H가 전자쌍을 공유한다','이웃한 두 물 분자의 H끼리 전자를 주고받는다','이웃한 두 물 분자의 O끼리 이온결합한다'],
+    answer:0, expl:'분자 안의 O–H는 극성 공유결합이고, 수소결합은 분자와 분자 사이의 인력이다. 둘째 선지는 수소결합이 아니라 분자 내부의 공유결합 설명이다.' },
+  { id:'u1-l3-03', level:3, type:'tf', tags:['응집'], src:'강의자료 대조', ref:'1강 5-(1)',
+    statement:'뿌리에서 흡수한 물이 중력을 거슬러 잎까지 끊기지 않고 올라갈 수 있는 것은, 물 분자들이 수소결합으로 서로 붙는 응집(과 흡착) 덕분이다.',
+    answer:true, expl:'물 기둥이 한 줄로 이어져 끌려 올라가려면 분자끼리 붙어 있어야 한다(응집). 관 벽에 달라붙는 흡착도 함께 돕는다.' },
+  { id:'u1-l3-04', level:3, type:'mc', tags:['pH'], src:'강의자료 대조', ref:'1강 6-(1)',
+    statement:'용액 A의 pH는 4, 용액 B의 pH는 6이다. 옳은 것은?',
+    choices:['A의 수소이온 농도는 B의 100배다','A의 수소이온 농도는 B의 2배다','B가 A보다 더 산성이다','A의 수소이온 농도는 B의 1/100이다'],
+    answer:0, expl:'pH = −log[H⁺]라 pH가 1 작으면 [H⁺]는 10배. 2 차이면 10² = 100배이고, pH가 작은 A가 더 산성이다.' },
+  { id:'u1-l3-05', level:3, type:'mc', tags:['필수원소'], src:'강의자료 대조', ref:'1강 1-(2)',
+    statement:'자료의 생명체 필수원소 표를 기준으로 원소와 역할의 짝이 옳은 것은?',
+    choices:['Ca — 골격 구성, 근수축 작용','Mg — 신경흥분 발생','K — 효소의 보조인자','P — 대부분의 단백질 성분'],
+    answer:0, expl:'표 기준: K는 신경흥분, Mg는 효소 보조인자, S는 대부분 단백질의 성분, P는 에너지 이동에 필요. Ca가 골격과 근수축이다.' },
+  { id:'u1-l3-06', level:3, type:'tf', tags:['산성화'], src:'강의자료 대조', ref:'1강 6-(3)',
+    statement:'산성비의 주된 원인 물질은 산화황과 산화질소이고, 해양 산성화는 CO₂가 물에 녹아 생긴 탄산에서 비롯된다.',
+    answer:true, expl:'둘 다 화석연료 사용에서 출발하지만 원인 물질과 경로가 다르다. 산화황·산화질소 → 산성비, CO₂ → 탄산 → H⁺ 증가 → 탄산이온 감소.' },
+  { id:'u1-l3-07', level:3, type:'mc', tags:['공유결합','비극성'], src:'강의자료 대조', ref:'1강 3-(1)',
+    statement:'산소 분자(O₂)를 이루는 두 산소 원자의 결합에 대한 설명으로 옳은 것은?',
+    choices:['전자 두 쌍을 공유하는 이중결합(O=O)이며, 같은 원자끼리라 비극성이다','전자 한 쌍을 공유하는 단일결합이며 극성이다','전자를 완전히 주고받은 이온결합이다','분자 사이에 생기는 수소결합이다'],
+    answer:0, expl:'루이스 구조 O::O = O=O(이중결합). 두 원자의 전기음성도가 같아 전자가 치우치지 않으므로 비극성 공유결합이다. H₂는 한 쌍을 공유하는 단일결합의 예다.' },
+
+  /* ---------- L4 종합·추론 (4) ---------- */
+  { id:'u1-l4-01', level:4, type:'mc', tags:['극성','용매'], src:'강의자료 대조', ref:'1강 3-(1)·4·5-(4)',
+    statement:'물이 이온화합물과 극성 물질은 잘 녹이지만 기름(비극성 물질)과는 섞이지 않는 이유를 가장 잘 연결한 것은?',
+    choices:['O의 전기음성도가 H보다 커서 극성 공유결합 → 물 분자가 극성 → 이온·극성 물질 주위에 수화층을 만들지만 비극성 물질과는 끌어당기지 못함','O–H 결합이 이온결합이라 이온화합물과 같은 종류의 결합을 이루기 때문','물 분자 사이의 반데르발스 인력이 매우 강해 모든 물질을 끌어당기지만 기름만 예외이기 때문','O와 H의 전기음성도가 같아 비극성 분자이므로 극성 물질과 잘 섞이기 때문'],
+    answer:0, expl:'원인 사슬: 전기음성도 차이 → 극성 공유결합(Oδ−, Hδ+) → 극성 분자 → 수화층. 비극성 물질과 섞이지 않는 성질 덕분에 세포막 같은 경계가 만들어진다.' },
+  { id:'u1-l4-02', level:4, type:'mc', tags:['응집','비열','증발냉각','결빙'], src:'강의자료 대조', ref:'1강 5-(1)~(3)',
+    statement:'현상과 그 원인이 되는 물의 특성을 짝지은 것 중 옳지 <b>않은</b> 것은?',
+    choices:['겨울 호수에서 표면만 얼고 그 아래 물은 액체로 남는다 — 물의 높은 비열','땀이 증발하면 체온이 내려간다 — 기화할 때 열을 흡수하는 증발 냉각','키 큰 나무 꼭대기까지 물이 올라간다 — 수소결합에 의한 응집과 흡착','바닷가의 기온 변화가 내륙보다 작다 — 적은 온도 변화로 많은 열을 흡수·방출하는 높은 비열'],
+    answer:0, expl:'호수 표면만 어는 것은 결빙 시 팽창해 얼음의 밀도가 물보다 낮기 때문이다. 떠오른 얼음이 아래 물을 단열한다. 나머지 세 짝은 옳다.' },
+  { id:'u1-l4-03', level:4, type:'mc', tags:['산성화','pH'], src:'강의자료 대조', ref:'1강 6-(3)',
+    statement:'대기 중 CO₂ 증가가 산호초 감소로 이어지는 과정을 순서대로 옳게 나열한 것은?',
+    choices:['CO₂가 물과 반응해 탄산 생성 → 탄산이 H⁺와 중탄산이온으로 해리 → H⁺가 탄산이온과 결합 → 탄산이온이 줄어 석회화 둔화','CO₂가 물과 반응해 탄산 생성 → 탄산이온 증가 → H⁺ 감소 → 석회화 촉진','CO₂가 산화황으로 바뀜 → 산성비 → 산호 표면이 녹음','CO₂가 OH⁻를 방출 → pH 상승 → 탄산이온이 중탄산이온으로 바뀌어 석회화 둔화'],
+    answer:0, expl:'핵심은 "H⁺가 탄산이온을 빼앗아 간다"는 것. 산호가 석회질을 만들 재료(탄산이온)가 줄어든다. 산성비의 원인은 산화황·산화질소로 경로가 다르다. (자료의 "H-" 표기는 H⁺의 오기)' },
+  { id:'u1-l4-04', level:4, type:'tf', tags:['동위원소','질량수'], src:'강의자료 대조', ref:'1강 2-(3)(4)',
+    statement:'방사성 탄소-14가 붕괴해 질소-14가 될 때 원소가 바뀌는 이유는 양성자 수가 변했기 때문이며, 이때 질량수는 14 그대로일 수 있다.',
+    answer:true, expl:'원소의 정체는 양성자 수(원자번호)가 정한다: C는 6, N은 7. 질량수 = 양성자 + 중성자이므로 중성자 하나가 양성자로 바뀌면 원자번호는 1 늘고 질량수는 14로 같다.' },
+  ]
+});
+
+</script>
+<script>
+/* U2 탄소와 거대 유기화합물 — 2강. 개념 과목: 전 문항 ref 필수 + 블라인드 풀이 대조 (PROBLEM_SPEC §10) */
+SV_BANK.push({
+  id: 'u2', no: 2, title: '탄소와 거대분자', titleEn: 'Carbon & Macromolecules',
+  scope: '탄소의 4가성 · 단위체/중합체·탈수축합/가수분해 · 탄수화물(단당·이당·녹말·글리코겐·셀룰로오스·키틴) · 지질(지방·인지질·스테로이드) · 단백질 1~4차 구조·변성 · 핵산',
+  problems: [
+
+  /* ---------- L1 용어·정의 (5) ---------- */
+  { id:'u2-l1-01', level:1, type:'mc', tags:['탈수축합','가수분해'], src:'강의자료 대조', ref:'2강 2-(2)',
+    statement:'중합체의 합성과 분해에 대한 설명으로 옳은 것은?',
+    choices:['합성은 물 분자가 빠지며 결합하는 탈수축합, 분해는 물 분자가 더해지며 끊어지는 가수분해다','합성은 가수분해, 분해는 탈수축합이다','합성과 분해 모두 물 분자가 빠져나간다','합성과 분해 모두 효소 없이만 일어난다'],
+    answer:0, expl:'이름이 과정을 말해 준다: 탈수(물이 빠짐)·축합(합쳐짐) / 가수(물을 더함)·분해. 두 방향 모두 효소가 촉진한다.' },
+  { id:'u2-l1-02', level:1, type:'tf', tags:['이당'], src:'강의자료 대조', ref:'2강 3-(1)',
+    statement:'설탕(sucrose)은 포도당 두 분자가 글리코시드 결합으로 연결된 이당류다.',
+    answer:false, expl:'포도당+포도당은 엿당(maltose)이다. 설탕은 포도당+과당, 젖당은 포도당+갈락토오스. 식물은 양분을 설탕 형태로 운반한다.' },
+  { id:'u2-l1-03', level:1, type:'mc', tags:['포화지방산','지방'], src:'강의자료 대조', ref:'2강 4-(1)',
+    statement:'포화지방산에 대한 설명으로 옳은 것은?',
+    choices:['탄화수소 사슬에 이중결합이 없고, 주로 동물성이며 실온에서 고체다','cis 이중결합이 있어 사슬이 꺾이고 실온에서 액체다','인산기가 붙은 친수성 머리를 가진다','탄소 고리 4개로 된 골격이다'],
+    answer:0, expl:'이중결합이 없어 사슬이 곧아 촘촘히 쌓이므로 실온에서 굳는다. 둘째 선지는 불포화지방산, 셋째는 인지질, 넷째는 스테로이드.' },
+  { id:'u2-l1-04', level:1, type:'mc', tags:['단백질구조'], src:'강의자료 대조', ref:'2강 5-(2)①',
+    statement:'단백질의 1차 구조란 무엇인가?',
+    choices:['유전정보에 의해 정해지는 아미노산의 선형 서열','골격의 수소결합으로 생긴 α나선·β병풍','R기 사이 상호작용으로 접힌 전체 3차원 모양','둘 이상의 폴리펩티드가 모인 구조'],
+    answer:0, expl:'1차 = 서열, 2차 = 골격 수소결합의 반복 패턴, 3차 = R기 상호작용으로 접힌 모양, 4차 = 사슬 여러 개의 조립.' },
+  { id:'u2-l1-05', level:1, type:'tf', tags:['염기','뉴클레오티드'], src:'강의자료 대조', ref:'2강 6-(2)①',
+    statement:'퓨린 계열 염기는 아데닌(A)과 구아닌(G)이며, 육각형과 오각형 고리 두 개로 되어 있다.',
+    answer:true, expl:'퓨린 = A·G(고리 2개), 피리미딘 = C·T·U(육각형 고리 1개). 이중나선에서는 늘 퓨린–피리미딘이 짝(A–T, G–C)이라 폭이 일정하다.' },
+
+  /* ---------- L2 개념 구별·비교 (8) ---------- */
+  { id:'u2-l2-01', level:2, type:'mc', tags:['녹말','글리코겐'], src:'강의자료 대조', ref:'2강 3-(2)①',
+    statement:'저장성 다당류를 생물과 짝지은 것으로 옳은 것은?',
+    choices:['식물 — 녹말(색소체에 과립으로 저장), 동물 — 글리코겐(간·근육 세포에 저장)','식물 — 글리코겐, 동물 — 녹말','식물 — 셀룰로오스, 동물 — 키틴','식물·동물 모두 키틴'],
+    answer:0, expl:'셀룰로오스·키틴은 저장이 아니라 구조를 맡는 다당류다. 글리코겐은 아밀로펙틴과 비슷하되 가지가 더 많다.' },
+  { id:'u2-l2-02', level:2, type:'tf', tags:['녹말'], src:'강의자료 대조', ref:'2강 3-(2)①',
+    statement:'녹말 중 아밀로오스는 가지가 없고, 아밀로펙틴은 1-6 글리코시드 결합으로 가지가 있다.',
+    answer:true, expl:'둘 다 α-포도당이 1-4 결합으로 이어진 나선이 기본이고, 1-6 결합이 섞이면 가지가 생긴다(아밀로펙틴, 더 많으면 글리코겐).' },
+  { id:'u2-l2-03', level:2, type:'mc', tags:['키틴'], src:'강의자료 대조', ref:'2강 3-(2)②',
+    statement:'질소를 포함한 탄수화물로, 절지동물의 외골격과 균류의 세포벽을 이루는 것은?',
+    choices:['키틴','셀룰로오스','글리코겐','콜레스테롤'],
+    answer:0, expl:'셀룰로오스는 식물 세포벽, 글리코겐은 동물의 저장 다당류, 콜레스테롤은 스테로이드(지질)다.' },
+  { id:'u2-l2-04', level:2, type:'mc', tags:['인지질'], src:'강의자료 대조', ref:'2강 4-(2)',
+    statement:'인지질이 물속에서 이중층을 이루는 이유로 옳은 것은?',
+    choices:['인산기 머리는 친수성, 탄화수소 꼬리는 소수성이라 꼬리끼리 물을 피해 안쪽으로 모이기 때문','머리와 꼬리가 모두 소수성이기 때문','지방산 3개가 공유결합으로 판 모양을 만들기 때문','탄소 고리 4개 골격이 층을 이루기 때문'],
+    answer:0, expl:'한 분자에 친수성·소수성 부분이 함께 있어, 물속에서는 꼬리를 안으로 숨기고 머리를 물 쪽으로 향한 두 겹이 가장 안정하다. 지방산 3개는 지방, 고리 4개는 스테로이드다.' },
+  { id:'u2-l2-05', level:2, type:'tf', tags:['스테로이드'], src:'강의자료 대조', ref:'2강 4-(3)',
+    statement:'콜레스테롤은 동물 세포막을 구성하며, 다른 스테로이드와 호르몬의 전구체로도 쓰인다.',
+    answer:true, expl:'간에서 만들어지는 스테로이드다. 4강에서 막 유동성의 "온도 완충제"로 다시 나온다.' },
+  { id:'u2-l2-06', level:2, type:'mc', tags:['아미노산'], src:'강의자료 대조', ref:'2강 5-(1)①',
+    statement:'아미노산의 종류와 성질(비극성·극성·전하)을 결정하는 부분은?',
+    choices:['R기(곁사슬)','아미노기','카르복실기','알파탄소에 붙은 수소 원자'],
+    answer:0, expl:'아미노기·카르복실기·수소는 모든 아미노산에 공통이다. 달라지는 것은 R기뿐이라 R기가 소수성인지, 극성인지, 전하를 띠는지가 곧 그 아미노산의 성격이다.' },
+  { id:'u2-l2-07', level:2, type:'mc', tags:['단백질구조'], src:'강의자료 대조', ref:'2강 5-(2)①',
+    statement:'시스테인 곁사슬 사이에 생기는 이황화물 다리가 주로 기여하는 단백질 구조 단계는?',
+    choices:['3차 구조','1차 구조','2차 구조의 α나선','4차 구조의 사슬 개수'],
+    answer:0, expl:'3차 구조는 곁사슬(R기)끼리의 상호작용으로 접힌 모양이며, 이황화물 다리는 그중 유일한 공유결합이다. 2차 구조는 골격의 수소결합이 만든다.' },
+  { id:'u2-l2-08', level:2, type:'mc', tags:['DNA','RNA'], src:'강의자료 대조', ref:'2강 6-(2)①④',
+    statement:'DNA와 RNA를 비교한 것으로 옳은 것은?',
+    choices:['DNA는 데옥시리보오스와 염기 T를 가진 이중가닥, RNA는 리보오스와 염기 U를 가진 단일가닥이다','DNA의 당은 리보오스, RNA의 당은 데옥시리보오스다','인산기는 DNA에만 있다','RNA에는 퓨린 염기가 없다'],
+    answer:0, expl:'데옥시리보오스는 2′ 탄소에 산소가 없는 당이다. 두 핵산 모두 인산기와 퓨린(A·G)을 가지며, 피리미딘 중 T는 DNA, U는 RNA에 쓰인다.' },
+  { id:'u2-l2-09', level:2, type:'mc', tags:['탄소골격'], src:'강의자료 대조', ref:'2강 1-(2)',
+    statement:'탄소 골격이 다양해질 수 있는 방식으로 자료에 제시되지 <b>않은</b> 것은?',
+    choices:['원자핵의 중성자 수를 바꾸는 방식','골격의 길이를 다양하게 하는 방식','골격에 가지를 치는 방식','닫힌 고리 모양으로 배열하는 방식'],
+    answer:0, expl:'자료의 다섯 가지: 4가성, 다양한 길이, 가지, 이중결합의 수·위치, 고리. 중성자 수가 달라지는 것은 동위원소 이야기로, 결합 모양(분자 골격)과는 무관하다.' },
+
+  /* ---------- L3 적용 — 상황 → 개념 (7) ---------- */
+  { id:'u2-l3-01', level:3, type:'mc', tags:['탄소'], src:'강의자료 대조', ref:'2강 1-(2)',
+    statement:'생명체를 이루는 분자가 매우 다양할 수 있는 이유를 탄소 원자의 성질로 설명한 것으로 옳은 것은?',
+    choices:['최외각 전자 4개로 네 방향 결합이 가능해 길이·가지·이중결합·고리가 다양한 골격을 만든다','최외각 전자가 8개로 꽉 차 반응하지 않기 때문이다','이온결합만 할 수 있어 결합 모양이 일정하기 때문이다','탄소는 수소와만 결합하기 때문이다'],
+    answer:0, expl:'4가성 덕분에 탄소는 여러 갈래의 교차점이 된다. 사슬 길이, 가지, 이중결합의 수·위치, 닫힌 고리 — 이 조합이 분자 다양성의 원천이다.' },
+  { id:'u2-l3-02', level:3, type:'mc', tags:['가수분해','중합체'], src:'강의자료 대조', ref:'2강 2-(2)',
+    statement:'소화 과정에서 녹말이 포도당으로 분해될 때 일어나는 반응으로 옳은 것은?',
+    choices:['물 분자가 더해지며 글리코시드 결합이 끊어지는 가수분해','물 분자가 빠지며 결합이 새로 생기는 탈수축합','펩티드 결합이 끊어지는 반응','인산디에스테르 결합이 만들어지는 반응'],
+    answer:0, expl:'중합체 → 단위체 방향은 늘 가수분해다. 녹말의 단위체를 잇는 결합은 글리코시드 결합이며, 펩티드 결합은 단백질, 인산디에스테르 결합은 핵산의 결합이다.' },
+  { id:'u2-l3-03', level:3, type:'mc', tags:['불포화지방산','포화지방산'], src:'강의자료 대조', ref:'2강 4-(1)',
+    statement:'올리브유는 실온에서 액체이고 버터는 고체다. 이 차이를 가장 잘 설명하는 것은?',
+    choices:['올리브유에는 cis 이중결합이 있는 불포화지방산이 많아 사슬이 꺾여 촘촘히 쌓이지 못하기 때문','올리브유는 글리세롤이 없고 지방산만으로 되어 있기 때문','버터는 인지질이라 이중층을 이루기 때문','올리브유는 탄수화물이기 때문'],
+    answer:0, expl:'이중결합이 없는 포화지방산(동물성)은 곧은 사슬이라 빽빽이 쌓여 굳고, cis 이중결합으로 꺾인 불포화지방산(식물·생선)은 틈이 생겨 액체로 남는다.' },
+  { id:'u2-l3-04', level:3, type:'tf', tags:['지방'], src:'강의자료 대조', ref:'2강 4-(1)',
+    statement:'지방은 같은 양·부피로 탄수화물보다 많은 에너지를 저장할 수 있어, 움직여야 하는 동물에게 에너지 저장 형태로 유리하다.',
+    answer:true, expl:'적은 질량·부피에 에너지를 담으니 몸이 가볍다. 지방은 내부 기관 보호와 체온 유지에도 쓰인다.' },
+  { id:'u2-l3-05', level:3, type:'mc', tags:['변성'], src:'강의자료 대조', ref:'2강 5-(2)①',
+    statement:'달걀을 삶으면 흰자가 굳어 원래대로 돌아가지 않는다. 이 현상에 대한 설명으로 옳은 것은?',
+    choices:['열이 단백질의 3차원 구조를 유지하는 약한 상호작용을 깨뜨린 변성이다','열이 아미노산 서열(1차 구조)을 바꾼 것이다','열이 단백질을 탄수화물로 바꾼 것이다','열이 펩티드 결합을 새로 만들어 서열이 길어진 것이다'],
+    answer:0, expl:'변성은 모양이 무너지는 것이고 서열은 그대로다. 온도·pH·염농도·유기용매가 원인이 된다. 조건이 돌아와도 되접히지 못하는 경우도 있다.' },
+  { id:'u2-l3-06', level:3, type:'mc', tags:['단백질구조'], src:'강의자료 대조', ref:'2강 5-(2)①',
+    statement:'헤모글로빈은 α사슬 2개와 β사슬 2개가 모여 하나의 기능 단위를 이룬다. 이는 단백질 구조의 몇 차 구조에 해당하는가?',
+    choices:['4차 구조','1차 구조','2차 구조','3차 구조'],
+    answer:0, expl:'둘 이상의 폴리펩티드가 모여 하나의 기능적 분자가 된 것이 4차 구조다. 사슬 각각의 서열·나선·접힘은 1~3차에 해당한다.' },
+  { id:'u2-l3-07', level:3, type:'mc', tags:['뉴클레오티드','염기'], src:'강의자료 대조', ref:'2강 6-(2)①',
+    statement:'"아데닌 + 리보오스"로만 이루어진 분자와, 여기에 인산기가 더 붙은 분자를 순서대로 옳게 부른 것은?',
+    choices:['뉴클레오시드 — 뉴클레오티드','뉴클레오티드 — 뉴클레오시드','뉴클레오시드 — 폴리뉴클레오티드','퓨린 — 피리미딘'],
+    answer:0, expl:'염기 + 오탄당 = 뉴클레오시드, 여기에 인산기가 붙으면 뉴클레오티드(핵산의 단위체). 아데닌은 퓨린이다.' },
+
+  /* ---------- L4 종합·추론 (4) ---------- */
+  { id:'u2-l4-01', level:4, type:'mc', tags:['셀룰로오스','녹말','다당'], src:'강의자료 대조', ref:'2강 3-(2)',
+    statement:'사람이 녹말은 소화하지만 셀룰로오스는 소화하지 못하는 이유로 가장 적절한 것은?',
+    choices:['둘 다 포도당 중합체지만, 셀룰로오스는 β-포도당이 1-4 결합으로 번갈아 뒤집혀 이어져 녹말 분해효소가 그 결합을 인식하지 못하기 때문','셀룰로오스는 포도당이 아니라 과당으로 이루어져 있기 때문','셀룰로오스는 지질이라 물에 녹지 않기 때문','녹말에는 1-6 결합만 있고 셀룰로오스에는 1-4 결합만 있기 때문'],
+    answer:0, expl:'단위체는 같고 결합의 모양(α vs β)이 다르다. 효소는 모양을 알아보므로 β 결합을 못 끊는다. 소·흰개미는 그 결합을 끊는 미생물의 도움을 받는다. 녹말(아밀로오스)도 1-4 결합이 기본이라 넷째 선지는 틀리다.' },
+  { id:'u2-l4-02', level:4, type:'mc', tags:['겸상적혈구','단백질구조'], src:'강의자료 대조', ref:'2강 5-(2)②',
+    statement:'겸상적혈구빈혈증이 생기는 과정을 단백질 구조 단계로 옳게 설명한 것은?',
+    choices:['1차 구조에서 아미노산 하나가 바뀜 → 소수성 부위가 드러나 2·3차 구조가 변함 → 헤모글로빈 분자끼리 뭉쳐 4차 구조 이상 → 낫 모양 섬유가 되어 산소 운반 저하','체온 상승으로 변성이 일어남 → 그 결과 1차 서열이 바뀜 → 낫 모양이 됨','4차 구조의 사슬 개수가 줄어듦 → 1차 서열이 자동으로 바뀜 → 낫 모양이 됨','2차 구조의 수소결합만 끊어짐 → 1·3차 구조는 그대로 → 낫 모양이 됨'],
+    answer:0, expl:'원인은 유전적인 1차 구조 변화이고, 그것이 위 단계로 번진다. 변성은 서열을 바꾸지 않는다. 바뀐 아미노산은 글루탐산 → 발린이다(자료의 "글루타민"은 오기).' },
+  { id:'u2-l4-03', level:4, type:'tf', tags:['변성','단백질구조'], src:'강의자료 대조', ref:'2강 5-(2)①',
+    statement:'변성된 단백질이 변성 요인을 없애자 다시 원래의 기능 형태로 접혔다면, 이는 단백질의 3차원 구조 정보가 1차 구조(아미노산 서열)에 들어 있다는 근거가 된다.',
+    answer:true, expl:'변성은 약한 결합만 깨고 서열은 그대로 둔다. 외부 도움 없이 원래 모양으로 돌아갔다면 모양을 정하는 정보는 서열에 있었던 것이다(재생, renaturation).' },
+  { id:'u2-l4-04', level:4, type:'mc', tags:['DNA','방향성','염기'], src:'강의자료 대조', ref:'2강 6-(2)②③',
+    statement:'DNA 한 가닥의 서열이 5′-ATGC-3′ 일 때, 이와 짝을 이루는 가닥을 5′→3′ 방향으로 옳게 쓴 것은?',
+    choices:['5′-GCAT-3′','5′-TACG-3′','5′-UACG-3′','5′-ATGC-3′'],
+    answer:0, expl:'짝 염기는 A–T, G–C라 위 가닥에 붙는 순서는 3′-TACG-5′. 두 가닥은 역평행이므로 5′부터 다시 쓰면 5′-GCAT-3′. U는 RNA의 염기라 DNA에는 없다.' },
+  ]
+});
+
+</script>
+<script>
+/* U3 세포 — 3강. 개념 과목: 전 문항 ref 필수 + 블라인드 풀이 대조 (PROBLEM_SPEC §10) */
+SV_BANK.push({
+  id: 'u3', no: 3, title: '세포', titleEn: 'The Cell',
+  scope: '세포설·SA/V·원형질막 · 원핵 vs 진핵 · 동물 vs 식물 · 핵·리보솜·소포체·골지체·리소좀·액포·미토콘드리아·엽록체·퍼옥시좀 · 내부공생설 · 세포골격 · 세포외 구조·연접',
+  problems: [
+
+  /* ---------- L1 용어·정의 (5) ---------- */
+  { id:'u3-l1-01', level:1, type:'tf', tags:['원핵','리보솜'], src:'강의자료 대조', ref:'3강 2-(1)',
+    statement:'리보솜은 진핵세포에만 있고 원핵세포에는 없다.',
+    answer:false, expl:'원핵·진핵의 공통점이 원형질막·세포질·DNA·리보솜이다. 리보솜은 막이 없는 소기관이라 핵막·막성 소기관이 없는 원핵세포에도 있다.' },
+  { id:'u3-l1-02', level:1, type:'mc', tags:['핵기능'], src:'강의자료 대조', ref:'3강 3-(1)',
+    statement:'핵 속 인(nucleolus)의 기능은?',
+    choices:['rRNA를 합성하고 리보솜 대·소단위체를 각각 조립한다','DNA를 세포질로 내보낸다','인지질과 스테로이드를 합성한다','세포호흡으로 ATP를 만든다'],
+    answer:0, expl:'인은 리보솜 공장이다. 조립된 소단위체는 핵공을 통해 세포질로 나가 단백질 합성에 쓰인다.' },
+  { id:'u3-l1-03', level:1, type:'mc', tags:['리소좀'], src:'강의자료 대조', ref:'3강 3-(5)',
+    statement:'리소좀에 대한 설명으로 옳은 것은?',
+    choices:['여러 가수분해효소를 담은 단일막 소낭이며, 효소는 산성에서 활성이 높다','이중막을 가지며 세포호흡을 한다','막이 없는 단백질 합성 장소다','광합성으로 당을 만든다'],
+    answer:0, expl:'식세포작용·자기소화작용으로 고분자와 손상된 소기관을 분해한다. 효소가 산성에서 잘 작동하므로 pH 7인 세포질로 새어도 기능을 거의 못 한다.' },
+  { id:'u3-l1-04', level:1, type:'tf', tags:['표면적'], src:'강의자료 대조', ref:'3강 1',
+    statement:'세포가 커질수록 표면적/부피 비(SA/V)가 커져서 세포와 환경 사이의 물질 교환이 유리해진다.',
+    answer:false, expl:'세포가 커지면 부피가 표면적보다 빨리 늘어 SA/V는 작아진다. 그래서 세포는 작게 유지되고, 큰 생물은 세포 수를 늘린다.' },
+  { id:'u3-l1-05', level:1, type:'mc', tags:['섬모','미세소관'], src:'강의자료 대조', ref:'3강 3-(10)②',
+    statement:'섬모와 편모의 운동을 만드는 세포골격과 운동단백질의 짝으로 옳은 것은?',
+    choices:['미세소관 — 디네인','미세섬유(액틴) — 미오신','중간섬유 — 콜라겐','미세소관 — 인테그린'],
+    answer:0, expl:'디네인이 ATP를 쓰며 미세소관 위를 "걸어" 섬모·편모를 굽힌다. 액틴–미오신은 근수축·아메바 운동·세포질 유동의 짝이다.' },
+
+  /* ---------- L2 개념 구별·비교 (8) ---------- */
+  { id:'u3-l2-01', level:2, type:'mc', tags:['원핵'], src:'강의자료 대조', ref:'3강 2-(1)',
+    statement:'원핵세포와 진핵세포의 차이로 옳은 것은?',
+    choices:['원핵세포는 핵막이 없어 DNA가 핵양체에 있고, 진핵세포는 막으로 둘러싸인 핵과 세포소기관을 가진다','원핵세포에는 원형질막이 없다','진핵세포에는 리보솜이 없다','원핵세포가 진핵세포보다 대체로 크다'],
+    answer:0, expl:'원형질막·세포질·DNA·리보솜은 둘 다 있다. 크기는 원핵 1~5 μm, 진핵 10~100 μm로 진핵이 크다.' },
+  { id:'u3-l2-02', level:2, type:'mc', tags:['소포체'], src:'강의자료 대조', ref:'3강 3-(3)',
+    statement:'활면소포체와 조면소포체의 기능을 옳게 구별한 것은?',
+    choices:['활면 — 지질·스테로이드 합성, 해독, Ca²⁺ 저장 / 조면 — 리보솜이 만든 단백질의 변형·수송','활면 — 리보솜이 붙어 단백질 합성 / 조면 — 지질 합성','활면 — 광합성 / 조면 — 세포호흡','활면 — rRNA 합성 / 조면 — DNA 복제'],
+    answer:0, expl:'"조면"은 표면에 리보솜이 붙어 거칠다는 뜻이라 단백질 쪽 일을 한다. 활면은 리보솜 없이 지질 대사·해독·칼슘 저장을 맡는다.' },
+  { id:'u3-l2-03', level:2, type:'mc', tags:['리보솜'], src:'강의자료 대조', ref:'3강 3-(2)',
+    statement:'진핵세포의 유리 리보솜과 소포체 부착 리보솜을 비교한 것으로 옳은 것은?',
+    choices:['구조는 같아 역할을 바꿀 수 있고, 유리 리보솜은 세포질에서 쓰일 단백질을, 부착 리보솜은 막·분비·소기관행 단백질을 만든다','유리 리보솜은 막으로 둘러싸여 있고 부착 리보솜은 막이 없다','두 리보솜은 구조가 달라 역할을 바꿀 수 없다','부착 리보솜은 원핵세포에만 있다'],
+    answer:0, expl:'리보솜은 막이 없는 소기관이다. 차이는 위치이지 구조가 아니다. 원핵세포에는 유리 리보솜만 있다.' },
+  { id:'u3-l2-04', level:2, type:'tf', tags:['골지체'], src:'강의자료 대조', ref:'3강 3-(4)',
+    statement:'골지체의 cis면은 소포체 쪽에 있어 수송낭을 받아들이고, trans면에서는 소낭이 떨어져 나가 물질을 목적지로 보낸다.',
+    answer:true, expl:'골지체는 방향(극성)이 있다. cis에서 trans로 가는 동안 당단백질의 탄수화물 부분 등이 화학적으로 변형된다.' },
+  { id:'u3-l2-05', level:2, type:'mc', tags:['미토콘드리아','엽록체'], src:'강의자료 대조', ref:'3강 3-(7)(8)',
+    statement:'미토콘드리아와 엽록체의 구조 용어를 옳게 짝지은 것은?',
+    choices:['미토콘드리아 — 크리스타(내막 주름)·기질 / 엽록체 — 틸라코이드가 쌓인 그라나·스트로마','미토콘드리아 — 그라나·스트로마 / 엽록체 — 크리스타·기질','둘 다 단일막이다','미토콘드리아 — 엽록소 / 엽록체 — 크리스타'],
+    answer:0, expl:'크리스타는 호흡 효소가 일할 면적을 넓힌다. 엽록체의 틸라코이드 막에 엽록소가 있어 빛을 모으고, 스트로마에 DNA·리보솜·효소가 있다.' },
+  { id:'u3-l2-06', level:2, type:'mc', tags:['퍼옥시좀'], src:'강의자료 대조', ref:'3강 3-(9)',
+    statement:'퍼옥시좀에 대한 설명으로 옳은 것은?',
+    choices:['단일막 소기관으로, 지방산을 산화해 미토콘드리아로 보내고 과산화물을 물로 바꾸는 해독을 한다','이중막을 가지며 광합성을 한다','가수분해효소로 손상된 소기관을 소화한다','내막계에서 만들어져 골지체를 거친다'],
+    answer:0, expl:'간세포의 알코올 분해가 대표 예다. 종자의 글리옥시좀은 특화된 퍼옥시좀으로 지방을 당으로 바꾼다. 내막계에서 만들어지지 않고 스스로 커져 둘로 나뉜다.' },
+  { id:'u3-l2-07', level:2, type:'mc', tags:['미세섬유','세포골격'], src:'강의자료 대조', ref:'3강 3-(10)②',
+    statement:'세포골격 요소와 대표 기능의 짝으로 옳은 것은?',
+    choices:['미세섬유(액틴) — 미오신과 함께 근수축·아메바 위족 이동·세포질 유동','중간섬유 — 섬모와 편모의 운동','미세소관 — 세포외기질의 콜라겐 형성','미세섬유 — 중심립 형성'],
+    answer:0, expl:'미세소관은 중심체·섬모·편모·염색체 이동, 미세섬유는 액틴–미오신 운동, 중간섬유는 세포 전체의 지지대다.' },
+  { id:'u3-l2-08', level:2, type:'mc', tags:['연접'], src:'강의자료 대조', ref:'3강 3-(12)',
+    statement:'동물세포의 세포간 연접과 특징의 짝으로 옳은 것은?',
+    choices:['간극연접 — 통로 단백질로 세포질이 이어져 이온·당·아미노산 같은 작은 분자가 이동한다','밀착연접 — 중간섬유가 고정못처럼 세포를 연결한다','고착연접 — 세포막이 융합되어 물질이 전혀 새지 않는다','원형질연락사 — 동물세포 사이의 통로다'],
+    answer:0, expl:'밀착연접 = 막이 융합되어 밀봉, 고착연접(데스모좀) = 중간섬유로 고정, 간극연접 = 통로. 원형질연락사는 식물세포의 연결이다.' },
+  { id:'u3-l2-09', level:2, type:'mc', tags:['막진화'], src:'강의자료 대조', ref:'3강 3 참고사항',
+    statement:'막진화설에 대한 설명으로 옳은 것은?',
+    choices:['세포막이 안으로 함입되어 이중의 핵막과 소포체 같은 내막계가 생겼다는 가설로, 핵막과 소포체가 이어져 있다는 점을 근거로 든다','원핵생물이 큰 세포에 들어가 공생하며 미토콘드리아가 되었다는 가설이다','엽록체가 세포 안에서 스스로 분열한다는 점을 핵심 근거로 든다','세포벽이 안으로 접혀 액포가 생겼다는 가설이다'],
+    answer:0, expl:'막진화설은 내막계(핵막·소포체·골지체·리소좀)의 기원을, 내부공생설은 미토콘드리아·엽록체의 기원을 설명한다. 둘째·셋째 선지는 내부공생설의 내용이다.' },
+
+  /* ---------- L3 적용 — 상황 → 개념 (7) ---------- */
+  { id:'u3-l3-01', level:3, type:'mc', tags:['표면적'], src:'강의자료 대조', ref:'3강 1',
+    statement:'정육면체 모양 세포의 한 변 길이가 2배가 되면 표면적/부피 비(SA/V)는 어떻게 되는가?',
+    choices:['1/2배로 줄어 물질 교환에 불리해진다','2배로 커져 물질 교환에 유리해진다','변하지 않는다','4배로 커진다'],
+    answer:0, expl:'표면적은 길이²로 4배, 부피는 길이³로 8배 → 비는 4/8 = 1/2배. 그래서 세포는 작게 유지되고 융모처럼 표면적만 늘리는 구조가 쓰인다.' },
+  { id:'u3-l3-02', level:3, type:'mc', tags:['리보솜','핵기능'], src:'강의자료 대조', ref:'3강 3-(1)(2)',
+    statement:'단백질 합성률이 매우 높은 췌장 세포에서 두드러지게 관찰될 것으로 예상되는 특징은?',
+    choices:['많은 수의 리보솜과 뚜렷하게 발달한 인','많은 수의 엽록체','두꺼운 세포벽','리보솜이 거의 없는 세포질'],
+    answer:0, expl:'단백질을 많이 만들려면 리보솜이 많아야 하고, 리보솜 소단위체를 조립하는 인도 크게 발달한다.' },
+  { id:'u3-l3-03', level:3, type:'mc', tags:['리소좀'], src:'강의자료 대조', ref:'3강 3-(5)',
+    statement:'테이삭스병 환자의 뇌세포에 지질이 쌓여 뇌가 손상되는 원인으로 옳은 것은?',
+    choices:['리소좀 안의 지질 분해효소가 없거나 작동하지 않아 지질을 분해하지 못하기 때문','활면소포체가 지질을 너무 많이 합성하기 때문','미토콘드리아가 지질을 태우지 못하기 때문','세포벽이 지질의 배출을 막기 때문'],
+    answer:0, expl:'리소좀 가수분해효소가 결핍된 질환의 예다. 분해되지 못한 지질이 뇌세포에 쌓인다. 동물세포에는 세포벽이 없다.' },
+  { id:'u3-l3-04', level:3, type:'tf', tags:['액포'], src:'강의자료 대조', ref:'3강 3-(6)',
+    statement:'식물의 액포는 팽압을 유지해 세포를 지지하고, 안토시아닌 같은 색소로 곤충을 끌어들이며, 독성 화합물로 포식자를 막는 등 여러 기능을 한다.',
+    answer:true, expl:'저장고·노폐물 격리·생장(팽압)·생식(색소)·방어까지 맡는다. 식물세포에는 리소좀이 없어 분해 기능도 액포가 대신한다.' },
+  { id:'u3-l3-05', level:3, type:'mc', tags:['섬모'], src:'강의자료 대조', ref:'3강 3-(10)②',
+    statement:'수란관 안에서 난자를 이동시키는 구조와 그 운동 방식을 옳게 짝지은 것은?',
+    choices:['섬모 — 짧고 여러 개이며, 중심축과 수직 방향으로 노젓기 운동','편모 — 길고 대개 1개이며, 중심축과 같은 방향으로 파동 운동','미세섬유 — 위족을 만들어 이동','중간섬유 — 액틴과 함께 수축'],
+    answer:0, expl:'수란관 벽의 많은 섬모가 함께 노를 저어 난자를 밀어낸다. 편모의 파동 운동은 정자가 스스로 헤엄치는 방식이다. 섬모·편모의 속 구조는 같다.' },
+  { id:'u3-l3-06', level:3, type:'mc', tags:['원형질연락사','연접'], src:'강의자료 대조', ref:'3강 3-(12)①',
+    statement:'이웃한 두 식물세포가 세포벽 사이로도 RNA·단백질 같은 물질을 주고받을 수 있게 하는 구조는?',
+    choices:['원형질연락사','간극연접','중간라멜라','밀착연접'],
+    answer:0, expl:'세포의 원형질이 세포벽을 뚫고 이웃 세포와 이어진 통로다. 간극연접·밀착연접은 동물세포의 연접이고, 중간라멜라는 1차 세포벽 사이를 붙이는 펙틴 층이다.' },
+  { id:'u3-l3-07', level:3, type:'mc', tags:['세포외기질'], src:'강의자료 대조', ref:'3강 3-(11)②',
+    statement:'동물세포의 세포외기질(ECM)이 세포막과 연결되는 방식으로 옳은 것은?',
+    choices:['피브로넥틴이 세포막 수용체 단백질인 인테그린에 붙고, 프로테오글리칸과 콜라겐이 함께 그물 구조를 이룬다','셀룰로오스 섬유가 원형질막을 관통해 고정된다','펩티도글리칸이 인지질과 공유결합한다','펙틴이 풀처럼 세포 사이를 붙인다'],
+    answer:0, expl:'ECM은 당단백질 그물이고, 인테그린이 그 그물을 세포막에 붙잡는 손잡이다. 셀룰로오스·펙틴은 식물 세포벽, 펩티도글리칸은 세균 세포벽 성분이다.' },
+
+  /* ---------- L4 종합·추론 (4) ---------- */
+  { id:'u3-l4-01', level:4, type:'mc', tags:['소포체','골지체','리보솜'], src:'강의자료 대조', ref:'3강 3-(2)~(4)',
+    statement:'췌장 세포에서 분비 단백질(소화효소)이 만들어져 세포 밖으로 나가기까지의 경로로 옳은 것은?',
+    choices:['소포체 부착 리보솜 → 조면소포체 → 수송낭 → 골지체(cis면 → trans면) → 소낭 → 세포 밖','유리 리보솜 → 핵 → 골지체(trans면 → cis면) → 세포 밖','활면소포체 → 리소좀 → 세포 밖','소포체 부착 리보솜 → 골지체 → 조면소포체 → 세포 밖'],
+    answer:0, expl:'분비 단백질은 부착 리보솜에서 만들어져 조면소포체에서 변형되고, 수송낭으로 골지체의 소포체 쪽(cis)에 들어가 반대편(trans)에서 목적지 소낭으로 나간다. 유리 리보솜 산물은 세포질에 머문다.' },
+  { id:'u3-l4-02', level:4, type:'mc', tags:['내부공생','막진화'], src:'강의자료 대조', ref:'3강 3 참고사항',
+    statement:'미토콘드리아·엽록체의 내부공생설을 지지하는 근거로 보기 <b>어려운</b> 것은?',
+    choices:['핵막과 소포체의 막이 서로 이어져 있다','세균의 DNA와 매우 비슷한 고유 DNA를 가진다','세포 안에서 스스로 복제·분열한다','세포질과 가장 안쪽 공간 사이에 두 겹 이상의 막이 있다'],
+    answer:0, expl:'핵막–소포체 연결은 세포막이 안으로 접혀 내막계가 생겼다는 막진화설의 근거다. 나머지 셋은 "원핵생물이 들어와 공생했다"는 설명과 맞는 관찰이다.' },
+  { id:'u3-l4-03', level:4, type:'mc', tags:['동식물','액포','리소좀'], src:'강의자료 대조', ref:'3강 2-(2)·3-(5)(6)',
+    statement:'자료를 기준으로 동물세포와 식물세포를 비교한 설명 중 옳은 것은?',
+    choices:['식물세포에는 리소좀이 없어 액포가 그 기능을 대신하며, 세포벽·엽록체·원형질연락사를 가진다','미토콘드리아는 동물세포에만 있다','퍼옥시좀은 식물세포에만 있다','동물세포에는 세포골격이 없어 세포외기질이 그 역할을 대신한다'],
+    answer:0, expl:'미토콘드리아·퍼옥시좀은 둘 다 있다. 동물세포는 세포벽이 없어서 오히려 세포골격의 역할이 매우 중요하다.' },
+  { id:'u3-l4-04', level:4, type:'tf', tags:['소포체'], src:'강의자료 대조', ref:'3강 3-(3)',
+    statement:'같은 약을 계속 복용하면 간세포에서 활면소포체와 해독 효소가 늘어나 약이 더 빨리 제거되므로, 그 약에 내성이 생길 수 있다.',
+    answer:true, expl:'활면소포체는 약물에 −OH를 붙여 잘 녹게 해 배출을 돕는다. 약이 이 체계를 늘리면 제거 속도가 빨라져 같은 양의 효과가 줄어든다.' },
+  ]
+});
+
+</script>
+<script>
+/* U4 세포의 연결(다세포) — 4강. 개념 과목: 전 문항 ref 필수 + 블라인드 풀이 대조 (PROBLEM_SPEC §10) */
+SV_BANK.push({
+  id: 'u4', no: 4, title: '막·수송·신호전달', titleEn: 'Membranes, Transport & Signaling',
+  scope: '유동모자이크·유동성·막단백질 · 단순확산·삼투·촉진확산 · 1차/2차 능동수송 · 세포외 배출·세포내 섭취 · 신호전달 수용→전달→반응·cAMP·콜레라',
+  problems: [
+
+  /* ---------- L1 용어·정의 (5) ---------- */
+  { id:'u4-l1-01', level:1, type:'mc', tags:['유동모자이크'], src:'강의자료 대조', ref:'4강 1-(1)',
+    statement:'세포막의 유동모자이크 모델에 대한 설명으로 옳은 것은?',
+    choices:['인지질 이중층에 단백질이 박혀 있고 일부 지질·단백질에 탄수화물이 붙어 있으며, 성분이 움직일 수 있는 구조','단백질 두 층 사이에 지질이 고정된 딱딱한 구조','셀룰로오스 섬유로 짜인 그물 구조','인지질 한 층으로 된 구조'],
+    answer:0, expl:'"모자이크"는 이중층에 박힌 여러 단백질, "유동"은 성분이 옆으로 움직인다는 뜻이다. 굳으면 막단백질이 일을 못 한다.' },
+  { id:'u4-l1-02', level:1, type:'tf', tags:['단순확산'], src:'강의자료 대조', ref:'4강 2-(2)①',
+    statement:'단순확산은 에너지를 쓰지 않고 농도가 높은 쪽에서 낮은 쪽으로 물질이 이동하는 현상이며, 산소와 이산화탄소가 이 방식으로 막을 통과한다.',
+    answer:true, expl:'작은 비극성 분자는 비극성인 지질 이중층에 녹아들어 단백질 없이 지나간다. 농도 기울기를 따르는 내리막 이동이라 에너지가 필요 없다.' },
+  { id:'u4-l1-03', level:1, type:'mc', tags:['능동수송'], src:'강의자료 대조', ref:'4강 2-(3)',
+    statement:'1차 능동수송과 2차 능동수송의 차이로 옳은 것은?',
+    choices:['1차는 ATP 에너지가 펌프에 직접 쓰이고, 2차는 1차 능동수송이 만든 이온 기울기를 에너지로 쓴다','1차는 에너지를 쓰지 않고 2차만 에너지를 쓴다','1차는 통로단백질을, 2차는 지질 이중층을 이용한다','1차는 거대분자를, 2차는 작은 분자를 옮긴다'],
+    answer:0, expl:'둘 다 기울기를 거스르는 능동수송이다. 차이는 에너지원: ATP를 직접 쓰느냐(1차), 1차가 쌓아 둔 이온 기울기가 내려가는 힘을 빌리느냐(2차).' },
+  { id:'u4-l1-04', level:1, type:'mc', tags:['세포내섭취'], src:'강의자료 대조', ref:'4강 3-(2)',
+    statement:'세포 밖에 있는 특정 물질만 골라 막의 수용체단백질에 결합시킨 뒤 소낭으로 들여오는 작용은?',
+    choices:['수용체매개 세포내 섭취작용','음세포작용','식세포작용','세포외 배출작용'],
+    answer:0, expl:'특이적으로 고르는 것은 수용체매개뿐이다. 음세포작용은 세포 밖 액체를 가리지 않고 들이키고, 식세포작용은 위족으로 큰 입자를 감싸 삼킨다.' },
+  { id:'u4-l1-05', level:1, type:'tf', tags:['신호수용'], src:'강의자료 대조', ref:'4강 5-(1)②',
+    statement:'세포막을 통과할 수 있는 테스토스테론 같은 리간드는 세포막 수용체가 아니라 세포질이나 핵에 있는 수용체와 결합한다.',
+    answer:true, expl:'막을 못 지나는 수용성·큰 리간드는 막 수용체(예: G단백질 결합 수용체)에, 막을 지나는 리간드는 세포 안 수용체에 붙는다.' },
+
+  /* ---------- L2 개념 구별·비교 (8) ---------- */
+  { id:'u4-l2-01', level:2, type:'mc', tags:['막단백질'], src:'강의자료 대조', ref:'4강 1-(3)',
+    statement:'막단백질의 종류와 기능을 옳게 짝지은 것은?',
+    choices:['수용체단백질 — 신호전달','수송단백질 — 당단백질로 다른 세포를 인식','세포-세포 인지단백질 — 친수성 통로를 만들어 용질을 이동','세포구조지지단백질 — 인접 세포와 간극연접을 형성'],
+    answer:0, expl:'수송단백질 = 통로·용질 이동, 인지단백질 = 당단백질로 세포 인식, 결합단백질 = 간극·밀착연접, 구조지지단백질 = 세포외기질과 결합해 모양 유지.' },
+  { id:'u4-l2-02', level:2, type:'tf', tags:['유동성'], src:'강의자료 대조', ref:'4강 1-(2)',
+    statement:'막을 이루는 인지질 꼬리의 불포화도가 높을수록 막의 유동성은 작아진다.',
+    answer:false, expl:'불포화 꼬리는 이중결합으로 꺾여 촘촘히 쌓이지 못하므로 유동성이 커진다. 2강의 불포화지방산이 실온에서 액체인 것과 같은 이유다.' },
+  { id:'u4-l2-03', level:2, type:'mc', tags:['삼투'], src:'강의자료 대조', ref:'4강 2-(2)②',
+    statement:'삼투(osmosis)에 대한 설명으로 옳은 것은?',
+    choices:['용질이 막을 통과하지 못할 때, 용질에 붙잡히지 않은 자유 물 분자가 막을 건너 이동하는 현상','용질이 ATP를 써서 막을 건너는 현상','거대분자가 소낭에 싸여 세포 안으로 들어오는 현상','이온이 통로단백질을 따라 이동하는 현상'],
+    answer:0, expl:'움직이는 것은 용질이 아니라 물이다. 에너지를 쓰지 않는 수동수송이며, 둘째는 능동수송, 셋째는 세포내 섭취, 넷째는 촉진확산이다.' },
+  { id:'u4-l2-04', level:2, type:'mc', tags:['촉진확산'], src:'강의자료 대조', ref:'4강 2-(2)③',
+    statement:'촉진확산에 쓰이는 통로단백질과 운반체단백질을 비교한 것으로 옳은 것은?',
+    choices:['통로단백질은 자극에 열리고 닫히는 통로로 비특이적인 것도 있고, 운반체단백질은 특정 용질과 결합해 모양이 바뀌며 옮긴다','둘 다 ATP를 소모한다','통로단백질만 특정 용질에 특이적이다','운반체단백질은 비극성 분자만 옮긴다'],
+    answer:0, expl:'촉진확산은 기울기를 따르는 수동수송이라 ATP를 쓰지 않는다. 옮기는 대상은 극성 분자와 이온이다. 운반체 결핍 질환의 예가 시스틴뇨증이다.' },
+  { id:'u4-l2-05', level:2, type:'mc', tags:['능동수송'], src:'강의자료 대조', ref:'4강 2-(3)',
+    statement:'자료에 제시된 수송 방향별 능동수송 예시의 짝으로 옳은 것은?',
+    choices:['역방향수송 — Na⁺-K⁺ 펌프','단방향수송 — H⁺-설탕 펌프','동방향수송 — 양성자 펌프','역방향수송 — 양성자 펌프'],
+    answer:0, expl:'자료 기준: 단방향 = 양성자 펌프, 동방향 = H⁺-설탕 펌프(두 물질이 같은 방향), 역방향 = Na⁺-K⁺ 펌프(Na⁺는 밖으로, K⁺는 안으로).' },
+  { id:'u4-l2-06', level:2, type:'mc', tags:['식세포','세포내섭취'], src:'강의자료 대조', ref:'4강 3-(2)①',
+    statement:'위족으로 음식 입자를 둘러싸 소낭으로 들인 뒤 리소좀과 융합시켜 소화하는 작용은?',
+    choices:['식세포작용','음세포작용','세포외 배출작용','수용체매개 세포내 섭취작용'],
+    answer:0, expl:'"먹는" 세포작용이다. 음세포작용은 "마시는" 것(세포 밖 액체를 비특이적으로), 수용체매개는 특정 물질만 골라 들인다.' },
+  { id:'u4-l2-07', level:2, type:'mc', tags:['인산화','신호전달'], src:'강의자료 대조', ref:'4강 5-(2)①',
+    statement:'인산화 연쇄반응으로 전달되는 신호를 억제 조절하는(끄는) 효소는?',
+    choices:['단백질 탈인산화효소','단백질 인산화효소','아데닐산고리화효소','글리코겐 가인산분해효소'],
+    answer:0, expl:'인산화효소가 인산기를 붙여 켜고, 탈인산화효소가 떼어 끈다. 켜고 끄는 짝이 있어야 신호가 필요할 때만 흐른다.' },
+  { id:'u4-l2-08', level:2, type:'tf', tags:['신호전달'], src:'강의자료 대조', ref:'4강 5-(2)',
+    statement:'세포 안의 신호 전달이 대개 여러 단계를 거치는 이유로 자료는 신호가 증폭된다는 점과 조절할 기회가 많아진다는 점을 든다.',
+    answer:true, expl:'단계마다 효소 하나가 많은 분자를 활성화하니 신호가 커지고, 단계가 많을수록 중간에서 끄거나 조절할 지점도 늘어난다.' },
+
+  /* ---------- L3 적용 — 상황 → 개념 (7) ---------- */
+  { id:'u4-l3-01', level:3, type:'mc', tags:['단순확산'], src:'강의자료 대조', ref:'4강 2-(1)',
+    statement:'다음 중 수송단백질의 도움 없이 지질 이중층을 직접 통과하기 가장 쉬운 물질은?',
+    choices:['산소(O₂)','포도당','나트륨 이온(Na⁺)','단백질'],
+    answer:0, expl:'작고 비극성인 분자는 비극성 지질층에 녹아 그대로 지나간다. 극성 분자(포도당)와 이온(Na⁺)은 수송단백질이 필요하고, 단백질 같은 거대분자는 소낭 수송을 쓴다.' },
+  { id:'u4-l3-02', level:3, type:'mc', tags:['삼투'], src:'강의자료 대조', ref:'4강 2-(2)②',
+    statement:'민물(저장액)에 사는 짚신벌레가 삼투로 계속 들어오는 물 때문에 터지지 않는 방법은?',
+    choices:['수축포에 물을 모아 밖으로 배출한다','세포벽이 팽압으로 더 이상의 유입을 막는다','능동수송으로 물을 더 들여온다','세포막을 고체로 굳혀 물을 막는다'],
+    answer:0, expl:'짚신벌레는 세포벽이 없는 단세포 생물이라 삼투를 스스로 조절해야 한다. 세포벽으로 버티는 것은 식물세포의 방식이다.' },
+  { id:'u4-l3-03', level:3, type:'mc', tags:['촉진확산'], src:'강의자료 대조', ref:'4강 2-(2)③',
+    statement:'시스틴뇨증 환자의 신장에 결석이 생기는 이유로 옳은 것은?',
+    choices:['시스테인을 촉진확산으로 재흡수하는 운반체단백질이 결핍되어, 아미노산이 재흡수되지 못하고 쌓이기 때문','Na⁺-K⁺ 펌프가 지나치게 작동하기 때문','수용체매개 세포내 섭취가 지나치게 일어나기 때문','인지질 꼬리가 포화되어 막이 굳었기 때문'],
+    answer:0, expl:'특정 용질에만 작용하는 운반체단백질 하나가 빠지면 그 물질만 옮겨지지 않는다. 운반체단백질의 특이성을 보여 주는 질환이다.' },
+  { id:'u4-l3-04', level:3, type:'mc', tags:['cAMP','신호전달'], src:'강의자료 대조', ref:'4강 5-(2)②',
+    statement:'에피네프린이 간세포에서 글리코겐 분해를 일으키는 경로를 순서대로 옳게 나열한 것은?',
+    choices:['에피네프린 → G단백질 결합 수용체 → G단백질 활성화 → 아데닐산고리화효소 → cAMP 생성 → 단백질 인산화효소 → 글리코겐 분해','에피네프린 → 핵 속 수용체 → 전사인자 활성화 → 글리코겐 합성','에피네프린 → cAMP → G단백질 → 수용체 → 글리코겐 분해','에피네프린 → 세포내 섭취 → 리소좀 → 글리코겐 분해'],
+    answer:0, expl:'수용(막 수용체) → 전달(G단백질 → cAMP라는 2차 전달자 → 인산화효소) → 반응(세포질 효소 활성 → 글리코겐 분해). 에피네프린은 막을 통과하지 않아 막 수용체에 붙는다.' },
+  { id:'u4-l3-05', level:3, type:'tf', tags:['신호반응'], src:'강의자료 대조', ref:'4강 5-(3)',
+    statement:'성장인자 신호가 인산화 연쇄반응을 거쳐 전사인자를 활성화하는 경우, 세포의 반응은 핵에서 유전자 발현의 조절로 나타난다.',
+    answer:true, expl:'반응은 두 곳에서 일어난다: 핵(전사인자 → 유전자 발현 조절, 예: 성장인자)과 세포질(효소 활성 변화, 예: 에피네프린의 글리코겐 분해).' },
+  { id:'u4-l3-06', level:3, type:'mc', tags:['세포외배출'], src:'강의자료 대조', ref:'4강 3-(1)',
+    statement:'췌장 세포가 소화효소가 든 소낭을 세포막과 융합시켜 세포 밖으로 내보내는 과정은?',
+    choices:['세포외 배출작용','식세포작용','음세포작용','촉진확산'],
+    answer:0, expl:'효소 같은 거대분자는 막을 그대로 못 지나므로 소낭째 막과 합쳐 내보낸다(exocytosis). 식세포·음세포작용은 반대로 들여오는 과정이다.' },
+  { id:'u4-l3-07', level:3, type:'mc', tags:['세포예정사','신호전달'], src:'강의자료 대조', ref:'4강 5 참고',
+    statement:'발생 과정에서 손가락 사이 조직이 사라져 손가락이 갈라지는 데 관여하는 것은?',
+    choices:['신호에 따라 세포가 스스로 죽는 세포예정사(apoptosis)','삼투에 의한 세포 파열','세포외 배출작용','막 유동성의 감소'],
+    answer:0, expl:'세포예정사도 신호전달로 조절된다. 필요 없는 세포를 계획대로 없애는 과정이 동물의 발생에 중요하다.' },
+
+  /* ---------- L4 종합·추론 (4) ---------- */
+  { id:'u4-l4-01', level:4, type:'mc', tags:['삼투'], src:'강의자료 대조', ref:'4강 2-(2)②',
+    statement:'동물세포와 식물세포를 각각 저장액(세포 안보다 용질 농도가 낮은 용액)에 넣었을 때의 결과로 옳은 것은?',
+    choices:['동물세포는 물이 과도하게 들어와 터질 수 있고, 식물세포는 세포벽이 압력으로 버텨 팽압이 유지된다','두 세포 모두 물이 빠져 쪼그라든다','동물세포는 쪼그라들고 식물세포는 터진다','두 세포 모두 아무 변화가 없다'],
+    answer:0, expl:'저장액이면 물이 세포 안으로 들어온다. 동물세포는 막만 있어 터질 수 있고(짚신벌레는 수축포로 퍼냄), 식물세포는 세포벽이 더 들어오지 못하게 막아 팽팽한 상태(팽압)를 성장과 지지에 쓴다.' },
+  { id:'u4-l4-02', level:4, type:'mc', tags:['콜레라','cAMP','신호전달'], src:'강의자료 대조', ref:'4강 5-(2)②',
+    statement:'콜레라 독소에 의한 설사를 신호전달 과정으로 옳게 설명한 것은?',
+    choices:['G단백질이 변형되어 GTP를 가수분해하지 못함 → 아데닐산고리화효소가 계속 활성 → cAMP 대량 축적 → 장세포가 물과 염을 계속 배출','독소가 cAMP를 분해함 → 신호가 차단됨 → 물 흡수가 늘어남','독소가 수용체를 파괴함 → 에피네프린이 결합하지 못함 → 글리코겐이 쌓임','독소가 인산화효소를 없앰 → 전사인자가 활성화됨 → 물 흡수가 늘어남'],
+    answer:0, expl:'G단백질은 GTP를 끊어야 꺼지는 스위치다. 끊지 못하면 켜진 채로 남아 2차 전달자 cAMP가 계속 만들어진다. 신호가 "꺼지지 않는" 고장이다.' },
+  { id:'u4-l4-03', level:4, type:'mc', tags:['촉진확산','단순확산','능동수송'], src:'강의자료 대조', ref:'4강 2-(1)~(3)',
+    statement:'막 수송 사례와 수송 방식의 짝으로 옳지 <b>않은</b> 것은?',
+    choices:['운반체단백질을 통해 극성 분자가 농도가 높은 쪽에서 낮은 쪽으로 이동 — 능동수송','산소가 지질 이중층을 지나 농도가 낮은 쪽으로 이동 — 단순확산','ATP를 써서 농도 기울기를 거슬러 이온을 퍼냄 — 1차 능동수송','자극으로 열린 통로단백질을 따라 이온이 농도 기울기대로 이동 — 촉진확산'],
+    answer:0, expl:'단백질을 거쳐도 기울기를 따라 내려가면 에너지가 들지 않는 촉진확산이다. 능동수송인지는 "단백질을 쓰는가"가 아니라 "기울기를 거스르며 에너지를 쓰는가"로 가른다.' },
+  { id:'u4-l4-04', level:4, type:'tf', tags:['콜레스테롤','유동성'], src:'강의자료 대조', ref:'4강 1-(2)',
+    statement:'콜레스테롤은 체온(37℃)에서는 인지질의 움직임을 억제해 막의 유동성을 줄이고, 저온에서는 막이 굳는 것을 막으므로 온도 변화에 대한 완충제 역할을 한다.',
+    answer:true, expl:'한 방향으로만 작용하지 않는다는 것이 핵심이다. 따뜻할 땐 너무 흐르지 않게, 추울 땐 굳지 않게 — 그래서 "온도 완충제"다.' },
+  ]
+});
+
+</script>
+<script>
+/* U5 물질대사 서론 — 5강. 개념 과목: 전 문항 ref 필수 + 블라인드 풀이 대조 (PROBLEM_SPEC §10) */
+SV_BANK.push({
+  id: 'u5', no: 5, title: '물질대사 서론', titleEn: 'Introduction to Metabolism',
+  scope: '물질대사 정의 · 열역학 1·2법칙·엔트로피·자발성 · 자유에너지 ΔG·평형·열린계 · 발열/흡열(자료 용어) · ATP 가수분해·세 가지 작업·재생 · 효소·활성화에너지·특이성·조절',
+  problems: [
+
+  /* ---------- L1 용어·정의 (5) ---------- */
+  { id:'u5-l1-01', level:1, type:'tf', tags:['열역학'], src:'강의자료 대조', ref:'5강 열역학 법칙',
+    statement:'열역학 제1법칙에 따르면 에너지는 형태가 바뀌어도 새로 생기거나 사라지지 않는다.',
+    answer:true, expl:'에너지 보존 법칙이다. 포도당의 화학에너지 → ATP → 근육의 운동에너지처럼 형태만 바뀌고 총량은 같다.' },
+  { id:'u5-l1-02', level:1, type:'mc', tags:['자유에너지'], src:'강의자료 대조', ref:'5강 자유에너지',
+    statement:'반응의 자유에너지 변화 ΔG의 정의로 옳은 것은?',
+    choices:['\\(\\Delta G = G_{\\text{생성물}} - G_{\\text{반응물}}\\)','\\(\\Delta G = G_{\\text{반응물}} - G_{\\text{생성물}}\\)','활성화에너지에서 생성물의 자유에너지를 뺀 값','반응 속도에 온도를 곱한 값'],
+    answer:0, expl:'나중 상태 − 처음 상태. 생성물 쪽 자유에너지가 낮으면 ΔG < 0 이고 자발적으로 진행한다.' },
+  { id:'u5-l1-03', level:1, type:'mc', tags:['ATP'], src:'강의자료 대조', ref:'5강 ATP (1)',
+    statement:'ATP 가수분해가 에너지를 쉽게 방출하는 이유로 자료에 제시된 것은?',
+    choices:['음전하를 띤 인산기 3개가 서로 밀어내 불안정한 상태이기 때문','인산기가 양전하를 띠어 서로 끌어당기기 때문','아데닌 염기가 산소와 반응하기 때문','리보오스 고리가 열에 쉽게 녹기 때문'],
+    answer:0, expl:'같은 음전하끼리 가까이 묶여 있어 에너지가 높은 상태다. 끝 인산기가 떨어지면 반발이 풀리며 ΔG = −7.3 kcal/mol 을 내놓는다.' },
+  { id:'u5-l1-04', level:1, type:'tf', tags:['효소작용','활성화에너지'], src:'강의자료 대조', ref:'5강 효소 (2)',
+    statement:'효소는 활성화에너지를 낮출 뿐 아니라 반응의 ΔG도 음수로 바꾸어 흡열반응을 발열반응으로 만든다.',
+    answer:false, expl:'효소는 넘어야 할 고개(활성화에너지)만 낮춘다. 출발점과 도착점의 차이인 ΔG는 그대로라 반응의 방향은 바꾸지 못한다 — 속도만 바꾸는 촉매다.' },
+  { id:'u5-l1-05', level:1, type:'mc', tags:['경쟁적억제'], src:'강의자료 대조', ref:'5강 효소 (4)③',
+    statement:'경쟁적 억제자에 대한 설명으로 옳은 것은?',
+    choices:['기질과 모양이 비슷해 활성부위를 두고 기질과 경쟁한다','활성부위가 아닌 곳에 결합해 효소 기능을 억제한다','경로의 최종 생성물이 앞 단계 효소를 억제하는 방식이다','비타민·금속이온처럼 효소 활성을 돕는다'],
+    answer:0, expl:'기질 유사체라 활성부위 자리를 차지한다. 둘째는 비경쟁적 억제자, 셋째는 되먹임 억제, 넷째는 보조인자.' },
+
+  /* ---------- L2 개념 구별·비교 (8) ---------- */
+  { id:'u5-l2-01', level:2, type:'mc', tags:['발열흡열'], src:'강의자료 대조', ref:'5강 자유에너지개념의 적용',
+    statement:'자료의 분류에 따를 때 ΔG < 0 인 반응의 특징으로 옳은 것은?',
+    choices:['자발적이고 에너지를 방출하며, 분해반응(이화)에 해당한다','비자발적이고 에너지를 흡수하며, 합성반응(동화)에 해당한다','자발적이지만 에너지를 흡수한다','항상 반응 속도가 빠르다'],
+    answer:0, expl:'자료는 ΔG<0 을 "발열", ΔG>0 을 "흡열"로 부른다. 자발적이라는 것은 방향에 대한 말이지 속도에 대한 말이 아니다 — 속도는 효소가 정한다.' },
+  { id:'u5-l2-02', level:2, type:'mc', tags:['자유에너지'], src:'강의자료 대조', ref:'5강 자유에너지개념의 적용',
+    statement:'포도당 + 산소 → 이산화탄소 + 물 반응의 ΔG가 −686 kcal/mol 일 때, 이산화탄소 + 물 → 포도당 + 산소 반응의 ΔG는?',
+    choices:['+686 kcal/mol','−686 kcal/mol','0 kcal/mol','−343 kcal/mol'],
+    answer:0, expl:'역반응은 출발과 도착이 뒤바뀌므로 크기는 같고 부호만 반대다. 광합성 쪽 방향은 에너지를 흡수해야 하는 비자발적 과정이다.' },
+  { id:'u5-l2-03', level:2, type:'tf', tags:['엔트로피','열역학'], src:'강의자료 대조', ref:'5강 열역학 법칙',
+    statement:'열역학 제2법칙에 따르면 에너지가 전달·변환될 때 일부가 열로 흩어지므로 우주의 엔트로피는 증가한다.',
+    answer:true, expl:'에너지를 100% 쓸 수는 없다는 법칙이다. 생물이 계속 먹어야 하는 이유이기도 하다.' },
+  { id:'u5-l2-04', level:2, type:'mc', tags:['ATP'], src:'강의자료 대조', ref:'5강 ATP (2)',
+    statement:'ATP가 하는 세 가지 작업 중 "수송 작업"의 예로 옳은 것은?',
+    choices:['농도 기울기를 거슬러 물질을 옮기는 능동수송','근육세포의 수축','단량체로부터 중합체 합성','산소의 단순확산'],
+    answer:0, expl:'근수축은 기계적 작업, 중합체 합성은 화학적 작업이다. 단순확산은 에너지가 들지 않으니 ATP 작업이 아니다.' },
+  { id:'u5-l2-05', level:2, type:'mc', tags:['활성화에너지','효소작용'], src:'강의자료 대조', ref:'5강 효소 (2)',
+    statement:'생물이 활성화에너지 장벽을 넘기 위해 고온 대신 효소를 쓰는 이유로 옳은 것은?',
+    choices:['고온은 단백질을 변성시켜 세포를 죽이고, 필요한 반응만 골라 일으키지 못하기 때문','효소가 반응의 ΔG를 더 크게 만들기 때문','고온에서는 엔트로피가 감소하기 때문','효소는 반응에서 소모되며 에너지를 직접 공급하기 때문'],
+    answer:0, expl:'열은 모든 반응을 무차별로 촉발하고 단백질을 망가뜨린다. 효소는 특정 반응의 장벽만 낮추며, 반응에서 소모되지 않는 촉매다.' },
+  { id:'u5-l2-06', level:2, type:'mc', tags:['기질특이성'], src:'강의자료 대조', ref:'5강 효소 (3)',
+    statement:'효소가 활성부위에서 자신이 촉매할 특정 기질만 인식해 결합하는 성질은?',
+    choices:['기질특이성','되먹임 억제','변성','보조인자'],
+    answer:0, expl:'활성부위의 모양과 화학적 성질이 기질과 맞아야 결합한다. 그래서 효소 하나는 보통 한 종류의 반응만 촉매한다.' },
+  { id:'u5-l2-07', level:2, type:'mc', tags:['경쟁적억제','비경쟁적억제'], src:'강의자료 대조', ref:'5강 효소 (4)③',
+    statement:'경쟁적 억제자와 비경쟁적 억제자를 구별하는 기준은?',
+    choices:['활성부위에 결합하면 경쟁적, 활성부위가 아닌 곳에 결합하면 비경쟁적','억제자가 단백질이면 경쟁적, 지질이면 비경쟁적','억제자가 온도를 높이면 경쟁적, 낮추면 비경쟁적','억제자가 ATP를 만들면 경쟁적, 쓰면 비경쟁적'],
+    answer:0, expl:'이름 그대로 "기질과 같은 자리를 두고 다투는가"다. 기질과 닮은 경쟁적 억제자는 활성부위에, 비경쟁적 억제자는 다른 곳에 붙어 기능을 떨어뜨린다.' },
+  { id:'u5-l2-08', level:2, type:'tf', tags:['보조인자'], src:'강의자료 대조', ref:'5강 효소 (4)②',
+    statement:'비타민이나 Mg²⁺ 같은 금속이온은 효소의 활성을 돕는 보조인자로 작용할 수 있다.',
+    answer:true, expl:'자료의 예: Mg²⁺·Mn²⁺는 DNA 중합효소의 보조인자다. 보조인자는 효소 활성의 조절 요인 중 하나다.' },
+
+  /* ---------- L3 적용 — 상황 → 개념 (7) ---------- */
+  { id:'u5-l3-01', level:3, type:'mc', tags:['물질대사','에너지변환'], src:'강의자료 대조', ref:'5강 물질대사의 정의',
+    statement:'댐에 가둔 물이 떨어지며 발전기를 돌려 전기를 만드는 과정의 에너지 변환을 옳게 나타낸 것은?',
+    choices:['위치에너지 → 운동에너지 → 전기에너지','화학에너지 → 운동에너지 → 전기에너지','전기에너지 → 위치에너지 → 운동에너지','열에너지 → 화학에너지 → 전기에너지'],
+    answer:0, expl:'높은 곳의 물이 가진 위치에너지가 떨어지며 운동에너지가 되고, 발전기가 이를 전기에너지로 바꾼다. 몸에서는 포도당의 화학에너지가 근육의 운동에너지로 바뀌는 식이다.' },
+  { id:'u5-l3-02', level:3, type:'mc', tags:['엔트로피','자발성'], src:'강의자료 대조', ref:'5강 열역학 법칙',
+    statement:'다음 중 외부에서 에너지를 넣지 않아도 일어나는 자발적 과정은?',
+    choices:['물이 높은 곳에서 낮은 곳으로 흐른다','펌프로 물을 낮은 곳에서 높은 곳으로 끌어올린다','이산화탄소와 물로 포도당을 합성한다','단량체를 이어 중합체를 만든다'],
+    answer:0, expl:'내리막 과정은 저절로 일어나며 우주의 엔트로피를 늘린다. 나머지 셋은 에너지를 넣어야 하는 비자발적 과정이다(합성 반응은 ΔG>0).' },
+  { id:'u5-l3-03', level:3, type:'mc', tags:['평형'], src:'강의자료 대조', ref:'5강 자유에너지',
+    statement:'어떤 반응이 평형에 도달했을 때에 대한 설명으로 옳은 것은?',
+    choices:['생성물과 반응물의 상대적 농도가 더 이상 변하지 않고, 그 반응으로는 더 이상 일을 할 수 없다','반응이 가장 빠르게 일어나는 상태다','계의 자유에너지가 가장 큰 상태다','효소가 모두 소모되어 반응이 멈춘 상태다'],
+    answer:0, expl:'계는 자유에너지가 낮은(안정한) 쪽으로 가다가 가장 안정한 지점에서 평형이 된다. 효소는 소모되지 않으며, 평형은 속도가 아니라 방향이 다한 상태다.' },
+  { id:'u5-l3-04', level:3, type:'tf', tags:['ATP'], src:'강의자료 대조', ref:'5강 ATP (1)(3)',
+    statement:'세포는 ATP를 가수분해해 생긴 ADP와 인산을 다시 ATP로 재생해 쓰므로, ATP는 한 번 쓰고 버리는 연료가 아니라 순환하는 에너지 운반체다.',
+    answer:true, expl:'발열(ΔG<0) 반응의 에너지로 ADP+Pᵢ → ATP를 다시 만들고, ATP 가수분해로 흡열 반응에 에너지를 댄다. 이 순환이 두 종류의 반응을 이어 준다.' },
+  { id:'u5-l3-05', level:3, type:'mc', tags:['경쟁적억제'], src:'강의자료 대조', ref:'5강 효소 (4)③',
+    statement:'어떤 억제자가 있는 상태에서 기질 농도를 크게 높였더니 억제 효과가 거의 사라졌다. 이 억제자는 무엇일 가능성이 가장 큰가?',
+    choices:['경쟁적 억제자','비경쟁적 억제자','보조인자','되먹임 억제에 쓰이는 최종 생성물'],
+    answer:0, expl:'경쟁적 억제자는 활성부위를 두고 기질과 다툰다. 기질이 압도적으로 많아지면 활성부위를 차지할 확률이 기질 쪽으로 기운다. 활성부위가 아닌 곳에 붙는 비경쟁적 억제는 기질을 늘려도 풀리지 않는다.' },
+  { id:'u5-l3-06', level:3, type:'mc', tags:['효소작용'], src:'강의자료 대조', ref:'5강 효소 (3)',
+    statement:'중성 용액 속에서도 효소의 활성부위가 산성 R기로 기질을 둘러싸 반응을 촉진한다. 이는 효소 작용 특성 중 무엇에 해당하는가?',
+    choices:['기질과 결합하며 활성부위 구조가 변해 주변보다 반응이 잘되는 환경을 제공하는 것','기질특이성','되먹임 억제','효소의 특이적 지역화'],
+    answer:0, expl:'효소는 활성부위 안에 작은 "반응실"을 만든다. 기질특이성은 누구와 결합하느냐, 지역화는 효소가 세포의 어느 구획에 있느냐의 문제다.' },
+  { id:'u5-l3-07', level:3, type:'mc', tags:['효소지역화'], src:'강의자료 대조', ref:'5강 효소 (5)',
+    statement:'세포호흡에 필요한 효소들이 주로 미토콘드리아에 모여 있어서 얻는 이점으로 옳은 것은?',
+    choices:['연달아 일어나야 하는 반응들이 한 구획에서 빠르고 효율적으로 진행된다','효소가 반응의 ΔG를 바꿀 수 있게 된다','효소가 변성되지 않도록 고온이 유지된다','세포질의 다른 모든 반응이 멈춘다'],
+    answer:0, expl:'세포는 구획화되어 있고, 한 경로의 효소들이 한곳에 모이면 앞 반응의 생성물이 곧바로 다음 효소에 전달된다. 3강 미토콘드리아의 크리스타가 효소 작용 면적을 넓힌 것과 이어진다.' },
+
+  /* ---------- L4 종합·추론 (4) ---------- */
+  { id:'u5-l4-01', level:4, type:'mc', tags:['평형','자유에너지'], src:'강의자료 대조', ref:'5강 자유에너지개념의 적용',
+    statement:'살아 있는 세포의 물질대사 경로가 평형에 도달하지 않고 계속 일을 할 수 있는 이유로 옳은 것은?',
+    choices:['세포가 연료와 산소를 계속 받아들이고 노폐물을 내보내는 열린계이기 때문','효소가 반응의 ΔG를 0으로 만들기 때문','세포 안의 모든 반응이 흡열반응이기 때문','세포는 닫힌계라 에너지가 밖으로 새지 않기 때문'],
+    answer:0, expl:'평형은 더 이상 일을 할 수 없는 상태다. 반응물이 계속 들어오고 생성물이 계속 빠져나가면 반응이 평형 쪽으로 계속 흘러가며 일을 한다.' },
+  { id:'u5-l4-02', level:4, type:'mc', tags:['엔트로피','열역학'], src:'강의자료 대조', ref:'5강 열역학 법칙',
+    statement:'수정란이 복잡한 성체로 자라며 몸의 질서가 커지는(엔트로피가 줄어드는) 현상이 열역학 법칙과 모순되지 않는 이유로 옳은 것은?',
+    choices:['성장 과정에서 내놓은 열이 주변의 엔트로피를 더 크게 늘려, 우주 전체의 엔트로피는 증가하기 때문이다(제2법칙)','생명체 안에서는 에너지가 새로 만들어지기 때문이다(제1법칙의 예외)','생물은 열역학 법칙을 따르지 않기 때문이다','성장하는 동안에는 열이 전혀 방출되지 않기 때문이다'],
+    answer:0, expl:'2법칙은 "우주(계+주변)"의 엔트로피를 말한다. 생물 안의 질서는 주변을 더 어지럽히는 대가로 얻는다. (자료 해당 문단 끝의 "1법칙을 따르게 된다"는 표현은 2법칙의 내용이다 — 자료 표기와 다름)' },
+  { id:'u5-l4-03', level:4, type:'mc', tags:['되먹임','다른자리'], src:'강의자료 대조', ref:'5강 효소 (4)④⑤',
+    statement:'어떤 대사 경로의 최종 산물이 쌓이면, 그 산물이 경로 첫 효소의 활성부위가 아닌 조절부위에 결합해 효소를 비활성화한다. 이 조절에 대한 설명으로 옳은 것은?',
+    choices:['되먹임 억제이며, 최종 산물이 다른자리 입체성 조절자로 작용한 경우다','경쟁적 억제이며, 최종 산물이 기질과 활성부위를 두고 경쟁한 경우다','보조인자가 효소를 활성화한 경우다','효소가 변성되어 비가역적으로 손상된 경우다'],
+    answer:0, expl:'"최종 산물이 앞 효소를 끈다" = 되먹임 억제, "활성부위가 아닌 조절부위에 붙어 모양을 바꾼다" = 다른자리 입체성 조절. 필요한 만큼만 만들게 하는 자동 조절 장치다.' },
+  { id:'u5-l4-04', level:4, type:'mc', tags:['ATP'], src:'강의자료 대조', ref:'5강 ATP (2)',
+    statement:'ATP가 수행하는 세포의 작업과 그 예시의 짝으로 옳지 <b>않은</b> 것은?',
+    choices:['기계적 작업 — 아미노산을 이어 폴리펩티드를 합성','수송 작업 — 농도 기울기를 거스르는 능동수송','기계적 작업 — 섬모 운동과 근육세포 수축','화학적 작업 — 단량체로부터 중합체 합성'],
+    answer:0, expl:'중합체 합성은 스스로 일어나지 않는 반응에 에너지를 대는 화학적 작업이다. 기계적 작업은 섬모·근수축·염색체 이동처럼 무언가를 움직이는 일이다.' },
+  ]
+});
+
+</script>
+
+<script src="../../shared/progress.js"></script>
+<script>
+window.SV_CONTENT = {"course": {"bigpicture": "\n<p><b>이 과목의 뼈대</b> — 수업계획서는 한 학기를 \"생명체는 무엇이 다른가\"라는 물음 하나로 묶는다.\n답은 다섯 가지 특징이다: <b>규칙적 배열</b><span class=\"en\">(order)</span> → <b>에너지 이용</b><span class=\"en\">(energy)</span> →\n<b>영속성</b><span class=\"en\">(heredity)</span> → <b>다양성</b><span class=\"en\">(evolution)</span> → <b>항상성</b><span class=\"en\">(homeostasis)</span>.</p>\n<p>지금까지의 1~5강은 앞의 두 막이다. ① <b>규칙적 배열</b>: 원자가 결합해 물과 거대분자가 되고(1·2강),\n거대분자가 막으로 구획된 세포와 세포소기관을 이루며(3강), 세포는 막을 통해 물질과 신호를 주고받는다(4강).\n② <b>에너지 이용</b>: 그 구조물을 유지하는 화학반응 전체가 물질대사이고, 방향은 열역학이, 속도는 효소가 정한다(5강).</p>\n<div class=\"mapline\">원소·결합(1강) → 물·pH(1강) → 거대분자 4종(2강) → 세포·소기관(3강) → 막·수송·신호(4강) → 에너지·ATP·효소(5강)</div>\n<p><b>공부 전략</b> — 개념 과목의 시험은 \"정의를 아는가\"보다 <b>\"비슷한 둘을 구별하는가\"</b>와 <b>\"원인과 결과를 잇는가\"</b>에서 갈린다.\n각 단원의 비교 쌍(공유 vs 수소결합, 녹말 vs 셀룰로오스, 원핵 vs 진핵, 확산 vs 능동수송, ΔG vs 활성화에너지)을 표로 만들고,\n문제의 L3·L4는 그 표를 상황에 적용하는 연습이다.</p>"}, "u1": {"concept": "\n<div class=\"bigpic\"><span class=\"bt\">U1 큰그림</span>\n생명의 모든 구조는 결국 <b>원자들이 어떻게 전자를 나누느냐</b>에서 출발한다. 전기음성도 차이가 결합의 종류를 정하고,\n결합의 종류가 물의 성질을 정하며, 물의 성질이 세포가 사는 환경을 정한다. 이 단원은 그 사슬을 한 줄로 꿰는 연습이다.</div>\n\n<h4>1. 생명체의 원소와 원자 <span class=\"en\">(Elements &amp; Atoms)</span><span class=\"tagm\">용어 필수</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 사람 몸을 원소 단위로 쪼개면 무엇이 얼마나 나오는가? 그리고 같은 원소인데 무게가 다른 원자는 어떻게 가능한가?</div>\n<p>생명체 질량의 약 96%는 <b>C·O·H·N</b>, 나머지 약 4%의 대부분은 Ca·P·K·S·Na·Cl·Mg이며, 극소량의 미량원소도 필수다.\n원자는 양성자·중성자로 된 원자핵과 그 둘레의 전자로 이루어진다. <b>원자번호 = 양성자 수</b>, <b>질량수 = 양성자 + 중성자</b>.\n양성자 수는 같고 중성자 수만 다르면 <b>동위원소</b><span class=\"en\">(isotope)</span>이고, 핵이 스스로 붕괴하는 것이 방사성 동위원소다.\n붕괴로 양성자 수가 바뀌면 다른 원소가 된다.</p>\n<p>반응성을 정하는 것은 <b>최외각 전자(원자가전자)</b>다. 첫 껍질은 전자 2개, 그 바깥 껍질은 대개 8개가 차면 안정하다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[개념] 원자번호·질량수·동위원소 정의 구별. [함정] 전자 수만 다른 것은 동위원소가 아니라 이온.</div>\n\n<h4>2. 화학결합 네 가지 <span class=\"en\">(Chemical Bonds)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 원자끼리 붙는 방법이 하나뿐이라면 DNA 두 가닥은 풀리지 않고, 단백질은 접히지 않는다. 강한 결합과 약한 결합이 왜 둘 다 필요한가?</div>\n<p><b>전기음성도</b><span class=\"en\">(electronegativity)</span> = 결합 전자를 끌어당기는 힘. 이 차이 하나로 결합이 갈린다.</p>\n<ul><li><b>공유결합</b>: 전자쌍을 나눠 가짐. 전기음성도가 같으면 <b>비극성</b>(H₂, O₂), 다르면 <b>극성</b>(H₂O: Oδ−, Hδ+).</li>\n<li><b>이온결합</b>: 차이가 매우 커서 전자를 아예 빼앗음 → 양·음이온끼리 끌림(NaCl).</li>\n<li><b>수소결합</b>: 전기음성도 큰 원자와 공유결합한 H가 <b>이웃 분자(또는 부위)</b>의 전기음성도 큰 원자에 끌리는 약한 인력.</li>\n<li><b>반데르발스 인력</b>: 비극성 분자에서 순간적으로 생긴 전하 치우침끼리의 아주 약한 인력.</li></ul>\n<p class=\"intuit\">💡 <b>직관</b> — 공유·이온결합은 \"분자를 만드는 용접\", 수소결합·반데르발스는 \"분자끼리 붙이는 벨크로\". 벨크로라서 떼었다 붙였다 할 수 있다 — DNA 복제와 단백질 변성의 열쇠.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[비교] 공유결합 vs 수소결합(전자 공유 여부), 극성 vs 비극성 판정. [연결] 2강 단백질 2·3차 구조, DNA 이중나선이 모두 약한 결합에 기댄다.</div>\n\n<h4>3. 물 — 극성이 만든 네 가지 성질 <span class=\"en\">(Properties of Water)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 물은 흔한 작은 분자인데 왜 \"생명의 용매\"라고 부르는가? 성질 네 가지의 공통 원인은 무엇인가?</div>\n<p>물은 극성 분자라 분자끼리 <b>수소결합</b>을 한다. 여기서 네 성질이 나온다.\n① <b>응집·흡착</b>: 분자들이 서로 붙어 식물 속에서 물이 중력을 거슬러 올라간다.\n② <b>온도 조절</b>: 비열이 높아 온도가 잘 안 변하고, 증발할 때 많은 열을 가져가 냉각시킨다.\n③ <b>결빙 시 팽창</b>: 얼음이 물보다 밀도가 낮아 뜨고, 아래 물을 단열해 생물이 얼지 않는다.\n④ <b>용매</b>: 이온·극성 물질 둘레에 <b>수화층</b><span class=\"en\">(hydration layer)</span>을 만들어 녹이고, 비극성 물질과는 섞이지 않아 막 같은 경계가 생긴다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[적용] 현상 → 성질 짝짓기(호수 결빙·땀·나무 수송·해안 기후). [함정] 호수 표면만 어는 이유를 \"비열\"로 고르는 오답.</div>\n\n<h4>4. pH와 완충 <span class=\"en\">(pH &amp; Buffers)</span><span class=\"tagm\">개념 필수</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 세포 안 단백질은 pH가 조금만 바뀌어도 모양이 무너진다. 그런데 몸에는 산과 염기가 끊임없이 들어온다.</div>\n<p><b>산</b>은 용액의 H⁺ 농도를 높이고, <b>염기</b>는 낮춘다(H⁺를 받거나 OH⁻를 내놓아서). \\(\\mathrm{pH}=-\\log[\\mathrm{H^+}]\\),\n중성에서는 \\([\\mathrm{H^+}][\\mathrm{OH^-}]=10^{-14}\\) 이라 pH 7. 세포 안은 pH 7 부근을 지켜야 하므로\n산·염기가 더해져도 pH를 버티게 하는 <b>완충용액</b><span class=\"en\">(buffer)</span>이 필요하다(탄산–중탄산 체계).</p>\n<p><b>해양 산성화</b> — CO₂가 물에 녹아 탄산 → H⁺와 중탄산이온으로 해리 → 늘어난 H⁺가 탄산이온과 결합 → 탄산이온이 줄어 산호의 석회화가 느려진다.\n산성비(산화황·산화질소)와는 다른 경로다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[순서] CO₂ → 산호초 경로 배열. [계산 감각] pH 1 차이 = [H⁺] 10배.</div>"}, "u2": {"concept": "\n<div class=\"bigpic\"><span class=\"bt\">U2 큰그림</span>\n생명체의 분자는 네 가족뿐이다 — <b>탄수화물·지질·단백질·핵산</b>. 이 중 셋은 작은 단위체를 줄줄이 이은 중합체이고,\n잇는 방법(탈수축합)과 끊는 방법(가수분해)은 모두 같다. 차이는 <b>무엇을 어떻게 이었는가</b>이며, 그것이 기능을 정한다.</div>\n\n<h4>1. 탄소와 중합체 <span class=\"en\">(Carbon &amp; Polymers)</span><span class=\"tagm\">개념 필수</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 원소는 몇 개 안 되는데 생체 분자의 종류는 셀 수 없이 많다. 다양성은 어디서 오는가?</div>\n<p>탄소는 최외각 전자가 4개라 <b>네 방향으로 결합</b>할 수 있다(4가). 그래서 길이가 다양한 사슬, 가지, 이중결합, 고리를 모두 만든다.\n큰 분자는 단위체를 이은 <b>중합체</b><span class=\"en\">(polymer)</span>: 탄수화물←단당류, 단백질←아미노산, 핵산←뉴클레오티드\n(지질은 지방산 등으로 이루어지지만 진짜 중합체는 아니다).\n<b>탈수축합</b><span class=\"en\">(dehydration)</span>은 물 분자를 빼며 공유결합으로 잇고, <b>가수분해</b><span class=\"en\">(hydrolysis)</span>는 물을 넣어 끊는다. 둘 다 효소가 돕는다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[비교] 합성=물 빠짐 / 분해=물 들어감. [함정] 지질을 \"중합체\"로 부르는 선지.</div>\n\n<h4>2. 탄수화물 <span class=\"en\">(Carbohydrates)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 녹말과 셀룰로오스는 둘 다 포도당만으로 만든다. 그런데 사람은 밥은 소화하고 종이는 못 한다. 왜?</div>\n<p><b>단당류</b>((CH₂O)ₙ, 주로 3·5·6탄당, 물속에서 고리 구조) → 두 개가 글리코시드 결합하면 <b>이당류</b>:\n엿당(포도당+포도당), 설탕(포도당+과당, 식물의 운반 형태), 젖당(포도당+갈락토오스).\n<b>다당류</b>의 성질은 단위체 종류와 <b>결합 위치·방향</b>이 정한다.</p>\n<ul><li><b>저장용</b>: 식물의 녹말(α-포도당 1-4 결합의 나선. 아밀로오스는 가지 없음, 아밀로펙틴은 1-6 가지), 동물의 글리코겐(간·근육, 가지가 더 많음).</li>\n<li><b>구조용</b>: 셀룰로오스(β-포도당 1-4 결합, 단위체가 번갈아 뒤집혀 곧은 사슬 → 사슬 사이 수소결합으로 미세섬유 → 녹말 분해효소로 못 끊음),\n키틴(질소 포함, 절지동물 외골격·균류 세포벽).</li></ul>\n<p class=\"intuit\">💡 <b>직관</b> — 같은 레고 블록도 \"같은 방향으로 끼우면 나선(녹말), 번갈아 뒤집어 끼우면 판자(셀룰로오스)\". 효소는 모양을 알아보는 열쇠라 판자는 못 연다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[비교] 녹말 vs 글리코겐 vs 셀룰로오스 표(단위체·결합·모양·기능). [적용] 소·흰개미가 셀룰로오스를 소화하는 방법(미생물).</div>\n\n<h4>3. 지질 <span class=\"en\">(Lipids)</span><span class=\"tagm\">개념 필수</span></h4>\n<p><b>지방</b> = 글리세롤 + 지방산 3개(에스터 결합, 트리아실글리세롤). 탄화수소 사슬이 소수성이라 물과 섞이지 않는다.\n<b>포화지방산</b>(이중결합 없음, 주로 동물성, 실온 고체) vs <b>불포화지방산</b>(cis 이중결합으로 꺾임, 식물·생선, 실온 액체).\n같은 무게에 탄수화물보다 에너지를 많이 저장하고, 기관 보호·보온에 쓰인다.\n<b>인지질</b>은 지방산 2개 + 인산기 머리 → 친수성 머리와 소수성 꼬리가 물속에서 <b>이중층</b>을 이뤄 세포막이 된다.\n<b>스테로이드</b>는 고리 4개 골격(콜레스테롤: 동물 세포막 성분이자 호르몬 전구체).</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[비교] 포화 vs 불포화(구조→실온 상태). [연결] 인지질·콜레스테롤은 4강 막 유동성의 재료.</div>\n\n<h4>4. 단백질 — 서열이 모양을, 모양이 기능을 <span class=\"en\">(Proteins)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 아미노산 하나만 바뀌었는데 적혈구가 낫 모양이 되어 빈혈이 생긴다. 한 글자 오타가 어떻게 전체를 무너뜨리는가?</div>\n<p>아미노산은 중심 탄소에 아미노기·카르복실기·H·<b>R기</b>가 붙은 분자이고, R기가 종류(20종)와 성질(비극성 / 극성 / 산성·염기성 전하)을 정한다.\n<b>펩티드 결합</b>은 한 아미노산의 카르복실기와 다음 것의 아미노기가 탈수축합한 공유결합이며, 사슬에 아미노 말단·카르복실 말단이 생긴다.</p>\n<ul><li><b>1차</b>: 아미노산 서열(유전정보가 정함).</li>\n<li><b>2차</b>: 골격의 O·N–H 사이 수소결합이 만드는 α나선·β병풍.</li>\n<li><b>3차</b>: R기끼리의 상호작용(소수성 상호작용·수소결합·이온결합·시스테인 사이 이황화 다리)으로 접힌 전체 모양.</li>\n<li><b>4차</b>: 폴리펩티드 여러 개의 조립(헤모글로빈 = α 2 + β 2).</li></ul>\n<p>pH·염농도·온도·유기용매 등이 약한 결합을 깨면 <b>변성</b><span class=\"en\">(denaturation)</span>. 조건이 돌아오면 다시 접히기도 하는데(<b>재생</b>),\n이는 모양 정보가 <b>1차 구조에 들어 있다</b>는 증거다. 겸상적혈구빈혈증은 1차 구조 한 자리 변화(글루탐산→발린)가 2·3·4차 구조로 번진 예다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[구별] 각 차수를 만드는 결합. [추론] 재생 실험이 말해 주는 것. [함정] 자료의 \"글루타민→발린\"은 오기 — 글루탐산.</div>\n\n<h4>5. 핵산 <span class=\"en\">(Nucleic Acids)</span><span class=\"tagx\">시험 핵심</span></h4>\n<p><b>뉴클레오티드</b> = 염기 + 오탄당 + 인산기(염기+오탄당만이면 뉴클레오시드). 염기는 <b>피리미딘</b>(고리 1개: C·T·U)과 <b>퓨린</b>(고리 2개: A·G).\nDNA의 당은 2′ 탄소에 산소가 없는 데옥시리보오스, RNA는 리보오스.\n한 뉴클레오티드의 3′-OH와 다음 것의 5′ 인산이 인산디에스테르 결합으로 이어져 <b>5′ 말단 → 3′ 말단</b> 방향성이 생긴다.\nDNA는 두 가닥이 <b>역평행</b>으로 꼬인 이중나선: 당–인산 골격은 바깥, 염기쌍(A–T, G–C)은 안쪽이며 수소결합으로 붙는다.\n한 가닥을 알면 다른 가닥이 정해져, 복제 때 각 가닥이 주형이 된다(반보존적 복제). RNA는 단일 가닥이지만 자기 안에서 염기쌍을 이루기도 한다(tRNA).</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[비교] DNA vs RNA(당·염기·가닥). [적용] 상보 가닥 서열·방향 쓰기. [연결] 7·8주차 유전정보 흐름의 입구.</div>"}, "u3": {"concept": "\n<div class=\"bigpic\"><span class=\"bt\">U3 큰그림</span>\n세포는 <b>막으로 구획된 공간</b>이다. 구획이 있어야 내부를 일정하게 지킬 수 있고, 진핵세포는 그 구획을 안쪽에도 여러 개 만들어\n서로 섞이면 안 되는 반응을 동시에 돌린다. 세포소기관은 \"무엇을 만들고, 어디로 보내고, 무엇을 부수는가\"의 분업표로 읽는다.</div>\n\n<h4>1. 세포설과 세포가 작은 이유 <span class=\"en\">(Cell Theory &amp; Cell Size)</span><span class=\"tagm\">개념 필수</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 코끼리 세포와 생쥐 세포의 크기는 비슷하다. 큰 생물은 세포를 키우지 않고 개수를 늘린다. 왜?</div>\n<p><b>세포설</b>: 세포는 생명의 기본 단위이고, 모든 생물은 세포로 되어 있으며, 세포는 이미 있는 세포에서 생긴다.\n세포가 커지면 부피가 표면적보다 빨리 늘어 <b>표면적/부피 비</b><span class=\"en\">(SA/V)</span>가 작아지고, 막을 통한 물질 교환이 모자라진다.\n그래서 세포는 작고(대개 1~100 μm), 소장 융모처럼 부피는 두고 표면적만 늘리는 구조가 쓰인다.\n<b>원형질막</b>은 선택적 투과 장벽이자 신호 교환·세포 부착의 자리다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[추론] 크기가 2배 → SA/V는 절반. [적용] 융모·주름 구조의 의미.</div>\n\n<h4>2. 원핵 vs 진핵, 동물 vs 식물 <span class=\"en\">(Prokaryote vs Eukaryote)</span><span class=\"tagx\">시험 핵심</span></h4>\n<p><b>공통</b>: 원형질막·세포질·DNA 유전자·리보솜. <b>원핵세포</b>(세균·고세균)는 핵막이 없어 DNA가 핵양체에 있고, 막성 소기관이 없으며 1~5 μm.\n<b>진핵세포</b>(원생생물·균류·동물·식물)는 핵과 막성 소기관을 갖고 10~100 μm.\n자료 기준으로 <b>식물세포에만</b> 세포벽·엽록체·원형질연락사·중앙 액포, <b>동물세포에만</b> 리소좀·중심립이 있는 중심체·편모가 있고,\n미토콘드리아·퍼옥시좀은 둘 다 있다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[표] 원핵/진핵 · 동물/식물 O·X 표. [함정] 리보솜은 원핵에도 있다(막이 없는 소기관).</div>\n\n<h4>3. 만들고 보내는 길 — 내막계 <span class=\"en\">(Endomembrane System)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 췌장 세포가 소화효소를 밖으로 분비하려면, 단백질은 어디서 만들어져 어떤 길로 나가는가?</div>\n<ul><li><b>핵</b>: DNA 복제·전사. 이중막(핵공으로 RNA·단백질 출입), <b>인</b>에서 rRNA 합성·리보솜 소단위 조립.</li>\n<li><b>리보솜</b>: 단백질 합성, 막 없음. 유리 리보솜 → 세포질 단백질 / 소포체 부착 리보솜 → 막·분비·소기관행 단백질. 구조는 같아 역할을 바꿀 수 있다.</li>\n<li><b>조면소포체</b>: 부착 리보솜이 만든 단백질을 받아 변형(이황화결합·접힘·당 부착)하고 수송낭으로 내보냄, 막 생산.\n<b>활면소포체</b>: 지질·스테로이드 합성, 해독(약물에 −OH를 붙여 배출을 쉽게 → 반복 복용 시 내성), Ca²⁺ 저장(근수축).</li>\n<li><b>골지체</b>: 소포체 쪽 <b>cis면</b>으로 받아 → 이동하며 변형 → <b>trans면</b>에서 목적지별 소낭으로 내보냄.</li>\n<li><b>리소좀</b>: 가수분해효소 주머니(단일막). 산성에서 활발해 세포질(pH 7)에 새어 나와도 해가 적다. 식세포·자기소화. 효소 결핍 → 테이삭스병.</li>\n<li><b>액포</b>(식물): 저장·노폐물 격리·팽압(지지와 성장)·색소·방어.</li></ul>\n<p class=\"intuit\">💡 <b>직관</b> — 분비 단백질의 여권 도장 순서: 부착 리보솜 → 조면소포체 → 수송낭 → 골지체(cis→trans) → 분비 소낭 → 세포 밖.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[순서] 분비 경로 배열. [구별] 활면 vs 조면 소포체 기능, 유리 vs 부착 리보솜의 산물.</div>\n\n<h4>4. 에너지 소기관과 내부공생설 <span class=\"en\">(Mitochondria, Chloroplasts &amp; Endosymbiosis)</span><span class=\"tagx\">시험 핵심</span></h4>\n<p><b>미토콘드리아</b>: 세포호흡으로 ATP 생산. 내막의 주름 <b>크리스타</b>가 효소가 일할 면적을 넓힌다. 기질에 리보솜·DNA·호흡 효소.\n<b>엽록체</b>(식물·조류): 광합성. 이중막 안에 <b>스트로마</b>(DNA·리보솜·효소)와 틸라코이드가 쌓인 <b>그라나</b>(엽록소가 빛 흡수).\n<b>퍼옥시좀</b>: 지방산 산화 후 미토콘드리아로 넘김, 과산화물 해독(간의 알코올 분해). 종자의 글리옥시좀은 지방→당.</p>\n<p><b>내부공생설</b>의 근거 — 미토콘드리아·엽록체는 ① 두 겹 이상의 막 ② 세균과 닮은 자체 DNA ③ 자체 리보솜 ④ 스스로 분열.\n→ 원핵생물이 큰 세포에 들어가 공생하게 되었다는 가설. 반면 <b>막진화설</b>은 세포막이 안으로 접혀 핵막·소포체 같은 내막계가 생겼다고 본다(핵막과 소포체가 이어진 것이 근거).</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[근거 고르기] 내부공생설을 지지하는 관찰. [구별] 두 가설이 설명하는 대상(에너지 소기관 vs 내막계).</div>\n\n<h4>5. 세포골격·세포 밖 구조·연접 <span class=\"en\">(Cytoskeleton, ECM &amp; Junctions)</span><span class=\"tagm\">개념 필수</span></h4>\n<p><b>세포골격</b>(진핵만): <b>미세소관</b>(중심체에서 형성, 섬모·편모의 9+2 구조, 디네인이 ATP를 써서 걷는 방식으로 굽힘, 염색체 이동),\n<b>미세섬유</b>(액틴 — 미오신과 함께 근수축·아메바 운동·세포질 유동), <b>중간섬유</b>(구조 지지).\n편모는 길고 적으며 파동 운동, 섬모는 짧고 많으며 노젓기 운동.</p>\n<p><b>세포 밖</b>: 세균 세포벽(펩티도글리칸), 식물 세포벽(셀룰로오스 — 1차 벽·펙틴 중간라멜라·2차 벽), 동물 <b>세포외기질</b>(콜라겐·프로테오글리칸·피브로넥틴이 막의 인테그린과 연결).\n<b>연접</b>: 식물 원형질연락사(벽을 뚫고 세포질이 이어짐) / 동물 밀착연접(새지 않게 봉함)·고착연접(데스모좀, 중간섬유로 고정)·간극연접(작은 분자가 지나는 통로).</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[짝짓기] 세포골격 3종 ↔ 기능, 연접 3종 ↔ 역할. [구별] 섬모 vs 편모.</div>"}, "u4": {"concept": "\n<div class=\"bigpic\"><span class=\"bt\">U4 큰그림</span>\n다세포 생물의 세포는 혼자 살지 않는다. 막은 <b>무엇을 들이고 내보낼지</b>(수송)와 <b>무슨 말을 들을지</b>(신호)를 고르는 관문이다.\n이 단원의 모든 내용은 두 질문으로 나뉜다: 에너지를 쓰는가? 그리고 신호는 어떻게 커지고 조절되는가?</div>\n\n<h4>1. 유동모자이크 막 <span class=\"en\">(Fluid Mosaic Model)</span><span class=\"tagm\">개념 필수</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 막이 딱딱하게 굳으면 왜 세포가 죽는가? 추운 곳에 사는 생물의 막은 무엇이 다른가?</div>\n<p>막 = 인지질 이중층 + 그 속에 박힌 단백질 + 일부 지질·단백질에 붙은 탄수화물. 성분이 옆으로 움직이는 <b>유동적</b> 구조다.\n굳으면 막단백질이 일을 못 해 물질 이동이 멈춘다. 유동성은 ① 인지질의 이동(옆으로는 빠르고 뒤집기는 드묾)\n② 꼬리의 <b>불포화도</b>(높을수록 유동적) ③ <b>콜레스테롤</b>(체온에선 움직임을 억제하고, 저온에선 굳는 것을 막는 \"온도 완충제\")이 정한다.\n막단백질은 수송·효소·수용체·세포 인지(당단백질)·세포 간 결합·골격 연결을 맡는다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[추론] 저온 적응 → 불포화 지방산 비율↑. [함정] 콜레스테롤이 \"항상\" 유동성을 높이거나 낮춘다는 선지.</div>\n\n<h4>2. 작은 분자의 수송 <span class=\"en\">(Passive &amp; Active Transport)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 산소는 막을 그냥 통과하는데 포도당과 이온은 못 한다. 그리고 세포는 이미 많은 쪽으로도 물질을 끌어모은다.</div>\n<p><b>선택적 투과성</b>의 두 원천: 지질 이중층은 작은 비극성 분자(O₂·CO₂·탄화수소)를 통과시키고, 극성 분자·이온은 수송단백질이 골라 통과시킨다.</p>\n<ul><li><b>수동수송</b>(에너지 X, 농도가 높은 쪽 → 낮은 쪽): <b>단순확산</b>(비극성 용질이 막을 직접) ·\n<b>삼투</b>(용질은 못 지나고 자유로운 물 분자가 이동. 동물세포는 고장액에서 쪼그라들고 저장액에서 터질 수 있음 → 짚신벌레 수축포, 식물세포는 세포벽이 버티며 팽압 유지) ·\n<b>촉진확산</b>(극성 분자·이온이 <b>통로단백질</b> 또는 <b>운반체단백질</b>을 통해. 운반체 결핍 예: 시스틴뇨증).</li>\n<li><b>능동수송</b>(에너지 O, 농도와 무관하게 — 기울기를 거슬러): 주로 운반체단백질. <b>1차</b>는 ATP가 펌프에 직접, <b>2차</b>는 1차가 만든 이온 기울기를 에너지로 씀.\n방향에 따라 단방향(양성자 펌프)·동방향(H⁺–설탕)·역방향(Na⁺–K⁺ 펌프).</li></ul>\n<p class=\"intuit\">💡 <b>직관</b> — 수동수송은 \"내리막 굴러가기\"(통로는 미끄럼틀일 뿐), 능동수송은 \"오르막 짐 나르기\"(펌프가 연료를 씀). 촉진확산도 단백질을 쓰지만 내리막이라 에너지는 들지 않는다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[분류] 수송 사례 → 단순/촉진/능동. [적용] 고장액·저장액에서 동물·식물세포의 변화. [함정] \"단백질을 쓰면 능동수송\".</div>\n\n<h4>3. 큰 분자의 수송 <span class=\"en\">(Exocytosis &amp; Endocytosis)</span><span class=\"tagm\">개념 필수</span></h4>\n<p><b>세포외 배출</b>: 소낭이 막과 합쳐 내용물을 밖으로. <b>세포내 섭취</b>: 막이 안으로 접혀 소낭 형성 —\n<b>식세포작용</b>(위족으로 입자를 감싸 삼킨 뒤 리소좀과 융합), <b>음세포작용</b>(세포 밖 액체를 가리지 않고 들이킴),\n<b>수용체매개</b>(필요한 물질만 수용체에 붙여 골라 들임).</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[구별] 특이적인 것은 수용체매개뿐. [연결] 3강 리소좀·골지체 분비 경로.</div>\n\n<h4>4. 신호전달 3단계 <span class=\"en\">(Reception → Transduction → Response)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 에피네프린 분자 몇 개가 간세포 밖에 붙었을 뿐인데, 세포 안에서는 글리코겐 수많은 분자가 분해된다. 신호는 어떻게 커지는가?</div>\n<p>① <b>수용</b>: 리간드가 특이적 수용체에 결합. 물에 녹는 큰 리간드는 <b>막 수용체</b>(예: G단백질 결합 수용체), 막을 통과하는 리간드(스테로이드 호르몬 등)는 <b>세포 안 수용체</b>.\n② <b>전달</b>: 대개 여러 단계 — 단계마다 <b>증폭</b>되고 <b>조절</b>할 기회가 생긴다. 인산화효소 연쇄(탈인산화효소가 끔), 또는 <b>2차 전달자</b> cAMP의 확산.\n에피네프린 → G단백질 결합 수용체 → G단백질 활성 → 아데닐산고리화효소 → cAMP → 단백질 인산화효소 → … → 글리코겐 분해.\n③ <b>반응</b>: 핵에서는 전사인자 활성 → 유전자 발현 조절, 세포질에서는 효소 활성 변화.</p>\n<p><b>콜레라</b>: 독소가 G단백질을 변형해 GTP를 끊지 못함 → 스위치가 켜진 채 cAMP가 쌓임 → 장세포가 물·염을 계속 내보내 설사.\n신호전달은 세포예정사(손가락 사이 물갈퀴 제거)에도 쓰인다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[순서] cAMP 경로 배열. [추론] 콜레라에서 \"꺼지지 않는 스위치\"가 어느 단계인가. [구별] 막 수용체 vs 세포 안 수용체 리간드.</div>"}, "u5": {"concept": "\n<div class=\"bigpic\"><span class=\"bt\">U5 큰그림</span>\n세포 안의 반응을 두 질문으로 나눠라. <b>일어날 수 있는가?</b> — 열역학과 자유에너지 ΔG가 답한다. <b>얼마나 빨리 일어나는가?</b> — 효소가 답한다.\n둘을 섞으면 틀린다: 효소는 속도를 바꿀 뿐 방향(ΔG)은 못 바꾼다. 그 사이에서 ATP는 내리막 반응의 에너지를 오르막 반응으로 옮기는 화폐다.</div>\n\n<h4>1. 물질대사와 열역학 <span class=\"en\">(Metabolism &amp; Thermodynamics)</span><span class=\"tagm\">개념 필수</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 생물은 수정란에서 복잡한 몸으로 점점 질서를 만든다. \"무질서는 늘 증가한다\"는 법칙을 어기는 것 아닌가?</div>\n<p><b>물질대사</b> = 생명 유지를 위한 모든 합성·분해 반응. 여러 단계로 일어나고 효소가 속도를 조절한다는 점이 일반 화학반응과 다르다.\n<b>1법칙</b>: 에너지는 형태만 바뀔 뿐 새로 생기거나 사라지지 않는다. <b>2법칙</b>: 변환 때마다 일부가 열로 흩어져 우주의 <b>엔트로피</b>(무질서도)가 증가한다 — 그래서 계속 먹어야 한다.\n외부 에너지 투입 없이 일어나는 과정이 <b>자발적</b>이다.\n생물이 자기 안의 엔트로피를 낮출 수 있는 것은 그 과정에서 내놓은 열이 <b>주변</b>의 엔트로피를 더 크게 늘리기 때문이며, 우주 전체로는 2법칙을 따른다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[예시 짝] 1법칙 vs 2법칙 사례. [함정] 자료 문장 끝의 \"1법칙을 따르게 된다\"는 오기 — 주변 엔트로피 증가는 2법칙의 내용.</div>\n\n<h4>2. 자유에너지 ΔG <span class=\"en\">(Free Energy)</span><span class=\"tagx\">시험 핵심</span></h4>\n<p><b>자유에너지</b> = 일에 쓸 수 있는 에너지. \\(\\Delta G = G_{\\text{생성물}} - G_{\\text{반응물}}\\).\n불안정한(자유에너지가 큰) 계는 자발적으로 안정한 쪽으로 가며 일을 하고, 끝에 도달하면 농도 변화가 없는 <b>평형</b>이다.\n자료의 분류: <b>ΔG&lt;0</b> → 자발적·에너지 방출·분해(이화), 자료 용어로 \"발열\" / <b>ΔG&gt;0</b> → 비자발적·에너지 흡수·합성(동화), \"흡열\".\n포도당 + O₂ → CO₂ + H₂O 의 ΔG가 −686 kcal/mol 이면 역반응은 +686 kcal/mol.\n세포는 연료를 계속 받고 노폐물을 버리는 <b>열린계</b>라 평형에 이르지 않고 일을 계속한다(평형 = 죽음).</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[부호] 정반응 ΔG → 역반응 ΔG. [추론] 세포가 평형에 도달하지 않는 이유.</div>\n\n<h4>3. ATP — 에너지 화폐 <span class=\"en\">(ATP)</span><span class=\"tagx\">시험 핵심</span></h4>\n<p>ATP + H₂O → ADP + Pᵢ, ΔG = −7.3 kcal/mol. 음전하를 띤 인산기 셋이 서로 밀어내 불안정해 쉽게 끊어지며,\n그 방출 에너지를 ΔG&gt;0 반응에 대준다. ATP가 하는 세 가지 일: <b>화학적</b>(단위체→중합체 합성), <b>수송</b>(기울기를 거스르는 능동수송), <b>기계적</b>(섬모·근수축·염색체 이동).\n쓰인 ADP는 다시 ATP로 재생된다(순환).</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[짝짓기] 세포 활동 ↔ ATP 작업 종류. [연결] 4강 1차 능동수송, 3강 디네인·미오신.</div>\n\n<h4>4. 효소 — 속도를 바꾸는 촉매 <span class=\"en\">(Enzymes)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 포도당은 공기 중에서 자발적으로 분해되는 반응(ΔG&lt;0)인데, 설탕 봉지는 수년이 지나도 멀쩡하다. 왜?</div>\n<p>반응을 시작하려면 분자를 불안정한 전이상태까지 올리는 <b>활성화에너지</b>(E<sub>A</sub>)가 필요하다. 생물은 고온으로 이를 넘을 수 없다(단백질 변성, 모든 반응을 무차별 촉발).\n그래서 <b>효소</b>가 E<sub>A</sub>를 낮춘다. <b>ΔG는 바꾸지 못한다</b> — 비자발 반응을 자발로 만들지 않는다.\n작동 특성: <b>기질특이성</b>(활성부위가 특정 기질만), 약한 결합으로 붙였다 떼는 <b>빠른 순환</b>, 결합 시 <b>활성부위 모양 변화</b>로 반응에 유리한 환경 제공.</p>\n<p><b>조절</b>: 온도·pH(3차 구조), <b>보조인자</b>(비타민·금속이온), <b>경쟁적 억제자</b>(기질을 닮아 활성부위를 두고 경쟁),\n<b>비경쟁적 억제자</b>(활성부위가 아닌 곳에 붙어 기능 저하), <b>다른자리 입체성 조절</b>(조절부위에 붙어 활성화·비활성화, 예: ATP·ADP),\n<b>되먹임 억제</b>(최종 산물이 경로 앞 효소를 억제). 효소는 필요한 구획에 모여 있다(호흡 효소 → 미토콘드리아).</p>\n<p class=\"intuit\">💡 <b>직관</b> — ΔG는 \"산 정상과 골짜기의 높이 차\", E<sub>A</sub>는 \"넘어야 할 고개\". 효소는 터널을 뚫는다 — 고개는 낮아지지만 출발점과 도착점의 높이 차는 그대로다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[함정] \"효소가 ΔG를 줄인다\". [구별] 경쟁적 vs 비경쟁적 억제(기질 농도를 높이면 극복되는 쪽은?), 되먹임 억제의 대상.</div>"}};
+window.SV_BUILD = {"date": "2026-09-14", "units": 5, "problems": 122, "gate": "PASS 2026-09-14 (N=50/문제)"};
+</script>
+<script>
+(function(){
+'use strict';
+var APP='course-bio', VP=Vault.progress(APP), VD=Vault.drill(APP), VM=Vault.meta(APP);
+var UNITS=SV_BANK, BYID={}, ALL=[];
+UNITS.forEach(function(u){ u.problems.forEach(function(p){ p._unit=u; BYID[p.id]=p; ALL.push(p); }); });
+var LAYERS=['concept','derive','worked'], LAYER_KO={concept:'개념',derive:'수식·유도',worked:'풀이된 예제'};
+/* 빈 레이어는 숨긴다 — 개념 과목(course-bio)은 derive·worked 가 없다 */
+function hasLayer(c,l){ return l==='concept' || (l==='derive' ? (c.derive||[]).length>0 : !!c[l]); }
+var $=function(s,el){ return (el||document).querySelector(s); };
+var esc=function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); };
+function typeset(el){
+  if(window.MathJax&&window.__mjready){ MathJax.typesetPromise([el]).catch(function(){}); }
+  else { (window.__mjq=window.__mjq||[]).push(el); }
+}
+
+/* ---------- 파라미터 추출/리롤 (러너와 동일 규칙) ---------- */
+function draw(spec){ 
+  if(spec.choices) return spec.choices[Math.floor(Math.random()*spec.choices.length)];
+  var steps=Math.round((spec.max-spec.min)/spec.step);
+  return spec.min+spec.step*Math.floor(Math.random()*(steps+1));
+}
+function sample(prob){
+  for(var t=0;t<500;t++){
+    var p={}; for(var k in prob.params) p[k]=draw(prob.params[k]);
+    if(!prob.constraint||prob.constraint(p)) return p;
+  }
+  return null;
+}
+var CUR={}; // 문제별 현재 파라미터
+function statementOf(prob){
+  if(!prob.params) return (typeof prob.statement==='function')?prob.statement({}):prob.statement;
+  if(!CUR[prob.id]) CUR[prob.id]=sample(prob);
+  return prob.statement(CUR[prob.id]);
+}
+function ansText(r){
+  if(r==null) return '';
+  var a=r.ans, u=r.unit;
+  if(typeof a==='number') return SVH.fmt(a)+' '+(u||'');
+  var parts=[]; for(var k in a){ parts.push(k+' = '+SVH.fmt(a[k])+' '+((u&&u[k])||'')); }
+  return parts.join(' · ');
+}
+
+/* ---------- 진도 ---------- */
+function readItems(){ var ids=[]; UNITS.forEach(function(u){ LAYERS.filter(function(l){ return hasLayer(SV_CONTENT[u.id]||{},l); }).forEach(function(l){ ids.push(u.id+'-'+l); }); }); return ids; }
+function refreshProg(){
+  var ids=readItems(), n=0; ids.forEach(function(id){ if(VP.get(id)) n++; });
+  $('#pbar').style.width=Math.round(n/ids.length*100)+'%';
+  $('#ptxt').textContent='읽음 '+n+' / '+ids.length+' · 문제 '+VD.counts().total+'/'+ALL.length;
+  document.querySelectorAll('.readbtn[data-read]').forEach(function(b){
+    var on=VP.get(b.getAttribute('data-read'));
+    b.setAttribute('aria-pressed',on?'true':'false');
+    b.textContent=on?'✓ 읽음':'읽음으로 표시';
+  });
+  var wc=wrongList().length, badge=$('#nav-wrong .nv'); if(badge) badge.textContent=wc||'';
+}
+function wrongList(){
+  var all=VD.all(), ids=[];
+  for(var k in all){ if((all[k]==='wrong'||all[k]==='partial')&&BYID[k]) ids.push(k); }
+  return ids;
+}
+
+/* ---------- 문제 카드 ---------- */
+function grade(prob, status, card){
+  VD.set(prob.id, status);
+  card.querySelectorAll('.pbtn.sel').forEach(function(b){ b.classList.remove('sel'); });
+  var btn=card.querySelector('.pbtn.grade-'+status[0]); if(btn) btn.classList.add('sel');
+  var dot=card.querySelector('.sdot'); if(dot){ dot.className='sdot '+status; }
+  refreshProg();
+  if(EXAM.running) examAnswered(prob.id, status);
+}
+function renderProblem(prob){
+  var card=document.createElement('article'); card.className='pcard'; card.setAttribute('data-pid',prob.id);
+  var st=VD.get(prob.id);
+  var srcb=prob.src?'<span class="srcb">'+esc(prob.src)+'</span>':'';
+  if(prob.ref) srcb+='<span class="srcb">근거 '+esc(prob.ref)+'</span>';
+  card.innerHTML='<div class="pc-head"><span class="lv lv'+prob.level+'">L'+prob.level+'</span>'+
+    '<span class="tagc">'+esc(prob.id)+' · '+esc((prob.tags||[]).join('·'))+'</span>'+srcb+
+    '<span class="sdot'+(st?' '+st:'')+'"></span></div>'+
+    '<div class="pc-st"></div><div class="pc-body"></div><div class="pc-btns"></div>';
+  var stEl=$('.pc-st',card), body=$('.pc-body',card), btns=$('.pc-btns',card);
+  stEl.innerHTML=statementOf(prob);
+
+  function addBtn(label, cls, fn){
+    var b=document.createElement('button'); b.type='button'; b.className='pbtn'+(cls?' '+cls:''); b.textContent=label;
+    b.addEventListener('click',fn); btns.appendChild(b); return b;
+  }
+  function gradeBtns(){
+    addBtn('맞음 ✓','grade-c',function(){ grade(prob,'correct',card); });
+    addBtn('부분 △','grade-p',function(){ grade(prob,'partial',card); });
+    addBtn('틀림 ✗','grade-w',function(){ grade(prob,'wrong',card); });
+    if(st){ var b=card.querySelector('.pbtn.grade-'+st[0]); if(b) b.classList.add('sel'); }
+  }
+
+  if(prob.type==='mc'||prob.type==='tf'){
+    var choices = prob.type==='tf' ? ['참 (O)','거짓 (X)'] : prob.choices;
+    var correctIdx = prob.type==='tf' ? (prob.answer?0:1) : prob.answer;
+    var wrap=document.createElement('div'); wrap.className='choices';
+    choices.forEach(function(c,i){
+      var b=document.createElement('button'); b.type='button'; b.className='choice'; b.innerHTML=c;
+      b.addEventListener('click',function(){
+        if(card.__done) return; card.__done=true;
+        wrap.children[correctIdx].classList.add('right');
+        if(i!==correctIdx) b.classList.add('wrongpick');
+        var ex=document.createElement('div'); ex.className='expl'; ex.innerHTML='<b>해설</b> — '+prob.expl;
+        body.appendChild(ex); typeset(ex);
+        grade(prob, i===correctIdx?'correct':'wrong', card);
+      });
+      wrap.appendChild(b);
+    });
+    body.appendChild(wrap);
+  } else {
+    var hintIdx=0, hb=null;
+    if(prob.hints&&prob.hints.length){
+      addBtn('💡 힌트','',function(){
+        if(hintIdx>=prob.hints.length) return;
+        if(!hb){ hb=document.createElement('div'); hb.className='hintbox'; body.appendChild(hb); }
+        var d=document.createElement('div'); d.innerHTML='힌트 '+(hintIdx+1)+'. '+prob.hints[hintIdx];
+        hb.appendChild(d); typeset(d); hintIdx++;
+        this.textContent = hintIdx>=prob.hints.length ? '힌트 끝' : '💡 힌트 '+(hintIdx+1);
+      });
+    }
+    var solBtn=addBtn('풀이 보기','',function(){
+      if(card.__sol){ card.__sol.hidden=!card.__sol.hidden; this.textContent=card.__sol.hidden?'풀이 보기':'풀이 닫기'; return; }
+      var box=document.createElement('div'); box.className='solbox';
+      var steps, aline='';
+      if(prob.type==='derive'){ steps=prob.steps; }
+      else{
+        var r=prob.solve(prob.params?CUR[prob.id]:{});
+        steps=r.steps; aline='<div class="ansline">답: '+esc(ansText(r))+'</div>';
+      }
+      box.innerHTML='<ol>'+steps.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ol>'+aline+
+        (prob.expl?'<div class="expl">'+prob.expl+'</div>':'');
+      body.appendChild(box); typeset(box);
+      card.__sol=box; this.textContent='풀이 닫기';
+      if(!card.__graded){ card.__graded=true; gradeBtns(); }
+    });
+    if(prob.params){
+      addBtn('🎲 새 숫자로','',function(){
+        CUR[prob.id]=sample(prob);
+        stEl.innerHTML=statementOf(prob); typeset(stEl);
+        if(card.__sol){ card.__sol.remove(); card.__sol=null; solBtn.textContent='풀이 보기'; }
+        if(hb){ hb.remove(); hb=null; hintIdx=0; }
+      });
+    }
+    if(st&&!card.__graded){ card.__graded=true; gradeBtns(); }
+  }
+  return card;
+}
+
+/* ---------- 뷰 ---------- */
+var view=$('#view');
+function setView(html){ view.innerHTML=html; }
+function renderHome(){
+  var dc=VD.counts();
+  var rate=dc.total?Math.round(dc.correct/dc.total*100):null;
+  setView('<div class="eyebrow">Life Sciences · 생명체의 특징 — 규칙적 배열 → 에너지 이용 (1~5강)</div>'+
+    '<h1>생명과학 문제은행</h1>'+
+    '<p class="lede">개념 → 유도 → 예제 → 4단계 문제(L1~L4). 전 문제가 검산 게이트(sympy 독립 재계산 대조)를 통과했고, 계산형 문제는 <b>🎲 새 숫자로</b>를 눌러 무한 반복할 수 있다.</p>'+
+    '<p class="note-line">현황 — 풀어본 문제 '+dc.total+' / '+ALL.length+(rate!==null?(' · 정답률 '+rate+'%'):'')+
+    ' · <a href="#wrong">오답노트 '+wrongList().length+'문제</a> · 빌드 '+SV_BUILD.date+' (게이트 '+SV_BUILD.gate+')</p>'+
+    (SV_CONTENT.course?'<details class="layer" open><summary><span class="lb">MAP</span>과목 큰그림 — 한눈에<span class="arrow">›</span></summary><div class="body">'+SV_CONTENT.course.bigpicture+'</div></details>':'')+
+    '<div class="ucards" id="ucards"></div>'+
+    '<h3>모드</h3><div class="ucards">'+
+    '<a class="ucard" href="#exam"><span class="uc-no">MOCK EXAM</span><span class="uc-ti">📝 모의고사</span><span class="uc-scope">범위·난이도·문항수를 골라 랜덤 출제 — 매번 새 수치, 종료 리포트 제공.</span></a>'+
+    '<a class="ucard" href="#wrong"><span class="uc-no">RETRY QUEUE</span><span class="uc-ti">🔁 오답노트</span><span class="uc-scope">틀림·부분 문제만 모아 재도전. 맞음으로 바꾸면 큐에서 빠진다.</span></a></div>');
+  var uc=$('#ucards');
+  UNITS.forEach(function(u){
+    var solved=0, ok=0;
+    u.problems.forEach(function(p){ var s=VD.get(p.id); if(s){solved++; if(s==='correct')ok++;} });
+    var avail=LAYERS.filter(function(l){return hasLayer(SV_CONTENT[u.id]||{},l);});
+    var reads=avail.filter(function(l){return VP.get(u.id+'-'+l);}).length;
+    var a=document.createElement('a'); a.className='ucard'; a.href='#'+u.id;
+    a.innerHTML='<span class="uc-no">UNIT '+u.no+'</span><span class="uc-ti">'+esc(u.title)+'</span>'+
+      '<span class="uc-scope">'+esc(u.scope)+'</span>'+
+      '<span class="uc-stat">읽음 '+reads+'/'+avail.length+' · 문제 '+solved+'/'+u.problems.length+(solved?' · 정답 '+ok:'')+'</span>';
+    uc.appendChild(a);
+  });
+  typeset(view);
+}
+function renderUnit(u){
+  var c=SV_CONTENT[u.id]||{};
+  setView('<div class="eyebrow">UNIT '+u.no+' / '+UNITS.length+'</div><h1>'+esc(u.title)+'</h1>'+
+    '<p class="lede">'+esc(u.scope)+'</p><div id="layers"></div>'+
+    '<h3>문제 세트 <span class="src">L1 개념확인 → L4 시험급 · '+u.problems.length+'문제</span></h3>'+
+    '<div class="filters" id="filters"></div><div id="plist"></div>');
+  var layers=$('#layers');
+  LAYERS.filter(function(l){ return hasLayer(c,l); }).forEach(function(l){
+    var d=document.createElement('details'); d.className='layer'; if(l==='concept') d.open=true;
+    var inner='';
+    if(l==='derive'){
+      (c.derive||[]).forEach(function(dv){
+        inner+='<details class="dstep"><summary>'+esc(dv.title)+'</summary><ol>'+
+          dv.steps.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ol></details>';
+      });
+    } else inner=c[l]||'';
+    d.innerHTML='<summary><span class="lb">'+(l.toUpperCase())+'</span>'+LAYER_KO[l]+'<span class="arrow">›</span></summary>'+
+      '<div class="body">'+inner+'<div class="readrow"><button type="button" class="readbtn" data-read="'+u.id+'-'+l+'"></button></div></div>';
+    layers.appendChild(d);
+  });
+  layers.addEventListener('click',function(e){
+    var b=e.target.closest('.readbtn'); if(!b) return;
+    VP.toggle(b.getAttribute('data-read')); refreshProg();
+  });
+  var lv=0, fl=$('#filters'), pl=$('#plist');
+  function renderList(){
+    pl.innerHTML='';
+    u.problems.filter(function(p){ return !lv||p.level===lv; }).forEach(function(p){ pl.appendChild(renderProblem(p)); });
+    typeset(pl);
+  }
+  [['전체',0],['L1 개념',1],['L2 기본',2],['L3 응용',3],['L4 시험급',4]].forEach(function(f){
+    var b=document.createElement('button'); b.type='button'; b.className='fchip'+(f[1]===0?' on':''); b.textContent=f[0];
+    b.addEventListener('click',function(){ lv=f[1]; fl.querySelectorAll('.fchip').forEach(function(x){x.classList.remove('on');}); b.classList.add('on'); renderList(); });
+    fl.appendChild(b);
+  });
+  renderList(); typeset(layers);
+}
+function renderWrong(){
+  var ids=wrongList();
+  setView('<div class="eyebrow">RETRY QUEUE</div><h1>오답노트</h1>'+
+    '<p class="lede">틀림·부분 표시 문제 '+ids.length+'개. 다시 풀어 <b>맞음</b>으로 바꾸면 큐에서 빠진다. 계산형은 자동으로 새 수치다.</p><div id="plist"></div>');
+  var pl=$('#plist');
+  if(!ids.length){ pl.innerHTML='<div class="empty">비어 있음 — 문제를 풀고 자가채점하면 틀림/부분이 여기 모인다.</div>'; return; }
+  ids.forEach(function(id){ var p=BYID[id]; if(p&&p.params) CUR[id]=sample(p); pl.appendChild(renderProblem(BYID[id])); });
+  typeset(pl);
+}
+/* ---------- 모의고사 ---------- */
+var EXAM={running:false};
+function renderExam(){
+  if(EXAM.running){ renderExamRun(); return; }
+  var uchecks=UNITS.map(function(u){ return '<label class="ck"><input type="checkbox" class="exu" value="'+u.id+'" checked> U'+u.no+' '+esc(u.title)+'</label>'; }).join('');
+  setView('<div class="eyebrow">MOCK EXAM</div><h1>모의고사</h1>'+
+    '<p class="lede">범위와 난이도를 고르면 랜덤 출제. 채점은 문제마다(객관식 자동 · 계산형 자가채점), 종료하면 리포트.</p>'+
+    '<div class="exam-setup">'+
+    '<div class="grp"><h4>범위</h4>'+uchecks+'</div>'+
+    '<div class="grp"><h4>난이도</h4>'+[1,2,3,4].map(function(l){return '<label class="ck"><input type="checkbox" class="exl" value="'+l+'" '+(l>1?'checked':'')+'> L'+l+'</label>';}).join('')+'</div>'+
+    '<div class="grp"><h4>문항 수</h4><select id="exn"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></div>'+
+    '<button class="bigbtn" id="exgo">모의고사 시작 →</button></div>');
+  $('#exgo').addEventListener('click',function(){
+    var us={}, ls={};
+    document.querySelectorAll('.exu:checked').forEach(function(c){us[c.value]=1;});
+    document.querySelectorAll('.exl:checked').forEach(function(c){ls[+c.value]=1;});
+    var pool=ALL.filter(function(p){ return us[p._unit.id]&&ls[p.level]; });
+    var n=Math.min(+$('#exn').value, pool.length);
+    if(!n){ alert('선택한 범위에 문제가 없습니다'); return; }
+    for(var i=pool.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=pool[i]; pool[i]=pool[j]; pool[j]=t; }
+    EXAM={running:true, list:pool.slice(0,n), idx:0, res:{}};
+    EXAM.list.forEach(function(p){ if(p.params) CUR[p.id]=sample(p); });
+    renderExamRun();
+  });
+}
+function examAnswered(pid, status){ if(EXAM.running&&EXAM.res) EXAM.res[pid]=status; }
+function renderExamRun(){
+  var i=EXAM.idx, p=EXAM.list[i];
+  setView('<div class="eyebrow">MOCK EXAM · '+(i+1)+' / '+EXAM.list.length+'</div>'+
+    '<div class="exam-top"><span>'+(i+1)+'/'+EXAM.list.length+'</span><div class="bar"><i style="width:'+Math.round(i/EXAM.list.length*100)+'%"></i></div>'+
+    '<button class="pbtn" id="exquit">종료</button></div><div id="pslot"></div>'+
+    '<div class="pc-btns" style="margin-top:14px"><button class="bigbtn" id="exnext">'+(i+1<EXAM.list.length?'다음 문제 →':'리포트 보기 →')+'</button></div>');
+  $('#pslot').appendChild(renderProblem(p)); typeset($('#pslot'));
+  $('#exnext').addEventListener('click',function(){
+    if(EXAM.idx+1<EXAM.list.length){ EXAM.idx++; renderExamRun(); } else renderExamReport();
+  });
+  $('#exquit').addEventListener('click',renderExamReport);
+}
+function renderExamReport(){
+  var res=EXAM.res, list=EXAM.list; EXAM.running=false;
+  var c=0,pt=0,w=0,na=0;
+  var perUnit={};
+  list.forEach(function(p){
+    var s=res[p.id];
+    var u=perUnit[p._unit.id]=perUnit[p._unit.id]||{t:0,c:0,title:p._unit.title,no:p._unit.no};
+    u.t++;
+    if(s==='correct'){c++;u.c++;} else if(s==='partial'){pt++;} else if(s==='wrong'){w++;} else na++;
+  });
+  var score=Math.round((c+0.5*pt)/list.length*100);
+  var rows=Object.keys(perUnit).sort().map(function(k){var u=perUnit[k];return '<tr><td>U'+u.no+' '+esc(u.title)+'</td><td>'+u.c+' / '+u.t+'</td></tr>';}).join('');
+  setView('<div class="eyebrow">MOCK EXAM · REPORT</div><h1>결과 리포트</h1>'+
+    '<div class="report"><div class="score">'+score+'점</div>'+
+    '<p>맞음 '+c+' · 부분 '+pt+' · 틀림 '+w+(na?' · 무응답 '+na:'')+' (총 '+list.length+'문제)</p>'+
+    '<table><thead><tr><th>단원</th><th>정답</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<div class="pc-btns"><a class="pbtn" href="#wrong">🔁 오답노트로</a><a class="pbtn" href="#exam" onclick="">다시 설정</a><a class="pbtn" href="#home">홈</a></div></div>');
+}
+
+/* ---------- 내비 · 라우팅 ---------- */
+function buildNav(){
+  var nav=$('#sidenav'), sheet=$('#tb-sheet');
+  var html='<div class="ng">학습</div><a href="#home" data-v="home">홈 · 현황</a>';
+  UNITS.forEach(function(u){ html+='<a href="#'+u.id+'" data-v="'+u.id+'">U'+u.no+' '+esc(u.title)+'</a>'; });
+  html+='<div class="ng">훈련</div><a href="#wrong" data-v="wrong" id="nav-wrong">오답노트<span class="nv"></span></a><a href="#exam" data-v="exam">모의고사</a>';
+  nav.innerHTML=html;
+  sheet.innerHTML=UNITS.map(function(u){ return '<a href="#'+u.id+'">U'+u.no+' '+esc(u.title)+'</a>'; }).join('');
+}
+function route(){
+  var h=(location.hash||'#home').slice(1);
+  var valid={home:1,wrong:1,exam:1}; UNITS.forEach(function(u){valid[u.id]=1;});
+  if(!valid[h]) h='home';
+  if(h!=='exam') EXAM.running=false;
+  document.querySelectorAll('.side nav a').forEach(function(a){ a.classList.toggle('on',a.getAttribute('data-v')===h); });
+  document.querySelectorAll('.tabbar [data-tv]').forEach(function(a){ a.classList.toggle('on',a.getAttribute('data-tv')===h); });
+  var sh=$('#tb-sheet'); if(sh) sh.hidden=true;
+  VM.touch(location.hash||'#home');
+  if(h==='home') renderHome();
+  else if(h==='wrong') renderWrong();
+  else if(h==='exam') renderExam();
+  else renderUnit(UNITS.filter(function(u){return u.id===h;})[0]);
+  window.scrollTo(0,0);
+  refreshProg();
+}
+var tbMore=$('#tb-more'), tbSheet=$('#tb-sheet');
+if(tbMore){ tbMore.addEventListener('click',function(e){ e.stopPropagation(); tbSheet.hidden=!tbSheet.hidden; });
+  document.addEventListener('click',function(e){ if(!tbSheet.hidden&&!tbSheet.contains(e.target)) tbSheet.hidden=true; }); }
+window.addEventListener('hashchange',route);
+buildNav(); route();
+})();
+</script>
+</body>
+</html>

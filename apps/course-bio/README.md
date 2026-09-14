@@ -1,3 +1,31 @@
+# 생명과학 문제은행 (course-bio)
+
+생명과학(07분반) **개념 위주** 문제은행 — 객관식·OX 중심. 모든 문항에 자료 위치(ref)를 달고, 정답을 가린 블라인드 풀이와 대조를 통과한 것만 싣는다.
+
+구성(정석식): 개념(+「정석」 핵심 박스) → 수식·유도 → 필수예제(완전 풀이) → 드릴 L1~L4
+(L3 응용·L4 시험급 중심 배분 6·12·14·8) · 파라메트릭 리롤 · 오답노트 · 모의고사.
+진도·자가채점: `vault:course-bio:*` (shared/progress.js).
+
+## 파이프라인 기록 (docs/PIPELINE.md 규약)
+
+| 단계 | 수행 내용 |
+|---|---|
+| EXTRACT | 1~5강 교재요약 PDF(35p) 텍스트 전량 + LearningX 수업계획서 캡처 → `pipeline/sources/강의자료분석.md`(원문 미전재, 자료 오류 의심 9건 표기). 시험범위 키워드는 `pipeline/coverage.json` |
+| VERIFY | 공용 게이트 `_course_kit/verify_core.py` **개념 모드**(`meta.json` gate) — 전 문항 ref(자료 위치) 필수 · 정답·해설을 뺀 문항을 별도 에이전트가 강의자료만 보고 풀어(`pipeline/blind/*.json`) 정답 키와 전수 대조, 불일치는 판정 근거(`blind_review.json`) 없으면 FAIL · 문항이 바뀌면 서명(sig)이 달라져 재풀이 강제 |
+| GENERATE | `_course_kit/build_core.py` — 게이트 통과 후 엔진 템플릿+content.py+problems/u*.js 단일 HTML 조립 |
+| OUTPUT | 단일 HTML SPA (149 KB ≤ 700 KB 예산) |
+
+## 재빌드
+
+```
+cd apps/course-bio/pipeline && ../../../.venv/bin/python build.py
+```
+
+**index.html 직접 수정 금지** — 문제는 `problems/u*.js` + `verify_ind.py`(같은 id로 독립 재계산),
+콘텐츠는 `content.py`, 공용 화면/게이트는 `apps/_course_kit/`.
+
+## 단원별 수량 현황 (게이트 2026-09-14 자동 기록)
+
 | 단원 | L1 | L2 | L3 | L4 | 계 | 하한(5·8·7·4) |
 |---|---|---|---|---|---|---|
 | U1 원자·분자·물 | 5 | 8 | 7 | 4 | 24 | ✅ |
@@ -41,3 +69,8 @@
 | 효소 활성 조절(억제·다른자리·되먹임) | u5 | 5 ✅ | 3 | 5강 효소 (4)(5) |
 
 블라인드 풀이 대조: 122건 기록 · 대기 0건 · 재검토 판정 0건
+
+## 상태
+
+- 1~5강(수업계획서 1주차~3주차 초반). 6강부터는 자료 수령 시 u6~ 추가
+- 시험 형식·중간 범위·날짜 미확인 — 확인되면 `apps.json` exams 와 문항 유형 비중 조정

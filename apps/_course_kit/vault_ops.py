@@ -12,7 +12,8 @@ from pathlib import Path
 BEGIN, END = "<!-- AUTO:BEGIN -->", "<!-- AUTO:END -->"
 STATUSES = ("unread", "read", "used", "skip")
 HINTS = {"확률": "course-prob", "COSE382": "course-prob", "MECH387": "course-control", "자동제어": "course-control",
-         "COSE362": "course-ml", "기계학습": "course-ml", "전전개": "course-eecirc", "Electrical": "course-eecirc"}
+         "COSE362": "course-ml", "기계학습": "course-ml", "전전개": "course-eecirc", "Electrical": "course-eecirc",
+         "생명과학": "course-bio", "교재요약": "course-bio"}
 EMPTY = {"new": [], "modified": [], "unread": [], "missing": []}
 
 

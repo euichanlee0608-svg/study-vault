@@ -1,0 +1,12 @@
+{
+  "id": "course-bio",
+  "title": "생명과학 문제은행",
+  "brand": "<b>생명과학</b> 문제은행",
+  "sub": "LIFE SCIENCES 07분반 · 1~5강",
+  "eyebrow": "Life Sciences · 생명체의 특징 — 규칙적 배열 → 에너지 이용 (1~5강)",
+  "readme_intro": "생명과학(07분반) **개념 위주** 문제은행 — 객관식·OX 중심. 모든 문항에 자료 위치(ref)를 달고, 정답을 가린 블라인드 풀이와 대조를 통과한 것만 싣는다.",
+  "extract": "1~5강 교재요약 PDF(35p) 텍스트 전량 + LearningX 수업계획서 캡처 → `pipeline/sources/강의자료분석.md`(원문 미전재, 자료 오류 의심 9건 표기). 시험범위 키워드는 `pipeline/coverage.json`",
+  "verify": "공용 게이트 `_course_kit/verify_core.py` **개념 모드**(`meta.json` gate) — 전 문항 ref(자료 위치) 필수 · 정답·해설을 뺀 문항을 별도 에이전트가 강의자료만 보고 풀어(`pipeline/blind/*.json`) 정답 키와 전수 대조, 불일치는 판정 근거(`blind_review.json`) 없으면 FAIL · 문항이 바뀌면 서명(sig)이 달라져 재풀이 강제",
+  "status": "## 상태\n\n- 1~5강(수업계획서 1주차~3주차 초반). 6강부터는 자료 수령 시 u6~ 추가\n- 시험 형식·중간 범위·날짜 미확인 — 확인되면 `apps.json` exams 와 문항 유형 비중 조정",
+  "gate": {"mode": "concept", "floor": {"1": 5, "2": 8, "3": 7, "4": 4}, "require_ref": true, "blind": true}
+}

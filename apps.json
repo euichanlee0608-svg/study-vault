@@ -92,6 +92,19 @@
         }
       ],
       "added": "2026-09-03"
+    },
+    {
+      "id": "course-bio",
+      "title": "생명과학 문제은행",
+      "titleEn": "Life Sciences Concept Drill",
+      "icon": "🧬",
+      "path": "apps/course-bio/",
+      "desc": "1~5강 개념 문제은행(원자·물 → 거대분자 → 세포 → 막·신호전달 → 물질대사) — 전 문항 자료 위치 표기 + 블라인드 풀이 대조 통과분만",
+      "pipeline": "문풀기반",
+      "category": "course",
+      "items": 5,
+      "exams": [],
+      "added": "2026-09-14"
     }
   ]
 }

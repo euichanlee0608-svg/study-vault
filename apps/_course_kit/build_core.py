@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
 """생성기 공용 코어 — 게이트 통과 후 단일 HTML 조립 + README 갱신. 앱별 build.py가 호출."""
-import json, re, subprocess, sys, datetime
+import json, os, re, subprocess, sys, datetime
 from pathlib import Path
 
 KIT = Path(__file__).parent
+VERIFY_NUM = ("공용 게이트 `_course_kit/verify_core.py` — solver(런타임 동일 JS) 시드 샘플 50개/문제를 "
+              "`verify_ind.py`의 sympy/numpy 독립 재계산(별도 경로)과 전수 대조. 통과분만 탑재")
 
 def main(app_pipeline: Path):
     DIR = app_pipeline; APP = DIR.parent
     meta = json.loads((DIR/"meta.json").read_text())
 
-    r = subprocess.run([sys.executable, str(DIR/"verify_problems.py"), "50"], cwd=DIR)
+    # SV_STRICT: 블라인드 풀이 대기분도 FAIL (체크포인트 게이트는 경고만) — SPEC §10
+    r = subprocess.run([sys.executable, str(DIR/"verify_problems.py"), "50"], cwd=DIR,
+                       env=dict(os.environ, SV_STRICT="1"))
     if r.returncode != 0:
         print("\n❌ 검산 게이트 실패 — 빌드 중단 (§13.3)"); sys.exit(1)
 
@@ -57,7 +61,7 @@ def main(app_pipeline: Path):
 | 단계 | 수행 내용 |
 |---|---|
 | EXTRACT | {meta['extract']} |
-| VERIFY | 공용 게이트 `_course_kit/verify_core.py` — solver(런타임 동일 JS) 시드 샘플 50개/문제를 `verify_ind.py`의 sympy/numpy 독립 재계산(별도 경로)과 전수 대조. 통과분만 탑재 |
+| VERIFY | {meta.get('verify', VERIFY_NUM)} |
 | GENERATE | `_course_kit/build_core.py` — 게이트 통과 후 엔진 템플릿+content.py+problems/u*.js 단일 HTML 조립 |
 | OUTPUT | 단일 HTML SPA ({size//1024} KB ≤ 700 KB 예산) |
 

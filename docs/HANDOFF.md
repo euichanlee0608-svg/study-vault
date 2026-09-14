@@ -4,20 +4,27 @@
 규약은 `docs/PROBLEM_SPEC.md`. 손으로 쓰는 곳은 맨 아래 "메모"뿐이다.
 
 <!-- AUTO:BEGIN -->
-_자동 생성 — `vault_ops.py` 가 명령마다 덮어쓴다. 손으로 고치지 말 것. 갱신 2026-09-14 21:58_
+_자동 생성 — `vault_ops.py` 가 명령마다 덮어쓴다. 손으로 고치지 말 것. 갱신 2026-09-14 23:00_
 
 ### ▶ 진행 중 작업 (끊긴 세션은 여기서 이어간다)
-- 없음
+- **course-bio** — 생명과학 신설(방안 C): 개념과목 게이트(ref 필수·블라인드 풀이·과목별 하한) + 1~5강 문제은행·개념 (시작 2026-09-14 22:47)
+  - 2026-09-14 23:00 인프라: 게이트 개념모드(meta.gate floor·ref필수·blind_errors·SV_STRICT)+러너 blind export/sig+SPEC §10+테스트 4건, 기존 4과목 회귀 PASS. course-bio 골격·coverage 27키워드·content 1~5강. 배치 u1 L1·L4 9문항 게이트 PASS(블라인드 대기)
 
 ### 📥 드라이브 자료 대장
 - 변화 없음 — 등록된 자료가 모두 반영됐다
 
-<details><summary>읽은 자료 9건 · 제외 1건</summary>
+<details><summary>읽은 자료 15건 · 제외 1건</summary>
 
+- `1강_원자분자물_교재요약.pdf` · course-bio · read · 2026-09-14 22:47 — 5p 텍스트 전량 판독(2026-09-14) → sources/강의자료분석.md
 - `2026Fall_확률및랜덤과정_WEEK1.pdf` · course-prob · used · 2026-09-14 18:31 — 9p 판독(2026-09-03) → sources/강의자료분석.md, U1~U6 240문항 · coverage.json 16키워드
+- `2강_탄소와거대유기화합물_교재요약.pdf` · course-bio · read · 2026-09-14 22:47 — 8p 텍스트 전량 판독
+- `3강_세포_교재요약.pdf` · course-bio · read · 2026-09-14 22:47 — 9p 텍스트 전량 판독
+- `4강_세포의연결_교재요약.pdf` · course-bio · read · 2026-09-14 22:47 — 7p 텍스트 전량 판독
+- `5강_물질대사서론_교재요약.pdf` · course-bio · read · 2026-09-14 22:47 — 6p 텍스트 전량 판독
 - `Orientation-2026.pdf` · course-eecirc · used · 2026-09-14 21:58 — 27p 텍스트 판독(2026-09-14) → sources/강의자료분석.md·coverage.json 25키워드, U1 +10문항·개념 §5
 - `Screenshot_20260902_224558_LearningX Student.jpg` · course-ml · used · 2026-09-14 18:31 — LearningX 강의계획서 판독(2026-09-02) → sources/강의자료분석.md, U1~U6 240문항
 - `Screenshot_20260902_224604_LearningX Student.jpg` · course-ml · used · 2026-09-14 18:31 — LearningX 강의계획서 판독(2026-09-02)
+- `Screenshot_20260914_224405_LearningX Student.jpg` · course-bio · read · 2026-09-14 22:47 — LearningX 생명과학 07분반 수업계획서(주차별 16주) 판독 — 시험기간·형식은 잘림
 - `[MECH387] Lec0_Syllabus.pdf` · course-control · used · 2026-09-14 18:31 — 11p 판독(2026-09-03) → sources/강의자료분석.md, U1~U7 280문항
 - `[MECH387] Lec1_Introduction.pdf` · course-control · used · 2026-09-14 18:31 — 26p 판독(2026-09-03) → sources/강의자료분석.md
 - `전전개 기말 기출.pdf` · course-eecirc · used · 2026-09-14 18:31 — 기말 문제지 유형 분석(2026-09-02)
@@ -30,15 +37,13 @@ _자동 생성 — `vault_ops.py` 가 명령마다 덮어쓴다. 손으로 고�
 
 | 과목 | 문제 | 경고(하한·커버리지) | coverage.json |
 |---|---|---|---|
+| course-bio | 9 | 27 | ✅ |
 | course-control | 280 | 0 | ✗ |
 | course-eecirc | 318 | 0 | ✅ |
 | course-ml | 240 | 0 | ✗ |
 | course-prob | 240 | 0 | ✅ |
 
 ### 🧾 최근 기록
-- 2026-09-14 18:31 · course-control · used: [MECH387] Lec0_Syllabus.pdf — 11p 판독(2026-09-03) → sources/강의자료분석.md, U1~U7 280문항
-- 2026-09-14 18:31 · course-control · used: [MECH387] Lec1_Introduction.pdf — 26p 판독(2026-09-03) → sources/강의자료분석.md
-- 2026-09-14 18:31 · course-prob · used: 2026Fall_확률및랜덤과정_WEEK1.pdf — 9p 판독(2026-09-03) → sources/강의자료분석.md, U1~U6 240문항 · coverage.json 16키워드
 - 2026-09-14 18:31 · course-ml · used: Screenshot_20260902_224558_LearningX Student.jpg — LearningX 강의계획서 판독(2026-09-02) → sources/강의자료분석.md, U1~U6 240문항
 - 2026-09-14 18:31 · course-ml · used: Screenshot_20260902_224604_LearningX Student.jpg — LearningX 강의계획서 판독(2026-09-02)
 - 2026-09-14 18:31 · course-eecirc · used: 전전개 기출.pdf — 중간 1세트 유형 분석(2026-09-02) → sources/기출분석.md
@@ -48,6 +53,12 @@ _자동 생성 — `vault_ops.py` 가 명령마다 덮어쓴다. 손으로 고�
 - 2026-09-14 18:32 · - · skip: CHAPTER 2 basic quantum mechanics-2026.pdf — 수강취소 과목(나노공학 추정) 자료 — 아니면 mark 로 과목 지정
 - 2026-09-14 21:58 · course-eecirc · used: Orientation-2026.pdf — 27p 텍스트 판독(2026-09-14) → sources/강의자료분석.md·coverage.json 25키워드, U1 +10문항·개념 §5
 - 2026-09-14 21:58 · course-eecirc · 전전개 Orientation 반영 완료: 308→318문항, coverage 25키워드 전부 충족, 빌드 PASS(N=50)
+- 2026-09-14 22:47 · course-bio · read: 1강_원자분자물_교재요약.pdf — 5p 텍스트 전량 판독(2026-09-14) → sources/강의자료분석.md
+- 2026-09-14 22:47 · course-bio · read: 2강_탄소와거대유기화합물_교재요약.pdf — 8p 텍스트 전량 판독
+- 2026-09-14 22:47 · course-bio · read: 3강_세포_교재요약.pdf — 9p 텍스트 전량 판독
+- 2026-09-14 22:47 · course-bio · read: 4강_세포의연결_교재요약.pdf — 7p 텍스트 전량 판독
+- 2026-09-14 22:47 · course-bio · read: 5강_물질대사서론_교재요약.pdf — 6p 텍스트 전량 판독
+- 2026-09-14 22:47 · course-bio · read: Screenshot_20260914_224405_LearningX Student.jpg — LearningX 생명과학 07분반 수업계획서(주차별 16주) 판독 — 시험기간·형식은 잘림
 <!-- AUTO:END -->
 
 ## 메모 (손으로 쓰는 곳 — 판단·범위·다음 할 일)

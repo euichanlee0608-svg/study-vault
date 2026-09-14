@@ -1,5 +1,6 @@
 /* 검산 러너(공용) — 문제은행 solver(런타임과 동일 코드)를 시드 샘플로 실행해 JSON 출력.
- * 사용: node verify_runner.mjs <app_pipeline_dir> [N] > out.json */
+ * 사용: node verify_runner.mjs <app_pipeline_dir> [N] > out.json
+ *       node verify_runner.mjs <app_pipeline_dir> blind [uN] > q.json   (정답·해설을 뺀 mc/tf — 블라인드 풀이용, SPEC §10) */
 import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
@@ -23,6 +24,8 @@ function mulberry32(seed) {
   };
 }
 function hashId(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+/* 문항 서명 — 문장·선택지가 바뀌면 달라져 블라인드 풀이를 무효화한다 */
+function sigOf(prob) { return hashId(JSON.stringify([prob.type, prob.statement, prob.choices || null])).toString(16); }
 function draw(spec, rnd) {
   if (spec.choices) return spec.choices[Math.floor(rnd() * spec.choices.length)];
   const steps = Math.round((spec.max - spec.min) / spec.step);
@@ -37,6 +40,21 @@ function sample(prob, rnd) {
   throw new Error(prob.id + ': constraint를 500회 내에 만족 못 함');
 }
 
+if (process.argv[3] === 'blind') {
+  const only = process.argv[4];
+  const qs = [];
+  for (const unit of globalThis.SV_BANK) {
+    if (only && unit.id !== only) continue;
+    for (const prob of unit.problems) {
+      if (prob.type !== 'mc' && prob.type !== 'tf') continue;
+      qs.push({ id: prob.id, unit: unit.id, type: prob.type, ref: prob.ref || '', statement: prob.statement,
+                choices: prob.type === 'mc' ? prob.choices : undefined, sig: sigOf(prob) });
+    }
+  }
+  process.stdout.write(JSON.stringify(qs, null, 1));
+  process.exit(0);
+}
+
 const out = { units: [], problems: [] };
 for (const unit of globalThis.SV_BANK) {
   const counts = { 1: 0, 2: 0, 3: 0, 4: 0 };
@@ -44,7 +62,7 @@ for (const unit of globalThis.SV_BANK) {
     counts[prob.level] = (counts[prob.level] || 0) + 1;
     const rec = {
       id: prob.id, unit: unit.id, level: prob.level, type: prob.type,
-      tags: prob.tags || [], src: prob.src || '',
+      tags: prob.tags || [], src: prob.src || '', ref: prob.ref || '',
       nHints: (prob.hints || []).length, hasExpl: !!prob.expl,
     };
     try {
@@ -57,8 +75,10 @@ for (const unit of globalThis.SV_BANK) {
       rec.nChoices = (prob.choices || []).length;
       rec.answerIdx = prob.answer;
       rec.distinctChoices = new Set(prob.choices || []).size;
+      rec.sig = sigOf(prob);
     } else if (prob.type === 'tf') {
       rec.answerBool = typeof prob.answer === 'boolean' ? prob.answer : null;
+      rec.sig = sigOf(prob);
     } else if (prob.type === 'derive') {
       rec.nSteps = (prob.steps || []).length;
       rec.lastStep = (prob.steps || []).slice(-1)[0] || '';

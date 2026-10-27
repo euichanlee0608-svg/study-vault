@@ -26,7 +26,7 @@ def now():
 def src_dir():
     if os.environ.get("STUDY_SRC_DIR"):
         return Path(os.environ["STUDY_SRC_DIR"])
-    hits = sorted(glob.glob(os.path.expanduser("~/Library/CloudStorage/GoogleDrive-*/내 드라이브/공유 파일함/3학년2학기")))
+    hits = sorted(glob.glob(os.path.expanduser("~/Library/CloudStorage/GoogleDrive-*/내 드라이브/수업 및 과제/3학년2학기")))
     return Path(hits[0]) if hits else None
 
 def load():

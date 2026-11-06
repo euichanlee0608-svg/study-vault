@@ -293,4 +293,59 @@ Routh–Hurwitz 표가 "근을 풀지 않고 우반평면 근의 <i>개수</i>�
 <div class="exambox"><span class="xt">시험 연결</span>[계산] K 범위+임계 진동수(중간 최다 배점 후보). [함정] K 부등식 방향(음수로 나눌 때), 1열 조건을 일부 행만 검사.</div>""",
 }
 
+
+# ---- 홈 히어로(2026-11-06 리디자인, DESIGN_BRIEF.md) — U6·U7 의 핵심 한 장: 극점 위치가 응답 모양을 정한다 ----
+def _hero(zeta=0.4, wn=1.0):
+    import math
+    wd = wn*math.sqrt(1-zeta*zeta); T = 14.0
+    x0, y0, W, H = 46, 214, 396, 150          # 플롯 원점·폭·높이(y 1.5 → H)
+    X = lambda t: x0 + t/T*W
+    Y = lambda y: y0 - y/1.5*H
+    pts = []
+    for i in range(281):
+        t = T*i/280
+        y = 1 - math.exp(-zeta*wn*t)*(math.cos(wd*t) + zeta/math.sqrt(1-zeta*zeta)*math.sin(wd*t))
+        pts.append(f"{X(t):.1f},{Y(y):.1f}")
+    tp = math.pi/wd; mp = math.exp(-math.pi*zeta/math.sqrt(1-zeta*zeta)); ts = 4/(zeta*wn)
+    band = f'<rect class="hf-band" x="{x0}" y="{Y(1.02):.1f}" width="{W}" height="{Y(0.98)-Y(1.02):.1f}"/>'
+    step = (f'<svg viewBox="0 0 470 250" role="img" aria-label="2차계 계단응답: 최대 오버슈트와 정착시간">'
+      f'{band}<path class="hf-ref" d="M{x0} {Y(1):.1f}H{x0+W}"/>'
+      f'<path class="hf-axis" d="M{x0} 40V{y0}H{x0+W+8}"/>'
+      f'<polyline class="hf-curve" pathLength="1" points="{" ".join(pts)}"/>'
+      f'<g class="hf-late"><path class="hf-mark" d="M{X(tp):.1f} {Y(1+mp)-4:.1f}V{Y(1):.1f}"/>'
+      f'<text class="hf-t r" x="{X(tp)+8:.1f}" y="{Y(1+mp)-8:.1f}">최대 오버슈트 {mp*100:.0f}%</text>'
+      f'<path class="hf-ref" d="M{X(ts):.1f} {Y(1.02)-6:.1f}V{y0}"/>'
+      f'<text class="hf-t" x="{X(ts)-6:.1f}" y="{y0-10}" text-anchor="end">정착시간 ≈ 4/ζω</text>'
+      f'<text class="hf-t" x="{x0+W+4}" y="{y0+22}" text-anchor="end">시간 t</text>'
+      f'<text class="hf-t" x="{x0-8}" y="{Y(1)+5:.1f}" text-anchor="end">1</text>'
+      f'<text class="hf-t b" x="{x0+10}" y="32">출력 y(t)</text></g></svg>')
+    # s-평면: 원점(196,125), 1 단위 = 92px
+    ox, oy, s = 196, 125, 92
+    px, py1, py2 = ox - zeta*wn*s, oy - wd*s, oy + wd*s
+    def X_(x, y): return f'<path class="hf-pole" d="M{x-8:.1f} {y-8:.1f}l16 16M{x+8:.1f} {y-8:.1f}l-16 16"/>'
+    r = 34; th = math.acos(zeta)
+    arc = f'M{ox-r} {oy}A{r} {r} 0 0 1 {ox - r*math.cos(th):.1f} {oy - r*math.sin(th):.1f}'
+    splane = (f'<svg class="splane" viewBox="0 0 260 250" role="img" aria-label="s-평면 위 두 극점">'
+      f'<path class="hf-axis" d="M14 {oy}H250M{ox} 16V234"/>'
+      f'<path class="hf-ref" d="M{ox} {oy}L{px:.1f} {py1:.1f}M{ox} {oy}L{px:.1f} {py2:.1f}"/>'
+      f'<g class="hf-late"><path class="hf-mark" d="{arc}"/>'
+      f'<text class="hf-t r" x="{ox-r-8}" y="{oy-30}" text-anchor="end">cos θ = ζ</text>'
+      f'<text class="hf-t" x="246" y="{oy+22}" text-anchor="end">σ</text>'
+      f'<text class="hf-t" x="{ox+8}" y="30">jω</text>'
+      f'<text class="hf-t b" x="{px-16:.1f}" y="{py1+6:.1f}" text-anchor="end">극점</text></g>'
+      f'{X_(px,py1)}{X_(px,py2)}</svg>')
+    cap = (f'<figcaption>오른쪽 s-평면의 극점 위치가 왼쪽 계단응답의 모양을 정한다. 감쇠비 ζ = {zeta}, 고유진동수 ω = {wn:g}일 때 '
+           f'최대 오버슈트는 {mp*100:.1f}%, 정착시간은 약 {ts:g}초다.</figcaption>')
+    return f'<div class="row2">{step}{splane}</div>{cap}'
+
+COURSE["hero"] = _hero()
+
+def _clean(s):  # 이모지 마커 제거(리디자인 — 피할 것 목록)
+    return s.replace("❓ ", "").replace("💡 ", "").replace("⚡ ", "").replace("❓", "").replace("💡", "").replace("⚡", "")
+CONCEPTS = {k: _clean(v) for k, v in CONCEPTS.items()}
+COURSE["bigpicture"] = _clean(COURSE["bigpicture"])
+
 UNITS = [COURSE] + [{**_old[k], "concept": CONCEPTS[k]} for k in ["u1","u2","u3","u4","u5","u6","u7"]]
+for _u in UNITS[1:]:
+    if isinstance(_u.get("worked"), str):
+        _u["worked"] = _clean(_u["worked"])

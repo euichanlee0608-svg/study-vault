@@ -13,7 +13,7 @@
 | EXTRACT | 2026Fall_확률및랜덤과정_WEEK1.pdf(9p 전체) 비전 판독 → 요목·평가·주차 분석(`pipeline/sources/강의자료분석.md`, 원문 미전재) + 표준 커리큘럼(Ross Stochastic Processes 골격) |
 | VERIFY | 공용 게이트 `_course_kit/verify_core.py` — solver(런타임 동일 JS) 시드 샘플 50개/문제를 `verify_ind.py`의 sympy/numpy 독립 재계산(별도 경로)과 전수 대조. 통과분만 탑재 |
 | GENERATE | `_course_kit/build_core.py` — 게이트 통과 후 엔진 템플릿+content.py+problems/u*.js 단일 HTML 조립 |
-| OUTPUT | 단일 HTML SPA (266 KB ≤ 700 KB 예산) |
+| OUTPUT | 단일 HTML SPA (270 KB ≤ 700 KB 예산) |
 
 ## 재빌드
 
@@ -24,7 +24,7 @@ cd apps/course-prob/pipeline && ../../../.venv/bin/python build.py
 **index.html 직접 수정 금지** — 문제는 `problems/u*.js` + `verify_ind.py`(같은 id로 독립 재계산),
 콘텐츠는 `content.py`, 공용 화면/게이트는 `apps/_course_kit/`.
 
-## 단원별 수량 현황 (게이트 2026-09-03 자동 기록)
+## 단원별 수량 현황 (게이트 2026-11-06 자동 기록)
 
 | 단원 | L1 | L2 | L3 | L4 | 계 | 하한(6·12·14·8) |
 |---|---|---|---|---|---|---|
@@ -36,6 +36,27 @@ cd apps/course-prob/pipeline && ../../../.venv/bin/python build.py
 | U6 이산시간 마르코프 연쇄 | 6 | 12 | 14 | 8 | 40 | ✅ |
 
 총 240문제 · 검산 샘플 N=50/문제
+
+### 시험범위 커버리지 (coverage.json)
+
+| 키워드 | 단원 | 문항 | 하한 | 근거 자료 |
+|---|---|---|---|---|
+| 확률과정의 뜻과 구분 | u1 | 4 ✅ | 3 | 2026Fall_확률및랜덤과정_WEEK1.pdf 개요 키워드 |
+| 조건부확률·베이즈 리뷰 | u1 | 7 ✅ | 4 | 2026Fall_확률및랜덤과정_WEEK1.pdf 선수과목 |
+| 지수분포 무기억성 | u2 | 6 ✅ | 3 | 2026Fall_확률및랜덤과정_WEEK1.pdf 09/09 주제 |
+| 지수 최솟값·경쟁 | u2 | 7 ✅ | 3 | 2026Fall_확률및랜덤과정_WEEK1.pdf 09/09 주제 |
+| 포아송과정의 뜻(공리·증분·pmf) | u3 | 7 ✅ | 3 | 2026Fall_확률및랜덤과정_WEEK1.pdf 09/09 주제 |
+| 도착간격·Erlang | u3 | 7 ✅ | 3 | 2026Fall_확률및랜덤과정_WEEK1.pdf 09/09 주제 |
+| 조건부 균등성 | u3 | 3 ✅ | 2 | 2026Fall_확률및랜덤과정_WEEK1.pdf 09/16 주제 |
+| 포아송과정의 중첩 | u4 | 3 ✅ | 3 | 2026Fall_확률및랜덤과정_WEEK1.pdf 개요 키워드 |
+| 포아송과정의 분해(thinning) | u4 | 11 ✅ | 4 | 2026Fall_확률및랜덤과정_WEEK1.pdf 개요 키워드 |
+| 일반화된 포아송(비균질·복합) | u4 | 10 ✅ | 4 | 2026Fall_확률및랜덤과정_WEEK1.pdf 09/16 주제 |
+| 재생과정 장기율 N(t)/t→1/μ | u5 | 5 ✅ | 2 | 2026Fall_확률및랜덤과정_WEEK1.pdf 09/23 주제 |
+| 재생보상정리의 뜻과 응용 | u5 | 9 ✅ | 4 | 2026Fall_확률및랜덤과정_WEEK1.pdf 개요 키워드 |
+| 수명 변수(잔여·나이·검사역설) | u5 | 11 ✅ | 3 | 2026Fall_확률및랜덤과정_WEEK1.pdf 09/23 주제 |
+| 행렬 관점의 이산시간 마르코프 연쇄 | u6 | 8 ✅ | 4 | 2026Fall_확률및랜덤과정_WEEK1.pdf 개요 키워드 |
+| 정상분포 | u6 | 6 ✅ | 3 | 2026Fall_확률및랜덤과정_WEEK1.pdf 10/07 주제 |
+| 흡수확률·기대흡수시간 | u6 | 5 ✅ | 3 | 2026Fall_확률및랜덤과정_WEEK1.pdf 10/07 주제 |
 
 ## 상태
 

@@ -13,7 +13,7 @@
 | EXTRACT | Lec0 Syllabus·Lec1 비전 판독 → 주차표·평가·범위 분석(`pipeline/sources/강의자료분석.md`, 원문 미전재) + Nise 8판 골격 |
 | VERIFY | 공용 게이트 `_course_kit/verify_core.py` — solver(런타임 동일 JS) 시드 샘플 50개/문제를 `verify_ind.py`의 sympy/numpy 독립 재계산(별도 경로)과 전수 대조. 통과분만 탑재 |
 | GENERATE | `_course_kit/build_core.py` — 게이트 통과 후 엔진 템플릿+content.py+problems/u*.js 단일 HTML 조립 |
-| OUTPUT | 단일 HTML SPA (290 KB ≤ 700 KB 예산) |
+| OUTPUT | 단일 HTML SPA (299 KB ≤ 700 KB 예산) |
 
 ## 재빌드
 
@@ -24,7 +24,7 @@ cd apps/course-control/pipeline && ../../../.venv/bin/python build.py
 **index.html 직접 수정 금지** — 문제는 `problems/u*.js` + `verify_ind.py`(같은 id로 독립 재계산),
 콘텐츠는 `content.py`, 공용 화면/게이트는 `apps/_course_kit/`.
 
-## 단원별 수량 현황 (게이트 2026-09-03 자동 기록)
+## 단원별 수량 현황 (게이트 2026-11-06 자동 기록)
 
 | 단원 | L1 | L2 | L3 | L4 | 계 | 하한(6·12·14·8) |
 |---|---|---|---|---|---|---|

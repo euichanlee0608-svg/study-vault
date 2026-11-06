@@ -6,7 +6,8 @@
 <title>기계학습 문제은행</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=IBM+Plex+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <script>
 window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'},
  startup:{typeset:false, pageReady:function(){return MathJax.startup.defaultPageReady().then(function(){
@@ -15,179 +16,212 @@ window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'},
 </script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
 <style>
+/* 공학 계산용지 — DESIGN_BRIEF.md (course-control) */
 :root{
-  --bg:#FBFAF8; --surf:#FFFFFF; --surf2:#F4F1EC; --side:#F6F3EE;
-  --ink:#1C1A18; --ink2:#57514B; --ink3:#8A8177;
-  --line:#E4DFD7; --line2:#D2CBC1;
-  --acc:#B4491C; --acc-bg:#FBEDE6;
-  --ok:#3E7A46; --ok-bg:#E8F2E9;
-  --warn:#8A6410; --warn-bg:#F8F0DC;
-  --bad:#A33B3B; --bad-bg:#F8E7E7;
-  --info:#5B6B75; --info-bg:#ECEFF1;
-  --code:#F1EDE7;
-  --shadow:0 1px 2px rgba(28,26,24,.05),0 2px 10px rgba(28,26,24,.04);
+  --bg:#F5F6F1; --surf:#FBFBF8; --surf2:#ECEEE6; --side:#EFF1EA;
+  --ink:#17201C; --ink2:#4A554F; --ink3:#7E8882;
+  --line:#DADED3; --line2:#C3C9BC; --grid:rgba(60,110,80,.09);
+  --acc:#1E4E8C; --acc-bg:#E3EAF3;
+  --red:#B8402A; --red-bg:#F6E4DE;
+  --ok:#2F6B45; --ok-bg:#E2EEE5;
+  --warn:#8A6410; --warn-bg:#F5EDD8;
+  --bad:#B8402A; --bad-bg:#F6E4DE;
+  --code:#ECEEE6;
+  --serif:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+  --sans:"Pretendard Variable",Pretendard,-apple-system,system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
 }
 @media (prefers-color-scheme:dark){
  :root:not([data-theme="light"]){
-  --bg:#141210; --surf:#1D1A17; --surf2:#252119; --side:#181512;
-  --ink:#EFEBE4; --ink2:#B3ABA1; --ink3:#847B71;
-  --line:#332E28; --line2:#453E36;
-  --acc:#E4763F; --acc-bg:#332016;
-  --ok:#7FBF88; --ok-bg:#1B2A1D;
-  --warn:#D6A54D; --warn-bg:#302614;
-  --bad:#D98080; --bad-bg:#331B1B;
-  --info:#9FB2BC; --info-bg:#20262A;
-  --code:#26221C;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 2px 12px rgba(0,0,0,.25);
+  --bg:#121715; --surf:#171D1A; --surf2:#1E2622; --side:#151B18;
+  --ink:#E6EBE6; --ink2:#AEB8B1; --ink3:#7C8780;
+  --line:#2A332E; --line2:#3A453F; --grid:rgba(150,200,170,.06);
+  --acc:#8DB3E8; --acc-bg:#1B2737;
+  --red:#E58C74; --red-bg:#33201B;
+  --ok:#86C29A; --ok-bg:#18281E;
+  --warn:#D9B061; --warn-bg:#2D2616;
+  --bad:#E58C74; --bad-bg:#33201B;
+  --code:#1E2622;
  }
 }
 :root[data-theme="dark"]{
-  --bg:#141210; --surf:#1D1A17; --surf2:#252119; --side:#181512;
-  --ink:#EFEBE4; --ink2:#B3ABA1; --ink3:#847B71;
-  --line:#332E28; --line2:#453E36;
-  --acc:#E4763F; --acc-bg:#332016;
-  --ok:#7FBF88; --ok-bg:#1B2A1D;
-  --warn:#D6A54D; --warn-bg:#302614;
-  --bad:#D98080; --bad-bg:#331B1B;
-  --info:#9FB2BC; --info-bg:#20262A;
-  --code:#26221C;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 2px 12px rgba(0,0,0,.25);
+  --bg:#121715; --surf:#171D1A; --surf2:#1E2622; --side:#151B18;
+  --ink:#E6EBE6; --ink2:#AEB8B1; --ink3:#7C8780;
+  --line:#2A332E; --line2:#3A453F; --grid:rgba(150,200,170,.06);
+  --acc:#8DB3E8; --acc-bg:#1B2737;
+  --red:#E58C74; --red-bg:#33201B;
+  --ok:#86C29A; --ok-bg:#18281E;
+  --warn:#D9B061; --warn-bg:#2D2616;
+  --bad:#E58C74; --bad-bg:#33201B;
+  --code:#1E2622;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{margin:0;background:var(--bg);color:var(--ink);
- font-family:"IBM Plex Sans KR",system-ui,-apple-system,"Malgun Gothic",sans-serif;
- line-height:1.68;font-size:15px;-webkit-font-smoothing:antialiased;
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+ line-height:1.72;font-size:15.5px;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;
  word-break:keep-all;overflow-wrap:break-word}
-a{color:var(--acc);text-decoration-thickness:1px;text-underline-offset:2px}
-a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:3px}
+a{color:var(--acc);text-decoration-thickness:1px;text-underline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:2px}
 mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%}
 .layout{display:flex;min-height:100vh}
-.side{width:250px;flex:0 0 250px;background:var(--side);border-right:1px solid var(--line);
- padding:22px 18px;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
-.brand a{color:var(--ink);text-decoration:none;font-family:Newsreader,Georgia,serif;font-size:19px;letter-spacing:-.01em}
-.brand b{color:var(--acc);font-weight:600}
-.brand span{display:block;font-size:10.5px;color:var(--ink3);font-family:"IBM Plex Mono",monospace;margin-top:2px}
-.prog-bar{height:5px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:4px}
-.prog-bar i{display:block;height:100%;width:0;background:var(--acc);border-radius:99px;transition:width .3s}
-.prog span{font-size:10.5px;color:var(--ink3);font-family:"IBM Plex Mono",monospace}
-.side nav{display:flex;flex-direction:column;gap:2px}
-.ng{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-family:"IBM Plex Mono",monospace;margin:10px 0 4px;padding-left:10px}
-.side nav a{display:block;padding:7px 10px;border-radius:6px;color:var(--ink2);text-decoration:none;font-size:13.5px}
-.side nav a:hover{background:var(--surf2)}
-.side nav a.on{background:var(--acc-bg);color:var(--acc);font-weight:600}
-.side nav a .nv{float:right;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink3)}
-.foot-side{margin-top:auto;font-size:10.5px;color:var(--ink3);line-height:1.5;font-family:"IBM Plex Mono",monospace}
+/* 사이드 — 모눈 위 목차 */
+.side{width:252px;flex:0 0 252px;background:var(--side);border-right:1px solid var(--line);
+ padding:28px 20px 22px;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;gap:18px}
+.brand a{color:var(--ink);text-decoration:none;font-family:var(--serif);font-size:20px;font-weight:700;letter-spacing:-.02em;line-height:1.3}
+.brand b{color:var(--acc);font-weight:700}
+.brand span{display:block;font-size:12.5px;color:var(--ink3);margin-top:4px}
+.prog-bar{height:2px;background:none;margin:0 0 6px;position:relative}
+.prog-bar i{display:block;height:2px;width:0;background:var(--acc);transition:width .5s ease-out}
+.prog span{font-size:12.5px;color:var(--ink2)}
+.side nav{display:flex;flex-direction:column}
+.ng{font-size:12.5px;color:var(--ink3);margin:14px 0 4px;padding-left:12px}
+.side nav a{display:block;position:relative;padding:7px 12px;color:var(--ink2);text-decoration:none;font-size:14px;line-height:1.45;border-left:2px solid transparent}
+.side nav a:hover{color:var(--ink)}
+.side nav a.on{color:var(--ink);font-weight:600;border-left-color:var(--acc)}
+.side nav a .nv{float:right;font-size:12px;color:var(--red);font-weight:600}
+.foot-side{margin-top:auto;font-size:12px;color:var(--ink3);line-height:1.6}
 .foot-side a{color:var(--ink3)}
-.main{flex:1;min-width:0;padding:clamp(22px,4vw,48px) clamp(16px,4.5vw,56px) 120px;display:flex;justify-content:center}
-.view{width:100%;max-width:820px}
-h1{font-family:Newsreader,"Gowun Batang",Georgia,serif;font-weight:600;font-size:clamp(25px,4vw,34px);line-height:1.16;letter-spacing:-.015em;margin:6px 0 12px;text-wrap:balance}
-h3{font-family:Newsreader,Georgia,serif;font-size:20px;font-weight:600;margin:30px 0 10px;letter-spacing:-.01em}
-h4{font-size:15.5px;font-weight:600;margin:22px 0 8px}
+.main{flex:1;min-width:0;padding:clamp(24px,4.5vw,56px) clamp(16px,5vw,64px) 120px;display:flex;justify-content:center}
+.view{width:100%;max-width:800px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(28px,4.4vw,40px);line-height:1.22;letter-spacing:-.025em;margin:4px 0 14px;text-wrap:balance}
+h3{font-family:var(--serif);font-size:21px;font-weight:700;margin:44px 0 12px;letter-spacing:-.02em}
+h4{font-size:15.5px;font-weight:700;margin:24px 0 8px}
 p{margin:0 0 12px}
 ul,ol{margin:0 0 13px;padding-left:22px}
 li{margin-bottom:6px}
-.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--acc);font-weight:500}
-.lede{font-size:15.5px;color:var(--ink2)}
-.easy{background:var(--acc-bg);border-radius:8px;padding:13px 16px;margin:0 0 14px}
+.eyebrow{font-size:14px;color:var(--ink2);font-weight:500}
+.lede{font-size:16.5px;color:var(--ink2);max-width:640px}
+.easy{background:var(--acc-bg);padding:13px 16px;margin:0 0 14px}
 .easy b{color:var(--acc)}
-.note-line{font-size:13.5px;color:var(--ink2);background:var(--surf2);border-radius:6px;padding:10px 14px;margin:0 0 12px}
-.src{font-size:12px;color:var(--ink3);font-weight:400}
-/* unit cards on home */
-.ucards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin:16px 0}
-.ucard{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:16px 17px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:7px;color:var(--ink);text-decoration:none}
-.ucard:hover{border-color:var(--acc)}
-.uc-no{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--acc);font-weight:600}
-.uc-ti{font-family:Newsreader,Georgia,serif;font-size:18px;font-weight:600}
-.uc-scope{font-size:12.5px;color:var(--ink2);line-height:1.55}
-.uc-stat{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink3)}
-/* collapsible layers */
-details.layer{border:1px solid var(--line);border-radius:9px;background:var(--surf);margin-bottom:10px;box-shadow:var(--shadow)}
-details.layer>summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:15px;list-style:none;display:flex;align-items:center;gap:8px}
+.note-line{font-size:14px;color:var(--ink2);margin:0 0 12px}
+.src{font-size:13px;color:var(--ink3);font-weight:400;font-family:var(--sans)}
+/* 홈 히어로 — 과목 그림 */
+.hero-fig{position:relative;margin:26px 0 8px;padding:18px 0 6px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+ background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:20px 20px}
+.hero-fig figcaption{font-size:13px;color:var(--ink3);margin:8px 0 6px}
+.hero-fig svg{display:block;width:100%;height:auto;overflow:visible}
+.hero-fig .row2{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr);gap:18px;align-items:end}
+.hf-curve{fill:none;stroke:var(--acc);stroke-width:2.6;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:hfDraw 2.2s cubic-bezier(.25,.7,.25,1) .25s forwards}
+.hf-axis{stroke:var(--ink2);stroke-width:1.2;fill:none}
+.hf-ref{stroke:var(--ink3);stroke-width:1;stroke-dasharray:4 4;fill:none}
+.hf-band{fill:var(--acc);opacity:.08}
+.hf-mark{stroke:var(--red);stroke-width:1.4;fill:none}
+.hf-t{font-family:var(--sans);font-size:15px;fill:var(--ink2)}
+.hf-t.r{fill:var(--red);font-weight:600}
+.hf-t.b{fill:var(--acc);font-weight:600}
+.hf-pole{stroke:var(--red);stroke-width:2.6;fill:none;opacity:0;animation:hfIn .7s ease-out 2.3s forwards}
+.hf-late{opacity:0;animation:hfIn .7s ease-out 2.5s forwards}
+@keyframes hfDraw{to{stroke-dashoffset:0}}
+@keyframes hfIn{to{opacity:1}}
+.facts{display:flex;flex-wrap:wrap;gap:6px 28px;margin:18px 0 6px;font-size:14px;color:var(--ink2)}
+.facts b{display:block;font-family:var(--serif);font-size:30px;line-height:1.15;color:var(--ink);font-weight:700;letter-spacing:-.02em}
+/* 단원 목록 — 카드 대신 행 */
+.ucards{margin:10px 0 0;border-top:1px solid var(--line2)}
+.ucard{position:relative;display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:4px 14px;align-items:baseline;
+ padding:15px 10px 15px 4px;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none;
+ animation:rowIn .45s cubic-bezier(.16,1,.3,1) both;animation-delay:var(--d,0ms);transition:background .15s}
+.ucard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:0;background:var(--acc);transition:width .18s ease-out}
+.ucard:hover{background:var(--surf2)} .ucard:hover::before{width:3px}
+.uc-no{font-family:var(--serif);font-size:15px;color:var(--acc);font-weight:700;grid-row:1/span 2}
+.uc-ti{font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:-.015em}
+.uc-scope{grid-column:2;font-size:13.5px;color:var(--ink2);line-height:1.55}
+.uc-stat{grid-column:3;grid-row:1;font-size:13px;color:var(--ink3);white-space:nowrap;text-align:right}
+@keyframes rowIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* 접히는 층 — 박스 대신 머리선 */
+details.layer{border-top:1px solid var(--line2);margin:0}
+details.layer:last-of-type{border-bottom:1px solid var(--line2)}
+details.layer>summary{cursor:pointer;padding:16px 2px;font-family:var(--serif);font-weight:700;font-size:18px;letter-spacing:-.015em;list-style:none;display:flex;align-items:center;gap:10px;min-height:44px}
 details.layer>summary::-webkit-details-marker{display:none}
-details.layer>summary .lb{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;padding:2px 8px;border-radius:99px;background:var(--info-bg);color:var(--info)}
-details.layer>summary .arrow{margin-left:auto;color:var(--ink3);transition:transform .2s}
+details.layer>summary .lb{display:none}
+details.layer>summary .arrow{margin-left:auto;color:var(--ink3);font-family:var(--sans);font-weight:400;transition:transform .25s ease-out}
 details.layer[open]>summary .arrow{transform:rotate(90deg)}
-details.layer>.body{padding:4px 18px 14px;border-top:1px solid var(--line)}
-details.dstep{border:1px solid var(--line);border-radius:7px;margin:0 0 8px;background:var(--surf2)}
-details.dstep>summary{cursor:pointer;padding:9px 13px;font-weight:500;font-size:13.5px}
-details.dstep ol{margin:4px 0 10px;padding:0 14px 0 34px}
-details.dstep li{margin-bottom:7px;font-size:13.5px}
-/* 정석식 박스 */
-.jsbox{border:1.5px solid var(--acc);border-radius:9px;background:var(--acc-bg);padding:11px 15px;margin:12px 0;font-size:14px}
-.jsbox .jt{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;color:var(--acc);font-weight:600;display:block;margin-bottom:3px}
-.exbox{border:1px solid var(--line2);border-left:3px solid var(--acc);border-radius:8px;background:var(--surf);padding:12px 15px;margin:12px 0}
-.exbox .xh{font-weight:600;font-size:14px;margin-bottom:6px}
-.exbox .xh .xno{font-family:"IBM Plex Mono",monospace;color:var(--acc);font-size:11.5px;margin-right:6px}
-.exbox .xsol{border-top:1px dashed var(--line2);margin-top:8px;padding-top:8px;font-size:13.5px}
+details.layer>.body{padding:0 2px 18px}
+details.dstep{border-left:2px solid var(--line2);margin:0 0 10px;padding-left:12px}
+details.dstep>summary{cursor:pointer;padding:6px 0;font-weight:600;font-size:14.5px}
+details.dstep ol{margin:4px 0 10px;padding:0 4px 0 22px}
+details.dstep li{margin-bottom:7px;font-size:14px}
+/* 정석·예제·큰그림 — 여백선과 면으로 */
+.jsbox{border-left:3px solid var(--acc);background:var(--acc-bg);padding:12px 16px;margin:14px 0;font-size:14.5px}
+.jsbox .jt{display:block;font-weight:700;color:var(--acc);font-size:14px;margin-bottom:4px}
+.exbox{border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:14px 2px;margin:16px 0}
+.exbox .xh{font-weight:600;font-size:14.5px;margin-bottom:6px}
+.exbox .xh .xno{color:var(--acc);font-weight:700;margin-right:8px}
+.exbox .xsol{margin-top:8px;padding:10px 0 0 14px;border-left:2px solid var(--acc);font-size:14px}
 .exbox .xsol ol{margin:4px 0 0;padding-left:20px}
-.exbox .xrel{font-size:12px;color:var(--ink3);margin-top:8px;font-family:"IBM Plex Mono",monospace}
-.bigpic{border:1.5px solid var(--acc);border-left:5px solid var(--acc);border-radius:10px;background:linear-gradient(180deg,var(--acc-bg),var(--surf));padding:14px 18px;margin:0 0 16px;font-size:14.5px;line-height:1.8}
-.bigpic .bt{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;color:var(--acc);font-weight:700;margin-bottom:5px}
-.mapline{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(--surf);border:1px dashed var(--line2);border-radius:8px;padding:9px 12px;margin:10px 0;overflow-x:auto}
+.exbox .xrel{font-size:13px;color:var(--ink3);margin-top:8px}
+.bigpic{border-left:3px solid var(--ink);padding:4px 0 4px 18px;margin:4px 0 20px;font-size:15px;line-height:1.85}
+.bigpic .bt{display:block;font-family:var(--serif);font-size:15px;color:var(--ink);font-weight:700;margin-bottom:4px}
+.mapline{font-size:14px;background:var(--surf2);padding:10px 14px;margin:12px 0;overflow-x:auto;line-height:1.7}
 .en{color:var(--ink3);font-weight:400;font-size:.88em}
-.tagx,.tagm,.tagc{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:700;letter-spacing:.06em;border-radius:5px;padding:2px 7px;margin-left:7px;vertical-align:2px;white-space:nowrap}
-.tagx{background:#c0392b;color:#fff}
-.tagm{background:var(--acc);color:#fff}
-.tagc{background:var(--line2);color:var(--ink2)}
-.whyq{border-left:3px solid var(--ink3);padding:3px 0 3px 12px;margin:13px 0;color:var(--ink2);font-size:14px}
-.intuit{background:var(--acc-bg);border-radius:8px;padding:9px 13px;margin:10px 0;font-size:13.5px}
-.exambox{border:1px solid var(--line2);border-left:3px solid #c0392b;border-radius:8px;background:var(--surf);padding:10px 14px;margin:12px 0;font-size:13px}
-.exambox .xt{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;color:#c0392b;font-weight:700;display:block;margin-bottom:3px}
-.layer .body h4{margin:24px 0 8px;font-size:16.5px}
-.layer .body h4:first-child{margin-top:4px}
-.readrow{margin:8px 0 2px;text-align:right}
-.readbtn{font:inherit;font-size:12.5px;min-height:40px;padding:7px 15px;border-radius:99px;border:1px solid var(--line2);background:var(--surf);color:var(--ink2);cursor:pointer}
-.readbtn[aria-pressed="true"]{background:var(--ok-bg);color:var(--ok);border-color:var(--ok)}
-/* drill */
-.filters{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
-.fchip{font:inherit;font-size:12.5px;min-height:36px;padding:5px 14px;border-radius:99px;border:1px solid var(--line2);background:var(--surf);color:var(--ink2);cursor:pointer}
-.fchip.on{background:var(--acc-bg);color:var(--acc);border-color:var(--acc);font-weight:600}
-.pcard{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:15px 17px;margin-bottom:12px;box-shadow:var(--shadow)}
-.pc-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:8px}
-.lv{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:99px}
-.lv1{background:var(--ok-bg);color:var(--ok)} .lv2{background:var(--info-bg);color:var(--info)}
-.lv3{background:var(--warn-bg);color:var(--warn)} .lv4{background:var(--acc-bg);color:var(--acc)}
-.tagc{font-size:11px;color:var(--ink3);font-family:"IBM Plex Mono",monospace}
-.srcb{font-size:10px;color:var(--ink3);border:1px solid var(--line);border-radius:99px;padding:1px 8px}
-.sdot{width:9px;height:9px;border-radius:99px;background:var(--line2);margin-left:auto;flex:0 0 auto}
-.sdot.correct{background:var(--ok)} .sdot.partial{background:var(--warn)} .sdot.wrong{background:var(--bad)}
-.pc-st{font-size:14.5px;margin-bottom:10px}
-.pc-btns{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
-.pbtn{font:inherit;font-size:12.5px;min-height:40px;padding:7px 14px;border-radius:8px;border:1px solid var(--line2);background:var(--surf2);color:var(--ink2);cursor:pointer}
-.pbtn:hover{border-color:var(--acc);color:var(--acc)}
-.pbtn.grade-c{border-color:var(--ok);color:var(--ok)}
-.pbtn.grade-p{border-color:var(--warn);color:var(--warn)}
-.pbtn.grade-w{border-color:var(--bad);color:var(--bad)}
-.pbtn.grade-c.sel{background:var(--ok-bg)} .pbtn.grade-p.sel{background:var(--warn-bg)} .pbtn.grade-w.sel{background:var(--bad-bg)}
-.hintbox{background:var(--warn-bg);border-radius:7px;padding:9px 13px;font-size:13px;margin:8px 0 0}
-.solbox{background:var(--surf2);border-radius:8px;padding:11px 14px;margin:10px 0 0}
+.tagx,.tagm,.tagc{display:inline-block;font-size:12.5px;font-weight:700;margin-left:8px;vertical-align:1px;white-space:nowrap;padding:0 0 1px;border-bottom:1.5px solid currentColor;line-height:1.3}
+.tagx{color:var(--red)} .tagm{color:var(--acc)} .tagc{color:var(--ink3);border-bottom-style:dotted}
+.whyq{border-left:2px solid var(--ink3);padding:2px 0 2px 14px;margin:14px 0;color:var(--ink2);font-size:14.5px}
+.intuit{background:var(--surf2);padding:10px 14px;margin:12px 0;font-size:14.5px}
+.exambox{border-left:3px solid var(--red);background:var(--red-bg);padding:11px 15px;margin:14px 0;font-size:14px}
+.exambox .xt{display:block;font-weight:700;color:var(--red);font-size:14px;margin-bottom:3px}
+.layer .body h4{margin:26px 0 8px;font-family:var(--serif);font-size:17px;letter-spacing:-.01em}
+.layer .body h4:first-child{margin-top:2px}
+.readrow{margin:12px 0 0;text-align:right}
+.readbtn{font:inherit;font-size:13.5px;min-height:44px;padding:8px 16px;border-radius:4px;border:1px solid var(--line2);background:transparent;color:var(--ink2);cursor:pointer}
+.readbtn[aria-pressed="true"]{color:var(--ok);border-color:var(--ok)}
+/* 드릴 — 필터는 밑줄 탭 */
+.filters{display:flex;flex-wrap:wrap;gap:2px 18px;margin:8px 0 6px;border-bottom:1px solid var(--line)}
+.fchip{font:inherit;font-size:14px;min-height:44px;padding:8px 2px;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;color:var(--ink3);cursor:pointer}
+.fchip:hover{color:var(--ink)}
+.fchip.on{color:var(--ink);border-bottom-color:var(--acc);font-weight:600}
+.pcard{padding:22px 0 20px;border-bottom:1px solid var(--line)}
+.pc-head{display:flex;align-items:baseline;gap:4px 12px;flex-wrap:wrap;margin-bottom:8px;font-size:13px;color:var(--ink3)}
+.lv{font-weight:700;font-size:13px}
+.lv1{color:var(--ok)} .lv2{color:var(--acc)} .lv3{color:var(--warn)} .lv4{color:var(--red)}
+.pmeta{color:var(--ink3)}
+.srcb{color:var(--ink3)}
+.srcb::before{content:"· "}
+.sdot{margin-left:auto;font-size:13px;font-weight:700}
+.sdot.correct{color:var(--ok)} .sdot.correct::after{content:"맞음"}
+.sdot.partial{color:var(--warn)} .sdot.partial::after{content:"부분"}
+.sdot.wrong{color:var(--red)} .sdot.wrong::after{content:"틀림"}
+.pc-st{font-size:16px;line-height:1.8;margin-bottom:12px}
+.pc-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.pbtn{font:inherit;font-size:13.5px;min-height:44px;padding:8px 15px;border-radius:4px;border:1px solid var(--line2);background:transparent;color:var(--ink2);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}
+.pbtn:hover{border-color:var(--ink2);color:var(--ink)}
+.pbtn.grade-c{color:var(--ok)} .pbtn.grade-p{color:var(--warn)} .pbtn.grade-w{color:var(--red)}
+.pbtn.grade-c.sel{background:var(--ok-bg);border-color:var(--ok)} .pbtn.grade-p.sel{background:var(--warn-bg);border-color:var(--warn)} .pbtn.grade-w.sel{background:var(--red-bg);border-color:var(--red)}
+.hintbox{border-left:2px solid var(--warn);background:var(--warn-bg);padding:9px 14px;font-size:14px;margin:10px 0 0}
+.solbox{border-left:2px solid var(--acc);padding:4px 0 4px 16px;margin:14px 0 4px}
 .solbox ol{margin:0;padding-left:20px}
-.solbox li{font-size:13.5px;margin-bottom:7px}
-.ansline{margin-top:8px;font-weight:600;color:var(--acc);font-size:14px}
-.choices{display:flex;flex-direction:column;gap:7px;margin:4px 0 2px}
-.choice{font:inherit;text-align:left;font-size:13.5px;min-height:44px;padding:9px 13px;border-radius:8px;border:1px solid var(--line2);background:var(--surf);color:var(--ink);cursor:pointer}
-.choice:hover{border-color:var(--acc)}
-.choice.right{border-color:var(--ok);background:var(--ok-bg)}
-.choice.wrongpick{border-color:var(--bad);background:var(--bad-bg)}
-.expl{background:var(--info-bg);border-radius:7px;padding:9px 13px;font-size:13px;margin-top:8px;color:var(--ink2)}
-/* exam */
-.exam-setup .grp{margin-bottom:14px}
-.exam-setup label.ck{display:inline-flex;align-items:center;gap:6px;margin:0 12px 6px 0;font-size:13.5px;min-height:36px}
-.exam-setup input[type=checkbox]{accent-color:var(--acc);width:17px;height:17px}
-.exam-setup select{font:inherit;font-size:14px;padding:8px 12px;border:1px solid var(--line2);border-radius:8px;background:var(--surf);color:var(--ink)}
-.bigbtn{font:inherit;font-size:14.5px;font-weight:600;min-height:46px;padding:10px 22px;border-radius:99px;border:none;background:var(--acc);color:#fff;cursor:pointer}
+.solbox li{font-size:14.5px;margin-bottom:8px}
+.ansline{margin-top:10px;font-weight:700;color:var(--acc);font-size:15px}
+.choices{display:flex;flex-direction:column;gap:8px;margin:4px 0 4px;counter-reset:ch}
+.choice{font:inherit;text-align:left;font-size:15px;min-height:46px;padding:10px 14px 10px 44px;border-radius:4px;border:1px solid var(--line2);background:var(--surf);color:var(--ink);cursor:pointer;position:relative;counter-increment:ch}
+.choice::before{content:counter(ch);position:absolute;left:15px;top:10px;font-family:var(--serif);font-weight:700;color:var(--ink3)}
+.choice:hover{border-color:var(--ink2)}
+.choice.right{border-color:var(--ok);background:var(--ok-bg)} .choice.right::before{color:var(--ok)}
+.choice.wrongpick{border-color:var(--red);background:var(--red-bg)} .choice.wrongpick::before{color:var(--red)}
+.expl{border-left:2px solid var(--acc);padding:6px 0 6px 14px;font-size:14px;margin-top:12px;color:var(--ink2)}
+/* 모의고사 */
+.exam-setup .grp{padding:16px 0;border-top:1px solid var(--line)}
+.exam-setup .grp h4{margin:0 0 8px;font-family:var(--serif);font-size:16px}
+.exam-setup label.ck{display:inline-flex;align-items:center;gap:8px;margin:0 18px 4px 0;font-size:14.5px;min-height:44px;cursor:pointer}
+.exam-setup input[type=checkbox]{accent-color:var(--acc);width:18px;height:18px}
+.exam-setup select{font:inherit;font-size:16px;min-height:44px;padding:8px 12px;border:1px solid var(--line2);border-radius:4px;background:var(--surf);color:var(--ink)}
+.bigbtn{font:inherit;font-size:15.5px;font-weight:600;min-height:50px;padding:12px 26px;border-radius:4px;border:none;background:var(--ink);color:var(--bg);cursor:pointer;margin-top:10px}
+.bigbtn:hover{background:var(--acc)}
 .bigbtn:disabled{opacity:.5;cursor:default}
-.exam-top{display:flex;align-items:center;gap:10px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink3);margin-bottom:12px}
-.exam-top .bar{flex:1;height:5px;background:var(--line);border-radius:99px;overflow:hidden}
-.exam-top .bar i{display:block;height:100%;background:var(--acc)}
-.report{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:18px 20px;box-shadow:var(--shadow)}
-.report .score{font-family:Newsreader,Georgia,serif;font-size:34px;font-weight:600;color:var(--acc)}
-table{border-collapse:collapse;width:100%;margin:10px 0 14px;font-size:13px;display:block;overflow-x:auto}
-th,td{border:1px solid var(--line);padding:7px 10px;text-align:left}
-th{background:var(--surf2);white-space:nowrap}
-.empty{border:1px dashed var(--line2);border-radius:10px;padding:24px;color:var(--ink3);font-size:13.5px;text-align:center}
-/* mobile */
+.exam-top{display:flex;align-items:center;gap:16px;margin:0 0 6px}
+.exam-top .cnt{font-family:var(--serif);font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1}
+.exam-top .cnt small{font-size:16px;color:var(--ink3);font-weight:500}
+.ticks{flex:1;display:flex;gap:4px;align-items:flex-end;height:22px}
+.ticks i{flex:1;height:10px;border-left:1.5px solid var(--line2)}
+.ticks i.done{border-color:var(--ink)} .ticks i.cur{height:22px;border-left:2.5px solid var(--acc)}
+.report{padding:6px 0 0}
+.report .score{font-family:var(--serif);font-size:64px;line-height:1.05;font-weight:700;color:var(--ink);letter-spacing:-.03em}
+.report .score small{font-size:22px;color:var(--ink3);margin-left:4px}
+table{border-collapse:collapse;width:100%;margin:12px 0 16px;font-size:14px;display:block;overflow-x:auto}
+th,td{border-bottom:1px solid var(--line);padding:9px 12px 9px 0;text-align:left}
+th{font-weight:600;color:var(--ink2);white-space:nowrap;border-bottom:1.5px solid var(--ink2)}
+.empty{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:28px 4px;color:var(--ink3);font-size:14.5px}
+code,.mono{font-family:"IBM Plex Mono",monospace;font-size:.92em}
+/* 모바일 */
 .tabbar{display:none}
 #tb-sheet{display:none}
 @media(max-width:960px){
@@ -195,29 +229,42 @@ th{background:var(--surf2);white-space:nowrap}
  input,textarea,select{font-size:16px}
  .layout{flex-direction:column}
  .side{width:100%;flex:none;height:auto;position:static;border-right:none;border-bottom:1px solid var(--line);
-  padding:12px 16px;flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap}
+  padding:14px 16px;flex-direction:row;align-items:center;gap:14px;flex-wrap:wrap}
+ .brand a{font-size:18px}
  .side nav,.ng,.foot-side{display:none}
- .side .prog{flex:1;min-width:110px}
- .main{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
+ .side .prog{flex:1;min-width:130px}
+ .main{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+ .hero-fig .row2{grid-template-columns:minmax(0,1fr)}
+ .hero-fig .splane{max-width:260px}
+ .ucard{grid-template-columns:40px minmax(0,1fr)}
+ .uc-stat{grid-column:2;grid-row:auto;text-align:left}
  .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;background:var(--side);border-top:1px solid var(--line);
-  padding:4px 4px calc(4px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.06)}
- .tabbar a,.tabbar button{flex:1;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
-  font:inherit;font-size:16px;line-height:1;background:none;border:none;border-radius:8px;color:var(--ink2);text-decoration:none;cursor:pointer;padding:5px 2px}
- .tabbar a span,.tabbar button span{font-size:10.5px;font-family:"IBM Plex Mono",monospace}
- .tabbar a.on{color:var(--acc);background:var(--acc-bg)}
- #tb-sheet{position:fixed;right:10px;bottom:calc(64px + env(safe-area-inset-bottom));z-index:51;background:var(--surf);
-  border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:8px;display:flex;flex-direction:column;min-width:190px}
+  padding:2px 4px calc(2px + env(safe-area-inset-bottom))}
+ .tabbar a,.tabbar button{flex:1;min-height:52px;display:flex;align-items:center;justify-content:center;
+  font:inherit;font-size:14px;line-height:1.2;background:none;border:none;border-top:2px solid transparent;color:var(--ink2);text-decoration:none;cursor:pointer;padding:4px 2px;white-space:nowrap}
+ .tabbar a.on{color:var(--ink);font-weight:700;border-top-color:var(--acc)}
+ #tb-sheet{position:fixed;right:10px;bottom:calc(66px + env(safe-area-inset-bottom));z-index:51;background:var(--surf);
+  border:1px solid var(--line2);border-radius:4px;padding:6px;display:flex;flex-direction:column;min-width:210px}
  #tb-sheet[hidden]{display:none!important}
- #tb-sheet a{display:flex;align-items:center;padding:11px 14px;min-height:44px;border-radius:8px;color:var(--ink2);text-decoration:none;font-size:14.5px}
+ #tb-sheet a{display:flex;align-items:center;padding:11px 14px;min-height:44px;color:var(--ink2);text-decoration:none;font-size:15px}
  #tb-sheet a:active{background:var(--surf2)}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media(max-width:640px){
+ .facts b{font-size:26px}
+ .report .score{font-size:52px}
+}
+@media print{
+ .side,.tabbar,#tb-sheet{display:none!important}
+ .main{padding:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}
+ .hf-curve{stroke-dashoffset:0}.hf-pole,.hf-late{opacity:1}}
 </style>
 </head>
 <body>
 <div class="layout">
 <aside class="side">
-  <div class="brand"><a href="#home"><b>기계학습</b> 문제은행</a><span>COSE362 · 중간범위 · 2026-09-03</span></div>
+  <div class="brand"><a href="#home"><b>기계학습</b> 문제은행</a><span>COSE362 · 중간범위 · 2026-11-06</span></div>
   <div class="prog"><div class="prog-bar"><i id="pbar"></i></div><span id="ptxt"></span></div>
   <nav id="sidenav"></nav>
   <div class="foot-side">전 문제 검산 게이트 통과분만 탑재<br><a href="../../">← Study Vault 허브</a></div>
@@ -225,11 +272,11 @@ th{background:var(--surf2);white-space:nowrap}
 <main class="main"><div class="view" id="view"></div></main>
 </div>
 <nav class="tabbar" aria-label="하단 탭">
-<a href="../../">🏠<span>허브</span></a>
-<a href="#home" data-tv="home">📚<span>홈</span></a>
-<a href="#wrong" data-tv="wrong">🔁<span>오답</span></a>
-<a href="#exam" data-tv="exam">📝<span>모의고사</span></a>
-<button id="tb-more" type="button">☰<span>단원</span></button>
+<a href="../../">허브</a>
+<a href="#home" data-tv="home">홈</a>
+<a href="#wrong" data-tv="wrong">오답</a>
+<a href="#exam" data-tv="exam">모의고사</a>
+<button id="tb-more" type="button">단원</button>
 </nav>
 <div id="tb-sheet" hidden></div>
 
@@ -2444,7 +2491,7 @@ SV_BANK.push({
 <script src="../../shared/progress.js"></script>
 <script>
 window.SV_CONTENT = {"course": {"bigpicture": "\n<p><b>이 과목의 단 하나의 물음</b> — 기계가 데이터로부터 \"배웠다\"는 것은 정확히 무엇이고,\n배운 것이 <b>새 데이터에서도 통한다</b>(일반화<span class=\"en\">(generalization)</span>)는 보장은 어디서 오는가.\n중간범위는 그 물음을 다섯 갈래로 심문한다.</p>\n<p>① <b>학습의 정형화 (U1)</b>: 학습=⟨과제 T, 성능 P, 경험 E⟩. 가설공간을 좁히는 <b>귀납 편향</b> 없이는\n일반화 자체가 불가능하다는 정리(무편향 학습 불가)가 과목 전체의 철학적 기초다. PAC 부등식이 \"편향의 보상\"을 정량화한다.</p>\n<p>② <b>첫 학습기 — 회귀 (U2)</b>: 최소제곱 \\(w=S_{xy}/S_{xx}\\) 폐형식과 경사하강 두 길.\n학습률·수렴 조건 \\(|1-2\\eta a|<1\\), 그리고 과적합↔규제(릿지)의 첫 대면.</p>\n<p>③ <b>심판 (U3)</b>: 혼동행렬에서 파생되는 지표 5종, ROC·AUC, 교차검증과 데이터 누수 —\n\"무엇으로 이겼다고 선언할 것인가\"의 규율. 모든 이후 모델은 이 심판대 위에 선다.</p>\n<p>④ <b>결정트리 (U4→U5)</b>: 정보이론(엔트로피·정보이득)으로 분할을 고르는 ID3(U4),\n지니로 고르는 CART와 과적합을 다스리는 가지치기(U5). 손계산 시험의 최대 지분 — 미첼 [9+,5−] 표가 성지다.</p>\n<p>⑤ <b>확률적 학습 (U6)</b>: 베이즈 정리로 \"가장 그럴듯한 가설\"을 고르는 MAP,\n조건부 독립이라는 대담한 가정으로 실전형이 된 나이브 베이즈+라플라스 평활.</p>\n<div class=\"mapline\">U1 학습이란(편향·PAC) → U2 회귀(폐형식·경사하강) → U3 평가(혼동행렬·CV) → U4 트리 I(엔트로피·IG) → U5 트리 II(지니·가지치기) → U6 베이즈·NB</div>\n<p><b>시험 전략</b> — 손계산 중심(정보이득·지니·NB 표·혼동행렬)+개념 판별. 반복 축:\n<b>[계산]</b> IG 소수 셋째 자리까지, 혼동행렬→지표 5종, NB 라플라스 표, 최소제곱 표 계산.\n<b>[개념]</b> 편향 없이는 일반화 없다, 과적합 진단(훈련·검증 격차), 누수 사례 판별, MAP vs ML.\n<b>[서술]</b> 무편향 학습 불가 논증, 교차검증 절차. 계산 문제는 \"표 만들기\"가 절반이다 — 열 설계를 훈련하라.</p>"}, "u1": {"concept": "\n<div class=\"bigpic\"><span class=\"bt\">U1 큰그림</span>\n\"학습\"을 공학 문제로 바꾸는 단원이다. 정의(T·P·E) → 가설공간이라는 무대 → 그 무대를 줄이는 귀납 편향 →\n편향이 없으면 일반화도 없다는 충격적 정리 → 편향의 보상을 정량화하는 PAC 부등식.\n버전공간과 후보 제거 알고리즘은 \"데이터와 일치하는 가설 전부\"를 추적하는 사고 실험으로,\n과적합(U2·U5)·평가(U3)의 문제의식이 전부 여기서 발아한다.</div>\n\n<h4>1. 학습의 정의와 과제 정형화 <span class=\"en\">(Well-Posed Learning: T, P, E)</span><span class=\"tagm\">계산 필수</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — \"스팸을 배운다\"는 말은 공학이 아니다. 무엇을(T), 무엇으로 재고(P), 무엇에서 배우나(E)를 못 박아야 시스템이 된다.</div>\n<p><b>정의(미첼)</b> — 프로그램이 경험 E로부터, 성능 지표 P로 잰 과제 T의 성적이 오르면 \"학습한다\".\n스팸 필터라면 T=분류, P=정밀도/재현율(U3), E=라벨된 메일. 문제를 받으면 <b>입력 표현·출력 공간·성능 지표부터 명시</b>하는 것이 문법이다.\n갈래: 지도학습<span class=\"en\">(supervised)</span>(라벨 쌍 — 분류는 이산 출력, 회귀는 연속 출력),\n비지도<span class=\"en\">(unsupervised)</span>(구조 발견), 강화<span class=\"en\">(reinforcement)</span>(지연 보상).</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[개념] 사례→T·P·E 분해, 분류/회귀/군집 판별. [함정] P를 \"정확도\"로 뭉개는 선지(불균형이면 오답 — U3 예고).</div>\n\n<h4>2. 가설공간과 귀납 편향 <span class=\"en\">(Hypothesis Space &amp; Inductive Bias)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 불리언 특징 n개의 \"모든 함수\"는 \\(2^{2^n}\\)개(n=4에 65536) — 데이터 몇 개로는 그중 하나를 고를 수 없다.\n후보를 미리 줄여야 학습이 시작된다.</div>\n<p><b>개념 등장</b> — 학습기가 고려하는 후보 집합이 가설공간<span class=\"en\">(hypothesis space)</span> \\(H\\),\n그것을 줄이는 사전 가정이 <b>귀납 편향</b><span class=\"en\">(inductive bias)</span>이다.\n연언(AND) 개념만 허용하면 \\(|H|=3^n+1\\)(특징마다 0/1/무관 — 다항!)로 붕괴 — 탐색 가능해진다.</p>\n<p><b>무편향 학습 불가 정리</b> — 편향 없이 전체 함수 공간을 쓰면, 미관측 입력에 대해 +로 찍는 가설과 −로 찍는 가설이\n훈련 데이터와 <b>똑같이 일치한 채</b> 항상 짝으로 남는다 → 투표는 영원히 동수 → 새 입력 예측 불가.\n∴ <b>일반화하는 모든 학습기는 가정을 갖는다</b> — \"어떤 편향이 이 문제에 맞는가\"가 모델 선택(U2 다항 차수, U5 트리 깊이)의 진짜 이름이다.</p>\n<p class=\"intuit\">💡 <b>직관</b> — 데이터는 후보를 지울 뿐, 후보 목록은 편향이 만든다. 목록이 무한 잡탕이면 지워도 지워도 잡탕이다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] 3ⁿ+1 vs 2^{2ⁿ} 크기 비교. [서술] 무편향 불가 논증(u1-정석 1.2가 골격 — 짝 가설 논법을 자기 말로).</div>\n\n<h4>3. 개념학습과 버전공간 <span class=\"en\">(Concept Learning &amp; Version Space)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 데이터와 일치하는 가설이 하나가 아니다. \"아직 살아 있는 후보 전부\"를 효율적으로 표현·갱신할 수 없나?</div>\n<p><b>개념</b> — 버전공간<span class=\"en\">(version space)</span> = 훈련 데이터와 일치하는 가설 전부.\n일반성 순서를 이용해 양 끝만 저장한다: S(최특수 경계<span class=\"en\">(most specific)</span>)와 G(최일반 경계).\n후보 제거<span class=\"en\">(candidate elimination)</span>의 리듬은 두 줄이다:</p>\n<p>\\[ \\text{양성 예제} \\Rightarrow S\\text{를 최소 일반화},\\qquad\n\\text{음성 예제} \\Rightarrow G\\text{를 최소 특수화} \\]</p>\n<p>(반대쪽 경계와 모순되는 가설은 삭제.) S=G로 만나면 수렴, 그 사이가 남으면 \"확신 못 함\"의 영역 —\n다수결/기권으로 예측한다. 노이즈 한 방에 버전공간이 통째로 빌 수 있다는 취약점이 과적합 서사의 첫 장면이다.</p>\n<p class=\"intuit\">💡 <b>직관</b> — S는 \"본 것만 인정하는 보수파\", G는 \"안 걸리면 다 허용하는 진보파\". 데이터가 쌓이며 양쪽이 조여든다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] 예제 3~4개 처리하며 S·G 추적(필수예제 1-1형 — 순서 실수 주의). [개념] 양성이 S를, 음성이 G를 움직인다(역방향 선지가 함정).</div>\n\n<h4>4. PAC 학습 — 편향의 보상 정량화 <span class=\"en\">(PAC Learning)</span><span class=\"tagm\">계산 필수</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — \"대충 맞는(오차≤ε) 가설을 높은 확률(≥1−δ)로\" 얻으려면 표본이 몇 개 필요한가 — 학습의 가격표를 달라.</div>\n<p><b>부등식</b> — 유한 가설공간의 일치 학습기<span class=\"en\">(consistent learner)</span>에 대해:</p>\n<p>\\[ m\\ \\ge\\ \\frac{1}{\\varepsilon}\\Big(\\ln|H|+\\ln\\frac{1}{\\delta}\\Big) \\]</p>\n<p>표본 복잡도가 \\(|H|\\)의 <b>로그</b>에만 의존 — 편향으로 \\(|H|\\)를 줄인 보상이 여기서 정량화된다\n(연언 공간이면 \\(\\ln(3^n+1)\\approx n\\ln3\\): 특징 수에 선형!). 읽는 법: ε(정확도)에 반비례, δ(신뢰)엔 로그 —\n\"더 정확히\"가 \"더 확실히\"보다 비싸다. 과적합의 정보이론적 얼굴: |H|가 크면 우연히 데이터에 맞는 나쁜 가설이 살아남을 확률이 커진다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] m 대입 계산(필수예제 1-2형: ln 값 주어짐). [개념] 각 항의 역할(ε 반비례·δ 로그·|H| 로그) 해석 선지.</div>\n\n<h4>5. 과적합의 씨앗 <span class=\"en\">(Overfitting Preview)</span><span class=\"tagc\">개념 이해용</span></h4>\n<p>노이즈 낀 데이터에 완벽 일치=잡음 암기. 진단 지표는 <b>훈련↔시험(검증) 성능 격차</b> —\n격차 크면 과적합(분산 문제), 둘 다 낮으면 과소적합(편향 문제). 이 이분법이 U2(차수·규제)·U3(검증 규율)·U5(가지치기)를\n하나의 서사로 꿴다: 이 과목은 사실 \"과적합과의 전쟁사\"다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] 훈련/시험 성적 표→진단→처방 고르기(필수예제 1-3형). </div>", "derive": [{"title": "연언 가설공간 크기 3ⁿ+1", "steps": ["특징마다 {0, 1, ?} 3택 [왜] ?=무관 조건", "곱의 법칙: 3ⁿ", "아무것도 안 받는 ∅ 추가 → 3ⁿ+1", "전체 2^(2ⁿ)과 비교: n=4에서 82 vs 65536 — 거의 다 버렸다", "극한 체크: n=0 ⇒ 2개(항상참/∅) ✓"]}, {"title": "후보 제거 알고리즘의 불변식", "steps": ["불변식: S ≤ 진짜 개념 ≤ G (일반성 순서)", "양성 x: S가 x를 포함 못 하면 최소 일반화, G에서 x 배제하는 가설 삭제", "음성 x: G가 x를 배제 못 하면 최소 특수화(분기), S에서 x 포함 가설 삭제", "수렴: S=G=단일 가설. 중간 상태는 다수결/기권으로 예측", "극한 체크: 노이즈 1개면 버전공간 붕괴(∅) 가능 — 알고리즘의 취약점까지"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 1-1</span>특징 3개 연언 공간에서 +(1,1,1), −(0,0,0), +(1,1,0)을 처리하라.</div><div class=\"xsol\"><b>풀이</b><ol><li>+(1,1,1): S=⟨1,1,1⟩.</li><li>+(1,1,0): 셋째 충돌 → S=⟨1,1,?⟩.</li><li>−(0,0,0): G 분기 {⟨1,?,?⟩,⟨?,1,?⟩,⟨?,?,1⟩}, S와 모순인 ⟨?,?,1⟩ 탈락 → |G|=2.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u1-l3-09 · u1-l4-02 · u1-l3-01</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 1-2</span>PAC: |H|=10⁶, ε=5%, δ=5%에 필요한 샘플 수는?</div><div class=\"xsol\"><b>풀이</b><ol><li>m ≥ (1/ε)(ln|H|+ln(1/δ)).</li><li>= 20×(13.8+3.0) ≈ <b>336개</b>.</li><li>가설공간 로그에만 의존 — 편향의 보상.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u1-l3-13 · u1-l4-04 · u1-l4-08</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 1-3</span>훈련 99%/시험 60% 모델과 훈련 65%/시험 63% 모델의 진단과 처방은?</div><div class=\"xsol\"><b>풀이</b><ol><li>전자: 격차 39%p → 과적합 → 규제·데이터·단순화.</li><li>후자: 둘 다 낮음 → 과소적합 → 표현력·특징.</li><li>선택은 언제나 시험(검증) 성능으로.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u1-l4-06 · u1-l2-10 · u2-l3-12</div></div>"}, "u2": {"concept": "\n<div class=\"bigpic\"><span class=\"bt\">U2 큰그림</span>\n첫 실전 학습기. \"직선 하나 긋기\"에 과목의 모든 주제가 압축돼 있다 — 손실 정의(잔차 제곱합) → 최적화 두 경로\n(폐형식 vs 경사하강) → 표현력 확장(다항 특징) → 그 대가(과적합) → 억제(릿지 규제) → 선택 기준(검증, U3).\n경사하강 수렴 조건은 자동제어의 안정성·마르코프 수렴과 같은 \"등비 감쇠\" 구조다 — 공대 전 과목을 관통하는 패턴.</div>\n\n<h4>1. 최소제곱 — 손실을 정의하고 미분으로 끝내기 <span class=\"en\">(Least Squares)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 점 n개에 \"가장 잘 맞는\" 직선 \\(\\hat y=wx+b\\)? \"잘 맞는다\"부터 수식이어야 한다.</div>\n<p><b>정의와 해</b> — 잔차 제곱합 \\(J(w,b)=\\sum_i(y_i-wx_i-b)^2\\)을 최소화. 볼록<span class=\"en\">(convex)</span>이라\n1계 조건이 전역 최소를 준다:</p>\n<p>\\[ w=\\frac{S_{xy}}{S_{xx}}=\\frac{\\sum(x_i-\\bar x)(y_i-\\bar y)}{\\sum(x_i-\\bar x)^2},\\qquad b=\\bar y-w\\bar x \\]</p>\n<p>회귀선은 \\((\\bar x,\\bar y)\\)를 지난다. 잔차의 성질 — \\(\\sum e_i=0\\), \\(\\sum x_ie_i=0\\)(직교) — 이 공짜 검산기.\n품질은 결정계수:</p>\n<p>\\[ R^2=1-\\frac{SSE}{SST} \\]</p>\n<p>— \"평균 예측 대비 설명한 분산 비율\". R²=0이 기준선(평균 모델), 시험셋에선 음수도 가능(평균보다 못함).</p><div class=\"jsbox\"><span class=\"jt\">정석 2.1</span>손계산 표 4열: \\(x-\\bar x\\ |\\ y-\\bar y\\ |\\ \\text{곱}\\ |\\ \\text{제곱}\\). 4~5점 문제는 이 표 하나로 w·b·R²까지 3분. 검산은 잔차 합=0. 표 설계가 곧 점수다 — 시험지에 표부터 그려라.</div>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] 표 계산→w·b→R²(필수예제 2-1·2-2형). [개념] (x̄,ȳ) 통과, R²의 뜻과 음수 가능성.</div>\n\n<h4>2. 경사하강 — 미분을 못 풀 때의 만능 경로 <span class=\"en\">(Gradient Descent)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 폐형식이 없는 손실(로지스틱, 신경망)이 온다. \"기울기 반대로 조금씩\"이라는 범용 절차가 필요하다.</div>\n<p><b>절차</b> — \\(w\\leftarrow w-\\eta\\nabla J(w)\\), \\(\\eta\\)=학습률<span class=\"en\">(learning rate)</span>.\n2차 손실 \\(J=aw^2\\)에서 갱신은 \\(w\\leftarrow(1-2\\eta a)w\\) — 등비수열이라 수렴 조건이 즉시 나온다:</p>\n<p>\\[ |1-2\\eta a|<1\\iff 0<\\eta<\\frac{1}{a} \\]</p>\n<p>\\(\\eta\\) 과대→발산(진동 폭 증가), \\(\\eta=1/2a\\)→한 방, 과소→기어간다. 다차원에선 a→최대 곡률:\n특징 스케일이 다르면 등고선이 길쭉해져 지그재그 — <b>표준화</b>가 처방이다.\n배치/미니배치/SGD는 \"한 걸음의 정확도 vs 걸음 빈도\"의 트레이드오프.</p>\n<p class=\"intuit\">💡 <b>직관</b> — 안개 낀 골짜기에서 발밑 경사만 보고 내려가기. 보폭(η)이 골짜기 폭(1/a)을 넘으면 반대편 벽에 부딪힌다.</p>\n<p>🔗 <b>연결</b> — (1−2ηa)ⁿ 감쇠는 자동제어 1차계·마르코프 (1−a−b)ⁿ과 동일 구조 — \"고정점+등비\"는 공학 공통 문법이다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] 2~3스텝 손추적(필수예제 2-3형), 수렴 η 범위. [개념] 표준화가 돕는 이유, SGD의 잡음과 장점.</div>\n\n<h4>3. 표현력과 규제 — 과적합과의 첫 전투 <span class=\"en\">(Polynomial Features &amp; Ridge)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 직선이 못 맞추는 곡선 데이터. 특징에 \\(x^2, x^3\\)을 추가하면 되지만 — 어디까지?</div>\n<p><b>확장과 대가</b> — 다항 특징은 <b>파라미터에 대해 선형</b>이라 여전히 \"선형 모델\"(폐형식·경사하강 그대로).\n차수를 올리면 훈련 오차는 단조 감소하지만 검증 오차는 <b>U자</b> — 내려가다(과소적합 해소) 올라간다(잡음 암기).\n억제 장치가 릿지<span class=\"en\">(ridge regression)</span>: \\(J+\\lambda\\|w\\|^2\\)로 큰 계수에 벌금 — 1변수 폐형식이 투명하다:</p>\n<p>\\[ w_{ridge}=\\frac{S_{xy}}{S_{xx}+\\lambda} \\]</p>\n<p>λ가 계수를 0 쪽으로 수축(편향↑ 분산↓). 진단 언어를 굳혀라: 기대 오차 = 편향² + 분산 + 잡음(바닥=베이즈 오류).\n격차 크면 분산 문제(데이터·규제·단순화), 둘 다 나쁘면 편향 문제(표현력·특징). 차수·λ의 선택은 <b>언제나 검증 성능</b>(U3)으로.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] 릿지 폐형식 대입, λ↑에 따른 w 수축. [개념] U자 곡선 해석, 편향-분산 진단→처방 매칭(단골 세트).</div>", "derive": [{"title": "최소제곱 폐형식", "steps": ["J=Σ(yᵢ−wxᵢ−b)² — 볼록이므로 1계 조건이 전역 최소", "∂J/∂b=0 → b=ȳ−wx̄ (평균점 통과)", "∂J/∂w=0에 대입, 중심화 정리", "\\(w=S_{xy}/S_{xx}\\)", "극한 체크: 완전 선형 데이터 ⇒ 잔차 0 ✓ · S_xx=0 ⇒ 정의 불가 ✓"]}, {"title": "경사하강 수렴 조건 (제어 이론과 같은 그림)", "steps": ["J=aw²: 갱신 w←(1−2ηa)w — 등비수열", "수렴 ⇔ |1−2ηa|<1 ⇔ 0<η<1/a", "η=1/2a면 한 방, 1/2a<η<1/a면 진동 수렴", "다차원: a → 최대 곡률(고유값) — 스케일 차이가 크면 지그재그(표준화의 이유)", "극한 체크: η→0 ⇒ 무한히 느림 ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 2-1</span>x=[0,1,2,3], y=[1,2,4,5]의 최소제곱 직선은?</div><div class=\"xsol\"><b>풀이</b><ol><li>x̄=1.5, ȳ=3. S_xy=7, S_xx=5.</li><li>w=1.4, b=3−2.1=<b>0.9</b>.</li><li>검산: 잔차 [0.1,−0.3,0.3,−0.1] 합=0 ✓.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u2-l2-02 · u2-l3-01 · u2-l4-02</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 2-2</span>SSE=10, SST=100이면 R²는? 평균 예측 모델은?</div><div class=\"xsol\"><b>풀이</b><ol><li>R²=1−0.1=<b>0.9</b>.</li><li>평균 모델: SSE=SST → R²=0(기준선).</li><li>R²<0도 가능(시험셋에서 평균보다 나쁘면).</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u2-l2-04 · u2-l2-11 · u2-l4-07</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 2-3</span>J=(w−3)², w₀=0, η=0.2로 2스텝 진행하라.</div><div class=\"xsol\"><b>풀이</b><ol><li>∇=2(w−3). w₁=0+0.2·6=1.2.</li><li>w₂=1.2+0.2·3.6=<b>1.92</b>.</li><li>수축비 (1−0.4)=0.6씩 3으로 접근.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u2-l2-05 · u2-l3-03 · u2-l4-06</div></div>"}, "u3": {"concept": "\n<div class=\"bigpic\"><span class=\"bt\">U3 큰그림</span>\n모델을 만드는 법(U2) 다음은 <b>이겼다고 선언하는 법</b>이다. 도구는 혼동행렬 하나 — 지표 5종이 전부 그 4칸의 비율이다.\n문턱을 훑으면 ROC·AUC, 데이터를 아껴 쓰면 교차검증, 그리고 이 모든 것을 무효화하는 단 하나의 죄 — 데이터 누수.\n\"정확도 99%\"가 왜 무의미할 수 있는지(불균형), 왜 시험셋은 한 번만 열어야 하는지 — 실무 사고의 대부분이 이 단원 위반에서 난다.</div>\n\n<h4>1. 혼동행렬과 지표 5종 <span class=\"en\">(Confusion Matrix &amp; Metrics)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 암 환자 1%인 데이터에서 \"전부 정상\"이라 답하면 정확도 99%. 숫자 하나로는 심판이 안 된다.</div>\n<p><b>도구</b> — 예측×실제 4칸: TP·FP·FN·TN. 파생 지표:</p>\n<p>\\[ \\text{Acc}=\\frac{TP+TN}{\\text{전체}},\\quad\nP=\\frac{TP}{TP+FP},\\quad R=\\frac{TP}{TP+FN},\\quad\nF_1=\\frac{2PR}{P+R},\\quad \\text{Spec}=\\frac{TN}{TN+FP} \\]</p>\n<p>정밀도<span class=\"en\">(precision)</span>는 \"양성이라 했을 때 맞을 확률\"(FP의 비용 — 스팸 오차단),\n재현율<span class=\"en\">(recall)</span>은 \"실제 양성을 잡을 확률\"(FN의 비용 — 암 놓침). 둘은 문턱을 사이에 둔 시소이고\nF1은 조화평균(작은 쪽에 민감)이다. <b>어느 지표를 최적화할지는 오류의 비용이 정한다</b> — 문제 문맥→지표 선택이 개념 문항의 몸통.\n베이즈 관점: 유병률이 낮으면 좋은 검사도 PPV(정밀도)가 무너진다(확률과정 U1과 같은 계산!).</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] 행렬→5지표(분모 선택이 전부), 문턱 이동 시 P·R 방향. [개념] 상황→지표 매칭(암 진단=재현율, 스팸=정밀도).</div>\n\n<h4>2. ROC와 AUC <span class=\"en\">(ROC Curve &amp; AUC)</span><span class=\"tagm\">계산 필수</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 문턱 하나짜리 성적표는 문턱을 바꾸면 뒤집힌다. 문턱 <b>전체</b>에서의 실력을 한 장에 그리자.</div>\n<p><b>개념</b> — 문턱을 1→0으로 훑으며 (FPR, TPR)=(1−특이도, 재현율)을 찍은 궤적이 ROC.\n대각선=동전 던지기, 좌상단=이상형. 곡선 아래 면적 AUC의 확률적 정의가 계산 문제의 열쇠다:</p>\n<p>\\[ \\mathrm{AUC}=P(\\text{임의 양성의 점수}>\\text{임의 음성의 점수}) \\]</p>\n<p>— 소표본이면 양성×음성 쌍을 전부 나열해 이긴 비율(동점 0.5)로 손계산. AUC는 문턱 불변·클래스 비율 불변이라\n불균형 데이터의 표준 심판이지만, \"확률 보정\"은 안 본다는 한계까지 알면 만점.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] 쌍 비교 AUC(점수 목록 주어짐), ROC 점 찍기. [개념] AUC=0.5·1.0의 의미, 불균형에서 Acc 대신 AUC인 이유.</div>\n\n<h4>3. 검증 규율 — 홀드아웃·교차검증·누수 <span class=\"en\">(Validation, Cross-Validation &amp; Leakage)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 데이터가 200개뿐. 시험셋을 떼면 훈련이 부족하고, 안 떼면 성적을 못 믿는다.</div>\n<p><b>규율</b> — 3분할이 원칙: 훈련(적합)/검증(하이퍼파라미터 선택)/시험(최종 1회 보고).\n데이터가 아까우면 k-겹 교차검증<span class=\"en\">(k-fold cross-validation)</span>: k조각 중 하나씩 검증을 돌려 평균 —\n전 데이터가 한 번씩 심판석에 앉는다. 하이퍼파라미터 탐색까지 공정하게 하려면 중첩 CV(바깥 평가/안쪽 선택).</p>\n<p><b>누수</b><span class=\"en\">(data leakage)</span> — 시험 정보가 훈련 과정에 새는 모든 경로:\n전체 데이터로 표준화 후 분할(통계량 누수), 시험셋 성능으로 모델 고르기(선택 누수), 시계열을 무작위 분할(미래 누수).\n증상은 \"검증 성적만 화려하고 실전에서 붕괴\". <b>전처리 통계량은 훈련 폴드에서만 산출</b>이 규율의 한 줄 요약이다.</p>\n<p class=\"intuit\">💡 <b>직관</b> — 시험지는 밀봉된 채 마지막에 한 번. 밀봉을 깬 횟수만큼 성적표는 부풀려진 거짓이 된다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] k-겹 평균±편차. [개념] 누수 사례 판별(3유형), 검증 vs 시험의 역할 구분 — 서술형으로도 출제.</div>", "derive": [{"title": "PPV(베이즈)와 기저율", "steps": ["P(병|+) = P(+|병)P(병)/P(+) [왜] 베이즈 정리 그대로", "P(+) = prev·sens + (1−prev)(1−spec) — 두 경로의 합", "유병률 1%·민감도 90%·특이도 90% ⇒ PPV ≈ 8.3%", "양성 대부분이 거짓 — 검사 좋아도 기저율이 지배", "극한 체크: spec→100% ⇒ PPV→100% ✓ (거짓 양성 소멸)"]}, {"title": "AUC = 순위 확률", "steps": ["정의: 무작위 양성 x⁺, 음성 x⁻에 대해 P(s(x⁺)>s(x⁻))", "문턱 t를 훑으면 (FPR(t), TPR(t)) 곡선 아래 면적과 일치(적분 치환)", "동점은 ½ — 쌍 비교 손계산 규칙", "성질: 단조 점수 변환에 불변(문턱 무관 지표)", "극한 체크: 완전 분리 ⇒ 1 ✓ · 뒤집힌 분류기 ⇒ 0 ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 3-1</span>TP=45, FN=15, FP=30, TN=110의 5지표를 구하라.</div><div class=\"xsol\"><b>풀이</b><ol><li>acc=77.5%, P=60%, R=75%.</li><li>특이도=78.6%, F1=<b>66.7%</b>.</li><li>표 하나에 5줄 — 시험 손계산 표준.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u3-l3-01 · u3-l2-01 · u3-l4-02</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 3-2</span>유병률 1%, 민감도 99%, 특이도 95%. 양성일 때 실제 병일 확률은?</div><div class=\"xsol\"><b>풀이</b><ol><li>분자 0.01×0.99=0.0099.</li><li>분모 +0.99×0.05=0.0495 → 합 0.0594.</li><li>PPV=<b>16.7%</b> — 직관(99%?)을 부수는 기저율.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u3-l3-02 · u3-l4-05 · u6-l2-01</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 3-3</span>양성 점수 [0.9,0.7], 음성 [0.8,0.4]의 AUC는?</div><div class=\"xsol\"><b>풀이</b><ol><li>쌍 4개: 0.9>0.8 ✓, 0.9>0.4 ✓, 0.7<0.8 ✗, 0.7>0.4 ✓.</li><li>AUC=3/4=<b>0.75</b>.</li><li>쌍 비교가 가장 빠른 손계산법.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u3-l2-08 · u3-l3-04 · u3-l4-04</div></div>"}, "u4": {"concept": "\n<div class=\"bigpic\"><span class=\"bt\">U4 큰그림</span>\n결정트리의 심장 — \"어떤 질문(특징)이 좋은 질문인가\"를 정보이론이 숫자로 답한다.\n불확실성의 단위(엔트로피) → 질문 후 남는 불확실성(조건부 엔트로피) → 그 감소량(정보이득) → 최대 이득 특징으로 분할(ID3)의\n4단 논법. 미첼의 [9+,5−] 테니스 표가 전 세계 시험지의 성지다 — IG(습도)=0.151 > IG(바람)=0.048을\n소수 셋째 자리까지 손으로 재현하는 것이 이 단원의 통과의례.</div>\n\n<h4>1. 엔트로피 — 불확실성의 자 <span class=\"en\">(Entropy)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — [9+,5−] 데이터와 [7+,7−] 데이터, 어느 쪽이 \"더 혼란스러운가\"를 수치로 말해야 분할을 비교한다.</div>\n<p><b>정의</b> — 이진 분포의 엔트로피:</p>\n<p>\\[ H(p)=-p\\log_2 p-(1-p)\\log_2(1-p)\\ \\ [\\text{bit}] \\]</p>\n<p>순수(p=0,1)에서 0, 반반(p=1/2)에서 최대 1비트 — \"평균 예/아니오 질문 수\"로 읽는다.\n손계산 상수를 몸에: \\(\\log_2 3\\approx1.585\\), \\(H(0.25)\\approx0.811\\), \\([9+,5-]\\to H(9/14)\\approx0.940\\).\n다класс는 \\(H=-\\sum p_i\\log_2 p_i\\), 최대 \\(\\log_2 k\\).</p>\n<p class=\"intuit\">💡 <b>직관</b> — 엔트로피는 \"스무고개에서 남은 평균 질문 수\". 좋은 특징은 질문 수를 많이 깎는 특징이다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] H 손계산(log₂ 환산 \\(\\log_2x=\\ln x/\\ln2\\)). [개념] 0·최대의 조건, 비트 해석.</div>\n\n<h4>2. 정보이득 — 질문의 가치 <span class=\"en\">(Information Gain)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 특징 A로 나누면 가지마다 순도가 다르게 좋아진다. \"평균적으로 얼마나 좋아졌나\"를 하나의 수로.</div>\n<p><b>정의</b> — 분할 후 가중평균 엔트로피(조건부 엔트로피)를 빼면 이득:</p>\n<p>\\[ IG(S,A)=H(S)-\\sum_{v}\\frac{|S_v|}{|S|}H(S_v) \\]</p>\n<p>ID3 알고리즘 = \"IG 최대 특징으로 분할\"의 재귀(순수해지거나 특징 소진까지).\n계산 규율: 가지별 \\([p+,n-]\\) 세기 → 가지 H → <b>가중치 |S_v|/|S|</b> 곱해 합 → H(S)에서 뺀다.\n가중치 빼먹기가 오답 1위. IG≥0(정보는 해가 안 된다 — 등호는 독립일 때).</p><div class=\"jsbox\"><span class=\"jt\">정석 4.1</span>미첼 표 재현 목표치(암기 검산용): H(S)=0.940, IG(습도)=0.151, IG(바람)=0.048, IG(전망)=0.246 → 루트는 전망(Outlook). 시험 표가 달라도 절차는 동일 — '가지 세기→H→가중합→차' 4박자를 소수 셋째 자리까지.</div>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] 표→IG 2~3특징 비교→루트 선택(최대 배점). [함정] 가중치 누락, log₂ 대신 ln 사용, 가지 하나가 순수(H=0)일 때 계산 생략 가능.</div>\n\n<h4>3. 다지 분할 편향과 이득비 <span class=\"en\">(Multi-way Split Bias &amp; Gain Ratio)</span><span class=\"tagm\">계산 필수</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — \"회원 ID\"로 나누면 가지마다 1명씩 — 전부 순수라 IG 최대다. 그런데 이 트리는 쓰레기다. 왜?</div>\n<p><b>진단과 처방</b> — IG는 가짓수 많은 특징을 편애한다(잘게 쪼개면 순수해 보임 — 일반화는 0).\nC4.5의 처방은 분할 자체의 엔트로피로 나누는 <b>이득비</b>:</p>\n<p>\\[ SplitInfo(A)=-\\sum_v\\frac{|S_v|}{|S|}\\log_2\\frac{|S_v|}{|S|},\\qquad\nGainRatio=\\frac{IG}{SplitInfo} \\]</p>\n<p>가짓수 벌금을 물린 IG다. ID 특징은 SplitInfo가 커서(=log₂n) 이득비가 붕괴 — 편향 교정.\n이 문제의식(훈련에서 좋아 보임≠일반화)이 U5 가지치기의 예고편이다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] IG는 큰데 이득비는 작은 사례 재현. [개념] 왜 다지 분할이 편애되나(서술 짧은형).</div>", "derive": [{"title": "IG ≥ 0 (오목성 논증)", "steps": ["H는 오목: H''<0 (이진에서 −1/[p(1−p)ln2])", "젠센 부등식: H(가중평균 분포) ≥ 가중평균 H(분포)", "부모 분포 = 자식 분포들의 가중평균 → H(부모) ≥ ΣwᵢH(자식ᵢ)", "따라서 IG = 차이 ≥ 0 — 질문은 최소한 해롭지 않다(훈련 기준)", "극한 체크: 자식 분포가 부모와 같으면 등호(IG=0) ✓"]}, {"title": "연속 특징: 경계 중점만 보면 되는 이유", "steps": ["문턱을 같은 레이블 구간 안에서 움직여도 분할 결과(집합)는 불변", "분할이 바뀌는 곳 = 인접 샘플의 레이블이 다른 경계뿐", "따라서 후보 = 경계 중점들만 — O(n) 후보로 충분", "정렬 1회 + 누적 카운트로 전체 스캔 O(n log n)", "극한 체크: 레이블이 정렬돼 있으면 후보 1개 ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 4-1</span>[9+,5−]를 바람(약[6+,2−]/강[3+,3−])으로 나눈 IG는?</div><div class=\"xsol\"><b>풀이</b><ol><li>H(9,5)=0.940.</li><li>가중: (8/14)(0.811)+(6/14)(1)=0.892.</li><li>IG=<b>0.048</b> — 미첼 교과서 수치 재현.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u4-l3-01 · u4-l2-03 · u4-l4-02</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 4-2</span>같은 부모를 습도(높[3+,4−]/보통[6+,1−])로 나누면?</div><div class=\"xsol\"><b>풀이</b><ol><li>H(3,4)=0.985, H(6,1)=0.592.</li><li>가중 (7/14)(0.985+0.592)=0.789.</li><li>IG=<b>0.151</b> > 0.048 → 습도 승 — ID3의 첫 분기.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u4-l3-02 · u4-l2-04 · u4-l4-08</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 4-3</span>학번 특징(14명 전부 다른 값)의 IG·SplitInfo·이득비는?</div><div class=\"xsol\"><b>풀이</b><ol><li>완전 분할 → IG=H(부모)=0.940(최대!).</li><li>SplitInfo=log₂14=3.81.</li><li>이득비=<b>0.247</b> — 벌점이 사기를 적발.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u4-l2-11 · u4-l3-07 · u4-l4-05</div></div>"}, "u5": {"concept": "\n<div class=\"bigpic\"><span class=\"bt\">U5 큰그림</span>\n같은 트리를 다른 자(지니)로 재고 — CART는 이진 분할+지니로 ID3와 대비된다 — 트리의 고질병인 과적합을\n수술(가지치기)한다. \"완전히 자란 트리는 훈련 데이터의 암기\"라는 진단에서, 검증 데이터로 가지를 되무르는\n축소 가지치기(REP)와 벌금 α로 잎 수를 다스리는 비용-복잡도 가지치기까지 — U1의 편향 서사와 U3의 검증 규율이\n트리 위에서 합류하는 단원이다.</div>\n\n<h4>1. 지니 불순도와 CART <span class=\"en\">(Gini Impurity &amp; CART)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 엔트로피의 log 계산이 무겁다. 순수도만 비교할 거면 더 싼 자는 없나?</div>\n<p><b>정의</b> — \"무작위로 뽑아 무작위 라벨을 붙일 때 틀릴 확률\":</p>\n<p>\\[ Gini(p)=1-\\sum_i p_i^2\\ \\xrightarrow{\\text{이진}}\\ 2p(1-p) \\]</p>\n<p>순수 0, 반반 0.5(이진 최대). 엔트로피와 개형이 거의 같아 <b>분할 순위도 대개 일치</b> — 실무(CART·sklearn 기본)는 지니.\nCART의 다른 결단: 모든 분할을 <b>이진</b>으로(다지 편향 원천 차단, 연속 특징은 문턱 s로 \\(x\\le s\\) / \\(x>s\\)),\n분할 기준은 가중 지니 감소:</p>\n<p>\\[ \\Delta Gini=Gini(S)-\\Big(\\tfrac{|S_L|}{|S|}Gini(S_L)+\\tfrac{|S_R|}{|S|}Gini(S_R)\\Big) \\]</p>\n<p>연속 문턱 후보는 정렬 후 <b>이웃 값의 중점</b>만 보면 충분하다(계산 문제의 정형). 회귀 트리는 지니 자리에 분산(MSE), 잎 예측은 평균.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] 지니·ΔGini 손계산, 연속 문턱 비교. [개념] 지니 vs 엔트로피(개형·비용·실무 기본값), CART 이진의 이유.</div>\n\n<h4>2. 과적합과 정지 규칙 <span class=\"en\">(Overfitting &amp; Stopping Rules)</span><span class=\"tagm\">계산 필수</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 트리를 끝까지 키우면 훈련 정확도 100% — 잎마다 표본 1개짜리 암기 사전이 된다.</div>\n<p><b>진단</b> — 깊이↑ ⇒ 훈련 오차 단조 감소, 검증 오차 U자(U2 다항 차수와 같은 그림 — 같은 병이다).\n사전 정지<span class=\"en\">(pre-pruning)</span>: 최대 깊이·최소 표본·최소 이득 문턱 — 싸지만 근시안\n(당장 이득 없는 분할 뒤에 좋은 분할이 숨을 수 있다 — XOR형). 그래서 정석은 \"끝까지 키우고 되무르는\" 사후 가지치기다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[개념] 사전 vs 사후 장단, 훈련/검증 곡선 해석. [계산] 정지 조건 적용 판정.</div>\n\n<h4>3. 가지치기 — REP와 비용-복잡도 <span class=\"en\">(Reduced-Error &amp; Cost-Complexity Pruning)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 어느 가지가 \"암기\"이고 어느 가지가 \"지식\"인가? 판사가 필요하다 — 훈련에 안 쓴 데이터.</div>\n<p><b>REP</b><span class=\"en\">(reduced-error pruning)</span> — 각 내부 노드에 대해 \"서브트리를 잎(다수결)으로 접었을 때\n<b>검증 정확도</b>가 나빠지지 않으면 접는다\"를 반복(상향식). 검증 데이터가 잡음 가지를 도려낸다 — U3 규율의 트리판.</p>\n<p><b>비용-복잡도</b><span class=\"en\">(cost-complexity)</span> — 벌금식 하나로 시리즈를 만든다:</p>\n<p>\\[ R_\\alpha(T)=R(T)+\\alpha|T|\\quad(|T|=\\text{잎 수}) \\]</p>\n<p>α=0이면 완전 트리, α↑마다 \"오류 증가/잎 감소\" 효율이 나쁜 가지부터 접힌다 — 접히는 임계\n\\(\\alpha^*=\\frac{\\Delta R}{\\Delta|T|}\\)(가지 하나의 가성비). α 시리즈 중 최종 선택은 교차검증(U3)으로.\nλ(릿지)·α(트리)·깊이 — 전부 같은 자리(복잡도 손잡이)라는 통찰이 과목의 등뼈다.</p>\n<p class=\"intuit\">💡 <b>직관</b> — 가지치기는 \"의심스러우면 단순한 쪽\" — 오컴의 면도날을 검증 데이터가 집행하는 절차다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] REP 접기 판정(검증 정오표), α* 임계 계산. [개념] α의 역할=λ의 역할(연결 선지), 상향식인 이유.</div>", "derive": [{"title": "잎 예측=평균 (회귀 트리)", "steps": ["잎 손실 J(c)=Σ(yᵢ−c)² [왜] 상수 예측의 SSE", "dJ/dc=−2Σ(yᵢ−c)=0 → c=ȳ", "볼록이므로 유일 최소 — 잎의 최적 상수는 평균", "L1 손실이면 중앙값 — 손실이 예측을 정한다", "극한 체크: 잎에 1개면 그 값 그대로(보간) ✓"]}, {"title": "임계 α의 존재 (약한 고리 자르기)", "steps": ["부트리 T vs 잎 치환: 비용 차 = Δ오류 − α·Δ잎", "α < Δ오류/Δ잎이면 유지, 크면 치환 — 경계가 임계 α", "부트리마다 임계 α가 달라 α를 올리면 약한 것부터 순서대로 잘린다", "그 경로(트리 열)에서 CV 최적을 고르는 것이 비용-복잡도 가지치기", "극한 체크: α=0 ⇒ 전체 트리, α→∞ ⇒ 뿌리 하나 ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 5-1</span>부모 [6+,4−] → [4+,0−]/[2+,4−]의 지니 이득은?</div><div class=\"xsol\"><b>풀이</b><ol><li>G(부모)=0.48.</li><li>자식: 0과 G(2,4)=0.444 → 가중 (4/10)0+(6/10)0.444=0.267.</li><li>이득=<b>0.213</b>.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u5-l2-02 · u5-l3-01 · u5-l4-02</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 5-2</span>치환 시 오류 +3, 잎 −4. α=0.5와 α=1에서 각각 결정은?</div><div class=\"xsol\"><b>풀이</b><ol><li>임계 α=3/4=0.75.</li><li>α=0.5<0.75 → 유지, α=1>0.75 → 치환.</li><li>α가 잎의 임대료라는 감각.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u5-l2-06 · u5-l2-05 · u5-l3-04</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 5-3</span>검증 정확도: 전체 88% → 치환1 90% → 치환2 86%. REP의 최종 상태는?</div><div class=\"xsol\"><b>풀이</b><ol><li>1차 88→90 채택.</li><li>2차 90→86 기각.</li><li>최종 = <b>치환 1회</b> — 나빠지기 직전까지.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u5-l4-04 · u5-l2-04 · u5-l3-02</div></div>"}, "u6": {"concept": "\n<div class=\"bigpic\"><span class=\"bt\">U6 큰그림</span>\n학습을 확률 추론으로 다시 세운다 — \"데이터가 주어졌을 때 가장 그럴듯한 가설\"이 베이즈 정리의 사후확률 최대화(MAP)다.\n우도까지만 보면 ML 추정. 분류에 적용하면 \"클래스별 우도×사전\"의 비교가 되는데, 특징이 여럿이면 결합 우도가\n지수적으로 폭발한다 — 이를 조건부 독립 한 방으로 눌러버린 것이 나이브 베이즈. 라플라스 평활·로그 변환까지 얹으면\n스팸 필터라는 실전기가 완성된다. 표 하나로 끝까지 손계산되는, 시험 최애 단원.</div>\n\n<h4>1. 베이즈 정리와 MAP <span class=\"en\">(Bayes' Theorem, MAP vs ML)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 증거 D를 보고 가설 h들의 순위를 매기고 싶다. \"D를 잘 설명하는\" 것과 \"원래 그럴듯한\" 것을 어떻게 합치나?</div>\n<p><b>정리</b> —</p>\n<p>\\[ P(h\\mid D)=\\frac{P(D\\mid h)\\,P(h)}{P(D)}\\qquad\n\\text{(사후}^{\\text{posterior}}\\propto\\text{우도}^{\\text{likelihood}}\\times\\text{사전}^{\\text{prior}}) \\]</p>\n<p>순위 비교엔 분모 P(D)(정규화 상수) 불필요. 두 추정자:</p>\n<p>\\[ h_{MAP}=\\arg\\max_h P(D|h)P(h),\\qquad h_{ML}=\\arg\\max_h P(D|h) \\]</p>\n<p>— 사전이 균등하면 둘이 일치. 데이터가 쌓일수록 우도가 사전을 압도(사전의 영향은 소표본에서 크다).\n오즈×우도비<span class=\"en\">(odds × likelihood ratio)</span> 형태로 증거를 곱해가는 갱신 감각까지 —\n확률과정 U1 베이즈와 같은 수학이 \"가설 선택\"의 옷을 입은 것이다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] 두 가설 MAP 비교(사전 곱 유무로 승자가 뒤집히는 설계). [개념] MAP vs ML, 사전의 역할.</div>\n\n<h4>2. 나이브 베이즈 — 대담한 가정의 실전기 <span class=\"en\">(Naïve Bayes Classifier)</span><span class=\"tagx\">시험 핵심</span></h4>\n<div class=\"whyq\"><b>❓ 문제 상황</b> — 특징 n개의 결합 우도 \\(P(x_1,\\dots,x_n|c)\\)를 표로 만들려면 조합이 지수적 — 데이터가 감당 못 한다.</div>\n<p><b>가정과 공식</b> — 클래스가 주어지면 특징들이 서로 독립이라고 <b>가정</b>(naïve)하면 곱으로 붕괴:</p>\n<p>\\[ \\hat c=\\arg\\max_c\\ P(c)\\prod_{i=1}^{n}P(x_i\\mid c) \\]</p>\n<p>표 계산 절차: 클래스별 사전(빈도) → 특징별 조건부 확률(빈도) → 곱 비교. 가정은 대개 거짓이지만\n<b>순위(argmax)만 맞으면 분류는 성공</b>한다는 것이 실전력의 비밀. 확률이 작아지므로 로그 합으로:\n\\(\\log P(c)+\\sum\\log P(x_i|c)\\) — 언더플로 방지+덧셈화.</p>\n<p><b>라플라스 평활</b><span class=\"en\">(Laplace smoothing)</span> — 훈련에 없던 값이면 \\(P=0\\)이 곱 전체를 살해한다. 처방:</p>\n<p>\\[ P(x_i\\mid c)=\\frac{n_{x}+1}{n_c+|V|} \\]</p>\n<p>(모든 칸에 가상 표본 1개 — |V|=그 특징의 값 가짓수). \"본 적 없음=불가능\"이라는 오만을 교정하는 사전분포의 얼굴이다.</p><div class=\"jsbox\"><span class=\"jt\">정석 6.1</span>NB 표 계산 5단계: ① 클래스별 사전 P(c) ② 특징×클래스 빈도표 ③ (평활 지시 있으면) +1/+|V| ④ 곱(또는 로그 합) ⑤ 대소 비교로 판정 — 정규화해 확률로 보고하라면 합으로 나눔. 0이 하나라도 보이면 평활 여부부터 재확인: 평활 누락·이중 적용이 최다 실수.</div><p class=\"intuit\">💡 <b>직관</b> — NB는 \"증거 하나하나가 독립 증인\"이라 치고 증언을 곱하는 재판. 증인이 결탁(상관)해도 판결 방향은 대개 맞는다.</p>\n<p>🔗 <b>연결</b> — U1 편향 서사의 완결: NB의 조건부 독립이야말로 강한 귀납 편향이고, 그 덕에 적은 데이터로 학습된다(PAC의 정신). U3 지표로 심판받고, 트리(U4·U5)와 \"해석 가능한 소형 모델\" 자리를 다툰다.</p>\n<div class=\"exambox\"><span class=\"xt\">시험 연결</span>[계산] 평활 낀 표 계산 전 과정(최대 배점 — 필수예제 6형), 로그 합 비교. [개념] 가정의 이름과 실패 조건(중복 특징), 0 확률 문제.</div>", "derive": [{"title": "베이즈 정리와 argmax 단순화", "steps": ["곱 규칙 대칭: P(h,D)=P(D|h)P(h)=P(h|D)P(D)", "나누면 정리 완성. P(D)=Σ_h P(D|h)P(h)는 h 무관 상수", "argmax_h P(h|D) = argmax_h P(D|h)P(h) — 정규화 생략 가능", "로그: argmax Σlog — 곱이 합으로(수치 안정)", "극한 체크: 사전 균등 ⇒ ML ✓"]}, {"title": "라플라스 평활 = 가짜 관측", "steps": ["ML 추정 n_x/n_c는 n_x=0에서 확률 0 단언 — 과감한 결론", "각 값에 가짜 관측 1개씩 더한 척: (n_x+1)/(n_c+|V|)", "베이즈 해석: 균등 디리클레 사전의 MAP — 평활은 '사전'이다", "α 일반화: α↑ = 사전 강화, α→∞ ⇒ 1/|V|", "극한 체크: n_c→∞ ⇒ ML로 수렴(데이터가 사전을 이긴다) ✓"]}], "worked": "<div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 6-1</span>P(스팸)=0.4. 스팸: P(무료)=0.6·P(링크)=0.5 / 정상: 0.1·0.2. \"무료+링크\" 메일은?</div><div class=\"xsol\"><b>풀이</b><ol><li>스팸 0.4×0.6×0.5=0.12.</li><li>정상 0.6×0.1×0.2=0.012.</li><li>사후 = 0.12/0.132 = <b>90.9%</b> 스팸.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u6-l3-01 · u6-l2-07 · u6-l4-08</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 6-2</span>스팸 3통(무료 2회 등장), |V|=2 라플라스로 P(무료|스팸)은?</div><div class=\"xsol\"><b>풀이</b><ol><li>(2+1)/(3+2)=<b>0.6</b>.</li><li>미등장 단어도 1/5 — 0의 사형 선고 방지.</li><li>ML(2/3)보다 완만 — 소표본 보험.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u6-l2-04 · u6-l3-02 · u6-l4-02</div></div><div class=\"exbox\"><div class=\"xh\"><span class=\"xno\">필수예제 6-3</span>사전 오즈 1:99, 우도비 20짜리 검사 양성 2회(독립). 사후는?</div><div class=\"xsol\"><b>풀이</b><ol><li>오즈 = (1/99)×20² = 4.04.</li><li>확률 = 4.04/5.04 = <b>80%</b>.</li><li>한 번(16.8%)으론 부족, 반복이 힘 — 오즈 곱셈의 미학.</li></ol></div><div class=\"xrel\">유제(리롤 가능) → u6-l2-08 · u6-l3-09 · u6-l4-04</div></div>"}};
-window.SV_BUILD = {"date": "2026-09-03", "units": 6, "problems": 240, "gate": "PASS 2026-09-03 (N=50/문제)"};
+window.SV_BUILD = {"date": "2026-11-06", "units": 6, "problems": 240, "gate": "PASS 2026-11-06 (N=50/문제)"};
 </script>
 <script>
 (function(){
@@ -2453,6 +2500,9 @@ var APP='course-ml', VP=Vault.progress(APP), VD=Vault.drill(APP), VM=Vault.meta(
 var UNITS=SV_BANK, BYID={}, ALL=[];
 UNITS.forEach(function(u){ u.problems.forEach(function(p){ p._unit=u; BYID[p.id]=p; ALL.push(p); }); });
 var LAYERS=['concept','derive','worked'], LAYER_KO={concept:'개념',derive:'수식·유도',worked:'풀이된 예제'};
+var LVNAME={1:'개념',2:'기본',3:'응용',4:'시험급'};
+/* 빈 레이어는 숨긴다 — 개념 과목(course-bio)은 derive·worked 가 없다 */
+function hasLayer(c,l){ return l==='concept' || (l==='derive' ? (c.derive||[]).length>0 : !!c[l]); }
 var $=function(s,el){ return (el||document).querySelector(s); };
 var esc=function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); };
 function typeset(el){
@@ -2488,7 +2538,7 @@ function ansText(r){
 }
 
 /* ---------- 진도 ---------- */
-function readItems(){ var ids=[]; UNITS.forEach(function(u){ LAYERS.forEach(function(l){ ids.push(u.id+'-'+l); }); }); return ids; }
+function readItems(){ var ids=[]; UNITS.forEach(function(u){ LAYERS.filter(function(l){ return hasLayer(SV_CONTENT[u.id]||{},l); }).forEach(function(l){ ids.push(u.id+'-'+l); }); }); return ids; }
 function refreshProg(){
   var ids=readItems(), n=0; ids.forEach(function(id){ if(VP.get(id)) n++; });
   $('#pbar').style.width=Math.round(n/ids.length*100)+'%';
@@ -2519,8 +2569,10 @@ function renderProblem(prob){
   var card=document.createElement('article'); card.className='pcard'; card.setAttribute('data-pid',prob.id);
   var st=VD.get(prob.id);
   var srcb=prob.src?'<span class="srcb">'+esc(prob.src)+'</span>':'';
-  card.innerHTML='<div class="pc-head"><span class="lv lv'+prob.level+'">L'+prob.level+'</span>'+
-    '<span class="tagc">'+esc(prob.id)+' · '+esc((prob.tags||[]).join('·'))+'</span>'+srcb+
+  if(prob.ref) srcb+='<span class="srcb">근거 '+esc(prob.ref)+'</span>';
+  srcb+='<span class="srcb">'+esc(prob.id)+'</span>';
+  card.innerHTML='<div class="pc-head"><span class="lv lv'+prob.level+'">L'+prob.level+' '+LVNAME[prob.level]+'</span>'+
+    '<span class="pmeta">'+esc((prob.tags||[]).join(' · '))+'</span>'+srcb+
     '<span class="sdot'+(st?' '+st:'')+'"></span></div>'+
     '<div class="pc-st"></div><div class="pc-body"></div><div class="pc-btns"></div>';
   var stEl=$('.pc-st',card), body=$('.pc-body',card), btns=$('.pc-btns',card);
@@ -2531,9 +2583,9 @@ function renderProblem(prob){
     b.addEventListener('click',fn); btns.appendChild(b); return b;
   }
   function gradeBtns(){
-    addBtn('맞음 ✓','grade-c',function(){ grade(prob,'correct',card); });
-    addBtn('부분 △','grade-p',function(){ grade(prob,'partial',card); });
-    addBtn('틀림 ✗','grade-w',function(){ grade(prob,'wrong',card); });
+    addBtn('맞음','grade-c',function(){ grade(prob,'correct',card); });
+    addBtn('부분','grade-p',function(){ grade(prob,'partial',card); });
+    addBtn('틀림','grade-w',function(){ grade(prob,'wrong',card); });
     if(st){ var b=card.querySelector('.pbtn.grade-'+st[0]); if(b) b.classList.add('sel'); }
   }
 
@@ -2557,12 +2609,12 @@ function renderProblem(prob){
   } else {
     var hintIdx=0, hb=null;
     if(prob.hints&&prob.hints.length){
-      addBtn('💡 힌트','',function(){
+      addBtn('힌트','',function(){
         if(hintIdx>=prob.hints.length) return;
         if(!hb){ hb=document.createElement('div'); hb.className='hintbox'; body.appendChild(hb); }
         var d=document.createElement('div'); d.innerHTML='힌트 '+(hintIdx+1)+'. '+prob.hints[hintIdx];
         hb.appendChild(d); typeset(d); hintIdx++;
-        this.textContent = hintIdx>=prob.hints.length ? '힌트 끝' : '💡 힌트 '+(hintIdx+1);
+        this.textContent = hintIdx>=prob.hints.length ? '힌트 끝' : '힌트 '+(hintIdx+1);
       });
     }
     var solBtn=addBtn('풀이 보기','',function(){
@@ -2581,7 +2633,7 @@ function renderProblem(prob){
       if(!card.__graded){ card.__graded=true; gradeBtns(); }
     });
     if(prob.params){
-      addBtn('🎲 새 숫자로','',function(){
+      addBtn('새 숫자로 다시','',function(){
         CUR[prob.id]=sample(prob);
         stEl.innerHTML=statementOf(prob); typeset(stEl);
         if(card.__sol){ card.__sol.remove(); card.__sol=null; solBtn.textContent='풀이 보기'; }
@@ -2599,37 +2651,42 @@ function setView(html){ view.innerHTML=html; }
 function renderHome(){
   var dc=VD.counts();
   var rate=dc.total?Math.round(dc.correct/dc.total*100):null;
+  var C=SV_CONTENT.course||{};
+  var nParam=ALL.filter(function(p){return !!p.params;}).length;
   setView('<div class="eyebrow">COSE362 Machine Learning · 중간범위 (8주 중간)</div>'+
     '<h1>기계학습 문제은행</h1>'+
-    '<p class="lede">개념 → 유도 → 예제 → 4단계 문제(L1~L4). 전 문제가 검산 게이트(sympy 독립 재계산 대조)를 통과했고, 계산형 문제는 <b>🎲 새 숫자로</b>를 눌러 무한 반복할 수 있다.</p>'+
-    '<p class="note-line">현황 — 풀어본 문제 '+dc.total+' / '+ALL.length+(rate!==null?(' · 정답률 '+rate+'%'):'')+
-    ' · <a href="#wrong">오답노트 '+wrongList().length+'문제</a> · 빌드 '+SV_BUILD.date+' (게이트 '+SV_BUILD.gate+')</p>'+
-    (SV_CONTENT.course?'<details class="layer" open><summary><span class="lb">MAP</span>과목 큰그림 — 한눈에<span class="arrow">›</span></summary><div class="body">'+SV_CONTENT.course.bigpicture+'</div></details>':'')+
-    '<div class="ucards" id="ucards"></div>'+
-    '<h3>모드</h3><div class="ucards">'+
-    '<a class="ucard" href="#exam"><span class="uc-no">MOCK EXAM</span><span class="uc-ti">📝 모의고사</span><span class="uc-scope">범위·난이도·문항수를 골라 랜덤 출제 — 매번 새 수치, 종료 리포트 제공.</span></a>'+
-    '<a class="ucard" href="#wrong"><span class="uc-no">RETRY QUEUE</span><span class="uc-ti">🔁 오답노트</span><span class="uc-scope">틀림·부분 문제만 모아 재도전. 맞음으로 바꾸면 큐에서 빠진다.</span></a></div>');
+    '<p class="lede">개념, 유도, 예제를 읽고 L1부터 L4까지 네 단계 문제로 굳힌다. 모든 계산형 문제는 독립 재계산과 대조해 통과한 것만 실었고, 숫자를 바꿔 몇 번이든 다시 풀 수 있다.</p>'+
+    (C.hero?'<figure class="hero-fig">'+C.hero+'</figure>':'')+
+    '<div class="facts"><span><b>'+ALL.length+'</b>문제</span><span><b>'+UNITS.length+'</b>단원</span><span><b>'+nParam+'</b>문제는 숫자가 매번 바뀜</span>'+
+    '<span><b>'+dc.total+'</b>문제 풀어 봄'+(rate!==null?(' · 정답률 '+rate+'%'):'')+'</span></div>'+
+    '<p class="note-line"><a href="#wrong">오답노트 '+wrongList().length+'문제</a> · 빌드 '+SV_BUILD.date+' · 검산 게이트 '+SV_BUILD.gate+'</p>'+
+    '<h3>단원</h3><div class="ucards" id="ucards"></div>'+
+    '<h3>훈련</h3><div class="ucards">'+
+    '<a class="ucard" href="#exam"><span class="uc-no">시험</span><span class="uc-ti">모의고사</span><span class="uc-scope">범위·난이도·문항 수를 골라 무작위로 출제한다. 계산 문제는 매번 새 수치이고, 끝나면 단원별 리포트가 나온다.</span></a>'+
+    '<a class="ucard" href="#wrong"><span class="uc-no">복습</span><span class="uc-ti">오답노트</span><span class="uc-scope">틀림·부분으로 채점한 문제만 모아 새 수치로 다시 낸다. 맞음으로 바꾸면 빠진다.</span><span class="uc-stat">'+wrongList().length+'문제 대기</span></a></div>'+
+    (C.bigpicture?'<h3>과목 큰그림</h3><details class="layer" open><summary>한 문장으로 보는 중간범위<span class="arrow">›</span></summary><div class="body">'+C.bigpicture+'</div></details>':''));
   var uc=$('#ucards');
-  UNITS.forEach(function(u){
+  UNITS.forEach(function(u,i){
     var solved=0, ok=0;
     u.problems.forEach(function(p){ var s=VD.get(p.id); if(s){solved++; if(s==='correct')ok++;} });
-    var reads=LAYERS.filter(function(l){return VP.get(u.id+'-'+l);}).length;
-    var a=document.createElement('a'); a.className='ucard'; a.href='#'+u.id;
-    a.innerHTML='<span class="uc-no">UNIT '+u.no+'</span><span class="uc-ti">'+esc(u.title)+'</span>'+
-      '<span class="uc-scope">'+esc(u.scope)+'</span>'+
-      '<span class="uc-stat">읽음 '+reads+'/3 · 문제 '+solved+'/'+u.problems.length+(solved?' · 정답 '+ok:'')+'</span>';
+    var avail=LAYERS.filter(function(l){return hasLayer(SV_CONTENT[u.id]||{},l);});
+    var reads=avail.filter(function(l){return VP.get(u.id+'-'+l);}).length;
+    var a=document.createElement('a'); a.className='ucard'; a.href='#'+u.id; a.style.setProperty('--d',(i*45)+'ms');
+    a.innerHTML='<span class="uc-no">U'+u.no+'</span><span class="uc-ti">'+esc(u.title)+'</span>'+
+      '<span class="uc-stat">'+u.problems.length+'문제 · 푼 '+solved+(solved?' · 정답 '+ok:'')+' · 읽음 '+reads+'/'+avail.length+'</span>'+
+      '<span class="uc-scope">'+esc(u.scope)+'</span>';
     uc.appendChild(a);
   });
   typeset(view);
 }
 function renderUnit(u){
   var c=SV_CONTENT[u.id]||{};
-  setView('<div class="eyebrow">UNIT '+u.no+' / '+UNITS.length+'</div><h1>'+esc(u.title)+'</h1>'+
+  setView('<div class="eyebrow">단원 '+u.no+' / '+UNITS.length+'</div><h1>'+esc(u.title)+'</h1>'+
     '<p class="lede">'+esc(u.scope)+'</p><div id="layers"></div>'+
-    '<h3>문제 세트 <span class="src">L1 개념확인 → L4 시험급 · '+u.problems.length+'문제</span></h3>'+
+    '<h3>문제 '+u.problems.length+'개 <span class="src">L1 개념 확인에서 L4 시험급까지</span></h3>'+
     '<div class="filters" id="filters"></div><div id="plist"></div>');
   var layers=$('#layers');
-  LAYERS.forEach(function(l){
+  LAYERS.filter(function(l){ return hasLayer(c,l); }).forEach(function(l){
     var d=document.createElement('details'); d.className='layer'; if(l==='concept') d.open=true;
     var inner='';
     if(l==='derive'){
@@ -2638,7 +2695,7 @@ function renderUnit(u){
           dv.steps.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ol></details>';
       });
     } else inner=c[l]||'';
-    d.innerHTML='<summary><span class="lb">'+(l.toUpperCase())+'</span>'+LAYER_KO[l]+'<span class="arrow">›</span></summary>'+
+    d.innerHTML='<summary>'+LAYER_KO[l]+'<span class="arrow">›</span></summary>'+
       '<div class="body">'+inner+'<div class="readrow"><button type="button" class="readbtn" data-read="'+u.id+'-'+l+'"></button></div></div>';
     layers.appendChild(d);
   });
@@ -2661,10 +2718,10 @@ function renderUnit(u){
 }
 function renderWrong(){
   var ids=wrongList();
-  setView('<div class="eyebrow">RETRY QUEUE</div><h1>오답노트</h1>'+
-    '<p class="lede">틀림·부분 표시 문제 '+ids.length+'개. 다시 풀어 <b>맞음</b>으로 바꾸면 큐에서 빠진다. 계산형은 자동으로 새 수치다.</p><div id="plist"></div>');
+  setView('<div class="eyebrow">복습</div><h1>오답노트</h1>'+
+    '<p class="lede">틀림·부분으로 채점한 문제 '+ids.length+'개. 계산형은 열 때마다 새 수치로 바뀌니 답을 외워서는 넘길 수 없다. 다시 풀어 <b>맞음</b>으로 바꾸면 여기서 빠진다.</p><div id="plist"></div>');
   var pl=$('#plist');
-  if(!ids.length){ pl.innerHTML='<div class="empty">비어 있음 — 문제를 풀고 자가채점하면 틀림/부분이 여기 모인다.</div>'; return; }
+  if(!ids.length){ pl.innerHTML='<div class="empty">아직 비어 있다. 문제를 풀고 틀림이나 부분으로 채점하면 여기 모인다.</div>'; return; }
   ids.forEach(function(id){ var p=BYID[id]; if(p&&p.params) CUR[id]=sample(p); pl.appendChild(renderProblem(BYID[id])); });
   typeset(pl);
 }
@@ -2673,22 +2730,24 @@ var EXAM={running:false};
 function renderExam(){
   if(EXAM.running){ renderExamRun(); return; }
   var uchecks=UNITS.map(function(u){ return '<label class="ck"><input type="checkbox" class="exu" value="'+u.id+'" checked> U'+u.no+' '+esc(u.title)+'</label>'; }).join('');
-  setView('<div class="eyebrow">MOCK EXAM</div><h1>모의고사</h1>'+
-    '<p class="lede">범위와 난이도를 고르면 랜덤 출제. 채점은 문제마다(객관식 자동 · 계산형 자가채점), 종료하면 리포트.</p>'+
+  setView('<div class="eyebrow">시험</div><h1>모의고사</h1>'+
+    '<p class="lede">범위와 난이도를 고르면 무작위로 출제한다. 객관식은 바로 채점되고, 계산형은 풀이를 펼쳐 스스로 채점한다. 끝나면 단원별 리포트가 나온다.</p>'+
     '<div class="exam-setup">'+
     '<div class="grp"><h4>범위</h4>'+uchecks+'</div>'+
     '<div class="grp"><h4>난이도</h4>'+[1,2,3,4].map(function(l){return '<label class="ck"><input type="checkbox" class="exl" value="'+l+'" '+(l>1?'checked':'')+'> L'+l+'</label>';}).join('')+'</div>'+
     '<div class="grp"><h4>문항 수</h4><select id="exn"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></div>'+
-    '<button class="bigbtn" id="exgo">모의고사 시작 →</button></div>');
+    '<button class="bigbtn" id="exgo">모의고사 시작</button><p class="note-line" id="exmsg" role="status" hidden></p></div>');
   $('#exgo').addEventListener('click',function(){
     var us={}, ls={};
     document.querySelectorAll('.exu:checked').forEach(function(c){us[c.value]=1;});
     document.querySelectorAll('.exl:checked').forEach(function(c){ls[+c.value]=1;});
     var pool=ALL.filter(function(p){ return us[p._unit.id]&&ls[p.level]; });
     var n=Math.min(+$('#exn').value, pool.length);
-    if(!n){ alert('선택한 범위에 문제가 없습니다'); return; }
+    if(!n){ var m=$('#exmsg'); m.hidden=false; m.textContent='고른 범위·난이도에 해당하는 문제가 없다. 단원이나 난이도를 하나 이상 더 골라 보자.'; return; }
     for(var i=pool.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=pool[i]; pool[i]=pool[j]; pool[j]=t; }
-    EXAM={running:true, list:pool.slice(0,n), idx:0, res:{}};
+    var uk=Object.keys(us).map(function(id){ return 'U'+UNITS.filter(function(u){return u.id===id;})[0].no; });
+    var lk=Object.keys(ls).sort().map(function(l){return 'L'+l;});
+    EXAM={running:true, list:pool.slice(0,n), idx:0, res:{}, label:(uk.length===UNITS.length?'전 단원':uk.join('·'))+' · '+lk.join('·')};
     EXAM.list.forEach(function(p){ if(p.params) CUR[p.id]=sample(p); });
     renderExamRun();
   });
@@ -2696,8 +2755,9 @@ function renderExam(){
 function examAnswered(pid, status){ if(EXAM.running&&EXAM.res) EXAM.res[pid]=status; }
 function renderExamRun(){
   var i=EXAM.idx, p=EXAM.list[i];
-  setView('<div class="eyebrow">MOCK EXAM · '+(i+1)+' / '+EXAM.list.length+'</div>'+
-    '<div class="exam-top"><span>'+(i+1)+'/'+EXAM.list.length+'</span><div class="bar"><i style="width:'+Math.round(i/EXAM.list.length*100)+'%"></i></div>'+
+  var ticks=EXAM.list.map(function(q,k){ return '<i class="'+(k<i?'done':(k===i?'cur':''))+'"></i>'; }).join('');
+  setView('<div class="eyebrow">모의고사 · '+esc(EXAM.label||'')+'</div>'+
+    '<div class="exam-top"><span class="cnt">'+(i+1)+'<small> / '+EXAM.list.length+'</small></span><div class="ticks" aria-hidden="true">'+ticks+'</div>'+
     '<button class="pbtn" id="exquit">종료</button></div><div id="pslot"></div>'+
     '<div class="pc-btns" style="margin-top:14px"><button class="bigbtn" id="exnext">'+(i+1<EXAM.list.length?'다음 문제 →':'리포트 보기 →')+'</button></div>');
   $('#pslot').appendChild(renderProblem(p)); typeset($('#pslot'));
@@ -2718,11 +2778,12 @@ function renderExamReport(){
   });
   var score=Math.round((c+0.5*pt)/list.length*100);
   var rows=Object.keys(perUnit).sort().map(function(k){var u=perUnit[k];return '<tr><td>U'+u.no+' '+esc(u.title)+'</td><td>'+u.c+' / '+u.t+'</td></tr>';}).join('');
-  setView('<div class="eyebrow">MOCK EXAM · REPORT</div><h1>결과 리포트</h1>'+
-    '<div class="report"><div class="score">'+score+'점</div>'+
-    '<p>맞음 '+c+' · 부분 '+pt+' · 틀림 '+w+(na?' · 무응답 '+na:'')+' (총 '+list.length+'문제)</p>'+
+  setView('<div class="eyebrow">모의고사 · '+esc(EXAM.label||'')+'</div><h1>결과 리포트</h1>'+
+    '<div class="report"><div class="score">'+score+'<small>점</small></div>'+
+    '<p>맞음 '+c+' · 부분 '+pt+' · 틀림 '+w+(na?' · 무응답 '+na:'')+' (총 '+list.length+'문제, 부분은 절반으로 계산)</p>'+
     '<table><thead><tr><th>단원</th><th>정답</th></tr></thead><tbody>'+rows+'</tbody></table>'+
-    '<div class="pc-btns"><a class="pbtn" href="#wrong">🔁 오답노트로</a><a class="pbtn" href="#exam" onclick="">다시 설정</a><a class="pbtn" href="#home">홈</a></div></div>');
+    '<p class="note-line">틀림과 부분으로 채점한 문제는 오답노트에 자동으로 들어갔다.</p>'+
+    '<div class="pc-btns"><a class="pbtn" href="#wrong">오답노트로</a><a class="pbtn" href="#exam">다시 설정</a><a class="pbtn" href="#home">홈</a></div></div>');
 }
 
 /* ---------- 내비 · 라우팅 ---------- */

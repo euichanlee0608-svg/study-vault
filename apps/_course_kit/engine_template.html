@@ -6,7 +6,8 @@
 <title>[[APP_TITLE]]</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=IBM+Plex+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <script>
 window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'},
  startup:{typeset:false, pageReady:function(){return MathJax.startup.defaultPageReady().then(function(){
@@ -15,179 +16,212 @@ window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'},
 </script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
 <style>
+/* 공학 계산용지 — DESIGN_BRIEF.md (course-control) */
 :root{
-  --bg:#FBFAF8; --surf:#FFFFFF; --surf2:#F4F1EC; --side:#F6F3EE;
-  --ink:#1C1A18; --ink2:#57514B; --ink3:#8A8177;
-  --line:#E4DFD7; --line2:#D2CBC1;
-  --acc:#B4491C; --acc-bg:#FBEDE6;
-  --ok:#3E7A46; --ok-bg:#E8F2E9;
-  --warn:#8A6410; --warn-bg:#F8F0DC;
-  --bad:#A33B3B; --bad-bg:#F8E7E7;
-  --info:#5B6B75; --info-bg:#ECEFF1;
-  --code:#F1EDE7;
-  --shadow:0 1px 2px rgba(28,26,24,.05),0 2px 10px rgba(28,26,24,.04);
+  --bg:#F5F6F1; --surf:#FBFBF8; --surf2:#ECEEE6; --side:#EFF1EA;
+  --ink:#17201C; --ink2:#4A554F; --ink3:#7E8882;
+  --line:#DADED3; --line2:#C3C9BC; --grid:rgba(60,110,80,.09);
+  --acc:#1E4E8C; --acc-bg:#E3EAF3;
+  --red:#B8402A; --red-bg:#F6E4DE;
+  --ok:#2F6B45; --ok-bg:#E2EEE5;
+  --warn:#8A6410; --warn-bg:#F5EDD8;
+  --bad:#B8402A; --bad-bg:#F6E4DE;
+  --code:#ECEEE6;
+  --serif:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+  --sans:"Pretendard Variable",Pretendard,-apple-system,system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
 }
 @media (prefers-color-scheme:dark){
  :root:not([data-theme="light"]){
-  --bg:#141210; --surf:#1D1A17; --surf2:#252119; --side:#181512;
-  --ink:#EFEBE4; --ink2:#B3ABA1; --ink3:#847B71;
-  --line:#332E28; --line2:#453E36;
-  --acc:#E4763F; --acc-bg:#332016;
-  --ok:#7FBF88; --ok-bg:#1B2A1D;
-  --warn:#D6A54D; --warn-bg:#302614;
-  --bad:#D98080; --bad-bg:#331B1B;
-  --info:#9FB2BC; --info-bg:#20262A;
-  --code:#26221C;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 2px 12px rgba(0,0,0,.25);
+  --bg:#121715; --surf:#171D1A; --surf2:#1E2622; --side:#151B18;
+  --ink:#E6EBE6; --ink2:#AEB8B1; --ink3:#7C8780;
+  --line:#2A332E; --line2:#3A453F; --grid:rgba(150,200,170,.06);
+  --acc:#8DB3E8; --acc-bg:#1B2737;
+  --red:#E58C74; --red-bg:#33201B;
+  --ok:#86C29A; --ok-bg:#18281E;
+  --warn:#D9B061; --warn-bg:#2D2616;
+  --bad:#E58C74; --bad-bg:#33201B;
+  --code:#1E2622;
  }
 }
 :root[data-theme="dark"]{
-  --bg:#141210; --surf:#1D1A17; --surf2:#252119; --side:#181512;
-  --ink:#EFEBE4; --ink2:#B3ABA1; --ink3:#847B71;
-  --line:#332E28; --line2:#453E36;
-  --acc:#E4763F; --acc-bg:#332016;
-  --ok:#7FBF88; --ok-bg:#1B2A1D;
-  --warn:#D6A54D; --warn-bg:#302614;
-  --bad:#D98080; --bad-bg:#331B1B;
-  --info:#9FB2BC; --info-bg:#20262A;
-  --code:#26221C;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 2px 12px rgba(0,0,0,.25);
+  --bg:#121715; --surf:#171D1A; --surf2:#1E2622; --side:#151B18;
+  --ink:#E6EBE6; --ink2:#AEB8B1; --ink3:#7C8780;
+  --line:#2A332E; --line2:#3A453F; --grid:rgba(150,200,170,.06);
+  --acc:#8DB3E8; --acc-bg:#1B2737;
+  --red:#E58C74; --red-bg:#33201B;
+  --ok:#86C29A; --ok-bg:#18281E;
+  --warn:#D9B061; --warn-bg:#2D2616;
+  --bad:#E58C74; --bad-bg:#33201B;
+  --code:#1E2622;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{margin:0;background:var(--bg);color:var(--ink);
- font-family:"IBM Plex Sans KR",system-ui,-apple-system,"Malgun Gothic",sans-serif;
- line-height:1.68;font-size:15px;-webkit-font-smoothing:antialiased;
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+ line-height:1.72;font-size:15.5px;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;
  word-break:keep-all;overflow-wrap:break-word}
-a{color:var(--acc);text-decoration-thickness:1px;text-underline-offset:2px}
-a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:3px}
+a{color:var(--acc);text-decoration-thickness:1px;text-underline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:2px}
 mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%}
 .layout{display:flex;min-height:100vh}
-.side{width:250px;flex:0 0 250px;background:var(--side);border-right:1px solid var(--line);
- padding:22px 18px;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
-.brand a{color:var(--ink);text-decoration:none;font-family:Newsreader,Georgia,serif;font-size:19px;letter-spacing:-.01em}
-.brand b{color:var(--acc);font-weight:600}
-.brand span{display:block;font-size:10.5px;color:var(--ink3);font-family:"IBM Plex Mono",monospace;margin-top:2px}
-.prog-bar{height:5px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:4px}
-.prog-bar i{display:block;height:100%;width:0;background:var(--acc);border-radius:99px;transition:width .3s}
-.prog span{font-size:10.5px;color:var(--ink3);font-family:"IBM Plex Mono",monospace}
-.side nav{display:flex;flex-direction:column;gap:2px}
-.ng{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-family:"IBM Plex Mono",monospace;margin:10px 0 4px;padding-left:10px}
-.side nav a{display:block;padding:7px 10px;border-radius:6px;color:var(--ink2);text-decoration:none;font-size:13.5px}
-.side nav a:hover{background:var(--surf2)}
-.side nav a.on{background:var(--acc-bg);color:var(--acc);font-weight:600}
-.side nav a .nv{float:right;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink3)}
-.foot-side{margin-top:auto;font-size:10.5px;color:var(--ink3);line-height:1.5;font-family:"IBM Plex Mono",monospace}
+/* 사이드 — 모눈 위 목차 */
+.side{width:252px;flex:0 0 252px;background:var(--side);border-right:1px solid var(--line);
+ padding:28px 20px 22px;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;gap:18px}
+.brand a{color:var(--ink);text-decoration:none;font-family:var(--serif);font-size:20px;font-weight:700;letter-spacing:-.02em;line-height:1.3}
+.brand b{color:var(--acc);font-weight:700}
+.brand span{display:block;font-size:12.5px;color:var(--ink3);margin-top:4px}
+.prog-bar{height:2px;background:none;margin:0 0 6px;position:relative}
+.prog-bar i{display:block;height:2px;width:0;background:var(--acc);transition:width .5s ease-out}
+.prog span{font-size:12.5px;color:var(--ink2)}
+.side nav{display:flex;flex-direction:column}
+.ng{font-size:12.5px;color:var(--ink3);margin:14px 0 4px;padding-left:12px}
+.side nav a{display:block;position:relative;padding:7px 12px;color:var(--ink2);text-decoration:none;font-size:14px;line-height:1.45;border-left:2px solid transparent}
+.side nav a:hover{color:var(--ink)}
+.side nav a.on{color:var(--ink);font-weight:600;border-left-color:var(--acc)}
+.side nav a .nv{float:right;font-size:12px;color:var(--red);font-weight:600}
+.foot-side{margin-top:auto;font-size:12px;color:var(--ink3);line-height:1.6}
 .foot-side a{color:var(--ink3)}
-.main{flex:1;min-width:0;padding:clamp(22px,4vw,48px) clamp(16px,4.5vw,56px) 120px;display:flex;justify-content:center}
-.view{width:100%;max-width:820px}
-h1{font-family:Newsreader,"Gowun Batang",Georgia,serif;font-weight:600;font-size:clamp(25px,4vw,34px);line-height:1.16;letter-spacing:-.015em;margin:6px 0 12px;text-wrap:balance}
-h3{font-family:Newsreader,Georgia,serif;font-size:20px;font-weight:600;margin:30px 0 10px;letter-spacing:-.01em}
-h4{font-size:15.5px;font-weight:600;margin:22px 0 8px}
+.main{flex:1;min-width:0;padding:clamp(24px,4.5vw,56px) clamp(16px,5vw,64px) 120px;display:flex;justify-content:center}
+.view{width:100%;max-width:800px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(28px,4.4vw,40px);line-height:1.22;letter-spacing:-.025em;margin:4px 0 14px;text-wrap:balance}
+h3{font-family:var(--serif);font-size:21px;font-weight:700;margin:44px 0 12px;letter-spacing:-.02em}
+h4{font-size:15.5px;font-weight:700;margin:24px 0 8px}
 p{margin:0 0 12px}
 ul,ol{margin:0 0 13px;padding-left:22px}
 li{margin-bottom:6px}
-.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--acc);font-weight:500}
-.lede{font-size:15.5px;color:var(--ink2)}
-.easy{background:var(--acc-bg);border-radius:8px;padding:13px 16px;margin:0 0 14px}
+.eyebrow{font-size:14px;color:var(--ink2);font-weight:500}
+.lede{font-size:16.5px;color:var(--ink2);max-width:640px}
+.easy{background:var(--acc-bg);padding:13px 16px;margin:0 0 14px}
 .easy b{color:var(--acc)}
-.note-line{font-size:13.5px;color:var(--ink2);background:var(--surf2);border-radius:6px;padding:10px 14px;margin:0 0 12px}
-.src{font-size:12px;color:var(--ink3);font-weight:400}
-/* unit cards on home */
-.ucards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin:16px 0}
-.ucard{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:16px 17px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:7px;color:var(--ink);text-decoration:none}
-.ucard:hover{border-color:var(--acc)}
-.uc-no{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--acc);font-weight:600}
-.uc-ti{font-family:Newsreader,Georgia,serif;font-size:18px;font-weight:600}
-.uc-scope{font-size:12.5px;color:var(--ink2);line-height:1.55}
-.uc-stat{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink3)}
-/* collapsible layers */
-details.layer{border:1px solid var(--line);border-radius:9px;background:var(--surf);margin-bottom:10px;box-shadow:var(--shadow)}
-details.layer>summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:15px;list-style:none;display:flex;align-items:center;gap:8px}
+.note-line{font-size:14px;color:var(--ink2);margin:0 0 12px}
+.src{font-size:13px;color:var(--ink3);font-weight:400;font-family:var(--sans)}
+/* 홈 히어로 — 과목 그림 */
+.hero-fig{position:relative;margin:26px 0 8px;padding:18px 0 6px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+ background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:20px 20px}
+.hero-fig figcaption{font-size:13px;color:var(--ink3);margin:8px 0 6px}
+.hero-fig svg{display:block;width:100%;height:auto;overflow:visible}
+.hero-fig .row2{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr);gap:18px;align-items:end}
+.hf-curve{fill:none;stroke:var(--acc);stroke-width:2.6;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:hfDraw 2.2s cubic-bezier(.25,.7,.25,1) .25s forwards}
+.hf-axis{stroke:var(--ink2);stroke-width:1.2;fill:none}
+.hf-ref{stroke:var(--ink3);stroke-width:1;stroke-dasharray:4 4;fill:none}
+.hf-band{fill:var(--acc);opacity:.08}
+.hf-mark{stroke:var(--red);stroke-width:1.4;fill:none}
+.hf-t{font-family:var(--sans);font-size:15px;fill:var(--ink2)}
+.hf-t.r{fill:var(--red);font-weight:600}
+.hf-t.b{fill:var(--acc);font-weight:600}
+.hf-pole{stroke:var(--red);stroke-width:2.6;fill:none;opacity:0;animation:hfIn .7s ease-out 2.3s forwards}
+.hf-late{opacity:0;animation:hfIn .7s ease-out 2.5s forwards}
+@keyframes hfDraw{to{stroke-dashoffset:0}}
+@keyframes hfIn{to{opacity:1}}
+.facts{display:flex;flex-wrap:wrap;gap:6px 28px;margin:18px 0 6px;font-size:14px;color:var(--ink2)}
+.facts b{display:block;font-family:var(--serif);font-size:30px;line-height:1.15;color:var(--ink);font-weight:700;letter-spacing:-.02em}
+/* 단원 목록 — 카드 대신 행 */
+.ucards{margin:10px 0 0;border-top:1px solid var(--line2)}
+.ucard{position:relative;display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:4px 14px;align-items:baseline;
+ padding:15px 10px 15px 4px;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none;
+ animation:rowIn .45s cubic-bezier(.16,1,.3,1) both;animation-delay:var(--d,0ms);transition:background .15s}
+.ucard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:0;background:var(--acc);transition:width .18s ease-out}
+.ucard:hover{background:var(--surf2)} .ucard:hover::before{width:3px}
+.uc-no{font-family:var(--serif);font-size:15px;color:var(--acc);font-weight:700;grid-row:1/span 2}
+.uc-ti{font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:-.015em}
+.uc-scope{grid-column:2;font-size:13.5px;color:var(--ink2);line-height:1.55}
+.uc-stat{grid-column:3;grid-row:1;font-size:13px;color:var(--ink3);white-space:nowrap;text-align:right}
+@keyframes rowIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* 접히는 층 — 박스 대신 머리선 */
+details.layer{border-top:1px solid var(--line2);margin:0}
+details.layer:last-of-type{border-bottom:1px solid var(--line2)}
+details.layer>summary{cursor:pointer;padding:16px 2px;font-family:var(--serif);font-weight:700;font-size:18px;letter-spacing:-.015em;list-style:none;display:flex;align-items:center;gap:10px;min-height:44px}
 details.layer>summary::-webkit-details-marker{display:none}
-details.layer>summary .lb{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;padding:2px 8px;border-radius:99px;background:var(--info-bg);color:var(--info)}
-details.layer>summary .arrow{margin-left:auto;color:var(--ink3);transition:transform .2s}
+details.layer>summary .lb{display:none}
+details.layer>summary .arrow{margin-left:auto;color:var(--ink3);font-family:var(--sans);font-weight:400;transition:transform .25s ease-out}
 details.layer[open]>summary .arrow{transform:rotate(90deg)}
-details.layer>.body{padding:4px 18px 14px;border-top:1px solid var(--line)}
-details.dstep{border:1px solid var(--line);border-radius:7px;margin:0 0 8px;background:var(--surf2)}
-details.dstep>summary{cursor:pointer;padding:9px 13px;font-weight:500;font-size:13.5px}
-details.dstep ol{margin:4px 0 10px;padding:0 14px 0 34px}
-details.dstep li{margin-bottom:7px;font-size:13.5px}
-/* 정석식 박스 */
-.jsbox{border:1.5px solid var(--acc);border-radius:9px;background:var(--acc-bg);padding:11px 15px;margin:12px 0;font-size:14px}
-.jsbox .jt{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;color:var(--acc);font-weight:600;display:block;margin-bottom:3px}
-.exbox{border:1px solid var(--line2);border-left:3px solid var(--acc);border-radius:8px;background:var(--surf);padding:12px 15px;margin:12px 0}
-.exbox .xh{font-weight:600;font-size:14px;margin-bottom:6px}
-.exbox .xh .xno{font-family:"IBM Plex Mono",monospace;color:var(--acc);font-size:11.5px;margin-right:6px}
-.exbox .xsol{border-top:1px dashed var(--line2);margin-top:8px;padding-top:8px;font-size:13.5px}
+details.layer>.body{padding:0 2px 18px}
+details.dstep{border-left:2px solid var(--line2);margin:0 0 10px;padding-left:12px}
+details.dstep>summary{cursor:pointer;padding:6px 0;font-weight:600;font-size:14.5px}
+details.dstep ol{margin:4px 0 10px;padding:0 4px 0 22px}
+details.dstep li{margin-bottom:7px;font-size:14px}
+/* 정석·예제·큰그림 — 여백선과 면으로 */
+.jsbox{border-left:3px solid var(--acc);background:var(--acc-bg);padding:12px 16px;margin:14px 0;font-size:14.5px}
+.jsbox .jt{display:block;font-weight:700;color:var(--acc);font-size:14px;margin-bottom:4px}
+.exbox{border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:14px 2px;margin:16px 0}
+.exbox .xh{font-weight:600;font-size:14.5px;margin-bottom:6px}
+.exbox .xh .xno{color:var(--acc);font-weight:700;margin-right:8px}
+.exbox .xsol{margin-top:8px;padding:10px 0 0 14px;border-left:2px solid var(--acc);font-size:14px}
 .exbox .xsol ol{margin:4px 0 0;padding-left:20px}
-.exbox .xrel{font-size:12px;color:var(--ink3);margin-top:8px;font-family:"IBM Plex Mono",monospace}
-.bigpic{border:1.5px solid var(--acc);border-left:5px solid var(--acc);border-radius:10px;background:linear-gradient(180deg,var(--acc-bg),var(--surf));padding:14px 18px;margin:0 0 16px;font-size:14.5px;line-height:1.8}
-.bigpic .bt{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;color:var(--acc);font-weight:700;margin-bottom:5px}
-.mapline{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(--surf);border:1px dashed var(--line2);border-radius:8px;padding:9px 12px;margin:10px 0;overflow-x:auto}
+.exbox .xrel{font-size:13px;color:var(--ink3);margin-top:8px}
+.bigpic{border-left:3px solid var(--ink);padding:4px 0 4px 18px;margin:4px 0 20px;font-size:15px;line-height:1.85}
+.bigpic .bt{display:block;font-family:var(--serif);font-size:15px;color:var(--ink);font-weight:700;margin-bottom:4px}
+.mapline{font-size:14px;background:var(--surf2);padding:10px 14px;margin:12px 0;overflow-x:auto;line-height:1.7}
 .en{color:var(--ink3);font-weight:400;font-size:.88em}
-.tagx,.tagm,.tagc{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:700;letter-spacing:.06em;border-radius:5px;padding:2px 7px;margin-left:7px;vertical-align:2px;white-space:nowrap}
-.tagx{background:#c0392b;color:#fff}
-.tagm{background:var(--acc);color:#fff}
-.tagc{background:var(--line2);color:var(--ink2)}
-.whyq{border-left:3px solid var(--ink3);padding:3px 0 3px 12px;margin:13px 0;color:var(--ink2);font-size:14px}
-.intuit{background:var(--acc-bg);border-radius:8px;padding:9px 13px;margin:10px 0;font-size:13.5px}
-.exambox{border:1px solid var(--line2);border-left:3px solid #c0392b;border-radius:8px;background:var(--surf);padding:10px 14px;margin:12px 0;font-size:13px}
-.exambox .xt{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;color:#c0392b;font-weight:700;display:block;margin-bottom:3px}
-.layer .body h4{margin:24px 0 8px;font-size:16.5px}
-.layer .body h4:first-child{margin-top:4px}
-.readrow{margin:8px 0 2px;text-align:right}
-.readbtn{font:inherit;font-size:12.5px;min-height:40px;padding:7px 15px;border-radius:99px;border:1px solid var(--line2);background:var(--surf);color:var(--ink2);cursor:pointer}
-.readbtn[aria-pressed="true"]{background:var(--ok-bg);color:var(--ok);border-color:var(--ok)}
-/* drill */
-.filters{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
-.fchip{font:inherit;font-size:12.5px;min-height:36px;padding:5px 14px;border-radius:99px;border:1px solid var(--line2);background:var(--surf);color:var(--ink2);cursor:pointer}
-.fchip.on{background:var(--acc-bg);color:var(--acc);border-color:var(--acc);font-weight:600}
-.pcard{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:15px 17px;margin-bottom:12px;box-shadow:var(--shadow)}
-.pc-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:8px}
-.lv{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:99px}
-.lv1{background:var(--ok-bg);color:var(--ok)} .lv2{background:var(--info-bg);color:var(--info)}
-.lv3{background:var(--warn-bg);color:var(--warn)} .lv4{background:var(--acc-bg);color:var(--acc)}
-.tagc{font-size:11px;color:var(--ink3);font-family:"IBM Plex Mono",monospace}
-.srcb{font-size:10px;color:var(--ink3);border:1px solid var(--line);border-radius:99px;padding:1px 8px}
-.sdot{width:9px;height:9px;border-radius:99px;background:var(--line2);margin-left:auto;flex:0 0 auto}
-.sdot.correct{background:var(--ok)} .sdot.partial{background:var(--warn)} .sdot.wrong{background:var(--bad)}
-.pc-st{font-size:14.5px;margin-bottom:10px}
-.pc-btns{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
-.pbtn{font:inherit;font-size:12.5px;min-height:40px;padding:7px 14px;border-radius:8px;border:1px solid var(--line2);background:var(--surf2);color:var(--ink2);cursor:pointer}
-.pbtn:hover{border-color:var(--acc);color:var(--acc)}
-.pbtn.grade-c{border-color:var(--ok);color:var(--ok)}
-.pbtn.grade-p{border-color:var(--warn);color:var(--warn)}
-.pbtn.grade-w{border-color:var(--bad);color:var(--bad)}
-.pbtn.grade-c.sel{background:var(--ok-bg)} .pbtn.grade-p.sel{background:var(--warn-bg)} .pbtn.grade-w.sel{background:var(--bad-bg)}
-.hintbox{background:var(--warn-bg);border-radius:7px;padding:9px 13px;font-size:13px;margin:8px 0 0}
-.solbox{background:var(--surf2);border-radius:8px;padding:11px 14px;margin:10px 0 0}
+.tagx,.tagm,.tagc{display:inline-block;font-size:12.5px;font-weight:700;margin-left:8px;vertical-align:1px;white-space:nowrap;padding:0 0 1px;border-bottom:1.5px solid currentColor;line-height:1.3}
+.tagx{color:var(--red)} .tagm{color:var(--acc)} .tagc{color:var(--ink3);border-bottom-style:dotted}
+.whyq{border-left:2px solid var(--ink3);padding:2px 0 2px 14px;margin:14px 0;color:var(--ink2);font-size:14.5px}
+.intuit{background:var(--surf2);padding:10px 14px;margin:12px 0;font-size:14.5px}
+.exambox{border-left:3px solid var(--red);background:var(--red-bg);padding:11px 15px;margin:14px 0;font-size:14px}
+.exambox .xt{display:block;font-weight:700;color:var(--red);font-size:14px;margin-bottom:3px}
+.layer .body h4{margin:26px 0 8px;font-family:var(--serif);font-size:17px;letter-spacing:-.01em}
+.layer .body h4:first-child{margin-top:2px}
+.readrow{margin:12px 0 0;text-align:right}
+.readbtn{font:inherit;font-size:13.5px;min-height:44px;padding:8px 16px;border-radius:4px;border:1px solid var(--line2);background:transparent;color:var(--ink2);cursor:pointer}
+.readbtn[aria-pressed="true"]{color:var(--ok);border-color:var(--ok)}
+/* 드릴 — 필터는 밑줄 탭 */
+.filters{display:flex;flex-wrap:wrap;gap:2px 18px;margin:8px 0 6px;border-bottom:1px solid var(--line)}
+.fchip{font:inherit;font-size:14px;min-height:44px;padding:8px 2px;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;color:var(--ink3);cursor:pointer}
+.fchip:hover{color:var(--ink)}
+.fchip.on{color:var(--ink);border-bottom-color:var(--acc);font-weight:600}
+.pcard{padding:22px 0 20px;border-bottom:1px solid var(--line)}
+.pc-head{display:flex;align-items:baseline;gap:4px 12px;flex-wrap:wrap;margin-bottom:8px;font-size:13px;color:var(--ink3)}
+.lv{font-weight:700;font-size:13px}
+.lv1{color:var(--ok)} .lv2{color:var(--acc)} .lv3{color:var(--warn)} .lv4{color:var(--red)}
+.pmeta{color:var(--ink3)}
+.srcb{color:var(--ink3)}
+.srcb::before{content:"· "}
+.sdot{margin-left:auto;font-size:13px;font-weight:700}
+.sdot.correct{color:var(--ok)} .sdot.correct::after{content:"맞음"}
+.sdot.partial{color:var(--warn)} .sdot.partial::after{content:"부분"}
+.sdot.wrong{color:var(--red)} .sdot.wrong::after{content:"틀림"}
+.pc-st{font-size:16px;line-height:1.8;margin-bottom:12px}
+.pc-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.pbtn{font:inherit;font-size:13.5px;min-height:44px;padding:8px 15px;border-radius:4px;border:1px solid var(--line2);background:transparent;color:var(--ink2);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}
+.pbtn:hover{border-color:var(--ink2);color:var(--ink)}
+.pbtn.grade-c{color:var(--ok)} .pbtn.grade-p{color:var(--warn)} .pbtn.grade-w{color:var(--red)}
+.pbtn.grade-c.sel{background:var(--ok-bg);border-color:var(--ok)} .pbtn.grade-p.sel{background:var(--warn-bg);border-color:var(--warn)} .pbtn.grade-w.sel{background:var(--red-bg);border-color:var(--red)}
+.hintbox{border-left:2px solid var(--warn);background:var(--warn-bg);padding:9px 14px;font-size:14px;margin:10px 0 0}
+.solbox{border-left:2px solid var(--acc);padding:4px 0 4px 16px;margin:14px 0 4px}
 .solbox ol{margin:0;padding-left:20px}
-.solbox li{font-size:13.5px;margin-bottom:7px}
-.ansline{margin-top:8px;font-weight:600;color:var(--acc);font-size:14px}
-.choices{display:flex;flex-direction:column;gap:7px;margin:4px 0 2px}
-.choice{font:inherit;text-align:left;font-size:13.5px;min-height:44px;padding:9px 13px;border-radius:8px;border:1px solid var(--line2);background:var(--surf);color:var(--ink);cursor:pointer}
-.choice:hover{border-color:var(--acc)}
-.choice.right{border-color:var(--ok);background:var(--ok-bg)}
-.choice.wrongpick{border-color:var(--bad);background:var(--bad-bg)}
-.expl{background:var(--info-bg);border-radius:7px;padding:9px 13px;font-size:13px;margin-top:8px;color:var(--ink2)}
-/* exam */
-.exam-setup .grp{margin-bottom:14px}
-.exam-setup label.ck{display:inline-flex;align-items:center;gap:6px;margin:0 12px 6px 0;font-size:13.5px;min-height:36px}
-.exam-setup input[type=checkbox]{accent-color:var(--acc);width:17px;height:17px}
-.exam-setup select{font:inherit;font-size:14px;padding:8px 12px;border:1px solid var(--line2);border-radius:8px;background:var(--surf);color:var(--ink)}
-.bigbtn{font:inherit;font-size:14.5px;font-weight:600;min-height:46px;padding:10px 22px;border-radius:99px;border:none;background:var(--acc);color:#fff;cursor:pointer}
+.solbox li{font-size:14.5px;margin-bottom:8px}
+.ansline{margin-top:10px;font-weight:700;color:var(--acc);font-size:15px}
+.choices{display:flex;flex-direction:column;gap:8px;margin:4px 0 4px;counter-reset:ch}
+.choice{font:inherit;text-align:left;font-size:15px;min-height:46px;padding:10px 14px 10px 44px;border-radius:4px;border:1px solid var(--line2);background:var(--surf);color:var(--ink);cursor:pointer;position:relative;counter-increment:ch}
+.choice::before{content:counter(ch);position:absolute;left:15px;top:10px;font-family:var(--serif);font-weight:700;color:var(--ink3)}
+.choice:hover{border-color:var(--ink2)}
+.choice.right{border-color:var(--ok);background:var(--ok-bg)} .choice.right::before{color:var(--ok)}
+.choice.wrongpick{border-color:var(--red);background:var(--red-bg)} .choice.wrongpick::before{color:var(--red)}
+.expl{border-left:2px solid var(--acc);padding:6px 0 6px 14px;font-size:14px;margin-top:12px;color:var(--ink2)}
+/* 모의고사 */
+.exam-setup .grp{padding:16px 0;border-top:1px solid var(--line)}
+.exam-setup .grp h4{margin:0 0 8px;font-family:var(--serif);font-size:16px}
+.exam-setup label.ck{display:inline-flex;align-items:center;gap:8px;margin:0 18px 4px 0;font-size:14.5px;min-height:44px;cursor:pointer}
+.exam-setup input[type=checkbox]{accent-color:var(--acc);width:18px;height:18px}
+.exam-setup select{font:inherit;font-size:16px;min-height:44px;padding:8px 12px;border:1px solid var(--line2);border-radius:4px;background:var(--surf);color:var(--ink)}
+.bigbtn{font:inherit;font-size:15.5px;font-weight:600;min-height:50px;padding:12px 26px;border-radius:4px;border:none;background:var(--ink);color:var(--bg);cursor:pointer;margin-top:10px}
+.bigbtn:hover{background:var(--acc)}
 .bigbtn:disabled{opacity:.5;cursor:default}
-.exam-top{display:flex;align-items:center;gap:10px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink3);margin-bottom:12px}
-.exam-top .bar{flex:1;height:5px;background:var(--line);border-radius:99px;overflow:hidden}
-.exam-top .bar i{display:block;height:100%;background:var(--acc)}
-.report{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:18px 20px;box-shadow:var(--shadow)}
-.report .score{font-family:Newsreader,Georgia,serif;font-size:34px;font-weight:600;color:var(--acc)}
-table{border-collapse:collapse;width:100%;margin:10px 0 14px;font-size:13px;display:block;overflow-x:auto}
-th,td{border:1px solid var(--line);padding:7px 10px;text-align:left}
-th{background:var(--surf2);white-space:nowrap}
-.empty{border:1px dashed var(--line2);border-radius:10px;padding:24px;color:var(--ink3);font-size:13.5px;text-align:center}
-/* mobile */
+.exam-top{display:flex;align-items:center;gap:16px;margin:0 0 6px}
+.exam-top .cnt{font-family:var(--serif);font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1}
+.exam-top .cnt small{font-size:16px;color:var(--ink3);font-weight:500}
+.ticks{flex:1;display:flex;gap:4px;align-items:flex-end;height:22px}
+.ticks i{flex:1;height:10px;border-left:1.5px solid var(--line2)}
+.ticks i.done{border-color:var(--ink)} .ticks i.cur{height:22px;border-left:2.5px solid var(--acc)}
+.report{padding:6px 0 0}
+.report .score{font-family:var(--serif);font-size:64px;line-height:1.05;font-weight:700;color:var(--ink);letter-spacing:-.03em}
+.report .score small{font-size:22px;color:var(--ink3);margin-left:4px}
+table{border-collapse:collapse;width:100%;margin:12px 0 16px;font-size:14px;display:block;overflow-x:auto}
+th,td{border-bottom:1px solid var(--line);padding:9px 12px 9px 0;text-align:left}
+th{font-weight:600;color:var(--ink2);white-space:nowrap;border-bottom:1.5px solid var(--ink2)}
+.empty{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:28px 4px;color:var(--ink3);font-size:14.5px}
+code,.mono{font-family:"IBM Plex Mono",monospace;font-size:.92em}
+/* 모바일 */
 .tabbar{display:none}
 #tb-sheet{display:none}
 @media(max-width:960px){
@@ -195,23 +229,36 @@ th{background:var(--surf2);white-space:nowrap}
  input,textarea,select{font-size:16px}
  .layout{flex-direction:column}
  .side{width:100%;flex:none;height:auto;position:static;border-right:none;border-bottom:1px solid var(--line);
-  padding:12px 16px;flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap}
+  padding:14px 16px;flex-direction:row;align-items:center;gap:14px;flex-wrap:wrap}
+ .brand a{font-size:18px}
  .side nav,.ng,.foot-side{display:none}
- .side .prog{flex:1;min-width:110px}
- .main{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
+ .side .prog{flex:1;min-width:130px}
+ .main{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+ .hero-fig .row2{grid-template-columns:minmax(0,1fr)}
+ .hero-fig .splane{max-width:260px}
+ .ucard{grid-template-columns:40px minmax(0,1fr)}
+ .uc-stat{grid-column:2;grid-row:auto;text-align:left}
  .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;background:var(--side);border-top:1px solid var(--line);
-  padding:4px 4px calc(4px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.06)}
- .tabbar a,.tabbar button{flex:1;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
-  font:inherit;font-size:16px;line-height:1;background:none;border:none;border-radius:8px;color:var(--ink2);text-decoration:none;cursor:pointer;padding:5px 2px}
- .tabbar a span,.tabbar button span{font-size:10.5px;font-family:"IBM Plex Mono",monospace}
- .tabbar a.on{color:var(--acc);background:var(--acc-bg)}
- #tb-sheet{position:fixed;right:10px;bottom:calc(64px + env(safe-area-inset-bottom));z-index:51;background:var(--surf);
-  border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:8px;display:flex;flex-direction:column;min-width:190px}
+  padding:2px 4px calc(2px + env(safe-area-inset-bottom))}
+ .tabbar a,.tabbar button{flex:1;min-height:52px;display:flex;align-items:center;justify-content:center;
+  font:inherit;font-size:14px;line-height:1.2;background:none;border:none;border-top:2px solid transparent;color:var(--ink2);text-decoration:none;cursor:pointer;padding:4px 2px;white-space:nowrap}
+ .tabbar a.on{color:var(--ink);font-weight:700;border-top-color:var(--acc)}
+ #tb-sheet{position:fixed;right:10px;bottom:calc(66px + env(safe-area-inset-bottom));z-index:51;background:var(--surf);
+  border:1px solid var(--line2);border-radius:4px;padding:6px;display:flex;flex-direction:column;min-width:210px}
  #tb-sheet[hidden]{display:none!important}
- #tb-sheet a{display:flex;align-items:center;padding:11px 14px;min-height:44px;border-radius:8px;color:var(--ink2);text-decoration:none;font-size:14.5px}
+ #tb-sheet a{display:flex;align-items:center;padding:11px 14px;min-height:44px;color:var(--ink2);text-decoration:none;font-size:15px}
  #tb-sheet a:active{background:var(--surf2)}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media(max-width:640px){
+ .facts b{font-size:26px}
+ .report .score{font-size:52px}
+}
+@media print{
+ .side,.tabbar,#tb-sheet{display:none!important}
+ .main{padding:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}
+ .hf-curve{stroke-dashoffset:0}.hf-pole,.hf-late{opacity:1}}
 </style>
 </head>
 <body>
@@ -225,11 +272,11 @@ th{background:var(--surf2);white-space:nowrap}
 <main class="main"><div class="view" id="view"></div></main>
 </div>
 <nav class="tabbar" aria-label="하단 탭">
-<a href="../../">🏠<span>허브</span></a>
-<a href="#home" data-tv="home">📚<span>홈</span></a>
-<a href="#wrong" data-tv="wrong">🔁<span>오답</span></a>
-<a href="#exam" data-tv="exam">📝<span>모의고사</span></a>
-<button id="tb-more" type="button">☰<span>단원</span></button>
+<a href="../../">허브</a>
+<a href="#home" data-tv="home">홈</a>
+<a href="#wrong" data-tv="wrong">오답</a>
+<a href="#exam" data-tv="exam">모의고사</a>
+<button id="tb-more" type="button">단원</button>
 </nav>
 <div id="tb-sheet" hidden></div>
 
@@ -246,6 +293,7 @@ var APP='[[APP_ID]]', VP=Vault.progress(APP), VD=Vault.drill(APP), VM=Vault.meta
 var UNITS=SV_BANK, BYID={}, ALL=[];
 UNITS.forEach(function(u){ u.problems.forEach(function(p){ p._unit=u; BYID[p.id]=p; ALL.push(p); }); });
 var LAYERS=['concept','derive','worked'], LAYER_KO={concept:'개념',derive:'수식·유도',worked:'풀이된 예제'};
+var LVNAME={1:'개념',2:'기본',3:'응용',4:'시험급'};
 /* 빈 레이어는 숨긴다 — 개념 과목(course-bio)은 derive·worked 가 없다 */
 function hasLayer(c,l){ return l==='concept' || (l==='derive' ? (c.derive||[]).length>0 : !!c[l]); }
 var $=function(s,el){ return (el||document).querySelector(s); };
@@ -315,8 +363,9 @@ function renderProblem(prob){
   var st=VD.get(prob.id);
   var srcb=prob.src?'<span class="srcb">'+esc(prob.src)+'</span>':'';
   if(prob.ref) srcb+='<span class="srcb">근거 '+esc(prob.ref)+'</span>';
-  card.innerHTML='<div class="pc-head"><span class="lv lv'+prob.level+'">L'+prob.level+'</span>'+
-    '<span class="tagc">'+esc(prob.id)+' · '+esc((prob.tags||[]).join('·'))+'</span>'+srcb+
+  srcb+='<span class="srcb">'+esc(prob.id)+'</span>';
+  card.innerHTML='<div class="pc-head"><span class="lv lv'+prob.level+'">L'+prob.level+' '+LVNAME[prob.level]+'</span>'+
+    '<span class="pmeta">'+esc((prob.tags||[]).join(' · '))+'</span>'+srcb+
     '<span class="sdot'+(st?' '+st:'')+'"></span></div>'+
     '<div class="pc-st"></div><div class="pc-body"></div><div class="pc-btns"></div>';
   var stEl=$('.pc-st',card), body=$('.pc-body',card), btns=$('.pc-btns',card);
@@ -327,9 +376,9 @@ function renderProblem(prob){
     b.addEventListener('click',fn); btns.appendChild(b); return b;
   }
   function gradeBtns(){
-    addBtn('맞음 ✓','grade-c',function(){ grade(prob,'correct',card); });
-    addBtn('부분 △','grade-p',function(){ grade(prob,'partial',card); });
-    addBtn('틀림 ✗','grade-w',function(){ grade(prob,'wrong',card); });
+    addBtn('맞음','grade-c',function(){ grade(prob,'correct',card); });
+    addBtn('부분','grade-p',function(){ grade(prob,'partial',card); });
+    addBtn('틀림','grade-w',function(){ grade(prob,'wrong',card); });
     if(st){ var b=card.querySelector('.pbtn.grade-'+st[0]); if(b) b.classList.add('sel'); }
   }
 
@@ -353,12 +402,12 @@ function renderProblem(prob){
   } else {
     var hintIdx=0, hb=null;
     if(prob.hints&&prob.hints.length){
-      addBtn('💡 힌트','',function(){
+      addBtn('힌트','',function(){
         if(hintIdx>=prob.hints.length) return;
         if(!hb){ hb=document.createElement('div'); hb.className='hintbox'; body.appendChild(hb); }
         var d=document.createElement('div'); d.innerHTML='힌트 '+(hintIdx+1)+'. '+prob.hints[hintIdx];
         hb.appendChild(d); typeset(d); hintIdx++;
-        this.textContent = hintIdx>=prob.hints.length ? '힌트 끝' : '💡 힌트 '+(hintIdx+1);
+        this.textContent = hintIdx>=prob.hints.length ? '힌트 끝' : '힌트 '+(hintIdx+1);
       });
     }
     var solBtn=addBtn('풀이 보기','',function(){
@@ -377,7 +426,7 @@ function renderProblem(prob){
       if(!card.__graded){ card.__graded=true; gradeBtns(); }
     });
     if(prob.params){
-      addBtn('🎲 새 숫자로','',function(){
+      addBtn('새 숫자로 다시','',function(){
         CUR[prob.id]=sample(prob);
         stEl.innerHTML=statementOf(prob); typeset(stEl);
         if(card.__sol){ card.__sol.remove(); card.__sol=null; solBtn.textContent='풀이 보기'; }
@@ -395,35 +444,39 @@ function setView(html){ view.innerHTML=html; }
 function renderHome(){
   var dc=VD.counts();
   var rate=dc.total?Math.round(dc.correct/dc.total*100):null;
+  var C=SV_CONTENT.course||{};
+  var nParam=ALL.filter(function(p){return !!p.params;}).length;
   setView('<div class="eyebrow">[[APP_EYEBROW]]</div>'+
     '<h1>[[APP_TITLE]]</h1>'+
-    '<p class="lede">개념 → 유도 → 예제 → 4단계 문제(L1~L4). 전 문제가 검산 게이트(sympy 독립 재계산 대조)를 통과했고, 계산형 문제는 <b>🎲 새 숫자로</b>를 눌러 무한 반복할 수 있다.</p>'+
-    '<p class="note-line">현황 — 풀어본 문제 '+dc.total+' / '+ALL.length+(rate!==null?(' · 정답률 '+rate+'%'):'')+
-    ' · <a href="#wrong">오답노트 '+wrongList().length+'문제</a> · 빌드 '+SV_BUILD.date+' (게이트 '+SV_BUILD.gate+')</p>'+
-    (SV_CONTENT.course?'<details class="layer" open><summary><span class="lb">MAP</span>과목 큰그림 — 한눈에<span class="arrow">›</span></summary><div class="body">'+SV_CONTENT.course.bigpicture+'</div></details>':'')+
-    '<div class="ucards" id="ucards"></div>'+
-    '<h3>모드</h3><div class="ucards">'+
-    '<a class="ucard" href="#exam"><span class="uc-no">MOCK EXAM</span><span class="uc-ti">📝 모의고사</span><span class="uc-scope">범위·난이도·문항수를 골라 랜덤 출제 — 매번 새 수치, 종료 리포트 제공.</span></a>'+
-    '<a class="ucard" href="#wrong"><span class="uc-no">RETRY QUEUE</span><span class="uc-ti">🔁 오답노트</span><span class="uc-scope">틀림·부분 문제만 모아 재도전. 맞음으로 바꾸면 큐에서 빠진다.</span></a></div>');
+    '<p class="lede">개념, 유도, 예제를 읽고 L1부터 L4까지 네 단계 문제로 굳힌다. 모든 계산형 문제는 독립 재계산과 대조해 통과한 것만 실었고, 숫자를 바꿔 몇 번이든 다시 풀 수 있다.</p>'+
+    (C.hero?'<figure class="hero-fig">'+C.hero+'</figure>':'')+
+    '<div class="facts"><span><b>'+ALL.length+'</b>문제</span><span><b>'+UNITS.length+'</b>단원</span><span><b>'+nParam+'</b>문제는 숫자가 매번 바뀜</span>'+
+    '<span><b>'+dc.total+'</b>문제 풀어 봄'+(rate!==null?(' · 정답률 '+rate+'%'):'')+'</span></div>'+
+    '<p class="note-line"><a href="#wrong">오답노트 '+wrongList().length+'문제</a> · 빌드 '+SV_BUILD.date+' · 검산 게이트 '+SV_BUILD.gate+'</p>'+
+    '<h3>단원</h3><div class="ucards" id="ucards"></div>'+
+    '<h3>훈련</h3><div class="ucards">'+
+    '<a class="ucard" href="#exam"><span class="uc-no">시험</span><span class="uc-ti">모의고사</span><span class="uc-scope">범위·난이도·문항 수를 골라 무작위로 출제한다. 계산 문제는 매번 새 수치이고, 끝나면 단원별 리포트가 나온다.</span></a>'+
+    '<a class="ucard" href="#wrong"><span class="uc-no">복습</span><span class="uc-ti">오답노트</span><span class="uc-scope">틀림·부분으로 채점한 문제만 모아 새 수치로 다시 낸다. 맞음으로 바꾸면 빠진다.</span><span class="uc-stat">'+wrongList().length+'문제 대기</span></a></div>'+
+    (C.bigpicture?'<h3>과목 큰그림</h3><details class="layer" open><summary>한 문장으로 보는 중간범위<span class="arrow">›</span></summary><div class="body">'+C.bigpicture+'</div></details>':''));
   var uc=$('#ucards');
-  UNITS.forEach(function(u){
+  UNITS.forEach(function(u,i){
     var solved=0, ok=0;
     u.problems.forEach(function(p){ var s=VD.get(p.id); if(s){solved++; if(s==='correct')ok++;} });
     var avail=LAYERS.filter(function(l){return hasLayer(SV_CONTENT[u.id]||{},l);});
     var reads=avail.filter(function(l){return VP.get(u.id+'-'+l);}).length;
-    var a=document.createElement('a'); a.className='ucard'; a.href='#'+u.id;
-    a.innerHTML='<span class="uc-no">UNIT '+u.no+'</span><span class="uc-ti">'+esc(u.title)+'</span>'+
-      '<span class="uc-scope">'+esc(u.scope)+'</span>'+
-      '<span class="uc-stat">읽음 '+reads+'/'+avail.length+' · 문제 '+solved+'/'+u.problems.length+(solved?' · 정답 '+ok:'')+'</span>';
+    var a=document.createElement('a'); a.className='ucard'; a.href='#'+u.id; a.style.setProperty('--d',(i*45)+'ms');
+    a.innerHTML='<span class="uc-no">U'+u.no+'</span><span class="uc-ti">'+esc(u.title)+'</span>'+
+      '<span class="uc-stat">'+u.problems.length+'문제 · 푼 '+solved+(solved?' · 정답 '+ok:'')+' · 읽음 '+reads+'/'+avail.length+'</span>'+
+      '<span class="uc-scope">'+esc(u.scope)+'</span>';
     uc.appendChild(a);
   });
   typeset(view);
 }
 function renderUnit(u){
   var c=SV_CONTENT[u.id]||{};
-  setView('<div class="eyebrow">UNIT '+u.no+' / '+UNITS.length+'</div><h1>'+esc(u.title)+'</h1>'+
+  setView('<div class="eyebrow">단원 '+u.no+' / '+UNITS.length+'</div><h1>'+esc(u.title)+'</h1>'+
     '<p class="lede">'+esc(u.scope)+'</p><div id="layers"></div>'+
-    '<h3>문제 세트 <span class="src">L1 개념확인 → L4 시험급 · '+u.problems.length+'문제</span></h3>'+
+    '<h3>문제 '+u.problems.length+'개 <span class="src">L1 개념 확인에서 L4 시험급까지</span></h3>'+
     '<div class="filters" id="filters"></div><div id="plist"></div>');
   var layers=$('#layers');
   LAYERS.filter(function(l){ return hasLayer(c,l); }).forEach(function(l){
@@ -435,7 +488,7 @@ function renderUnit(u){
           dv.steps.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ol></details>';
       });
     } else inner=c[l]||'';
-    d.innerHTML='<summary><span class="lb">'+(l.toUpperCase())+'</span>'+LAYER_KO[l]+'<span class="arrow">›</span></summary>'+
+    d.innerHTML='<summary>'+LAYER_KO[l]+'<span class="arrow">›</span></summary>'+
       '<div class="body">'+inner+'<div class="readrow"><button type="button" class="readbtn" data-read="'+u.id+'-'+l+'"></button></div></div>';
     layers.appendChild(d);
   });
@@ -458,10 +511,10 @@ function renderUnit(u){
 }
 function renderWrong(){
   var ids=wrongList();
-  setView('<div class="eyebrow">RETRY QUEUE</div><h1>오답노트</h1>'+
-    '<p class="lede">틀림·부분 표시 문제 '+ids.length+'개. 다시 풀어 <b>맞음</b>으로 바꾸면 큐에서 빠진다. 계산형은 자동으로 새 수치다.</p><div id="plist"></div>');
+  setView('<div class="eyebrow">복습</div><h1>오답노트</h1>'+
+    '<p class="lede">틀림·부분으로 채점한 문제 '+ids.length+'개. 계산형은 열 때마다 새 수치로 바뀌니 답을 외워서는 넘길 수 없다. 다시 풀어 <b>맞음</b>으로 바꾸면 여기서 빠진다.</p><div id="plist"></div>');
   var pl=$('#plist');
-  if(!ids.length){ pl.innerHTML='<div class="empty">비어 있음 — 문제를 풀고 자가채점하면 틀림/부분이 여기 모인다.</div>'; return; }
+  if(!ids.length){ pl.innerHTML='<div class="empty">아직 비어 있다. 문제를 풀고 틀림이나 부분으로 채점하면 여기 모인다.</div>'; return; }
   ids.forEach(function(id){ var p=BYID[id]; if(p&&p.params) CUR[id]=sample(p); pl.appendChild(renderProblem(BYID[id])); });
   typeset(pl);
 }
@@ -470,22 +523,24 @@ var EXAM={running:false};
 function renderExam(){
   if(EXAM.running){ renderExamRun(); return; }
   var uchecks=UNITS.map(function(u){ return '<label class="ck"><input type="checkbox" class="exu" value="'+u.id+'" checked> U'+u.no+' '+esc(u.title)+'</label>'; }).join('');
-  setView('<div class="eyebrow">MOCK EXAM</div><h1>모의고사</h1>'+
-    '<p class="lede">범위와 난이도를 고르면 랜덤 출제. 채점은 문제마다(객관식 자동 · 계산형 자가채점), 종료하면 리포트.</p>'+
+  setView('<div class="eyebrow">시험</div><h1>모의고사</h1>'+
+    '<p class="lede">범위와 난이도를 고르면 무작위로 출제한다. 객관식은 바로 채점되고, 계산형은 풀이를 펼쳐 스스로 채점한다. 끝나면 단원별 리포트가 나온다.</p>'+
     '<div class="exam-setup">'+
     '<div class="grp"><h4>범위</h4>'+uchecks+'</div>'+
     '<div class="grp"><h4>난이도</h4>'+[1,2,3,4].map(function(l){return '<label class="ck"><input type="checkbox" class="exl" value="'+l+'" '+(l>1?'checked':'')+'> L'+l+'</label>';}).join('')+'</div>'+
     '<div class="grp"><h4>문항 수</h4><select id="exn"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></div>'+
-    '<button class="bigbtn" id="exgo">모의고사 시작 →</button></div>');
+    '<button class="bigbtn" id="exgo">모의고사 시작</button><p class="note-line" id="exmsg" role="status" hidden></p></div>');
   $('#exgo').addEventListener('click',function(){
     var us={}, ls={};
     document.querySelectorAll('.exu:checked').forEach(function(c){us[c.value]=1;});
     document.querySelectorAll('.exl:checked').forEach(function(c){ls[+c.value]=1;});
     var pool=ALL.filter(function(p){ return us[p._unit.id]&&ls[p.level]; });
     var n=Math.min(+$('#exn').value, pool.length);
-    if(!n){ alert('선택한 범위에 문제가 없습니다'); return; }
+    if(!n){ var m=$('#exmsg'); m.hidden=false; m.textContent='고른 범위·난이도에 해당하는 문제가 없다. 단원이나 난이도를 하나 이상 더 골라 보자.'; return; }
     for(var i=pool.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=pool[i]; pool[i]=pool[j]; pool[j]=t; }
-    EXAM={running:true, list:pool.slice(0,n), idx:0, res:{}};
+    var uk=Object.keys(us).map(function(id){ return 'U'+UNITS.filter(function(u){return u.id===id;})[0].no; });
+    var lk=Object.keys(ls).sort().map(function(l){return 'L'+l;});
+    EXAM={running:true, list:pool.slice(0,n), idx:0, res:{}, label:(uk.length===UNITS.length?'전 단원':uk.join('·'))+' · '+lk.join('·')};
     EXAM.list.forEach(function(p){ if(p.params) CUR[p.id]=sample(p); });
     renderExamRun();
   });
@@ -493,8 +548,9 @@ function renderExam(){
 function examAnswered(pid, status){ if(EXAM.running&&EXAM.res) EXAM.res[pid]=status; }
 function renderExamRun(){
   var i=EXAM.idx, p=EXAM.list[i];
-  setView('<div class="eyebrow">MOCK EXAM · '+(i+1)+' / '+EXAM.list.length+'</div>'+
-    '<div class="exam-top"><span>'+(i+1)+'/'+EXAM.list.length+'</span><div class="bar"><i style="width:'+Math.round(i/EXAM.list.length*100)+'%"></i></div>'+
+  var ticks=EXAM.list.map(function(q,k){ return '<i class="'+(k<i?'done':(k===i?'cur':''))+'"></i>'; }).join('');
+  setView('<div class="eyebrow">모의고사 · '+esc(EXAM.label||'')+'</div>'+
+    '<div class="exam-top"><span class="cnt">'+(i+1)+'<small> / '+EXAM.list.length+'</small></span><div class="ticks" aria-hidden="true">'+ticks+'</div>'+
     '<button class="pbtn" id="exquit">종료</button></div><div id="pslot"></div>'+
     '<div class="pc-btns" style="margin-top:14px"><button class="bigbtn" id="exnext">'+(i+1<EXAM.list.length?'다음 문제 →':'리포트 보기 →')+'</button></div>');
   $('#pslot').appendChild(renderProblem(p)); typeset($('#pslot'));
@@ -515,11 +571,12 @@ function renderExamReport(){
   });
   var score=Math.round((c+0.5*pt)/list.length*100);
   var rows=Object.keys(perUnit).sort().map(function(k){var u=perUnit[k];return '<tr><td>U'+u.no+' '+esc(u.title)+'</td><td>'+u.c+' / '+u.t+'</td></tr>';}).join('');
-  setView('<div class="eyebrow">MOCK EXAM · REPORT</div><h1>결과 리포트</h1>'+
-    '<div class="report"><div class="score">'+score+'점</div>'+
-    '<p>맞음 '+c+' · 부분 '+pt+' · 틀림 '+w+(na?' · 무응답 '+na:'')+' (총 '+list.length+'문제)</p>'+
+  setView('<div class="eyebrow">모의고사 · '+esc(EXAM.label||'')+'</div><h1>결과 리포트</h1>'+
+    '<div class="report"><div class="score">'+score+'<small>점</small></div>'+
+    '<p>맞음 '+c+' · 부분 '+pt+' · 틀림 '+w+(na?' · 무응답 '+na:'')+' (총 '+list.length+'문제, 부분은 절반으로 계산)</p>'+
     '<table><thead><tr><th>단원</th><th>정답</th></tr></thead><tbody>'+rows+'</tbody></table>'+
-    '<div class="pc-btns"><a class="pbtn" href="#wrong">🔁 오답노트로</a><a class="pbtn" href="#exam" onclick="">다시 설정</a><a class="pbtn" href="#home">홈</a></div></div>');
+    '<p class="note-line">틀림과 부분으로 채점한 문제는 오답노트에 자동으로 들어갔다.</p>'+
+    '<div class="pc-btns"><a class="pbtn" href="#wrong">오답노트로</a><a class="pbtn" href="#exam">다시 설정</a><a class="pbtn" href="#home">홈</a></div></div>');
 }
 
 /* ---------- 내비 · 라우팅 ---------- */

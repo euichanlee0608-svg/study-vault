@@ -13,7 +13,7 @@
 | EXTRACT | 2026Fall_확률및랜덤과정_WEEK1.pdf(9p 전체) 비전 판독 → 요목·평가·주차 분석(`pipeline/sources/강의자료분석.md`, 원문 미전재) + 표준 커리큘럼(Ross Stochastic Processes 골격) |
 | VERIFY | 공용 게이트 `_course_kit/verify_core.py` — solver(런타임 동일 JS) 시드 샘플 50개/문제를 `verify_ind.py`의 sympy/numpy 독립 재계산(별도 경로)과 전수 대조. 통과분만 탑재 |
 | GENERATE | `_course_kit/build_core.py` — 게이트 통과 후 엔진 템플릿+content.py+problems/u*.js 단일 HTML 조립 |
-| OUTPUT | 단일 HTML SPA (270 KB ≤ 700 KB 예산) |
+| OUTPUT | 단일 HTML SPA (271 KB ≤ 700 KB 예산) |
 
 ## 재빌드
 

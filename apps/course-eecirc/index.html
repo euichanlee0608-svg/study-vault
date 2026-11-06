@@ -210,12 +210,16 @@ details.dstep li{margin-bottom:7px;font-size:14px}
 .exam-top{display:flex;align-items:center;gap:16px;margin:0 0 6px}
 .exam-top .cnt{font-family:var(--serif);font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1}
 .exam-top .cnt small{font-size:16px;color:var(--ink3);font-weight:500}
-.ticks{flex:1;display:flex;gap:4px;align-items:flex-end;height:22px}
-.ticks i{flex:1;height:10px;border-left:1.5px solid var(--line2)}
-.ticks i.done{border-color:var(--ink)} .ticks i.cur{height:22px;border-left:2.5px solid var(--acc)}
+.ticks{flex:1;display:flex;gap:4px;align-items:flex-end;height:26px}
+.ticks i{flex:1;height:12px;border-left:2px solid var(--line2)}
+.ticks i.done{border-color:var(--ink2);height:16px} .ticks i.cur{height:26px;border-left:3px solid var(--acc)}
 .report{padding:6px 0 0}
 .report .score{font-family:var(--serif);font-size:64px;line-height:1.05;font-weight:700;color:var(--ink);letter-spacing:-.03em}
 .report .score small{font-size:22px;color:var(--ink3);margin-left:4px}
+.report{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 48px;align-items:start}
+.marks td{padding:8px 12px 8px 0}
+.marks .mkn{font-family:var(--serif);font-weight:700;color:var(--ink3);width:36px}
+.marks .mk{font-size:22px;line-height:1;color:var(--red);font-weight:700;text-align:center;width:52px}
 table{border-collapse:collapse;width:100%;margin:12px 0 16px;font-size:14px;display:block;overflow-x:auto}
 th,td{border-bottom:1px solid var(--line);padding:9px 12px 9px 0;text-align:left}
 th{font-weight:600;color:var(--ink2);white-space:nowrap;border-bottom:1.5px solid var(--ink2)}
@@ -235,6 +239,7 @@ code,.mono{font-family:"IBM Plex Mono",monospace;font-size:.92em}
  .side .prog{flex:1;min-width:130px}
  .main{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
  .hero-fig .row2{grid-template-columns:minmax(0,1fr)}
+ .report{grid-template-columns:minmax(0,1fr)}
  .hero-fig .splane{max-width:260px}
  .ucard{grid-template-columns:40px minmax(0,1fr)}
  .uc-stat{grid-column:2;grid-row:auto;text-align:left}
@@ -3473,12 +3478,16 @@ function renderExamReport(){
   });
   var score=Math.round((c+0.5*pt)/list.length*100);
   var rows=Object.keys(perUnit).sort().map(function(k){var u=perUnit[k];return '<tr><td>U'+u.no+' '+esc(u.title)+'</td><td>'+u.c+' / '+u.t+'</td></tr>';}).join('');
+  var MK={correct:'○',partial:'△',wrong:'✕'};
+  var marks=list.map(function(p,k){ var s=res[p.id];
+    return '<tr><td class="mkn">'+(k+1)+'</td><td>U'+p._unit.no+' '+esc((p.tags||[]).join(' · '))+' <span class="src">L'+p.level+'</span></td><td class="mk">'+(MK[s]||'–')+'</td></tr>'; }).join('');
   setView('<div class="eyebrow">모의고사 · '+esc(EXAM.label||'')+'</div><h1>결과 리포트</h1>'+
-    '<div class="report"><div class="score">'+score+'<small>점</small></div>'+
+    '<div class="report"><div class="rep-l"><div class="score">'+score+'<small>점</small></div>'+
     '<p>맞음 '+c+' · 부분 '+pt+' · 틀림 '+w+(na?' · 무응답 '+na:'')+' (총 '+list.length+'문제, 부분은 절반으로 계산)</p>'+
-    '<table><thead><tr><th>단원</th><th>정답</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<table><thead><tr><th>단원</th><th>정답</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '<div class="rep-r"><table class="marks"><thead><tr><th>번호</th><th>문제</th><th>채점</th></tr></thead><tbody>'+marks+'</tbody></table></div></div>'+
     '<p class="note-line">틀림과 부분으로 채점한 문제는 오답노트에 자동으로 들어갔다.</p>'+
-    '<div class="pc-btns"><a class="pbtn" href="#wrong">오답노트로</a><a class="pbtn" href="#exam">다시 설정</a><a class="pbtn" href="#home">홈</a></div></div>');
+    '<div class="pc-btns"><a class="pbtn" href="#wrong">오답노트로</a><a class="pbtn" href="#exam">다시 설정</a><a class="pbtn" href="#home">홈</a></div>');
 }
 
 /* ---------- 내비 · 라우팅 ---------- */

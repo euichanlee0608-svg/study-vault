@@ -94,7 +94,7 @@ SV_BANK.push({
     hints:['s² 행이 보조 다항식.'] },
   { id:'u7-l2-08', level:2, type:'num', tags:['RHP 개수'], src:'기출 유형',
     params:{ c:{choices:[1,2]} },
-    statement:function(p){ return '\\(s^3+s^2+s+'+ (p.c===1?6:10) +'\\)... 고정형: \\(s^3+s^2+'+p.c+'s+'+(p.c+4)+'\\)의 Routh 1열을 만들고 RHP 극점 수를 구하라.'; },
+    statement:function(p){ return '\\(s^3+s^2+'+p.c+'s+'+(p.c+4)+'\\)의 Routh 1열을 만들고 RHP 극점 수를 구하라.'; },
     solve:function(p){
       var a2=1, a1=p.c, a0=p.c+4;
       var b1=(a2*a1-a0)/a2;
@@ -169,7 +169,7 @@ SV_BANK.push({
     hints:['U7-l2-06·07의 결합.'] },
   { id:'u7-l3-03', level:3, type:'num', tags:['파라미터 2개 범위'], src:'기출 유형',
     params:{ a:{choices:[1,2]} },
-    statement:function(p){ return '특성식 \\(s^3+'+(p.a+2)+'s^2+(K_1+'+p.a+')s+K_2\\)... 단순화: K₁=K로 두고 \\(s^3+'+(p.a+2)+'s^2+(K+'+p.a+')s+'+(2*p.a)+'\\)의 안정 K 조건(K > ?)을 구하라.'; },
+    statement:function(p){ return '특성식 \\(s^3+'+(p.a+2)+'s^2+(K+'+p.a+')s+'+(2*p.a)+'\\)의 안정 K 조건(K > ?)을 구하라.'; },
     solve:function(p){
       // (a+2)(K+a) > 2a → K > 2a/(a+2) - a
       var lim=2*p.a/(p.a+2)-p.a;
@@ -179,7 +179,7 @@ SV_BANK.push({
     hints:['부등식을 K로 정리.'] },
   { id:'u7-l3-04', level:3, type:'num', tags:['ε법'], src:'교재 표준',
     params:{ a:{choices:[2,3]} },
-    statement:function(p){ return '\\(s^3+'+p.a+'s^2+0\\cdot s+'+(2*p.a)+'\\)... 1열에 0이 뜨는 \\(s^4+s^3+2s^2+2s+'+p.a+'\\)로 판정하라: b₁=0 → ε 대체 후 c₁의 부호와 RHP 개수를 구하라.'; },
+    statement:function(p){ return 'Routh 1열에 0이 뜨는 \\(s^4+s^3+2s^2+2s+'+p.a+'\\)를 판정하라: b₁=0 → ε 대체 후 c₁의 부호와 RHP 개수를 구하라.'; },
     solve:function(p){
       // 1열: 1,1, b1=(2-2)/1=0→ε, c1=(ε·2 - 1·a)/ε = 2 - a/ε → ε→0⁺에서 -∞(a>0) → 음수
       return { ans:{c1sgn:-1, n:2}, unit:{c1sgn:'', n:'개'}, steps:[
@@ -212,7 +212,7 @@ SV_BANK.push({
     hints:['K=K_max/여유.'] },
   { id:'u7-l3-07', level:3, type:'num', tags:['지연 근사와 안정'], src:'기출 유형',
     params:{ a:{choices:[1,2]}, T:{choices:[0.1,0.2]} },
-    statement:function(p){ return '지연 e^{−Ts}를 1차 파데 근사 \\(\\frac{1-Ts/2}{1+Ts/2}\\)로 바꾼 루프 \\(G=\\dfrac{K(1-'+(p.T/2)+'s)}{s(s+'+p.a+')(1+'+(p.T/2)+'s)}\\)... 특성식 상수항과 s³ 계수만으로: T='+p.T+'가 만든 우반평면 영점의 위치를 구하고, 지연이 안정성에 불리한 이유를 답하라. (영점 위치)'; },
+    statement:function(p){ return '지연 e^{−Ts}를 1차 파데 근사 \\(\\frac{1-Ts/2}{1+Ts/2}\\)로 바꾼 루프 \\(G=\\dfrac{K(1-'+(p.T/2)+'s)}{s(s+'+p.a+')(1+'+(p.T/2)+'s)}\\). T='+p.T+'가 만든 우반평면 영점의 위치를 구하고, 지연이 안정성에 불리한 이유를 답하라. (영점 위치)'; },
     solve:function(p){
       var z=2/p.T;
       return { ans:z, unit:'(RHP 영점 s=+값)', steps:[
@@ -332,7 +332,7 @@ SV_BANK.push({
     hints:['같은 부등식을 두 방향으로.'] },
   { id:'u7-l4-05', level:4, type:'num', tags:['전행 0 완주'], src:'기출 유형',
     params:{ b:{choices:[1,3]} },
-    statement:function(p){ return '\\(s^4+'+p.b+'s^3+6s^2+'+(4*p.b)+'s+8\\)... 전행 0이 뜨도록 설계된 \\(s^4+2s^3+'+ (4+p.b) +'s^2+'+(2*p.b)+'s+'+(p.b*p.b)+'\\)... 복잡하니 고정형: \\(s^4+s^3+5s^2+s+4\\)의 (a) b₁ (b) c₁(ε법 필요 여부 포함) (c) RHP 개수를 구하라. (파라미터 무관 고정 검산: b='+p.b+'는 무시)'; },
+    statement:function(p){ return '\\(s^4+s^3+5s^2+s+4\\)의 (a) b₁ (b) c₁(ε법 필요 여부 포함) (c) RHP 개수를 구하라.'; },
     solve:function(p){
       // s^4+s^3+5s^2+s+4: b1=(5-1)/1=4, b2=4 ; c1=(4*1-1*4)/4=0 → ε ; d1=(ε*4-0)/ε=4
       return { ans:{b1:4, c1:0, n:2}, unit:{b1:'', c1:'(→ε)', n:'개'}, steps:[

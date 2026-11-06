@@ -1375,7 +1375,7 @@ SV_BANK.push({
     expl:'HW·중간의 "모델링→TF" 문항 서술 틀 그대로.' },
   { id:'u3-l4-04', level:4, type:'num', tags:['영점 효과 정량'], src:'기출 유형',
     params:{ a:{choices:[1,2]}, z:{choices:[0.5,4]} },
-    statement:function(p){ return '\\(G_1=\\dfrac{2}{(s+1)(s+2)}\\)에 영점을 넣은 \\(G_2=\\dfrac{2(s/'+p.z+'+1)}{(s+1)(s+2)}\\)... 두 시스템의 (a) DC 이득 비교값(같으면 1) (b) G₂ 스텝 응답의 초기 기울기 \\(\\dot y(0^+)=\\lim s^2G_2/s\\)를 구하라.'; },
+    statement:function(p){ return '\\(G_1=\\dfrac{2}{(s+1)(s+2)}\\)에 영점을 넣은 \\(G_2=\\dfrac{2(s/'+p.z+'+1)}{(s+1)(s+2)}\\)가 있다. 두 시스템의 (a) DC 이득 비교값(같으면 1) (b) G₂ 스텝 응답의 초기 기울기 \\(\\dot y(0^+)=\\lim s^2G_2/s\\)를 구하라.'; },
     solve:function(p){
       var slope=2/p.z; // lim s·[sG2/s] = lim s G2 = 2*(s/z)/(s²)*s → 2/z
       return { ans:{same:1, slope:slope}, unit:{same:'', slope:''}, steps:[
@@ -1687,7 +1687,7 @@ SV_BANK.push({
     hints:['같은 공식을 두 번.'] },
   { id:'u4-l3-12', level:3, type:'num', tags:['이득 여유 개념 준비'], src:'창작 문제(검산됨)',
     params:{ a:{choices:[2,4]} },
-    statement:function(p){ return '단위 피드백, \\(G=\\dfrac{K}{s(s+'+p.a+')^2}\\)... 대신 정적 등가 판단: 특성방정식 \\(s(s+'+p.a+')^2+K=0\\)에서 s=jω 대입 시 허수부=0이 되는 ω(≠0)와 그때 K(임계 이득)를 구하라.'; },
+    statement:function(p){ return '단위 피드백, \\(G=\\dfrac{K}{s(s+'+p.a+')^2}\\)의 폐루프 특성방정식 \\(s(s+'+p.a+')^2+K=0\\)에 s=jω를 대입해, 허수부가 0이 되는 ω(≠0)와 그때의 K(임계 이득)를 구하라.'; },
     solve:function(p){
       // s(s+a)^2 = s^3+2as^2+a^2 s ; jω: -jω³ -2aω² + ja²ω + K = 0
       // 실부: K-2aω²=0, 허부: ω(a²-ω²)=0 → ω=a
@@ -1916,7 +1916,7 @@ SV_BANK.push({
     hints:['행렬 곱 한 줄.'] },
   { id:'u5-l2-10', level:2, type:'num', tags:['(sI−A) 역'], src:'창작 문제(검산됨)',
     params:{ a:{choices:[2,4]}, s0:{choices:[0,1]} },
-    statement:function(p){ return 'A=[[0,1],[0,−'+p.a+']] (적분기+1차)에서 \\((sI-A)^{-1}\\)의 (1,2) 성분을 s='+p.s0+'에서... 대신 일반식으로 구해 s='+(p.s0+1)+'에서 값을 구하라.'; },
+    statement:function(p){ return 'A=[[0,1],[0,−'+p.a+']] (적분기+1차)에서 \\((sI-A)^{-1}\\)의 (1,2) 성분을 일반식으로 구하고 s='+(p.s0+1)+'에서의 값을 구하라.'; },
     solve:function(p){ var sv=p.s0+1, v=1/(sv*(sv+p.a));
       return { ans:v, unit:'', steps:[
         'sI−A = [[s,−1],[0,s+'+p.a+']] → 역의 (1,2) = 1/[s(s+'+p.a+')]',
@@ -1924,7 +1924,7 @@ SV_BANK.push({
     hints:['상삼각의 역행렬.'] },
   { id:'u5-l2-11', level:2, type:'num', tags:['모드 분해'], src:'창작 문제(검산됨)',
     params:{ l1:{choices:[-1]}, l2:{choices:[-4,-5]}, c1:{choices:[2,3]}, c2:{choices:[1,2]}, t1:{choices:[1]} },
-    statement:function(p){ return '자유응답이 \\(y='+p.c1+'e^{'+p.l1+'t}+'+p.c2+'e^{'+p.l2+'t}\\)일 때 (a) t='+p.t1+'의 y (b) 두 모드 크기가 같아지는... 대신 t='+p.t1+'에서 빠른 모드가 차지하는 비율(%)을 구하라.'; },
+    statement:function(p){ return '자유응답이 \\(y='+p.c1+'e^{'+p.l1+'t}+'+p.c2+'e^{'+p.l2+'t}\\)일 때 (a) t='+p.t1+'의 y (b) t='+p.t1+'에서 빠른 모드가 차지하는 비율(%)을 구하라.'; },
     solve:function(p){
       var m1=p.c1*Math.exp(p.l1*p.t1), m2=p.c2*Math.exp(p.l2*p.t1);
       return { ans:{y:m1+m2, pct:m2/(m1+m2)*100}, unit:{y:'', pct:'%'}, steps:[
@@ -2151,7 +2151,7 @@ SV_BANK.push({
     hints:['tr·det로 분모 재구성.'] },
   { id:'u5-l4-08', level:4, type:'num', tags:['임계 이득(상태공간 관점)'], src:'기출 유형',
     params:{ a:{choices:[2,4]} },
-    statement:function(p){ return '피드백 u=−Kx₁을 건 이중 적분기 \\(\\ddot y=u-'+p.a+'\\dot y\\)... 정리하면 \\(\\ddot y+'+p.a+'\\dot y+Ky=0\\). (a) 임의 K>0에서 안정 여부(1/0) (b) ζ=1이 되는 K를 구하라.'; },
+    statement:function(p){ return '시스템 \\(\\ddot y=u-'+p.a+'\\dot y\\)에 피드백 u=−Ky를 걸면 닫힌계는 \\(\\ddot y+'+p.a+'\\dot y+Ky=0\\)이 된다. (a) 임의 K>0에서 안정 여부(1/0) (b) ζ=1이 되는 K를 구하라.'; },
     solve:function(p){
       var Kc=p.a*p.a/4;
       return { ans:{st:1, Kc:Kc}, unit:{st:'', Kc:''}, steps:[
@@ -2288,7 +2288,7 @@ SV_BANK.push({
     hints:['어떤 사양이 어떤 파라미터 소관인지.'] },
   { id:'u6-l2-11', level:2, type:'num', tags:['첫 언더슈트'], src:'창작 문제(검산됨)',
     params:{ z:{choices:[0.3,0.5]} },
-    statement:function(p){ return 'ζ='+p.z+' 2차계에서 첫 봉우리 다음의 첫 골(undershoot)의 최종값 대비 깊이(%)를 구하라. (힌트: 골은 t=2π/ω_d, 깊이 = M_p²... 아님 — e^{−2πζ/√(1−ζ²)})'; },
+    statement:function(p){ return 'ζ='+p.z+' 2차계에서 첫 봉우리 다음의 첫 골(undershoot)의 최종값 대비 깊이(%)를 구하라. (힌트: 골은 t=2π/ω_d, 깊이 = e^{−2πζ/√(1−ζ²)} = M_p²)'; },
     solve:function(p){
       var d=Math.exp(-2*Math.PI*p.z/Math.sqrt(1-p.z*p.z))*100;
       return { ans:d, unit:'%', steps:[
@@ -2334,7 +2334,7 @@ SV_BANK.push({
     hints:['ζ 먼저, 그다음 ω₀.'] },
   { id:'u6-l3-03', level:3, type:'num', tags:['추가 극점 정량'], src:'기출 유형',
     params:{ sg:{choices:[1,2]}, wd:{choices:[3,4]}, k:{choices:[2,5,10]} },
-    statement:function(p){ return '지배극점 −'+p.sg+'±j'+p.wd+'에 실극점 −'+p.sg*5*1+'... 대신 −'+p.sg+'×'+p.k+' 위치의 극점 추가. (a) 극점비 (b) 2차 근사 타당 여부(1/0) (c) 근사 시 M_p를 구하라.'; },
+    statement:function(p){ return '지배극점 −'+p.sg+'±j'+p.wd+'에 실극점 −'+(p.sg*p.k)+'를 추가했다. (a) 극점비 (b) 2차 근사 타당 여부(1/0) (c) 근사 시 M_p를 구하라.'; },
     solve:function(p){
       var Mp=Math.exp(-Math.PI*p.sg/p.wd)*100;
       return { ans:{ratio:p.k, ok:p.k>=5?1:0, Mp:Mp}, unit:{ratio:'배', ok:'', Mp:'%'}, steps:[
@@ -2494,7 +2494,7 @@ SV_BANK.push({
     expl:'중간 서술형 1순위 후보 — 매년 어느 학교든 낸다.' },
   { id:'u6-l4-04', level:4, type:'num', tags:['3극점 실응답'], src:'기출 유형',
     params:{ sg:{choices:[1]}, wd:{choices:[2,3]}, p3:{choices:[2,10]} },
-    statement:function(p){ return '극점 −'+p.sg+'±j'+p.wd+'와 −'+p.p3+' (DC 1). t=1에서 (a) 2차 근사 응답 (b) 3차 정확 응답의 빠른 모드 항 크기(잔차 근사 R≈ω₀²/(ω₀²−...) 생략, 단순히 e^{−'+p.p3+'t}의 크기)를 구해 근사 오차 감을 잡아라.'; },
+    statement:function(p){ return '극점 −'+p.sg+'±j'+p.wd+'와 −'+p.p3+' (DC 1). t=1에서 (a) 2차 근사 응답 (b) 빠른 모드 항 e^{−'+p.p3+'t}의 크기를 구해 2차 근사의 오차 규모를 가늠하라.'; },
     solve:function(p){
       var w0=Math.hypot(p.sg,p.wd), z=p.sg/w0, ph=Math.acos(z);
       var y2=1-Math.exp(-p.sg)/Math.sqrt(1-z*z)*Math.sin(p.wd+ph);
@@ -2662,7 +2662,7 @@ SV_BANK.push({
     hints:['s² 행이 보조 다항식.'] },
   { id:'u7-l2-08', level:2, type:'num', tags:['RHP 개수'], src:'기출 유형',
     params:{ c:{choices:[1,2]} },
-    statement:function(p){ return '\\(s^3+s^2+s+'+ (p.c===1?6:10) +'\\)... 고정형: \\(s^3+s^2+'+p.c+'s+'+(p.c+4)+'\\)의 Routh 1열을 만들고 RHP 극점 수를 구하라.'; },
+    statement:function(p){ return '\\(s^3+s^2+'+p.c+'s+'+(p.c+4)+'\\)의 Routh 1열을 만들고 RHP 극점 수를 구하라.'; },
     solve:function(p){
       var a2=1, a1=p.c, a0=p.c+4;
       var b1=(a2*a1-a0)/a2;
@@ -2737,7 +2737,7 @@ SV_BANK.push({
     hints:['U7-l2-06·07의 결합.'] },
   { id:'u7-l3-03', level:3, type:'num', tags:['파라미터 2개 범위'], src:'기출 유형',
     params:{ a:{choices:[1,2]} },
-    statement:function(p){ return '특성식 \\(s^3+'+(p.a+2)+'s^2+(K_1+'+p.a+')s+K_2\\)... 단순화: K₁=K로 두고 \\(s^3+'+(p.a+2)+'s^2+(K+'+p.a+')s+'+(2*p.a)+'\\)의 안정 K 조건(K > ?)을 구하라.'; },
+    statement:function(p){ return '특성식 \\(s^3+'+(p.a+2)+'s^2+(K+'+p.a+')s+'+(2*p.a)+'\\)의 안정 K 조건(K > ?)을 구하라.'; },
     solve:function(p){
       // (a+2)(K+a) > 2a → K > 2a/(a+2) - a
       var lim=2*p.a/(p.a+2)-p.a;
@@ -2747,7 +2747,7 @@ SV_BANK.push({
     hints:['부등식을 K로 정리.'] },
   { id:'u7-l3-04', level:3, type:'num', tags:['ε법'], src:'교재 표준',
     params:{ a:{choices:[2,3]} },
-    statement:function(p){ return '\\(s^3+'+p.a+'s^2+0\\cdot s+'+(2*p.a)+'\\)... 1열에 0이 뜨는 \\(s^4+s^3+2s^2+2s+'+p.a+'\\)로 판정하라: b₁=0 → ε 대체 후 c₁의 부호와 RHP 개수를 구하라.'; },
+    statement:function(p){ return 'Routh 1열에 0이 뜨는 \\(s^4+s^3+2s^2+2s+'+p.a+'\\)를 판정하라: b₁=0 → ε 대체 후 c₁의 부호와 RHP 개수를 구하라.'; },
     solve:function(p){
       // 1열: 1,1, b1=(2-2)/1=0→ε, c1=(ε·2 - 1·a)/ε = 2 - a/ε → ε→0⁺에서 -∞(a>0) → 음수
       return { ans:{c1sgn:-1, n:2}, unit:{c1sgn:'', n:'개'}, steps:[
@@ -2780,7 +2780,7 @@ SV_BANK.push({
     hints:['K=K_max/여유.'] },
   { id:'u7-l3-07', level:3, type:'num', tags:['지연 근사와 안정'], src:'기출 유형',
     params:{ a:{choices:[1,2]}, T:{choices:[0.1,0.2]} },
-    statement:function(p){ return '지연 e^{−Ts}를 1차 파데 근사 \\(\\frac{1-Ts/2}{1+Ts/2}\\)로 바꾼 루프 \\(G=\\dfrac{K(1-'+(p.T/2)+'s)}{s(s+'+p.a+')(1+'+(p.T/2)+'s)}\\)... 특성식 상수항과 s³ 계수만으로: T='+p.T+'가 만든 우반평면 영점의 위치를 구하고, 지연이 안정성에 불리한 이유를 답하라. (영점 위치)'; },
+    statement:function(p){ return '지연 e^{−Ts}를 1차 파데 근사 \\(\\frac{1-Ts/2}{1+Ts/2}\\)로 바꾼 루프 \\(G=\\dfrac{K(1-'+(p.T/2)+'s)}{s(s+'+p.a+')(1+'+(p.T/2)+'s)}\\). T='+p.T+'가 만든 우반평면 영점의 위치를 구하고, 지연이 안정성에 불리한 이유를 답하라. (영점 위치)'; },
     solve:function(p){
       var z=2/p.T;
       return { ans:z, unit:'(RHP 영점 s=+값)', steps:[
@@ -2900,7 +2900,7 @@ SV_BANK.push({
     hints:['같은 부등식을 두 방향으로.'] },
   { id:'u7-l4-05', level:4, type:'num', tags:['전행 0 완주'], src:'기출 유형',
     params:{ b:{choices:[1,3]} },
-    statement:function(p){ return '\\(s^4+'+p.b+'s^3+6s^2+'+(4*p.b)+'s+8\\)... 전행 0이 뜨도록 설계된 \\(s^4+2s^3+'+ (4+p.b) +'s^2+'+(2*p.b)+'s+'+(p.b*p.b)+'\\)... 복잡하니 고정형: \\(s^4+s^3+5s^2+s+4\\)의 (a) b₁ (b) c₁(ε법 필요 여부 포함) (c) RHP 개수를 구하라. (파라미터 무관 고정 검산: b='+p.b+'는 무시)'; },
+    statement:function(p){ return '\\(s^4+s^3+5s^2+s+4\\)의 (a) b₁ (b) c₁(ε법 필요 여부 포함) (c) RHP 개수를 구하라.'; },
     solve:function(p){
       // s^4+s^3+5s^2+s+4: b1=(5-1)/1=4, b2=4 ; c1=(4*1-1*4)/4=0 → ε ; d1=(ε*4-0)/ε=4
       return { ans:{b1:4, c1:0, n:2}, unit:{b1:'', c1:'(→ε)', n:'개'}, steps:[

@@ -122,7 +122,7 @@ SV_BANK.push({
     hints:['어떤 사양이 어떤 파라미터 소관인지.'] },
   { id:'u6-l2-11', level:2, type:'num', tags:['첫 언더슈트'], src:'창작 문제(검산됨)',
     params:{ z:{choices:[0.3,0.5]} },
-    statement:function(p){ return 'ζ='+p.z+' 2차계에서 첫 봉우리 다음의 첫 골(undershoot)의 최종값 대비 깊이(%)를 구하라. (힌트: 골은 t=2π/ω_d, 깊이 = M_p²... 아님 — e^{−2πζ/√(1−ζ²)})'; },
+    statement:function(p){ return 'ζ='+p.z+' 2차계에서 첫 봉우리 다음의 첫 골(undershoot)의 최종값 대비 깊이(%)를 구하라. (힌트: 골은 t=2π/ω_d, 깊이 = e^{−2πζ/√(1−ζ²)} = M_p²)'; },
     solve:function(p){
       var d=Math.exp(-2*Math.PI*p.z/Math.sqrt(1-p.z*p.z))*100;
       return { ans:d, unit:'%', steps:[
@@ -168,7 +168,7 @@ SV_BANK.push({
     hints:['ζ 먼저, 그다음 ω₀.'] },
   { id:'u6-l3-03', level:3, type:'num', tags:['추가 극점 정량'], src:'기출 유형',
     params:{ sg:{choices:[1,2]}, wd:{choices:[3,4]}, k:{choices:[2,5,10]} },
-    statement:function(p){ return '지배극점 −'+p.sg+'±j'+p.wd+'에 실극점 −'+p.sg*5*1+'... 대신 −'+p.sg+'×'+p.k+' 위치의 극점 추가. (a) 극점비 (b) 2차 근사 타당 여부(1/0) (c) 근사 시 M_p를 구하라.'; },
+    statement:function(p){ return '지배극점 −'+p.sg+'±j'+p.wd+'에 실극점 −'+(p.sg*p.k)+'를 추가했다. (a) 극점비 (b) 2차 근사 타당 여부(1/0) (c) 근사 시 M_p를 구하라.'; },
     solve:function(p){
       var Mp=Math.exp(-Math.PI*p.sg/p.wd)*100;
       return { ans:{ratio:p.k, ok:p.k>=5?1:0, Mp:Mp}, unit:{ratio:'배', ok:'', Mp:'%'}, steps:[
@@ -328,7 +328,7 @@ SV_BANK.push({
     expl:'중간 서술형 1순위 후보 — 매년 어느 학교든 낸다.' },
   { id:'u6-l4-04', level:4, type:'num', tags:['3극점 실응답'], src:'기출 유형',
     params:{ sg:{choices:[1]}, wd:{choices:[2,3]}, p3:{choices:[2,10]} },
-    statement:function(p){ return '극점 −'+p.sg+'±j'+p.wd+'와 −'+p.p3+' (DC 1). t=1에서 (a) 2차 근사 응답 (b) 3차 정확 응답의 빠른 모드 항 크기(잔차 근사 R≈ω₀²/(ω₀²−...) 생략, 단순히 e^{−'+p.p3+'t}의 크기)를 구해 근사 오차 감을 잡아라.'; },
+    statement:function(p){ return '극점 −'+p.sg+'±j'+p.wd+'와 −'+p.p3+' (DC 1). t=1에서 (a) 2차 근사 응답 (b) 빠른 모드 항 e^{−'+p.p3+'t}의 크기를 구해 2차 근사의 오차 규모를 가늠하라.'; },
     solve:function(p){
       var w0=Math.hypot(p.sg,p.wd), z=p.sg/w0, ph=Math.acos(z);
       var y2=1-Math.exp(-p.sg)/Math.sqrt(1-z*z)*Math.sin(p.wd+ph);

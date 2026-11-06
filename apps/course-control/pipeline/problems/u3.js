@@ -295,7 +295,7 @@ SV_BANK.push({
     expl:'HW·중간의 "모델링→TF" 문항 서술 틀 그대로.' },
   { id:'u3-l4-04', level:4, type:'num', tags:['영점 효과 정량'], src:'기출 유형',
     params:{ a:{choices:[1,2]}, z:{choices:[0.5,4]} },
-    statement:function(p){ return '\\(G_1=\\dfrac{2}{(s+1)(s+2)}\\)에 영점을 넣은 \\(G_2=\\dfrac{2(s/'+p.z+'+1)}{(s+1)(s+2)}\\)... 두 시스템의 (a) DC 이득 비교값(같으면 1) (b) G₂ 스텝 응답의 초기 기울기 \\(\\dot y(0^+)=\\lim s^2G_2/s\\)를 구하라.'; },
+    statement:function(p){ return '\\(G_1=\\dfrac{2}{(s+1)(s+2)}\\)에 영점을 넣은 \\(G_2=\\dfrac{2(s/'+p.z+'+1)}{(s+1)(s+2)}\\)가 있다. 두 시스템의 (a) DC 이득 비교값(같으면 1) (b) G₂ 스텝 응답의 초기 기울기 \\(\\dot y(0^+)=\\lim s^2G_2/s\\)를 구하라.'; },
     solve:function(p){
       var slope=2/p.z; // lim s·[sG2/s] = lim s G2 = 2*(s/z)/(s²)*s → 2/z
       return { ans:{same:1, slope:slope}, unit:{same:'', slope:''}, steps:[

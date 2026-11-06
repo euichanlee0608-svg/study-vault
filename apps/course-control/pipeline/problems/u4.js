@@ -248,7 +248,7 @@ SV_BANK.push({
     hints:['같은 공식을 두 번.'] },
   { id:'u4-l3-12', level:3, type:'num', tags:['이득 여유 개념 준비'], src:'창작 문제(검산됨)',
     params:{ a:{choices:[2,4]} },
-    statement:function(p){ return '단위 피드백, \\(G=\\dfrac{K}{s(s+'+p.a+')^2}\\)... 대신 정적 등가 판단: 특성방정식 \\(s(s+'+p.a+')^2+K=0\\)에서 s=jω 대입 시 허수부=0이 되는 ω(≠0)와 그때 K(임계 이득)를 구하라.'; },
+    statement:function(p){ return '단위 피드백, \\(G=\\dfrac{K}{s(s+'+p.a+')^2}\\)의 폐루프 특성방정식 \\(s(s+'+p.a+')^2+K=0\\)에 s=jω를 대입해, 허수부가 0이 되는 ω(≠0)와 그때의 K(임계 이득)를 구하라.'; },
     solve:function(p){
       // s(s+a)^2 = s^3+2as^2+a^2 s ; jω: -jω³ -2aω² + ja²ω + K = 0
       // 실부: K-2aω²=0, 허부: ω(a²-ω²)=0 → ω=a

@@ -106,7 +106,7 @@ SV_BANK.push({
     hints:['행렬 곱 한 줄.'] },
   { id:'u5-l2-10', level:2, type:'num', tags:['(sI−A) 역'], src:'창작 문제(검산됨)',
     params:{ a:{choices:[2,4]}, s0:{choices:[0,1]} },
-    statement:function(p){ return 'A=[[0,1],[0,−'+p.a+']] (적분기+1차)에서 \\((sI-A)^{-1}\\)의 (1,2) 성분을 s='+p.s0+'에서... 대신 일반식으로 구해 s='+(p.s0+1)+'에서 값을 구하라.'; },
+    statement:function(p){ return 'A=[[0,1],[0,−'+p.a+']] (적분기+1차)에서 \\((sI-A)^{-1}\\)의 (1,2) 성분을 일반식으로 구하고 s='+(p.s0+1)+'에서의 값을 구하라.'; },
     solve:function(p){ var sv=p.s0+1, v=1/(sv*(sv+p.a));
       return { ans:v, unit:'', steps:[
         'sI−A = [[s,−1],[0,s+'+p.a+']] → 역의 (1,2) = 1/[s(s+'+p.a+')]',
@@ -114,7 +114,7 @@ SV_BANK.push({
     hints:['상삼각의 역행렬.'] },
   { id:'u5-l2-11', level:2, type:'num', tags:['모드 분해'], src:'창작 문제(검산됨)',
     params:{ l1:{choices:[-1]}, l2:{choices:[-4,-5]}, c1:{choices:[2,3]}, c2:{choices:[1,2]}, t1:{choices:[1]} },
-    statement:function(p){ return '자유응답이 \\(y='+p.c1+'e^{'+p.l1+'t}+'+p.c2+'e^{'+p.l2+'t}\\)일 때 (a) t='+p.t1+'의 y (b) 두 모드 크기가 같아지는... 대신 t='+p.t1+'에서 빠른 모드가 차지하는 비율(%)을 구하라.'; },
+    statement:function(p){ return '자유응답이 \\(y='+p.c1+'e^{'+p.l1+'t}+'+p.c2+'e^{'+p.l2+'t}\\)일 때 (a) t='+p.t1+'의 y (b) t='+p.t1+'에서 빠른 모드가 차지하는 비율(%)을 구하라.'; },
     solve:function(p){
       var m1=p.c1*Math.exp(p.l1*p.t1), m2=p.c2*Math.exp(p.l2*p.t1);
       return { ans:{y:m1+m2, pct:m2/(m1+m2)*100}, unit:{y:'', pct:'%'}, steps:[
@@ -341,7 +341,7 @@ SV_BANK.push({
     hints:['tr·det로 분모 재구성.'] },
   { id:'u5-l4-08', level:4, type:'num', tags:['임계 이득(상태공간 관점)'], src:'기출 유형',
     params:{ a:{choices:[2,4]} },
-    statement:function(p){ return '피드백 u=−Kx₁을 건 이중 적분기 \\(\\ddot y=u-'+p.a+'\\dot y\\)... 정리하면 \\(\\ddot y+'+p.a+'\\dot y+Ky=0\\). (a) 임의 K>0에서 안정 여부(1/0) (b) ζ=1이 되는 K를 구하라.'; },
+    statement:function(p){ return '시스템 \\(\\ddot y=u-'+p.a+'\\dot y\\)에 피드백 u=−Ky를 걸면 닫힌계는 \\(\\ddot y+'+p.a+'\\dot y+Ky=0\\)이 된다. (a) 임의 K>0에서 안정 여부(1/0) (b) ζ=1이 되는 K를 구하라.'; },
     solve:function(p){
       var Kc=p.a*p.a/4;
       return { ans:{st:1, Kc:Kc}, unit:{st:'', Kc:''}, steps:[

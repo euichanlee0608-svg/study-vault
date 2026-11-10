@@ -27,3 +27,13 @@ python3 -m venv /tmp/cdpvenv && /tmp/cdpvenv/bin/pip -q install websocket-client
 ```bash
 python3 tests/test_vault_ops.py     # 전부 통과하면 종료코드 0
 ```
+
+## test_rlocus_core.mjs — 근궤적 실험실 계산 회귀
+
+`apps/course-control/lab/rlocus_core.js` 를 고치면 돌린다. 예제 시스템 7개에서 점근선·이탈점·허수축 교차·출발각·계단응답·
+근궤적 잔차·가지 연속성을 `tests/rlocus_ref.py`(numpy, **다른 경로**: K(σ) 수치 미분, K 이분법으로 안정 경계, 작은 K 에서의
+실제 이동 방향, 동반행렬 고유분해 해석해)와 대조한다. 레포 `.venv` 의 numpy 를 쓴다.
+
+```bash
+node tests/test_rlocus_core.mjs     # 전부 통과하면 종료코드 0 (현재 77개)
+```

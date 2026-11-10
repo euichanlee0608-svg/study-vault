@@ -792,3 +792,97 @@ def _(p):
     Keff = K/p["b"]; z = p["a"]/(2*math.sqrt(Keff))
     Mp = _mp(z) if z < 1 else 0.0
     return {"Kmax": Kmax, "w": math.sqrt(p["a"]*p["b"]), "z": z, "Mp": Mp}
+
+# ---- U9 근궤적 (root locus) ----
+import numpy as np
+P = np.polynomial.polynomial  # 저차→고차 계수
+
+def _rl_poly(*roots):
+    """주어진 근들로 만든 다항식 계수(고차→저차)."""
+    return np.poly(roots)
+
+def _break_pts(N, D):
+    """K = -D/N 의 dK/dσ=0 ⇔ N'D − ND' = 0 의 실근 (N, D 는 고차→저차 계수)."""
+    c = np.polysub(np.polymul(np.polyder(N), D), np.polymul(N, np.polyder(D)))
+    r = np.roots(c)
+    return [x.real for x in r if abs(x.imag) < 1e-9]
+
+@reg("u9-l2-01")
+def _(p):
+    poles = [-p["a"], -p["b"], -p["c"]]
+    return {"sa": sum(poles)/(len(poles)-0), "q": float(len(poles))}
+@reg("u9-l2-02")
+def _(p):
+    poles = [0, -p["a"], -p["b"]]; zeros = [-p["z"]]
+    nm = len(poles)-len(zeros)
+    angs = [180.0*(2*k+1)/nm for k in range(nm)]
+    return {"sa": (sum(poles)-sum(zeros))/nm, "th": min(a for a in angs if 0 <= a <= 180)}
+@reg("u9-l2-03")
+def _(p):
+    N = [1.0]; D = _rl_poly(-p["a"], -p["b"])
+    cand = [x for x in _break_pts(N, D) if -p["b"] < x < -p["a"]]
+    assert len(cand) == 1
+    sb = cand[0]
+    K = -np.polyval(D, sb)/np.polyval(N, sb)
+    return {"sb": sb, "K": float(K)}
+@reg("u9-l2-04")
+def _(p):
+    # s²+a s+K = 0 → 표준형 대조
+    wn = p["a"]/(2*p["z"])
+    K = wn*wn
+    r = np.roots([1, p["a"], K])   # 검산: 근의 감쇠비
+    assert abs(-r[0].real/abs(r[0]) - p["z"]) < 1e-9
+    return float(K)
+@reg("u9-l2-05")
+def _(p):
+    s0 = complex(-p["a"]/2.0, p["w"])
+    return float(abs(s0)*abs(s0+p["a"]))
+@reg("u9-l2-06")
+def _(p):
+    s0 = complex(-1, 1)
+    a1 = math.degrees(cmath.phase(s0+p["a"])); a2 = math.degrees(cmath.phase(s0+p["b"]))
+    tot = a1+a2
+    return {"ang": tot, "on": 1.0 if abs(tot-180.0) < 1e-9 else 0.0}
+@reg("u9-l2-07")
+def _(p):
+    a, b = p["a"], p["b"]
+    # s(s+a)(s+b)+K = 0 에 s=jω → 실부 -(a+b)ω²+K=0, 허부 -ω³+abω=0
+    w = math.sqrt(a*b); K = (a+b)*w*w
+    r = np.roots([1, a+b, a*b, K])
+    assert min(abs(x.real) for x in r) < 1e-6
+    return {"K": K, "w": w}
+@reg("u9-l2-08")
+def _(p):
+    b, c = p["b"], p["c"]
+    pole = complex(-1, b)
+    others = [-c, complex(-1, -b)]
+    ang = 180.0 - sum(math.degrees(cmath.phase(pole-q)) for q in others)
+    ang = (ang + 180.0) % 360.0 - 180.0
+    if ang == -180.0: ang = 180.0
+    return ang
+@reg("u9-l2-09")
+def _(p):
+    poles = [0, -p["a"], -p["b"], -p["c"]]
+    return {"sa": sum(poles)/4.0, "th1": 180.0/4}
+@reg("u9-l2-10")
+def _(p):
+    r = np.roots([1, p["a"], p["K"]])
+    assert abs(r[0].imag) > 1e-9
+    r0 = max(r, key=lambda c: c.imag)
+    return {"re": float(r0.real), "im": float(r0.imag)}
+@reg("u9-l2-11")
+def _(p):
+    a, b = p["a"], p["b"]
+    N = [1.0]; D = _rl_poly(0, -a, -b)
+    cand = [x for x in _break_pts(N, D) if -a < x < 0]
+    assert len(cand) == 1
+    sb = cand[0]
+    return {"sb": sb, "K": float(-np.polyval(D, sb))}
+@reg("u9-l2-12")
+def _(p):
+    a, z = p["a"], p["z"]
+    N = _rl_poly(-z); D = _rl_poly(0, -a)
+    pts = _break_pts(N, D)
+    s1 = [x for x in pts if -a < x < 0]; s2 = [x for x in pts if x < -z]
+    assert len(s1) == 1 and len(s2) == 1
+    return {"s1": s1[0], "s2": s2[0]}

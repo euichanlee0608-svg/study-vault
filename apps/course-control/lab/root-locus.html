@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>근궤적 실험실 — 자동제어 문제은행</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* 공학 계산용지 — ../DESIGN_BRIEF.md '근궤적 실험실' */
+:root{
+  --bg:#F5F6F1; --surf:#FBFBF8; --ink:#17201C; --ink2:#4A554F; --ink3:#7E8882;
+  --line:#DADED3; --line2:#C3C9BC; --grid:rgba(60,110,80,.10); --grid2:rgba(60,110,80,.22);
+  --acc:#1E4E8C; --acc-soft:rgba(30,78,140,.35); --red:#B8402A; --ok:#2F6B45;
+  --serif:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+  --sans:"Pretendard Variable",Pretendard,-apple-system,system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+ :root:not([data-theme="light"]){
+  --bg:#121715; --surf:#171D1A; --ink:#E6EBE6; --ink2:#AEB8B1; --ink3:#7C8780;
+  --line:#2A332E; --line2:#3A453F; --grid:rgba(150,200,170,.07); --grid2:rgba(150,200,170,.16);
+  --acc:#8DB3E8; --acc-soft:rgba(141,179,232,.4); --red:#E58C74; --ok:#86C29A;
+ }
+}
+:root[data-theme="dark"]{
+  --bg:#121715; --surf:#171D1A; --ink:#E6EBE6; --ink2:#AEB8B1; --ink3:#7C8780;
+  --line:#2A332E; --line2:#3A453F; --grid:rgba(150,200,170,.07); --grid2:rgba(150,200,170,.16);
+  --acc:#8DB3E8; --acc-soft:rgba(141,179,232,.4); --red:#E58C74; --ok:#86C29A;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;
+  word-break:keep-all;overflow-wrap:anywhere;-webkit-text-size-adjust:100%;font-variant-numeric:tabular-nums}
+a{color:var(--acc)}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 28px 64px}
+.back{font-size:14px;color:var(--ink2);text-decoration:none}
+.back:hover{text-decoration:underline}
+h1{font-family:var(--serif);font-weight:700;font-size:34px;line-height:1.25;margin:10px 0 6px;letter-spacing:-.01em}
+.lede{color:var(--ink2);margin:0 0 22px;max-width:62ch}
+.grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:34px;align-items:start}
+.plane-wrap{position:relative}
+#plane{display:block;width:100%;height:auto;aspect-ratio:1/1;background:var(--surf);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair}
+#plane .mk{cursor:grab}
+#plane .mk.sel .mk-shape{stroke:var(--acc)}
+.tools{display:flex;flex-wrap:wrap;gap:4px 18px;margin:12px 0 0;font-size:15px}
+.tools button,.presets button{font:inherit;color:var(--acc);background:none;border:0;padding:6px 0;min-height:36px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.tools button:disabled{color:var(--ink3);text-decoration:none;cursor:default}
+.tools .del{color:var(--red)}
+.hint{font-size:14px;color:var(--ink3);margin:6px 0 0}
+.tf{font-family:var(--serif);font-size:20px;margin:0 0 6px;line-height:1.5}
+.tf .k{color:var(--red)}
+.sub{font-size:14px;color:var(--ink3);margin:0 0 16px}
+.krow{display:flex;align-items:center;gap:12px;margin:4px 0 4px}
+.krow label{font-family:var(--serif);font-size:18px;min-width:22px}
+#kr{flex:1;min-width:0;accent-color:var(--red);height:36px}
+#kn{width:110px;font:inherit;font-size:16px;padding:6px 8px;border:1px solid var(--line2);border-radius:4px;background:var(--surf);color:var(--ink);text-align:right}
+.status{margin:8px 0 14px;font-size:15px}
+.status b{font-weight:600}
+.status.bad b{color:var(--red)}
+.rows{margin:0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.rows li{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr);gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.rows li > span:first-child{color:var(--ink2)}
+.rows .v{color:var(--ink)}
+.rows .v em{font-style:normal;color:var(--red)}
+h2{font-family:var(--serif);font-size:20px;font-weight:700;margin:30px 0 10px}
+#stepfig{display:block;width:100%;height:auto;margin:6px 0 4px;background:var(--surf);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.cmp{font-size:14px;color:var(--ink2);margin:6px 0 0}
+.presets{display:flex;flex-wrap:wrap;gap:2px 20px;margin:6px 0 0;font-size:15px}
+.presets button{font-family:var(--serif)}
+.zrow{display:flex;align-items:center;gap:10px;margin:14px 0 0;font-size:15px;flex-wrap:wrap}
+.zrow input[type=checkbox]{width:18px;height:18px;accent-color:var(--acc)}
+#zn{width:80px;font:inherit;font-size:16px;padding:5px 8px;border:1px solid var(--line2);border-radius:4px;background:var(--surf);color:var(--ink)}
+.notes{margin-top:34px;color:var(--ink2);font-size:15px;max-width:72ch}
+.notes p{margin:0 0 10px}
+svg text{font-family:var(--sans)}
+.ax{stroke:var(--ink3);stroke-width:1.2}
+.gl{stroke:var(--grid);stroke-width:1}
+.gl2{stroke:var(--grid2);stroke-width:1}
+.tick{fill:var(--ink3);font-size:11px}
+.loc{fill:none;stroke:var(--acc);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.realseg{stroke:var(--acc);stroke-width:4;stroke-linecap:butt;opacity:.28}
+.asy{stroke:var(--ink3);stroke-width:1;stroke-dasharray:5 5}
+.zl{stroke:var(--acc-soft);stroke-width:1;stroke-dasharray:2 4}
+.mk-shape{stroke:var(--ink);stroke-width:2.4;fill:var(--surf)}
+.mk-hit{fill:transparent;stroke:none}
+.clp{fill:var(--red);stroke:var(--surf);stroke-width:1.5}
+.note{fill:var(--red);font-size:12px}
+.note-line{stroke:var(--red);stroke-width:1.4}
+.arrow{fill:var(--acc)}
+.curve{fill:none;stroke:var(--acc);stroke-width:2.2}
+.band{fill:var(--acc);opacity:.08}
+.ref{stroke:var(--ink3);stroke-width:1;stroke-dasharray:4 4}
+@media (max-width:959px){
+  .wrap{padding:18px 16px 48px}
+  h1{font-size:28px}
+  .grid{grid-template-columns:minmax(0,1fr);gap:22px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html#u9">← 자동제어 문제은행 · U9 근궤적</a>
+  <h1>근궤적 실험실</h1>
+  <p class="lede">극점(×)과 영점(○)을 끌어 옮기면 근궤적이 다시 그려진다. 이득 K를 올리면 빨간 점, 곧 폐루프 극점이 파란 궤적을 따라 움직이고 오른쪽 계단응답이 함께 바뀐다. 궤적 위를 누르면 그 점의 K로 맞춘다.</p>
+
+  <div class="grid">
+    <div>
+      <div class="plane-wrap"><svg id="plane" viewBox="0 0 600 600" role="img" aria-label="s-평면 위 근궤적"></svg></div>
+      <div class="tools">
+        <button type="button" data-add="p1">실수 극점 추가</button>
+        <button type="button" data-add="p2">복소 극점 쌍 추가</button>
+        <button type="button" data-add="z1">실수 영점 추가</button>
+        <button type="button" data-add="z2">복소 영점 쌍 추가</button>
+        <button type="button" class="del" id="del" disabled>선택한 것 지우기</button>
+        <button type="button" id="fit">화면 맞춤</button>
+      </div>
+      <p class="hint">복소 극점·영점은 켤레 쌍으로 같이 움직인다. 실수 극점·영점은 실수축 위에서만 움직인다.</p>
+      <h2>예제 시스템</h2>
+      <div class="presets" id="presets"></div>
+    </div>
+
+    <div>
+      <p class="tf" id="tf"></p>
+      <p class="sub" id="tfsub"></p>
+      <div class="krow">
+        <label for="kr">K</label>
+        <input id="kr" type="range" min="-3" max="5" step="0.001" value="0" aria-label="이득 K (로그 눈금)">
+        <input id="kn" type="number" inputmode="decimal" min="0" step="any" value="1" aria-label="이득 K 값">
+      </div>
+      <p class="status" id="status"></p>
+      <ul class="rows" id="clrows"></ul>
+
+      <h2>폐루프 계단응답</h2>
+      <svg id="stepfig" viewBox="0 0 520 260" role="img" aria-label="폐루프 단위 계단응답"></svg>
+      <p class="cmp" id="cmp"></p>
+
+      <h2>손으로 그릴 때의 답</h2>
+      <ul class="rows" id="rules"></ul>
+      <div class="zrow">
+        <input type="checkbox" id="zon" checked>
+        <label for="zon">감쇠비 선 ζ =</label>
+        <input id="zn" type="number" inputmode="decimal" min="0.05" max="0.99" step="0.05" value="0.5" aria-label="감쇠비">
+        <span class="hint" style="margin:0">— 이 선과 궤적이 만나는 점의 K를 아래에 적는다</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <h2>읽는 법</h2>
+    <p>근궤적은 특성방정식 \(1+KG(s)H(s)=0\)의 근이 K = 0에서 ∞로 갈 때 그리는 길이다. 각 가지는 개루프 극점에서 출발해 영점으로 들어가거나, 영점이 모자라면 점근선을 따라 무한대로 간다.</p>
+    <p>오른쪽 계단응답 아래에는 지배극점 한 쌍으로 근사한 오버슈트·정착시간과, 실제로 계산한 응답의 값을 나란히 적었다. 지배극점 옆에 다른 극점이나 영점이 가까이 있으면 두 값이 벌어진다 — 2차 근사를 믿어도 되는지 눈으로 확인하는 자리다.</p>
+    <p>계산은 같은 폴더의 <code>rlocus_core.js</code>가 하고, 이탈점·허수축 교차·출발각·계단응답을 numpy로 다른 방법으로 다시 계산해 대조하는 테스트를 통과한 것만 쓴다.</p>
+  </div>
+</div>
+
+<script src="rlocus_core.js"></script>
+<script>
+(function(){
+"use strict";
+var NS = "http://www.w3.org/2000/svg";
+var plane = document.getElementById("plane"), stepfig = document.getElementById("stepfig");
+var PRESETS = [
+  {name:"K / s(s+2)", p:[[0,0],[-2,0]], z:[], K:5},
+  {name:"K / s(s+2)(s+5)", p:[[0,0],[-2,0],[-5,0]], z:[], K:30},
+  {name:"K(s+3) / s(s+1)(s+2)", p:[[0,0],[-1,0],[-2,0]], z:[[-3,0]], K:4},
+  {name:"K / (s+1)(s²+2s+5)", p:[[-1,0],[-1,2]], z:[], K:5},
+  {name:"K(s+2) / (s²+2s+2)(s+4)", p:[[-1,1],[-4,0]], z:[[-2,0]], K:8},
+  {name:"K(s+1) / s²(s+9)", p:[[0,0],[0,0],[-9,0]], z:[[-1,0]], K:27},
+  {name:"K / (s+1)(s+2)(s+3)(s+4)", p:[[-1,0],[-2,0],[-3,0],[-4,0]], z:[], K:20}
+];
+var st = { items:[], K:1, view:{cx:-2, span:10}, sel:-1, zeta:0.5, zon:true };
+var L = null, drag = null, raf = 0, dirtyLocus = true;
+
+// ---------- 모델 ----------
+function rootsOf(kind){
+  var r = [];
+  st.items.forEach(function(it){ if (it.t !== kind) return;
+    if (it.im > 0) { r.push(RL.C(it.re, it.im)); r.push(RL.C(it.re, -it.im)); } else r.push(RL.C(it.re, 0)); });
+  return r;
+}
+function polys(){ var P = rootsOf("p"), Z = rootsOf("z"); return { N: RL.fromRoots(Z), D: RL.fromRoots(P), n: P.length, m: Z.length }; }
+function count(kind){ return rootsOf(kind).length; }
+
+function fmt(x, d){ if (!isFinite(x)) return "∞"; d = d == null ? 3 : d;
+  var a = Math.abs(x), s = a >= 1000 ? x.toFixed(0) : a >= 100 ? x.toFixed(1) : a >= 1 ? x.toFixed(Math.min(d, 2)) : x.toPrecision(Math.max(1, d));
+  s = s.indexOf(".") >= 0 && s.indexOf("e") < 0 ? s.replace(/0+$/, "").replace(/\.$/, "") : s;
+  return (s === "-0" ? "0" : s).replace("-", "−"); }
+function fmtC(c){ if (Math.abs(c.im) < 1e-9) return fmt(c.re); return fmt(c.re) + (c.im >= 0 ? " + " : " − ") + fmt(Math.abs(c.im)) + "j"; }
+function fmtPair(c){ return Math.abs(c.im) < 1e-9 ? fmt(c.re) : fmt(c.re) + " ± " + fmt(Math.abs(c.im)) + "j"; }
+
+function factorText(kind){
+  var parts = [];
+  st.items.forEach(function(it){ if (it.t !== kind) return;
+    if (it.im > 0) { var b = -2 * it.re, c = it.re * it.re + it.im * it.im;
+      parts.push("(s²" + (Math.abs(b) < 1e-9 ? "" : (b > 0 ? "+" : "−") + fmt(Math.abs(b)) + "s") + "+" + fmt(c) + ")"); }
+    else if (Math.abs(it.re) < 1e-9) parts.push("s");
+    else parts.push("(s" + (it.re < 0 ? "+" : "−") + fmt(Math.abs(it.re)) + ")");
+  });
+  // 같은 인수 묶기(s·s → s²)
+  var cnt = {}, order = [];
+  parts.forEach(function(p){ if (!cnt[p]) { cnt[p] = 0; order.push(p); } cnt[p]++; });
+  return order.map(function(p){ return cnt[p] > 1 ? p + (cnt[p] === 2 ? "²" : cnt[p] === 3 ? "³" : "^" + cnt[p]) : p; }).join("") || "1";
+}
+
+// ---------- 화면 좌표 ----------
+function W2S(x, y){ var v = st.view, h = v.span / 2; return [ (x - (v.cx - h)) / v.span * 600, (h - y) / v.span * 600 ]; }
+function S2W(px, py){ var v = st.view, h = v.span / 2; return [ v.cx - h + px / 600 * v.span, h - py / 600 * v.span ]; }
+function fit(){
+  var xs = [0], ys = [1];
+  st.items.forEach(function(it){ xs.push(it.re); ys.push(Math.abs(it.im)); });
+  var P = polys();
+  if (P.n) {
+    RL.jwCross(P.N, P.D).forEach(function(c){ ys.push(c.w); });
+    RL.breakPoints(P.N, P.D).forEach(function(b){ if (Math.abs(b.s) < 50) xs.push(b.s); });
+  }
+  var xmin = Math.min.apply(null, xs), xmax = Math.max.apply(null, xs), ymax = Math.max.apply(null, ys);
+  var span = Math.max(xmax - xmin + 2.5, 2 * ymax + 2, 4);
+  span = Math.ceil(span * 1.15);
+  st.view = { cx: (xmin + xmax) / 2 - 0.1 * span * 0, span: span };
+  // 허수축(σ=0)이 보이게
+  var h = span / 2;
+  if (st.view.cx + h < 0.15 * span) st.view.cx = 0.15 * span - h;
+  if (st.view.cx - h > -0.15 * span) st.view.cx = h - 0.15 * span;
+  dirtyLocus = true;
+}
+function niceStep(span){ var raw = span / 10, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p; return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p; }
+
+function el(tag, attrs, parent, text){ var e = document.createElementNS(NS, tag);
+  for (var k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; if (parent) parent.appendChild(e); return e; }
+
+// ---------- 그리기: s-평면 ----------
+function drawPlane(){
+  var P = polys();
+  if (dirtyLocus && P.n) { L = RL.locus(P.N, P.D, st.view.span / 2); dirtyLocus = false; }
+  plane.textContent = "";
+  var defs = el("defs", {}, plane), cp = el("clipPath", {id: "clip"}, defs); el("rect", {x:0, y:0, width:600, height:600}, cp);
+  var g = el("g", {"clip-path": "url(#clip)"}, plane);
+  var v = st.view, h = v.span / 2, stp = niceStep(v.span);
+  for (var x = Math.ceil((v.cx - h) / stp) * stp; x <= v.cx + h; x += stp) { var X = W2S(x, 0)[0]; el("line", {x1:X, y1:0, x2:X, y2:600, "class": Math.abs(x / (5 * stp) - Math.round(x / (5 * stp))) < 1e-6 ? "gl2" : "gl"}, g); }
+  for (var y = Math.ceil(-h / stp) * stp; y <= h; y += stp) { var Y = W2S(0, y)[1]; el("line", {x1:0, y1:Y, x2:600, y2:Y, "class": Math.abs(y / (5 * stp) - Math.round(y / (5 * stp))) < 1e-6 ? "gl2" : "gl"}, g); }
+  var o = W2S(0, 0);
+  el("line", {x1:0, y1:o[1], x2:600, y2:o[1], "class":"ax"}, g); el("line", {x1:o[0], y1:0, x2:o[0], y2:600, "class":"ax"}, g);
+  for (x = Math.ceil((v.cx - h) / (2 * stp)) * 2 * stp; x <= v.cx + h; x += 2 * stp) if (Math.abs(x) > 1e-9 && W2S(x, 0)[0] > 14 && W2S(x, 0)[0] < 580) el("text", {x: W2S(x, 0)[0], y: Math.min(590, o[1] + 15), "class":"tick", "text-anchor":"middle"}, g, fmt(x));
+  for (y = Math.ceil(-h / (2 * stp)) * 2 * stp; y <= h; y += 2 * stp) if (Math.abs(y) > 1e-9 && W2S(0, y)[1] > 26 && W2S(0, y)[1] < 588) el("text", {x: o[0] + 5, y: W2S(0, y)[1] + 4, "class":"tick"}, g, fmt(y) + "j");
+  el("text", {x: 592, y: o[1] - 7, "class":"tick", "text-anchor":"end"}, g, "σ");
+  el("text", {x: o[0] + 6, y: 14, "class":"tick"}, g, "jω");
+  if (!P.n) { drawMarkers(); return; }
+
+  // ζ 선
+  if (st.zon && st.zeta > 0 && st.zeta < 1) {
+    var th = Math.acos(st.zeta), R = 3 * v.span;
+    [1, -1].forEach(function(sg){ var e = W2S(-R * Math.cos(th), sg * R * Math.sin(th)); el("line", {x1:o[0], y1:o[1], x2:e[0], y2:e[1], "class":"zl"}, g); });
+  }
+  // 실수축 구간
+  RL.realSegments(P.N, P.D, v.cx - 2 * v.span).forEach(function(sg){ var a = W2S(sg[0], 0), b = W2S(sg[1], 0); el("line", {x1:a[0], y1:a[1], x2:b[0], y2:b[1], "class":"realseg"}, g); });
+  // 점근선
+  var as = RL.asymptotes(P.N, P.D);
+  if (as && as.count > 1) as.angles.forEach(function(a){ var r = a * Math.PI / 180, s0 = W2S(as.center, 0), e = W2S(as.center + 3 * v.span * Math.cos(r), 3 * v.span * Math.sin(r)); el("line", {x1:s0[0], y1:s0[1], x2:e[0], y2:e[1], "class":"asy"}, g); });
+  // 궤적
+  L.branches.forEach(function(br){
+    var pts = [], segs = [];
+    br.forEach(function(c){ var q = W2S(c.re, c.im);
+      var inside = q[0] > -600 && q[0] < 1200 && q[1] > -600 && q[1] < 1200;
+      if (inside) pts.push(q[0].toFixed(1) + "," + q[1].toFixed(1)); else if (pts.length) { segs.push(pts); pts = []; } });
+    if (pts.length) segs.push(pts);
+    segs.forEach(function(s){ if (s.length > 1) el("polyline", {points: s.join(" "), "class":"loc"}, g); });
+    // K 가 커지는 방향 표시 — 화면 안 경로의 45% 지점
+    var inview = br.map(function(c){ return W2S(c.re, c.im); }).filter(function(q){ return q[0] >= 0 && q[0] <= 600 && q[1] >= 0 && q[1] <= 600; });
+    if (inview.length > 8) { var len = 0, acc = [0];
+      for (var i = 1; i < inview.length; i++) { len += Math.hypot(inview[i][0] - inview[i-1][0], inview[i][1] - inview[i-1][1]); acc.push(len); }
+      if (len > 40) { var tgt = 0.45 * len, j = acc.findIndex(function(a){ return a >= tgt; }); j = Math.max(1, j);
+        var a2 = inview[j], a1 = inview[j - 1], ang = Math.atan2(a2[1] - a1[1], a2[0] - a1[0]) * 180 / Math.PI;
+        el("path", {d: "M6 0L-5 -5L-2 0L-5 5Z", transform: "translate(" + a2[0].toFixed(1) + " " + a2[1].toFixed(1) + ") rotate(" + ang.toFixed(1) + ")", "class":"arrow"}, g); } }
+  });
+  // 이탈점·허수축 교차·출발각 주석
+  RL.breakPoints(P.N, P.D).forEach(function(b){ var q = W2S(b.s, 0); el("line", {x1:q[0], y1:q[1] - 7, x2:q[0], y2:q[1] + 7, "class":"note-line"}, g); });
+  RL.jwCross(P.N, P.D).forEach(function(c){ if (c.w < 1e-6) return; [1, -1].forEach(function(sg){ var q = W2S(0, sg * c.w); el("circle", {cx:q[0], cy:q[1], r:3.2, fill:"none", "class":"note-line"}, g); });
+    var q = W2S(0, c.w); el("text", {x:q[0] + 8, y:q[1] - 6, "class":"note"}, g, "K = " + fmt(c.K)); });
+  RL.angles(P.N, P.D).forEach(function(a){ if (a.kind !== "departure") return; var r = a.deg * Math.PI / 180, q = W2S(a.at.re, a.at.im), len = 34;
+    el("line", {x1:q[0], y1:q[1], x2:q[0] + len * Math.cos(r), y2:q[1] - len * Math.sin(r), "class":"note-line"}, g); });
+  // 현재 K 의 폐루프 극점
+  RL.roots(RL.charPoly(P.N, P.D, st.K)).forEach(function(c){ var q = W2S(c.re, c.im); el("circle", {cx:q[0], cy:q[1], r:5.5, "class":"clp"}, g); });
+  drawMarkers();
+}
+function drawMarkers(){
+  st.items.forEach(function(it, i){
+    var ys = it.im > 0 ? [it.im, -it.im] : [0];
+    ys.forEach(function(y, k){
+      var q = W2S(it.re, y), gg = el("g", {"class": "mk" + (st.sel === i ? " sel" : ""), "data-i": i, "data-conj": k}, plane);
+      el("circle", {cx:q[0], cy:q[1], r:16, "class":"mk-hit"}, gg);
+      if (it.t === "p") el("path", {d: "M" + (q[0]-7) + " " + (q[1]-7) + "l14 14M" + (q[0]+7) + " " + (q[1]-7) + "l-14 14", "class":"mk-shape"}, gg);
+      else el("circle", {cx:q[0], cy:q[1], r:6.5, "class":"mk-shape"}, gg);
+    });
+  });
+}
+
+// ---------- 그리기: 계단응답 ----------
+function drawStep(P){
+  stepfig.textContent = "";
+  var cmp = document.getElementById("cmp");
+  if (!P.n) { cmp.textContent = ""; return null; }
+  var cl = RL.roots(RL.charPoly(P.N, P.D, st.K)), dom = RL.dominant(cl);
+  var unstable = cl.some(function(c){ return c.re > 1e-9; });
+  var slow = cl.reduce(function(m, c){ return Math.max(m, c.re); }, -Infinity);
+  var tEnd = slow < -1e-6 ? Math.min(60, Math.max(2, 1.4 * 4 / -slow)) : 12;
+  var r = RL.step(P.N, P.D, st.K, tEnd, 600), met = RL.stepMetrics(r);
+  var x0 = 46, y0 = 222, Wd = 452, Hd = 190;
+  var yss = r.yss, ymax = Math.max(1.3 * Math.abs(yss) || 1, Math.min(Math.max.apply(null, r.y.map(Math.abs)), 3 * Math.abs(yss || 1)) * 1.08);
+  var ymin = Math.min(0, Math.max(Math.min.apply(null, r.y), -ymax));
+  var X = function(t){ return x0 + t / tEnd * Wd; }, Y = function(y){ return y0 - (Math.max(ymin, Math.min(ymax, y)) - ymin) / (ymax - ymin) * Hd; };
+  el("line", {x1:x0, y1:y0, x2:x0 + Wd, y2:y0, "class":"ax"}, stepfig); el("line", {x1:x0, y1:y0, x2:x0, y2:y0 - Hd, "class":"ax"}, stepfig);
+  if (isFinite(yss) && !unstable) {
+    el("rect", {x:x0, y:Y(yss * 1.02), width:Wd, height:Math.max(1, Y(yss * 0.98) - Y(yss * 1.02)), "class":"band"}, stepfig);
+    el("line", {x1:x0, y1:Y(yss), x2:x0 + Wd, y2:Y(yss), "class":"ref"}, stepfig);
+    el("text", {x:x0 - 6, y:Y(yss) + 4, "class":"tick", "text-anchor":"end"}, stepfig, fmt(yss));
+  }
+  el("text", {x:x0 - 6, y:y0 + 4, "class":"tick", "text-anchor":"end"}, stepfig, "0");
+  el("text", {x:x0 + Wd, y:y0 + 18, "class":"tick", "text-anchor":"end"}, stepfig, "t = " + fmt(tEnd) + " s");
+  el("text", {x:x0 + 6, y:y0 - Hd + 2, "class":"tick"}, stepfig, "y(t)");
+  el("polyline", {points: r.t.map(function(t, i){ return X(t).toFixed(1) + "," + Y(r.y[i]).toFixed(1); }).join(" "), "class":"curve"}, stepfig);
+  if (!unstable && isFinite(met.os) && met.os > 0.5) {
+    var ip = r.y.indexOf(Math.max.apply(null, r.y));
+    el("line", {x1:X(r.t[ip]), y1:Y(r.y[ip]) - 6, x2:X(r.t[ip]), y2:Y(yss), "class":"note-line"}, stepfig);
+    el("text", {x:X(r.t[ip]) + 6, y:Y(r.y[ip]) - 6, "class":"note"}, stepfig, "오버슈트 " + fmt(met.os, 3) + "%");
+  }
+  if (!unstable && isFinite(met.ts) && met.ts > 0 && met.ts < tEnd) { var xt = X(met.ts);
+    el("line", {x1:xt, y1:Y(yss) - 10, x2:xt, y2:y0, "class":"ref"}, stepfig);
+    el("text", {x:xt - 4, y:y0 - 8, "class":"tick", "text-anchor":"end"}, stepfig, "정착 " + fmt(met.ts) + " s"); }
+  if (unstable) cmp.innerHTML = "폐루프가 불안정해 응답이 발산한다 — 화면은 앞부분만 그렸다.";
+  else if (dom && Math.abs(dom.pole.im) > 1e-9) cmp.textContent = "지배극점 2차 근사: 오버슈트 " + fmt(dom.os, 3) + "%, 정착시간 " + fmt(dom.ts) + " s · 실제 응답: 오버슈트 " + fmt(met.os, 3) + "%, 정착시간 " + fmt(met.ts) + " s";
+  else cmp.textContent = "지배극점이 실수라 진동 없이 수렴한다 · 실제 정착시간 " + fmt(met.ts) + " s (2% 기준)";
+  return { cl: cl, dom: dom, unstable: unstable, met: met };
+}
+
+// ---------- 글: 전달함수·상태·규칙 ----------
+function writeText(P, res){
+  document.getElementById("tf").innerHTML = 'G(s)H(s) = <span class="k">K</span>' + (count("z") ? "·" + factorText("z") : "") + " / " + factorText("p");
+  document.getElementById("tfsub").textContent = P.n ? "개루프 극점 " + P.n + "개, 영점 " + P.m + "개 → 가지 " + P.n + "개, 무한대로 가는 가지 " + (P.n - P.m) + "개" : "극점을 하나 이상 추가하라.";
+  var stt = document.getElementById("status"), rows = document.getElementById("clrows");
+  rows.textContent = "";
+  if (!P.n || !res) { stt.textContent = ""; return; }
+  var rhp = res.cl.filter(function(c){ return c.re > 1e-9; }).length;
+  stt.className = "status" + (rhp ? " bad" : "");
+  stt.innerHTML = rhp ? "<b>불안정</b> — 오른쪽 반평면 극점 " + rhp + "개" : res.cl.some(function(c){ return Math.abs(c.re) <= 1e-9; }) ? "<b>임계 안정</b> — 허수축 위 극점" : "<b>안정</b> — 폐루프 극점이 모두 왼쪽";
+  var seen = [], list = [];
+  res.cl.slice().sort(function(a, b){ return b.re - a.re; }).forEach(function(c){
+    if (c.im < -1e-9) return; list.push(fmtPair(c)); });
+  addRow(rows, "폐루프 극점", list.join(", "));
+  if (res.dom) addRow(rows, "지배극점", fmtPair(res.dom.pole) + (Math.abs(res.dom.pole.im) > 1e-9 ? " · ζ = " + fmt(res.dom.zeta) + ", ωn = " + fmt(res.dom.wn) : ""));
+  var yss = RL.step(P.N, P.D, st.K, 0.01, 1).yss;
+  addRow(rows, "정상상태 출력", isFinite(yss) && !rhp ? fmt(yss) + " (단위 계단 입력)" : "—");
+
+  var rules = document.getElementById("rules"); rules.textContent = "";
+  var segs = RL.realSegments(P.N, P.D, -Infinity).map(function(s){ return (isFinite(s[0]) ? fmt(s[0]) : "−∞") + " ~ " + fmt(s[1]); });
+  addRow(rules, "실수축 구간", segs.length ? segs.join(", ") : "없음");
+  var as = RL.asymptotes(P.N, P.D);
+  addRow(rules, "점근선", as ? "중심 σa = " + fmt(as.center) + ", 각 " + as.angles.map(function(a){ return fmt(a) + "°"; }).join(", ") : "없음 (n = m)");
+  var bp = RL.breakPoints(P.N, P.D);
+  addRow(rules, "이탈·유입점", bp.length ? bp.map(function(b){ return "σ = " + fmt(b.s) + " (K = " + fmt(b.K) + ")"; }).join(", ") : "없음");
+  var jw = RL.jwCross(P.N, P.D);
+  addRow(rules, "허수축 교차", jw.length ? jw.map(function(c){ return (c.w < 1e-6 ? "원점" : "ω = ±" + fmt(c.w) + " rad/s") + ", <em>K = " + fmt(c.K) + "</em>"; }).join(" · ") : "없음", true);
+  var an = RL.angles(P.N, P.D);
+  addRow(rules, "출발·도착각", an.length ? an.map(function(a){ return (a.kind === "departure" ? "극점 " : "영점 ") + fmtC(a.at) + "에서 " + fmt(a.deg) + "°"; }).join(" · ") : "복소 극점·영점 없음");
+  if (st.zon && st.zeta > 0 && st.zeta < 1) {
+    var zs = zetaCross(P);
+    addRow(rules, "ζ = " + fmt(st.zeta) + " 선과의 교점", zs.length ? zs.map(function(z){ return "s = " + fmtPair(z.s) + ", <em>K = " + fmt(z.K) + "</em>"; }).join(" · ") : "궤적이 이 선과 만나지 않는다", true);
+  }
+}
+function addRow(ul, k, v, html){ var li = document.createElement("li"), a = document.createElement("span"), b = document.createElement("span");
+  a.textContent = k; b.className = "v"; if (html) b.innerHTML = v; else b.textContent = v; li.appendChild(a); li.appendChild(b); ul.appendChild(li); }
+
+/** ζ 선(반직선 s = r·e^{j(π−θ)}) 위에서 각도 조건을 만족하는 점 — 궤적 표본에서 구간을 찾고 각도 오차로 이분법. */
+function zetaCross(P){
+  if (!L) return [];
+  var th = Math.acos(st.zeta), out = [];
+  function onRay(r){ return RL.C(-r * Math.cos(th), r * Math.sin(th)); }
+  function err(r){ return RL.gainAt(P.N, P.D, onRay(r)).angleErr; }
+  L.branches.forEach(function(br){
+    for (var k = 1; k < br.length; k++) {
+      var a = br[k - 1], b = br[k];
+      if (a.im <= 1e-9 || b.im <= 1e-9) continue;
+      var fa = Math.atan2(a.im, -a.re) - th, fb = Math.atan2(b.im, -b.re) - th;
+      if (fa * fb > 0) continue;
+      var lo = Math.hypot(a.re, a.im), hi = Math.hypot(b.re, b.im);
+      if (lo > hi) { var t = lo; lo = hi; hi = t; }
+      lo *= 0.98; hi *= 1.02;
+      var elo = err(lo);
+      for (var it = 0; it < 80; it++) { var mid = 0.5 * (lo + hi), em = err(mid); if ((em < 0) === (elo < 0)) { lo = mid; elo = em; } else hi = mid; }
+      var s = onRay(0.5 * (lo + hi)), g = RL.gainAt(P.N, P.D, s);
+      if (Math.abs(g.angleErr) < 1e-3 && !out.some(function(o){ return Math.hypot(o.s.re - s.re, o.s.im - s.im) < 1e-4; })) out.push({ s: s, K: g.K });
+    }
+  });
+  return out.sort(function(a, b){ return a.K - b.K; });
+}
+
+// ---------- 갱신 ----------
+function render(){
+  raf = 0;
+  var P = polys();
+  drawPlane();
+  var res = drawStep(P);
+  writeText(P, res);
+  document.getElementById("del").disabled = st.sel < 0;
+  document.querySelectorAll("[data-add^=z]").forEach(function(b){ b.disabled = count("z") + (b.dataset.add === "z2" ? 2 : 1) > count("p"); });
+}
+function schedule(){ if (!raf) raf = requestAnimationFrame(render); }
+function setK(K, fromSlider){
+  st.K = Math.max(0, K);
+  var kr = document.getElementById("kr"), kn = document.getElementById("kn");
+  if (!fromSlider) kr.value = st.K > 0 ? Math.log10(st.K) : kr.min;
+  kn.value = fmt(st.K, 4).replace("−", "-");
+  schedule();
+}
+function load(pr){
+  st.items = pr.p.map(function(q){ return { t:"p", re:q[0], im:q[1] }; }).concat(pr.z.map(function(q){ return { t:"z", re:q[0], im:q[1] }; }));
+  st.sel = -1; fit(); setK(pr.K);
+}
+
+// ---------- 입력 ----------
+function svgPoint(ev){ var r = plane.getBoundingClientRect(); return [ (ev.clientX - r.left) / r.width * 600, (ev.clientY - r.top) / r.height * 600 ]; }
+plane.addEventListener("pointerdown", function(ev){
+  var mk = ev.target.closest(".mk");
+  if (mk) {
+    st.sel = +mk.dataset.i; drag = { i: st.sel, conj: +mk.dataset.conj };
+    plane.setPointerCapture(ev.pointerId); ev.preventDefault(); schedule(); return;
+  }
+  // 궤적 위를 누르면 그 점의 K 로
+  if (!L) return;
+  var q = svgPoint(ev), best = null, bd = 18;
+  L.branches.forEach(function(br){ br.forEach(function(c, k){ var s = W2S(c.re, c.im), d = Math.hypot(s[0] - q[0], s[1] - q[1]); if (d < bd) { bd = d; best = k; } }); });
+  if (best != null) setK(L.K[best]);
+  st.sel = -1; schedule();
+});
+plane.addEventListener("pointermove", function(ev){
+  if (!drag) return;
+  var q = svgPoint(ev), w = S2W(q[0], q[1]), it = st.items[drag.i];
+  var snap = function(x){ return Math.round(x * 20) / 20; };
+  it.re = snap(w[0]);
+  if (it.im > 0) it.im = Math.max(0.05, snap(Math.abs(w[1])));
+  dirtyLocus = true; schedule();
+});
+function endDrag(){ if (drag) { drag = null; schedule(); } }
+plane.addEventListener("pointerup", endDrag); plane.addEventListener("pointercancel", endDrag);
+
+document.getElementById("kr").addEventListener("input", function(e){ setK(Math.pow(10, +e.target.value), true); });
+document.getElementById("kn").addEventListener("change", function(e){ var v = parseFloat(String(e.target.value).replace("−", "-")); if (isFinite(v) && v >= 0) setK(v); });
+document.querySelectorAll("[data-add]").forEach(function(b){ b.addEventListener("click", function(){
+  var t = b.dataset.add[0], pair = b.dataset.add[1] === "2", v = st.view;
+  var x = Math.round((v.cx - v.span * 0.2) * 2) / 2;
+  st.items.push({ t: t, re: x, im: pair ? Math.max(1, Math.round(v.span * 0.2)) : 0 });
+  st.sel = st.items.length - 1; dirtyLocus = true; schedule(); }); });
+document.getElementById("del").addEventListener("click", function(){ if (st.sel < 0) return; st.items.splice(st.sel, 1); st.sel = -1;
+  // 영점이 극점보다 많아지면 마지막 영점부터 뺀다(부적절 전달함수 방지)
+  while (count("z") > count("p")) { for (var i = st.items.length - 1; i >= 0; i--) if (st.items[i].t === "z") { st.items.splice(i, 1); break; } }
+  dirtyLocus = true; schedule(); });
+document.getElementById("fit").addEventListener("click", function(){ fit(); schedule(); });
+document.getElementById("zon").addEventListener("change", function(e){ st.zon = e.target.checked; schedule(); });
+document.getElementById("zn").addEventListener("change", function(e){ var z = parseFloat(e.target.value); if (z > 0 && z < 1) { st.zeta = z; schedule(); } });
+window.addEventListener("keydown", function(e){ if ((e.key === "Delete" || e.key === "Backspace") && st.sel >= 0 && document.activeElement === document.body) document.getElementById("del").click(); });
+
+var pre = document.getElementById("presets");
+PRESETS.forEach(function(pr, i){ var b = document.createElement("button"); b.type = "button"; b.textContent = pr.name; b.addEventListener("click", function(){ load(pr); }); pre.appendChild(b); });
+// ?p= 로 예제 고르기(문제에서 링크할 때)
+var m = /[?&]p=(\d+)/.exec(location.search);
+load(PRESETS[m ? Math.min(PRESETS.length - 1, +m[1]) : 1]);
+})();
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+</body>
+</html>

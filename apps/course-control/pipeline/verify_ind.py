@@ -886,3 +886,214 @@ def _(p):
     s1 = [x for x in pts if -a < x < 0]; s2 = [x for x in pts if x < -z]
     assert len(s1) == 1 and len(s2) == 1
     return {"s1": s1[0], "s2": s2[0]}
+
+# ---- U9 근궤적 (l3/l4) ----
+def _zeta_os(os_):
+    L = math.log(os_/100.0)
+    return -L/math.sqrt(math.pi**2 + L*L)
+
+def _routh3(c):
+    """3차 s³+c2 s²+c1 s+c0 의 Routh: s¹ 행 = (c2 c1 − c0)/c2. 반환 (c2c1 - c0 = 0 이 되는 c0)."""
+    return c[1]*c[2]
+
+def _norm180(x):
+    x = (x + 180.0) % 360.0 - 180.0
+    return 180.0 if x == -180.0 else x
+
+def _cubic_pair(a, b, sg):
+    """s(s+a)(s+b)+K 의 근이 {-sg±jω, p3} 가 되도록: 근의 합과 계수 대조."""
+    p3 = -(a+b) + 2*sg
+    q = a*b + 2*sg*p3          # s 계수: q − 2σ p3 = ab (σ=sg 의 부호 주의: 2sg s 항)
+    w2 = q - sg*sg
+    K = -q*p3
+    assert w2 > 1e-12 and K > 0 and p3 < 0
+    r = np.roots(np.polyadd(_rl_poly(0, -a, -b), [K]))
+    assert min(abs(x.real + sg) for x in r) < 1e-9
+    return p3, math.sqrt(w2), K, q
+
+@reg("u9-l3-01")
+def _(p):
+    z = _zeta_os(p["os"]); a = p["a"]
+    K = a*a/(4*z*z)
+    r = np.roots([1, a, K])
+    assert abs(-r[0].real/abs(r[0]) - z) < 1e-9
+    return {"zeta": z, "K": K}
+@reg("u9-l3-02")
+def _(p):
+    a = p["a"]
+    # 판별식 a²−4K=0 경계
+    Kmin = sp.nsimplify(a)**2/4
+    return {"Ts": 4.0/(a/2.0), "Kmin": float(Kmin)}
+@reg("u9-l3-03")
+def _(p):
+    a, b = p["a"], p["b"]
+    D = _rl_poly(0, -a, -b)
+    sb = [x for x in np.roots(np.polyder(D)) if abs(x.imag) < 1e-12 and -a < x.real < 0]
+    assert len(sb) == 1
+    sb = sb[0].real; Kb = float(-np.polyval(D, sb))
+    r = np.roots(np.polyadd(D, [Kb]))
+    p3 = max(r, key=lambda x: abs(x.real - sb)).real
+    return {"Kb": Kb, "p3": float(p3)}
+@reg("u9-l3-04")
+def _(p):
+    a, z = p["a"], p["z"]
+    K_ = sp.symbols("K_", positive=True)
+    zeta2 = (a+K_)**2/(4*K_*z)          # s²+(a+K)s+Kz, ζ²
+    Ks = sp.solve(sp.diff(zeta2, K_), K_)
+    assert len(Ks) == 1
+    K = float(Ks[0]); zm = math.sqrt(float(zeta2.subs(K_, Ks[0])))
+    r = np.roots([1, a+K, K*z]); assert abs(r[0].imag) > 0
+    # 원 반지름: 허수부 최대 점에서 |s+z|
+    rad = max(abs(x + z) for x in r)
+    return {"r": rad, "zmin": zm, "K": K}
+@reg("u9-l3-05")
+def _(p):
+    b, c, z = p["b"], p["c"], p["z"]
+    pole = complex(-1, b)
+    ang = 180.0 + math.degrees(cmath.phase(pole + z)) \
+        - math.degrees(cmath.phase(pole + c)) - math.degrees(cmath.phase(pole - complex(-1, -b)))
+    return _norm180(ang)
+@reg("u9-l3-06")
+def _(p):
+    a, b, z = p["a"], p["b"], p["z"]
+    sig = (a+b)/2.0
+    wn = sig/z
+    K = wn*wn - a*b
+    r = np.roots(np.polyadd(_rl_poly(-a, -b), [K]))
+    assert abs(r[0].imag) > 0 and abs(-r[0].real/abs(r[0]) - z) < 1e-9
+    return {"K": K, "Tp": math.pi/abs(r[0].imag)}
+@reg("u9-l3-07")
+def _(p):
+    a, z = p["a"], p["z"]
+    K = (a/(2*z))**2
+    r = np.roots([1, a, K]); assert abs(-r[0].real/abs(r[0]) - z) < 1e-9
+    Kv = K/a
+    return {"K": K, "ess": 1.0/Kv}
+@reg("u9-l3-08")
+def _(p):
+    a = p["a"]
+    c = np.poly([-a, -a, -a])            # s³+3a s²+3a² s+a³ (K 더하기 전)
+    K = c[1]*c[2] - c[3]                 # Routh s¹ 행 = 0
+    w = math.sqrt(c[2])
+    r = np.roots(np.polyadd(c, [K]))
+    assert min(abs(x.real) for x in r) < 1e-6
+    return {"K": K, "w": w}
+@reg("u9-l3-09")
+def _(p):
+    a, b, K0 = p["a"], p["b"], p["K0"]
+    c = _rl_poly(0, -a, -b)
+    Kmax = c[1]*c[2]
+    r = np.roots(np.polyadd(c, [Kmax])); assert min(abs(x.real) for x in r) < 1e-6
+    return {"Kmax": Kmax, "GM": Kmax/K0, "GMdB": 20*math.log10(Kmax/K0)}
+@reg("u9-l3-10")
+def _(p):
+    p3, w, K, q = _cubic_pair(p["a"], p["b"], p["sg"])
+    return {"p3": p3, "w": w, "K": K}
+@reg("u9-l3-11")
+def _(p):
+    z, zt = p["z"], p["zt"]
+    N = _rl_poly(-z); D = _rl_poly(0, 0)
+    c = np.polysub(np.polymul(np.polyder(N), D), np.polymul(N, np.polyder(D)))
+    pts = [x.real for x in np.roots(c) if abs(x.imag) < 1e-12 and x.real < -z]
+    assert len(pts) == 1
+    sbi = pts[0]; Kbi = float(-np.polyval(D, sbi)/np.polyval(N, sbi))
+    K = 4*z*zt*zt
+    r = np.roots([1, K, K*z]); assert abs(-r[0].real/abs(r[0]) - zt) < 1e-9
+    return {"sbi": sbi, "Kbi": Kbi, "K": K}
+@reg("u9-l3-12")
+def _(p):
+    b, c = p["b"], p["c"]
+    zr = complex(-1, b)
+    ang = 180.0 + math.degrees(cmath.phase(zr)) + math.degrees(cmath.phase(zr + c)) \
+        - math.degrees(cmath.phase(zr - complex(-1, -b)))
+    return _norm180(ang)
+@reg("u9-l3-13")
+def _(p):
+    a, b, z = p["a"], p["b"], p["z"]
+    # s³+(a+b)s²+(ab+K)s+Kz, Routh: (a+b)(ab+K)=Kz
+    K = sp.symbols("K")
+    sol = sp.solve(sp.Eq((a+b)*(a*b+K), K*z), K)
+    assert len(sol) == 1 and sol[0] > 0
+    Kmax = float(sol[0]); w = math.sqrt(a*b + Kmax)
+    c = np.polyadd(_rl_poly(0, -a, -b), np.polymul([Kmax], _rl_poly(-z)))
+    assert min(abs(x.real) for x in np.roots(c)) < 1e-6
+    return {"Kmax": Kmax, "w": w}
+@reg("u9-l3-14")
+def _(p):
+    a, z = p["a"], p["z"]
+    K = (a/(2*z))**2
+    r = np.roots([1, a, K]); r0 = r[0]
+    assert abs(-r0.real/abs(r0) - z) < 1e-9
+    return {"Tp": math.pi/abs(r0.imag), "Ts": 4.0/abs(r0.real)}
+
+@reg("u9-l4-01")
+def _(p):
+    a, b = p["a"], p["b"]
+    D = _rl_poly(0, -a, -b)
+    sb = [x.real for x in np.roots(np.polyder(D)) if abs(x.imag) < 1e-12 and -a < x.real < 0]
+    assert len(sb) == 1
+    K = D[1]*D[2]
+    r = np.roots(np.polyadd(D, [K])); assert min(abs(x.real) for x in r) < 1e-6
+    return {"sa": float(np.sum(np.roots(D)).real)/3.0, "sb": sb[0], "K": K, "w": math.sqrt(D[2])}
+@reg("u9-l4-02")
+def _(p):
+    a, z = p["a"], p["z"]
+    N = _rl_poly(-z); D = _rl_poly(0, -a)
+    c = np.polysub(np.polymul(np.polyder(N), D), np.polymul(N, np.polyder(D)))
+    pts = [x.real for x in np.roots(c) if abs(x.imag) < 1e-12]
+    s1 = [x for x in pts if -a < x < 0]; s2 = [x for x in pts if x < -z]
+    assert len(s1) == 1 and len(s2) == 1
+    Kf = lambda x: float(-np.polyval(D, x)/np.polyval(N, x))
+    return {"s1": s1[0], "K1": Kf(s1[0]), "s2": s2[0], "K2": Kf(s2[0])}
+@reg("u9-l4-03")
+def _(p):
+    b, c = p["b"], p["c"]
+    D = np.polymul([1, c], [1, 2, 1+b*b])
+    K = D[1]*D[2] - D[3]
+    r = np.roots(np.polyadd(D, [K])); assert min(abs(x.real) for x in r) < 1e-6
+    pole = complex(-1, b)
+    th = 180.0 - math.degrees(cmath.phase(pole + c)) - math.degrees(cmath.phase(pole - complex(-1, -b)))
+    return {"sa": float(np.sum(np.roots(D)).real)/3.0, "th": _norm180(th), "K": K, "w": math.sqrt(D[2])}
+@reg("u9-l4-04")
+def _(p):
+    p3, w, K, q = _cubic_pair(p["a"], p["b"], p["sg"])
+    return {"p3": p3, "w": w, "K": K, "zeta": p["sg"]/math.sqrt(q), "ratio": abs(p3)/p["sg"]}
+@reg("u9-l4-05")
+def _(p):
+    z, Ts = p["z"], p["Ts"]
+    K = 8.0/Ts                           # σ = K/2 = 4/Ts
+    r = np.roots([1, K, K*z]); assert abs(r[0].imag) > 1e-9
+    r0 = max(r, key=lambda x: x.imag)
+    assert abs(4/abs(r0.real) - Ts) < 1e-9
+    return {"K": K, "zeta": -r0.real/abs(r0), "Tp": math.pi/r0.imag}
+@reg("u9-l4-06")
+def _(p):
+    a, b, z = p["a"], p["b"], p["z"]
+    th = math.pi - math.acos(z)
+    c2, s2_, c3, s3 = math.sin(2*th), None, None, math.sin(3*th)
+    # s=r e^{jθ} 를 s³+(a+b)s²+ab s+K 에 넣은 허부=0 → r² sin3θ + (a+b) r sin2θ + ab sinθ = 0
+    rr = np.roots([math.sin(3*th), (a+b)*math.sin(2*th), a*b*math.sin(th)])
+    cands = []
+    for r_ in rr:
+        if abs(r_.imag) > 1e-12 or r_.real <= 0: continue
+        s0 = r_.real*cmath.exp(1j*th)
+        K = -(s0**3 + (a+b)*s0**2 + a*b*s0)
+        if K.real > 0 and abs(K.imag) < 1e-9*max(1, abs(K)):
+            ang = sum(math.degrees(cmath.phase(s0 + q)) for q in (0, a, b))
+            assert abs(ang - 180.0) < 1e-8
+            cands.append((s0, K.real))
+    assert len(cands) == 1
+    s0, K = cands[0]
+    # 크기 조건 재확인
+    assert abs(abs(s0)*abs(s0+a)*abs(s0+b) - K) < 1e-9*K
+    return {"re": s0.real, "im": s0.imag, "K": K, "p3": -(a+b) - 2*s0.real}
+@reg("u9-l4-07")
+def _(p):
+    b, c = p["b"], p["c"]
+    D = _rl_poly(-1, -b, -c)
+    sb = [x.real for x in np.roots(np.polyder(D)) if abs(x.imag) < 1e-12 and -b < x.real < -1]
+    assert len(sb) == 1
+    Kmax = D[1]*D[2] - D[3]
+    r = np.roots(np.polyadd(D, [Kmax])); assert min(abs(x.real) for x in r) < 1e-6
+    return {"sa": -(1+b+c)/3.0, "sb": sb[0], "Kb": float(-np.polyval(D, sb[0])),
+            "Kmax": Kmax, "w": math.sqrt(D[2])}
